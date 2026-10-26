@@ -7,6 +7,7 @@ export interface SearchResult {
 }
 
 export async function callMeta(instructions: string, input: string): Promise<string> {
+  if (useBaseten()) return basetenText(instructions, input);
   return (await request(instructions, input, false)).text;
 }
 
@@ -32,6 +33,7 @@ export async function runAgent(
   run: (name: string, args: Record<string, unknown>) => string,
   maxTurns = 8,
 ): Promise<{ text: string; turns: number }> {
+  if (useBaseten()) return runAgentChat(instructions, task, tools, run, maxTurns);
   const key = process.env.MODEL_API_KEY;
   if (!key) throw new Error("MODEL_API_KEY is not set");
   const history: unknown[] = [{ role: "user", content: task }];
@@ -127,4 +129,81 @@ async function request(instructions: string, input: string, search: boolean) {
   } finally {
     clearTimeout(timer);
   }
+}
+
+// --- Baseten: Muse Spark Open (open weights) over the OpenAI-style chat completions API. ---
+// Web search grounding is a Meta API feature, so callMetaSearch always stays on Meta.
+const BASETEN_URL = "https://inference.baseten.co/v1/chat/completions";
+const BASETEN_MODEL = "meta-models/muse-spark-open-1026";
+
+export function useBaseten(): boolean {
+  return process.env.MODEL_PROVIDER === "baseten";
+}
+
+interface ChatMessage {
+  role: string;
+  content?: string | null;
+  tool_calls?: { id: string; type: string; function: { name: string; arguments: string } }[];
+  tool_call_id?: string;
+}
+
+async function basetenChat(messages: ChatMessage[], tools?: AgentTool[]): Promise<ChatMessage> {
+  const key = process.env.BASETEN_API_KEY;
+  if (!key) throw new Error("BASETEN_API_KEY is not set");
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 110_000);
+  try {
+    const res = await fetch(BASETEN_URL, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: BASETEN_MODEL,
+        messages,
+        max_tokens: 12000,
+        temperature: 0,
+        ...(tools ? { tools: tools.map((t) => ({ type: "function", function: t })) } : {}),
+      }),
+      signal: controller.signal,
+    });
+    if (!res.ok) throw new Error(`Baseten returned HTTP ${res.status}: ${(await res.text()).slice(0, 300)}`);
+    const data = await res.json();
+    const msg = data.choices?.[0]?.message;
+    if (!msg) throw new Error("Baseten response had no message");
+    return msg;
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+async function basetenText(instructions: string, input: string): Promise<string> {
+  const msg = await basetenChat([{ role: "system", content: instructions }, { role: "user", content: input }]);
+  if (!msg.content) throw new Error("Baseten response had no text output");
+  return msg.content;
+}
+
+async function runAgentChat(
+  instructions: string,
+  task: string,
+  tools: AgentTool[],
+  run: (name: string, args: Record<string, unknown>) => string,
+  maxTurns: number,
+): Promise<{ text: string; turns: number }> {
+  const messages: ChatMessage[] = [{ role: "system", content: instructions }, { role: "user", content: task }];
+  let text = "";
+  for (let turn = 1; turn <= maxTurns; turn++) {
+    const msg = await basetenChat(messages, tools);
+    messages.push({ role: "assistant", content: msg.content ?? "", ...(msg.tool_calls ? { tool_calls: msg.tool_calls } : {}) });
+    text = msg.content ?? "";
+    if (!msg.tool_calls || msg.tool_calls.length === 0) return { text, turns: turn };
+    for (const c of msg.tool_calls) {
+      let out: string;
+      try {
+        out = run(c.function.name, JSON.parse(c.function.arguments || "{}"));
+      } catch (err) {
+        out = `Error: ${err instanceof Error ? err.message : "tool failed"}`;
+      }
+      messages.push({ role: "tool", tool_call_id: c.id, content: out.slice(0, 6000) });
+    }
+  }
+  return { text, turns: maxTurns };
 }
