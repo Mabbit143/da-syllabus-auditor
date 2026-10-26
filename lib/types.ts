@@ -25,6 +25,7 @@ export interface SignalHit {
   polarity: 1 | -1;
   passageId: string;
   evidence?: AuthorEvidence;
+  pairedPassageId?: string;
 }
 
 export interface AuthorEvidence {
@@ -61,7 +62,15 @@ export interface Coverage {
   skipped: string[];
 }
 
+export interface Assessment {
+  what: string;
+  week: number;
+  percent: number | null;
+  passageId: string;
+}
+
 export interface AuditReport {
+  assessments: Assessment[];
   fileName: string;
   pageCount: number;
   coverage: Coverage;
@@ -80,6 +89,7 @@ export interface AuditRequest {
 }
 
 export interface Candidates {
+  assessments: { what: string; week: number; percent: number | null; page: number; quote: string }[];
   readings: { author: string; title: string; topic?: string; page: number; quote: string }[];
   signals: { code: string; page: number; quote: string }[];
   flags: {

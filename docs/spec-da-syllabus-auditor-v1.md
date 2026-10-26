@@ -25,7 +25,11 @@ Target: single PDF -> page-preserving extraction -> Meta Model API analysis -> d
 
 In scope: single PDF upload; file name/page count; extraction; five dimension assessments; attendance, grade-weight and late-policy flags; transparent overall read; source context; missing-evidence notices; printable report.
 
-Out of scope: LMS/Canvas or calendar integration, grade simulation, multi-course comparisons or term views, crunch-week maps, professor/advisor email drafting, institutional dashboards, paid services, identity/demographic/intent inference, and automated claims of discrimination. OCR is not required for v1: unreadable scans fail explicitly. No accounts or durable storage are proposed for v1.
+Out of scope: LMS/Canvas or calendar integration, grade simulation, professor/advisor email drafting, institutional dashboards, paid services, identity/demographic/intent inference, and automated claims of discrimination. OCR is not required for v1: unreadable scans fail explicitly. No accounts and no server-side storage. Browser-only storage (localStorage) is allowed for the term view.
+
+## Scope expansion (user decision 2026-10-26, supersedes the single-syllabus rule)
+
+The user moved these into scope on day 1 of the hackathon, in this order: (1) stronger grading with ambiguity and contradiction signals, (2) an agentic consistency auditor in which the model uses tools to read the syllabus and find internal contradictions, (3) a multi-syllabus term view with a crunch-week map and a ranking of which course is riskiest. Still out of scope: LMS/Canvas sync, calendar integration, grade simulation, email drafts, institutional dashboards, accounts, server storage, paid services. The term view keeps each syllabus transient in the browser; nothing is sent or stored beyond the existing per-audit analysis calls.
 
 ## Architecture choices proposed for approval
 
@@ -112,7 +116,7 @@ Cite the 1-3 verified passages with the strongest signals; if more exist, state 
 
 | Dimension | Positive signals (P) | Negative signals (N) |
 | --- | --- | --- |
-| Transparency | T1 grade weights or percentages stated; T2 due dates or a schedule stated; T3 grading criteria or scale stated; T4 contact, office hours or response time stated | T5 a policy is referenced but left undefined ("at instructor's discretion" with no criteria); T6 a term that changes grades or penalties is left undefined |
+| Transparency | T1 grade weights or percentages stated; T2 due dates or a schedule stated; T3 grading criteria or scale stated; T4 contact, office hours or response time stated | T5 a policy is referenced but left undefined ("at instructor's discretion" with no criteria); T6 a term that changes grades or penalties is left undefined; T7 two stated counts, numbers or policies conflict (found by the consistency auditor, both quotes verified); T8 a grade scale or table is ambiguous (mixed units, missing bounds); T9 an unresolved placeholder, leftover drafting note or text error is left in the syllabus |
 | Punitive vs. flexible | F1 late work accepted with a stated allowance, grace period or extension process; F2 lowest scores dropped, or revision or resubmission allowed; F3 absences excused through a described process, or attendance not graded | F4 attendance counts toward the grade or is penalized; F5 late work penalized, zero credit or not accepted; F6 "no exceptions" or no make-up stated |
 | Accessibility in practice | A1 accommodation process stated with how, who or when to ask; A2 course-specific flexibility stated (alternate formats, recordings, flexible deadlines); A3 free, open or library-provided materials stated | A4 accommodation requires documentation or a deadline that is stated as a hurdle; A5 required purchase of materials stated; A6 rigid in-person or timed requirement stated with no stated alternative |
 | Whose perspectives are in the room | P1 text states a goal or unit on varied communities, viewpoints or lived experience; P2 student knowledge or experience invited as course content; P3 choice among readings or topics stated | P4 text frames the course around a single canon, tradition or viewpoint; P5 text assumes uniform student circumstances (for example weekday daytime availability, a car, campus residence) |

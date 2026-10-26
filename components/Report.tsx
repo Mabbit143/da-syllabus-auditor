@@ -76,6 +76,7 @@ export default function Report({ report, pages }: { report: AuditReport; pages: 
                 <div key={h.passageId}>
                   <p className="signal">{h.polarity === 1 ? "+" : "−"} {h.label}</p>
                   <Quote passage={byId.get(h.passageId)!} pages={pages} />
+                  {h.pairedPassageId && <Quote passage={byId.get(h.pairedPassageId)!} pages={pages} />}
                   {h.evidence && (
                     <p className="muted">
                       Author bio ({h.evidence.author}): &ldquo;{h.evidence.quote}&rdquo;{" "}

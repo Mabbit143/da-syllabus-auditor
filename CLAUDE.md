@@ -80,8 +80,7 @@ The PRD defines this intended flow; no modules implement it yet:
 - Unreadable or image-only PDFs fail plainly (`could not read text from this file`); never fabricate an audit from the file name.
 - Contradictory policies retain both passages and a mixed/unclear assessment. Long documents are processed by section; disclose any skipped sections.
 - Uploaded syllabi are not shared, published, or used to train anything. Implement a printable/shareable report without automatically publishing the source document.
-- V1 is single-syllabus only. No LMS/Canvas sync, calendar integration, grade simulation, email drafts, institutional dashboards, or multi-course features. Cross-course work is stretch only after v1 is done and frozen.
-- No accounts in v1 unless the chosen stack makes them trivial; the PRD deliberately avoids committing to accounts/storage.
+- Scope (user decision 2026-10-26): multi-syllabus term view, crunch-week map and an agentic consistency auditor are IN scope; see the spec section "Scope expansion". Still out: LMS/Canvas sync, calendar integration, grade simulation, email drafts, institutional dashboards, accounts, server-side storage. Browser localStorage only.
 
 ## Onboarding gotchas and unresolved decisions
 

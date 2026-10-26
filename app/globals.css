@@ -21,3 +21,9 @@ button { font: inherit; padding: 8px 14px; cursor: pointer; }
 button.link { background: none; border: 0; padding: 0; color: #1a5fd0; text-decoration: underline; }
 button:focus-visible, input:focus-visible { outline: 3px solid #1a5fd0; outline-offset: 2px; }
 @media print { .noprint { display: none !important; } main { padding: 0; } .card { break-inside: avoid; } }
+table.term { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+table.term th, table.term td { border-bottom: 1px solid var(--line); padding: 6px 8px; text-align: left; vertical-align: top; }
+.weeks { display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px; }
+.week { border: 1px solid var(--line); border-radius: 6px; padding: 6px; text-align: center; display: flex; flex-direction: column; font-size: 0.85rem; }
+.week.crunch { border-color: #b3261e; background: rgba(179, 38, 30, 0.14); }
+@media (max-width: 520px) { .weeks { grid-template-columns: repeat(4, 1fr); } }

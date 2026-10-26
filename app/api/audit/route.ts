@@ -3,7 +3,7 @@ import { runAudit } from "@/lib/audit";
 import { callMeta, callMetaSearch } from "@/lib/meta";
 import type { AuditRequest } from "@/lib/types";
 
-export const maxDuration = 120;
+export const maxDuration = 300;
 
 const MAX_PAGES = 80;
 const MAX_PAGE_CHARS = 20_000;
