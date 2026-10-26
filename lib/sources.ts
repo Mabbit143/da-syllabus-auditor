@@ -15,7 +15,7 @@ Return ONLY one JSON object: {"found":true,"url":"https://...","quote":"exact bi
 export const CONFIRM_INSTRUCTIONS = `You check one claim. Return ONLY {"supported":true} or {"supported":false}.
 "insider_stated" is supported only if the bio quote itself explicitly states the author belongs to or comes from the community or tradition the reading covers. "outsider_stated" is supported only if the quote itself explicitly states a background outside it. A stated nationality, ethnicity or community membership counts as a stated background. Job titles, affiliations and research interests alone do not support either claim. Do not use outside knowledge.`;
 
-function squash(s: string): string {
+export function squash(s: string): string {
   return s.replace(/\s+/g, " ").trim();
 }
 
@@ -28,7 +28,7 @@ export interface BioCheck {
   relation: "insider_stated" | "outsider_stated";
 }
 
-function isPublicHttp(url: string): boolean {
+export function isPublicHttp(url: string): boolean {
   try {
     const u = new URL(url);
     if (u.protocol !== "https:" && u.protocol !== "http:") return false;
@@ -38,7 +38,7 @@ function isPublicHttp(url: string): boolean {
   }
 }
 
-function pageText(html: string): string {
+export function pageText(html: string): string {
   return squash(
     html
       .replace(/<(script|style|noscript)[\s\S]*?<\/>/gi, " ")
