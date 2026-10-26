@@ -159,7 +159,7 @@ async function basetenChat(messages: ChatMessage[], tools?: AgentTool[]): Promis
       body: JSON.stringify({
         model: BASETEN_MODEL,
         messages,
-        max_tokens: 12000,
+        max_tokens: 30000,
         temperature: 0,
         ...(tools ? { tools: tools.map((t) => ({ type: "function", function: t })) } : {}),
       }),
@@ -167,8 +167,12 @@ async function basetenChat(messages: ChatMessage[], tools?: AgentTool[]): Promis
     });
     if (!res.ok) throw new Error(`Baseten returned HTTP ${res.status}: ${(await res.text()).slice(0, 300)}`);
     const data = await res.json();
-    const msg = data.choices?.[0]?.message;
+    const choice = data.choices?.[0];
+    const msg = choice?.message;
     if (!msg) throw new Error("Baseten response had no message");
+    if (!msg.content && !msg.tool_calls?.length) {
+      console.error(`[baseten] empty reply: finish_reason=${choice.finish_reason} completion_tokens=${data.usage?.completion_tokens} reasoning_chars=${String(msg.reasoning_content ?? "").length}`);
+    }
     return msg;
   } finally {
     clearTimeout(timer);
