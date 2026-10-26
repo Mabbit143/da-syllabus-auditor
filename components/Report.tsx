@@ -18,6 +18,7 @@ function Quote({ passage, pages }: { passage: Passage; pages: Page[] }) {
     <blockquote className="quote">
       <p>&ldquo;{passage.text}&rdquo;</p>
       <span className="where">
+        <span className="stamp">Verified</span>
         Page {passage.page}{" "}
         <button type="button" className="link noprint" onClick={() => setOpen(!open)}>
           {open ? "Hide context" : "See in context"}
