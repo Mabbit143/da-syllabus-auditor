@@ -66,3 +66,14 @@ table.term th { font-family: var(--font-label), sans-serif; text-transform: uppe
   .card.strong .grade { color: var(--cyan-dark); } .card.weak .grade, .card.sev-high .grade { color: var(--pink-dark); }
   .card.mixed .grade, .card.sev-medium .grade { color: var(--violet); } .warn { color: var(--pink-dark); }
 }
+.nav { max-width: 780px; margin: 0 auto; padding: 14px 16px 0; display: flex; gap: 20px; font-family: var(--font-label), sans-serif; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; }
+.form { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: 12px 0; }
+.form label, fieldset label.check { display: flex; flex-direction: column; gap: 4px; font-family: var(--font-label), sans-serif; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.04em; }
+input[type=text], input:not([type]), input[type=number], input[type=date] { font: inherit; padding: 8px; background: transparent; color: var(--fg); border: 2px solid var(--line); border-radius: 2px; }
+fieldset { border: 2px solid var(--line); border-radius: 2px; margin: 8px 0; display: flex; flex-wrap: wrap; gap: 8px 20px; }
+fieldset label.check { flex-direction: row; align-items: center; gap: 8px; text-transform: none; letter-spacing: 0; font-family: var(--font-body), sans-serif; font-size: 1rem; }
+legend { font-family: var(--font-label), sans-serif; text-transform: uppercase; padding: 0 6px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0; }
+button.chip { background: transparent; color: var(--fg); border: 2px solid var(--line); }
+button.chip.on { background: var(--lime); color: var(--black); border-color: var(--lime); }
+.why { margin: 4px 0 8px; padding-left: 20px; font-size: 0.9rem; } .actions { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }

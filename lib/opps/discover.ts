@@ -29,13 +29,22 @@ export function buildQueries(p: Profile): string[] {
   ].filter(Boolean);
   const group = who.length ? who.join(" or ") : "undergraduate students";
   const major = p.major ? ` ${p.major}` : "";
-  return [
+  const where = [p.school, p.location].filter(Boolean).join(" ");
+  const queries = [
     `scholarships for ${group}${major} open now`,
-    `emergency grants for students ${p.school || ""} ${p.location || ""}`.replace(/\s+/g, " ").trim(),
-    `grants for ${group} ${p.location || ""}`.replace(/\s+/g, " ").trim(),
+    `emergency grants for students ${where}`,
+    `grants for ${group} ${p.location}`,
     `fellowships for${major || " undergraduate"} students ${group}`,
     `${p.school || p.location || "state"} university foundation scholarships ${group}`,
+    `${p.location || "state"} state scholarships and grants for ${group}`,
+    `scholarships for${major || " college"} majors undergraduate`,
+    `emergency financial aid fund ${p.school || "college students"}`,
+    "non-traditional adult learner scholarships open for applications",
+    p.flags.includes("parent") ? "scholarships and grants for student parents" : "first-generation college student grants and scholarships",
+    "scholarships with upcoming deadlines this semester for undergraduates",
+    "small grants for textbooks, childcare and transportation for college students",
   ];
+  return queries.map((q) => q.replace(/\s+/g, " ").trim());
 }
 
 function parse(text: string): Candidate[] {
@@ -102,19 +111,22 @@ export function verifyCandidate(c: Candidate, text: string, searched: Set<string
 
 export async function discoverFunding(profile: Profile, search: Search): Promise<{ found: Opportunity[]; dropped: Record<string, number>; queries: number }> {
   const queries = buildQueries(profile);
-  const settled = await Promise.allSettled(
-    queries.map(async (q) => {
-      for (let attempt = 1; ; attempt++) {
-        const r = await search(DISCOVER_INSTRUCTIONS, `Student profile: major ${profile.major || "any"}, school ${profile.school || "any"}, location ${profile.location || "any"}.\nSearch for: ${q}`);
-        try {
-          return { candidates: parse(r.text), results: r.results };
-        } catch (err) {
-          console.error(`[opps] bad JSON (attempt ${attempt}):`, err instanceof Error ? err.message : err);
-          if (attempt >= 2) throw err;
-        }
+  const runOne = async (q: string) => {
+    for (let attempt = 1; ; attempt++) {
+      const r = await search(DISCOVER_INSTRUCTIONS, `Student profile: major ${profile.major || "any"}, school ${profile.school || "any"}, location ${profile.location || "any"}.
+Search for: ${q}`);
+      try {
+        return { candidates: parse(r.text), results: r.results };
+      } catch (err) {
+        console.error(`[opps] bad JSON (attempt ${attempt}):`, err instanceof Error ? err.message : err);
+        if (attempt >= 2) throw err;
       }
-    }),
-  );
+    }
+  };
+  const settled: PromiseSettledResult<Awaited<ReturnType<typeof runOne>>>[] = [];
+  for (let i = 0; i < queries.length; i += 6) {
+    settled.push(...(await Promise.allSettled(queries.slice(i, i + 6).map(runOne))));
+  }
   const dropped: Record<string, number> = {};
   const drop = (why: string) => (dropped[why] = (dropped[why] ?? 0) + 1);
   const pending: { c: Candidate; searched: Set<string> }[] = [];

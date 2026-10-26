@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Anton, Roboto, Roboto_Condensed, Roboto_Mono, Special_Elite } from "next/font/google";
+import Nav from "@/components/Nav";
 import "./globals.css";
 
 const anton = Anton({ variable: "--font-display", subsets: ["latin"], weight: "400" });
@@ -16,7 +17,10 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${anton.variable} ${condensed.variable} ${roboto.variable} ${mono.variable} ${typed.variable}`}>
-      <body>{children}</body>
+      <body>
+        <Nav />
+        {children}
+      </body>
     </html>
   );
 }
