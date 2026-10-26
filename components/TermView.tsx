@@ -35,7 +35,7 @@ export default function TermView({ courses, onOpen, onRemove }: {
 
   return (
     <section>
-      <h3>Term view ({courses.length} syllabus{courses.length === 1 ? "" : "es"})</h3>
+      <h3>Term view ({courses.length} {courses.length === 1 ? "syllabus" : "syllabi"})</h3>
       <p className="muted">
         Risk points: High flag = 2, Medium flag = 1, each Weak dimension = 1. Weeks assume every course shares the
         same term calendar. Everything stays in this browser.
