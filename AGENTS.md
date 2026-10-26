@@ -30,7 +30,7 @@ Coding gate: no application code, scaffolding or installs before the hackathon k
 - Unreadable or image-only PDF: fail with `could not read text from this file`.
 - Every API route and fetch needs try/catch, readable error logs and a user-facing error state.
 - Smallest working implementation; small isolated components; full files, no `...` placeholders.
-- Scope: see the spec sections "Scope expansion" and "Opportunity dashboard". In: term view, crunch-week map, consistency agent, and an opportunity dashboard (funding, research, grad programs) on Supabase free tier with accounts and row-level security. Out: LMS, calendar, paid services. Never store syllabus text server-side; never commit keys. Every listing needs verified source quotes.
+- Scope: see the spec sections "Scope expansion" and "Opportunity dashboard". In: term view, crunch-week map, consistency agent, and an opportunity dashboard (funding, research, grad programs) on Supabase free tier with accounts and row-level security. Out: LMS, calendar, paid services. Saved syllabus text is private to the student's own account and only saved by their choice; never commit keys. Listings that charge a fee or require a membership are dropped. Every listing needs verified source quotes.
 
 ## Do not touch
 

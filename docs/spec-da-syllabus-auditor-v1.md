@@ -29,7 +29,7 @@ Out of scope: LMS/Canvas or calendar integration, grade simulation, professor/ad
 
 ## Scope expansion (user decision 2026-10-26, supersedes the single-syllabus rule)
 
-The user moved these into scope on day 1 of the hackathon, in this order: (1) stronger grading with ambiguity and contradiction signals, (2) an agentic consistency auditor in which the model uses tools to read the syllabus and find internal contradictions, (3) a multi-syllabus term view with a crunch-week map and a ranking of which course is riskiest. Still out of scope: LMS/Canvas sync, calendar integration, grade simulation, institutional dashboards, paid services. Accounts and server storage are now in scope for the opportunity dashboard only. The term view keeps each syllabus transient in the browser; syllabus text is never stored on the server.
+The user moved these into scope on day 1 of the hackathon, in this order: (1) stronger grading with ambiguity and contradiction signals, (2) an agentic consistency auditor in which the model uses tools to read the syllabus and find internal contradictions, (3) a multi-syllabus term view with a crunch-week map and a ranking of which course is riskiest. Still out of scope: LMS/Canvas sync, calendar integration, grade simulation, institutional dashboards, paid services. Accounts and server storage are now in scope for the opportunity dashboard only. Syllabus text is stored server-side only in a signed-in student's own private account, by their choice; it is never shown to other users or used to train anything.
 
 ## Architecture choices proposed for approval
 
@@ -80,14 +80,14 @@ Path: (1) survive your courses (syllabus audit, term view, a fix for every findi
 ### Rules (same evidence gate as the audit)
 
 - Discovery agents search the web (Meta search grounding). A listing appears only if verbatim quotes, fetched from its source page and checked as exact substrings, support its amount, deadline and eligibility (funding) or its research focus and opening (professors, assistantships). Anything unsupported is dropped, never shown as a guess. Discovery that did not run is never presented as done.
-- Scam rule: a funding listing that asks the student to pay a fee to apply, or whose page gives no sponsor, is flagged or dropped.
+- Fee rule (user decision 2026-10-26): a funding listing that charges a fee to apply, or requires buying a membership, is dropped, not flagged. A listing whose page names no sponsor is also dropped.
 - Professor and program profiles use only public professional information on the page (research areas, listed openings, contact link). No inference about a person beyond what the page states.
 - Fit score is computed by code, not the model: hard eligibility filters from the student profile, then days to deadline, amount, and workload fit against the student's term-view crunch weeks. The model proposes quotes; code decides rank.
 - Each opportunity gets a status (new, saved, rejected, applied, awarded, declined), deadline, required materials and next step.
 
 ### Data (Supabase free tier: Postgres + auth + row-level security)
 
-Tables: `profiles` (user id, major, school, location, hours available, flags the student chooses to enter), `opportunities` (type, title, sponsor, amount, deadline, source url, verified quotes, fit inputs), `applications` (opportunity id, status, materials, notes), `audit_summaries` (flags, assessments and risk points only, no syllabus text). Row-level security: a user can read and write only their own rows. Keys: the service key stays server-side; never commit keys.
+Tables: `profiles` (user id, major, school, location, hours available, flags the student chooses to enter), `opportunities` (type, title, sponsor, amount, deadline, source url, verified quotes, fit inputs), `applications` (opportunity id, status, materials, notes), `audits` (the report plus the extracted syllabus page text, saved only when a signed-in student chooses to save, so it reopens with see-in-context). Row-level security: a user can read and write only their own rows, including their saved syllabus text and reports; they are never shown to other users. Keys: the service key stays server-side; never commit keys.
 
 ### Privacy and cost
 
