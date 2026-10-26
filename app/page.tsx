@@ -81,7 +81,7 @@ export default function Home() {
       <h1 className="noprint">DA Syllabus Auditor</h1>
       <section className="noprint">
         <p>Upload a syllabus PDF to see how it treats students, with quotes you can check yourself. The PDF stays in your browser; only its text is sent for analysis. Audits are saved only in this browser. Add several syllabi to compare your term.</p>
-        <input type="file" accept="application/pdf" onChange={(e) => { onFile(e.target.files?.[0]); e.target.value = ""; }} disabled={status.step === "working"} />
+        <input type="file" aria-label="Upload syllabus PDF" accept="application/pdf" onChange={(e) => { onFile(e.target.files?.[0]); e.target.value = ""; }} disabled={status.step === "working"} />
       </section>
       {status.step === "working" && <p role="status">{status.message}</p>}
       {status.step === "error" && <p role="alert" className="warn">{status.message}</p>}
