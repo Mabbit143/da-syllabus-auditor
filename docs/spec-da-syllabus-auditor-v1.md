@@ -25,11 +25,11 @@ Target: single PDF -> page-preserving extraction -> Meta Model API analysis -> d
 
 In scope: single PDF upload; file name/page count; extraction; five dimension assessments; attendance, grade-weight and late-policy flags; transparent overall read; source context; missing-evidence notices; printable report.
 
-Out of scope: LMS/Canvas or calendar integration, grade simulation, professor/advisor email drafting, institutional dashboards, paid services, identity/demographic/intent inference, and automated claims of discrimination. OCR is not required for v1: unreadable scans fail explicitly. No accounts and no server-side storage. Browser-only storage (localStorage) is allowed for the term view.
+Out of scope: LMS/Canvas or calendar integration, grade simulation, professor/advisor email drafting, institutional dashboards, paid services, identity/demographic/intent inference, and automated claims of discrimination. OCR is not required for v1: unreadable scans fail explicitly. Accounts and a free hosted database are allowed for the opportunity dashboard (see "Opportunity dashboard"). Syllabus audits stay browser-only unless the student saves a summary.
 
 ## Scope expansion (user decision 2026-10-26, supersedes the single-syllabus rule)
 
-The user moved these into scope on day 1 of the hackathon, in this order: (1) stronger grading with ambiguity and contradiction signals, (2) an agentic consistency auditor in which the model uses tools to read the syllabus and find internal contradictions, (3) a multi-syllabus term view with a crunch-week map and a ranking of which course is riskiest. Still out of scope: LMS/Canvas sync, calendar integration, grade simulation, email drafts, institutional dashboards, accounts, server storage, paid services. The term view keeps each syllabus transient in the browser; nothing is sent or stored beyond the existing per-audit analysis calls.
+The user moved these into scope on day 1 of the hackathon, in this order: (1) stronger grading with ambiguity and contradiction signals, (2) an agentic consistency auditor in which the model uses tools to read the syllabus and find internal contradictions, (3) a multi-syllabus term view with a crunch-week map and a ranking of which course is riskiest. Still out of scope: LMS/Canvas sync, calendar integration, grade simulation, institutional dashboards, paid services. Accounts and server storage are now in scope for the opportunity dashboard only. The term view keeps each syllabus transient in the browser; syllabus text is never stored on the server.
 
 ## Architecture choices proposed for approval
 
@@ -70,6 +70,28 @@ Neither path selects a framework, host, parser, SDK, model ID, or version. Meta 
 | B20 | Student retries / prior failure | New request; no duplicate findings; no automatic unlimited provider retries |
 | B21 | Student prints or saves report / complete or partial report | Print readable report, citations, coverage and caveats; partial status remains visible |
 | B22 | Syllabus contains model instructions / analysis | Treat syllabus content as untrusted evidence; it cannot change system rules, call tools, or bypass verification |
+
+## Opportunity dashboard (user decision 2026-10-26, rebuilt from scratch for the hackathon)
+
+The product grows from an audit into a dashboard for students who pay their own way (non-traditional, first-generation, returning, low-income). The earlier Floot app "Scholarship HQ" is reference for what students need only; no code is reused, and everything is newly built in this repository.
+
+Path: (1) survive your courses (syllabus audit, term view, a fix for every finding); (2) fund your degree (scholarships, grants, fellowships, emergency funding); (3) plan your next step (professors and research areas in your and adjacent departments, open assistantships and programs at other schools).
+
+### Rules (same evidence gate as the audit)
+
+- Discovery agents search the web (Meta search grounding). A listing appears only if verbatim quotes, fetched from its source page and checked as exact substrings, support its amount, deadline and eligibility (funding) or its research focus and opening (professors, assistantships). Anything unsupported is dropped, never shown as a guess. Discovery that did not run is never presented as done.
+- Scam rule: a funding listing that asks the student to pay a fee to apply, or whose page gives no sponsor, is flagged or dropped.
+- Professor and program profiles use only public professional information on the page (research areas, listed openings, contact link). No inference about a person beyond what the page states.
+- Fit score is computed by code, not the model: hard eligibility filters from the student profile, then days to deadline, amount, and workload fit against the student's term-view crunch weeks. The model proposes quotes; code decides rank.
+- Each opportunity gets a status (new, saved, rejected, applied, awarded, declined), deadline, required materials and next step.
+
+### Data (Supabase free tier: Postgres + auth + row-level security)
+
+Tables: `profiles` (user id, major, school, location, hours available, flags the student chooses to enter), `opportunities` (type, title, sponsor, amount, deadline, source url, verified quotes, fit inputs), `applications` (opportunity id, status, materials, notes), `audit_summaries` (flags, assessments and risk points only, no syllabus text). Row-level security: a user can read and write only their own rows. Keys: the service key stays server-side; never commit keys.
+
+### Privacy and cost
+
+Student profile data is the user's own and is deleted on request. Nothing is used to train anything. Free tiers only; search calls are the main metered cost and are capped per day.
 
 ## Evidence and assessment contract
 

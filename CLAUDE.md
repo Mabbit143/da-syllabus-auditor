@@ -80,7 +80,7 @@ The PRD defines this intended flow; no modules implement it yet:
 - Unreadable or image-only PDFs fail plainly (`could not read text from this file`); never fabricate an audit from the file name.
 - Contradictory policies retain both passages and a mixed/unclear assessment. Long documents are processed by section; disclose any skipped sections.
 - Uploaded syllabi are not shared, published, or used to train anything. Implement a printable/shareable report without automatically publishing the source document.
-- Scope (user decision 2026-10-26): multi-syllabus term view, crunch-week map and an agentic consistency auditor are IN scope; see the spec section "Scope expansion". Still out: LMS/Canvas sync, calendar integration, grade simulation, email drafts, institutional dashboards, accounts, server-side storage. Browser localStorage only.
+- Scope (user decision 2026-10-26): term view, crunch-week map, the agentic consistency auditor and the opportunity dashboard (funding, research, grad programs; Supabase free tier with accounts) are IN scope; see the spec sections "Scope expansion" and "Opportunity dashboard". Still out: LMS/Canvas sync, calendar integration, grade simulation, institutional dashboards, paid services. Syllabus text is never stored server-side.
 
 ## Onboarding gotchas and unresolved decisions
 
