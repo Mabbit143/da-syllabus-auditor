@@ -1,7 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useUserId } from "@/components/Nav";
 import OppCard, { type OppStatus } from "@/components/OppCard";
+import { loadProfile, loadStatuses, saveProfile, saveStatus } from "@/lib/cloud";
 import {
   FUNDING_TYPES, REQUIREMENT_FLAGS, type FundingType, type Profile, type RankedOpportunity, type RequirementFlag,
 } from "@/lib/opps/types";
@@ -50,20 +52,53 @@ export default function Opportunities() {
   const [error, setError] = useState("");
   const [filter, setFilter] = useState<FundingType | "all" | "saved">("all");
 
+  const userId = useUserId();
+  const [savedOpps, setSavedOpps] = useState<Record<string, RankedOpportunity>>({});
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   useEffect(() => {
     setProfile(read(PROFILE_KEY, EMPTY));
     setStatuses(read(STATUS_KEY, {}));
   }, []);
 
+  // Signed in: load the account's profile and saved listings; if the account is empty, upload this device's.
+  useEffect(() => {
+    if (!userId) return;
+    (async () => {
+      const remoteProfile = await loadProfile();
+      if (remoteProfile) {
+        setProfile(remoteProfile);
+        write(PROFILE_KEY, remoteProfile);
+      } else {
+        await saveProfile(read(PROFILE_KEY, EMPTY));
+      }
+      const remote = await loadStatuses();
+      if (remote) {
+        const map: Record<string, OppStatus> = {};
+        const opps: Record<string, RankedOpportunity> = {};
+        for (const r of remote) {
+          map[r.url] = r.status;
+          opps[r.url] = r.opp;
+        }
+        setStatuses((prev) => ({ ...prev, ...map }));
+        setSavedOpps(opps);
+      }
+    })();
+  }, [userId]);
+
   function setP(patch: Partial<Profile>) {
     const next = { ...profile, ...patch };
     setProfile(next);
     write(PROFILE_KEY, next);
+    if (timer.current) clearTimeout(timer.current);
+    timer.current = setTimeout(() => void saveProfile(next), 800);
   }
-  function setStatus(url: string, s: OppStatus) {
-    const next = { ...statuses, [url]: s };
+  function setStatus(opp: RankedOpportunity, s: OppStatus) {
+    const next = { ...statuses, [opp.url]: s };
     setStatuses(next);
     write(STATUS_KEY, next);
+    setSavedOpps((prev) => ({ ...prev, [opp.url]: opp }));
+    void saveStatus({ url: opp.url, status: s, opp });
   }
 
   async function search() {
@@ -88,7 +123,10 @@ export default function Opportunities() {
     }
   }
 
-  const visible = (results ?? []).filter((o) => {
+  const pool = filter === "saved"
+    ? Object.values(savedOpps).sort((a, b) => a.rank - b.rank)
+    : (results ?? []);
+  const visible = pool.filter((o) => {
     const s = statuses[o.url] ?? "new";
     if (filter === "saved") return s === "saved";
     return s !== "rejected" && (filter === "all" || o.type === filter);
@@ -123,7 +161,7 @@ export default function Opportunities() {
       {error && <p role="alert" className="warn">{error}</p>}
       {note && !busy && <p className="muted">{note}</p>}
 
-      {results && !busy && (
+      {(results || Object.keys(savedOpps).length > 0) && !busy && (
         <section>
           <div className="chips noprint" role="group" aria-label="Filter by type">
             {(["all", ...FUNDING_TYPES, "saved"] as const).map((t) => (
@@ -134,7 +172,7 @@ export default function Opportunities() {
           </div>
           {visible.length === 0 && <p>Nothing here yet. Try different filters, or add details to your profile.</p>}
           {visible.map((o) => (
-            <OppCard key={o.url} opp={o} status={statuses[o.url] ?? "new"} onStatus={(s) => setStatus(o.url, s)} />
+            <OppCard key={o.url} opp={o} status={statuses[o.url] ?? "new"} onStatus={(s) => setStatus(o, s)} />
           ))}
         </section>
       )}

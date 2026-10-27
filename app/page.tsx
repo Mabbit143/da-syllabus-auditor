@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import Report from "@/components/Report";
 import TermView, { type Course } from "@/components/TermView";
+import { useUserId } from "@/components/Nav";
+import { deleteAudit, loadAudits, saveAudit } from "@/lib/cloud";
 import { extractPages } from "@/lib/extract";
 import type { AuditReport, Page } from "@/lib/types";
 
@@ -33,9 +35,26 @@ export default function Home() {
   const [openId, setOpenId] = useState<string | null>(null);
   const [status, setStatus] = useState<Status>({ step: "idle" });
 
+  const userId = useUserId();
+
   useEffect(() => {
     setCourses(load());
   }, []);
+
+  // Signed in: the account is the source of truth. If it is empty, upload what is on this device.
+  useEffect(() => {
+    if (!userId) return;
+    (async () => {
+      const remote = await loadAudits();
+      if (remote === null) return;
+      if (remote.length > 0) {
+        setCourses(remote);
+        save(remote);
+      } else {
+        for (const c of load()) await saveAudit(c);
+      }
+    })();
+  }, [userId]);
 
   function update(next: StoredCourse[]) {
     setCourses(next);
@@ -66,6 +85,7 @@ export default function Home() {
       const report: AuditReport = data.report;
       const id = crypto.randomUUID();
       update([...courses, { id, report, pages }]);
+      void saveAudit({ id, report, pages });
       setOpenId(id);
       setStatus({ step: "idle" });
     } catch (err) {
@@ -95,7 +115,10 @@ export default function Home() {
         <TermView
           courses={courses}
           onOpen={setOpenId}
-          onRemove={(id) => update(courses.filter((c) => c.id !== id))}
+          onRemove={(id) => {
+            update(courses.filter((c) => c.id !== id));
+            void deleteAudit(id);
+          }}
         />
       )}
     </main>
