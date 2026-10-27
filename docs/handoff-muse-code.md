@@ -18,7 +18,7 @@ The owner's motto: tools that only point out problems and give no solutions are 
 ## 3. Live system
 
 - Deployed on Vercel free tier: https://da-syllabus-auditor-hkrr.vercel.app (public; Deployment Protection was turned off). The long per-deployment URL is login-walled; always use the short one.
-- Verified 2026-10-27: the site loads and `/api/audit` returned a real report in 6 seconds for a one-page test syllabus. **Not verified on Vercel:** a full 9-page audit (about 54 s locally on Meta, about 75 s on Baseten), the 300-second `maxDuration` on the free plan, sign-in, and the policy check. Routes set `maxDuration = 300` (audit, opportunities, policy-check) and 120 (fixes).
+- Verified 2026-10-27: the site loads and `/api/audit` returned a real report in 6 seconds for a one-page test syllabus. Also verified 2026-10-27 on Vercel: a synthetic 9-page audit (HTTP 200, 14 s, full coverage) and the UO policy check (HTTP 200, 23 s, 5 of 5 topics on `uoregon.edu`); see section 14. **Not verified on Vercel:** sign-in, and timing with the real 9-page demo PDF in the browser (about 54 s locally on Meta, about 75 s on Baseten). Routes set `maxDuration = 300` (audit, opportunities, policy-check) and 120 (fixes).
 - Supabase (free tier): Postgres, email/password auth, row-level security. The redirect URLs include the Vercel address (the owner confirmed doing this).
 - Git state when this was written: `main` is **2 commits ahead of `origin/main`** (`8ee6923` policy check, `d3a9e8c` UO corpus) plus an uncommitted edit to `lib/policy/lookup.ts` (the UO domain fix, section 9). The owner pushes only after explicit approval each time.
   - Update 2026-10-27 (checked against the repo): the UO domain fix is now committed as `14ace8b` (`fix(policy): require the school's own site for UO`), the handoff and `CLAUDE.md` updates are committed (`6de34ad`, `cc7ff88`, `e039968`), and the working tree is clean. Tick item 1 in section 11 only after the live lookup test passes; the commit alone is not the test.
@@ -156,7 +156,7 @@ Findings so far from reading UO's own pages (all from public pages; quotes verif
 
 ## 14. Unverified items to confirm early
 
-- [ ] The 300-second function limit on Vercel's free plan, and a full audit plus policy check running on the live site.
+- [x] The 300-second function limit on Vercel's free plan, and a full audit plus policy check running on the live site. Verified 2026-10-27 against the live API: 9-page audit HTTP 200 in 14 s (full coverage, overall "mixed" on 5 of 5, 24 verified passages) and UO policy check HTTP 200 in 23 s (5 of 5 topics on `uoregon.edu`). Both are synthetic test syllabi and finish far under 300 s, so the cap itself is not stressed; still confirm timing with the real 9-page demo PDF in the browser before the demo.
 - [ ] Whether `db/002-policy-gaps.sql` has been run, and whether the owner is in `app_owners`.
 - [ ] Whether a Meta billing spend limit is set.
 - [ ] That the GitHub Actions E2E workflow passes.

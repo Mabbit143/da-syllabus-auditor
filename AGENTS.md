@@ -14,7 +14,7 @@ Built and live. Next.js app on Vercel (`da-syllabus-auditor-hkrr.vercel.app`, De
 
 Built: audit, fixes per finding, opportunity search, term view, Supabase sign-in and saved audits, policy check against the school's policies, owner-only gap list, UO policy corpus (`data/uo-policies/`: 400 web pages and 177 PDFs as text).
 
-Not verified: a full 9-page audit on Vercel (the 300-second function limit on the free plan is unconfirmed), the policy check on Vercel, the Playwright E2E run, and GitHub Actions. Verified 2026-10-27 locally: the policy lookup after the domain fix returns all five topics on `uoregon.edu` pages. See the checklist in `docs/handoff-muse-code.md` section 14.
+Not verified: sign-in on Vercel, timing with the real 9-page demo PDF in the browser, the Playwright E2E run, and GitHub Actions. Verified 2026-10-27: the policy lookup returns all five topics on `uoregon.edu` pages locally and on Vercel (policy check 23 s; synthetic 9-page audit 14 s). See the checklist in `docs/handoff-muse-code.md` section 14.
 
 ## Decided
 
