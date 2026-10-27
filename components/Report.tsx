@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import FixKit from "@/components/FixKit";
 import type { AuditReport, Page, Passage } from "@/lib/types";
 
 const STATUS_TEXT = {
@@ -108,6 +109,8 @@ export default function Report({ report, pages }: { report: AuditReport; pages: 
           </div>
         ))}
       </section>
+
+      <FixKit report={report} />
 
       <button type="button" className="noprint" onClick={() => window.print()}>
         Print or save this report

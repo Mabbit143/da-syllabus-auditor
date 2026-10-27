@@ -81,3 +81,4 @@ button.chip.on { background: var(--lime); color: var(--black); border-color: var
 .authform { position: absolute; right: 0; top: 28px; z-index: 5; width: 280px; padding: 14px; background: var(--bg); border: 2px solid var(--lime); border-radius: 2px; display: grid; gap: 10px; }
 .authform label { display: flex; flex-direction: column; gap: 4px; font-family: var(--font-label), sans-serif; text-transform: uppercase; font-size: 0.8rem; }
 .authform input { font: inherit; padding: 8px; background: transparent; color: var(--fg); border: 2px solid var(--line); border-radius: 2px; }
+.draft { margin: 4px 0 8px; padding: 8px 12px; border: 1px dashed var(--line); background: rgba(245, 242, 234, 0.05); white-space: pre-wrap; }
