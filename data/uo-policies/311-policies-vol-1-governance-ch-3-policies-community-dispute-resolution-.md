@@ -1,0 +1,158 @@
+# Community Dispute Resolution Program | University of Oregon Policy Library
+
+Source: https://policies.uoregon.edu/vol-1-governance/ch-3-policies/community-dispute-resolution-program
+Fetched: 2026-10-27
+Found from: https://policies.uoregon.edu
+
+Community Dispute Resolution Program
+Policy Number
+I.03.02
+Reason for Policy
+This policy applies to the programs administered by the University of Oregon (through the law school) known as Resolution Oregon.
+Entities Affected
+All members of the public and UO community interacting with the Resolution Oregon program.
+Responsible Office
+For questions about this policy, please contact the office for Resolution Oregon at 541-346-1623.
+Website Address
+https://policies.uoregon.edu/vol-1-governance/ch-3-policies/community-d…
+Enactment & Revision History
+28 May 2024 - Technical revision to program name applied by the University Secretary.
+20 July 2018 - Revisions approved by the university president
+Policy renumbered from 571.100, et seq. to I.03.02.
+04 September 2015 - Technical revisions enacted by the university secretary
+01 July 2014 - Became a University of Oregon Policy by operation of law
+Former Oregon Administrative Rule Chapter 571 Division 100
+Policy
+A. Applicability
+This policy applies to the programs administered by the University of Oregon (University), acting through the Dean of its School of Law pursuant to ORS 36.100 et seq.
+B. Definitions
+(1) "Applicant" is an entity which has submitted an application for program funding pursuant to ORS 36.155.
+(2) "University" means the University of Oregon acting through the Dean of its School of Law.
+(3) "Dean" means the Dean of the University of Oregon School of Law.
+(4) "Mediation" is defined in ORS 36.1l0(5) and includes case development and conciliation.
+(5) "Community Dispute Resolution Program" means a program that has been determined eligible for funding under ORS 36.155 and this policy.
+(6) "Grantee" is a community dispute resolution program that has been awarded funding pursuant to ORS 36.155.
+(7) "Policy" refers to this policy.
+(8) “Confidential Information” is any communication, document, or other information subject to the confidentiality requirements of ORS 36.220-36.238.
+C. Minimum Eligibility Requirements
+To be eligible to receive funding under ORS 36.100 et seq. and this policy, a dispute resolution program must:
+(1) Be:
+(a) A governmental entity with a separate dispute resolution program budget and a dispute resolution program advisory committee of at least five representative members of the community in which the governmental entity is located, which advisory committee meets at least quarterly; or
+(b) A nonprofit organization registered in Oregon with a board of directors of at least five representative members of the community or communities in which the organization does business, which board of directors meets at least quarterly. If an applicant is a nonprofit organization established for purposes other than dispute resolution, it shall have a separate dispute resolution program budget and a separate advisory committee of at least five representative members of the community in which the organization does business, which advisory committee shall meet at least quarterly; and
+(2) Provide citizen education in conflict resolution skills to assist citizens in resolving their own disputes peacefully and community mediation services. Community mediation services must be provided, at least in part, by volunteer mediators. In addition to these essential services, programs may elect to provide other services in order to respond to local identified needs. Such services may include, but are not limited to:
+(a) Methods for addressing the interests of crime victims in criminal cases when those cases are either not prosecuted for lack of funds or could be more effectively handled outside the courts;
+(b) Arbitration; and
+(c) Training for individuals who resolve disputes.
+(3) The Oregon Judicial Department shall not be eligible for funding under ORS 36.100 et seq. and this policy.
+(4) Municipal, county, and justice courts shall not be eligible for funding under ORS 36.100 et seq. and this policy.
+D. Fees for Service
+(1) A Grantee is not required to charge fees to disputants for dispute resolution services. If a Grantee charges fees for dispute resolution services, a sliding fee scale or waiver or deferment based on income must be offered. The Grantee shall explain to all disputants, in advance of the services being furnished, the amount of any fees and other costs that may be charged.
+(2) A Grantee shall not charge the following fees:
+(a) Fees contingent on outcome; or
+(b) Fees calculated on the basis of the amount in controversy.
+E. Matching (Participating) Fund Requirements
+(1) Grantees shall be required to match the funding granted to them pursuant to ORS 36.155 at the following levels:
+(a) First grant year: 10 percent;
+(b) Second grant year: 25 percent;
+(c) Third grant year: 50 percent;
+(d) Fourth grant year: 75 percent;
+(e) Fifth grant year: 100 percent.
+(2) Matching funds may be generated through fees for services, grants, donations, fundraising, in-kind donations, and other efforts. The University, acting through the Dean, shall retain discretion to waive or modify the matching fund requirements based upon the Grantee's good faith efforts and substantial compliance with such requirements.
+(3) In-kind donations may be reported or credited as revenue or expenditures if such donations:
+(a) Will be received during the proposed budgetary period; and
+(b) Represent necessary and ordinary expenses or services related to the operation and management of the Grantee.
+(4) Documentation of in-kind donations shall include descriptions of the services or materials donated, the dates received, and the names and addresses of the donors. Volunteer services shall be documented by means of time sheets signed by the volunteer and verified by the program manager.
+(5) In-kind donations and services, such as office space and administrative, clerical, and professional services, shall be valued at the prevailing market rate.
+(6) The following may not be included as in-kind donations:
+(a) Volunteer time by members of the Grantee's board of directors or advisory committee while serving in the capacity as members of the board or committee.
+F. Participation by Counties
+(1) To qualify for a grant under ORS 36.155 and this policy, a county shall notify the Dean on in accordance with a schedule established by the Dean of its intention to participate in the expenditure of funds for programs funded under ORS 36.155. Such notification shall be by resolution of the appropriate board of county commissioners or, if the programs are to serve more than one county, by joint resolution. A county providing notice may select the dispute resolution programs to receive grants under ORS 36.155 for providing dispute resolution services within the county from among Community Dispute Resolution Programs within the county or, in the case of a joint resolution, counties.
+(2) The county's notification to the Dean must include a statement of agreement by the county to engage in a selection process and to select as the recipient of funding an entity capable of and willing to provide dispute resolution services according to this policy. The award of a grant is contingent upon the selection by the county of a qualified entity. The Dean may provide consultation and technical assistance to a county to identify, develop and implement dispute resolution programs that meet the standards and guidelines set forth in this policy.
+(3) If a county does not issue a timely notification under subsection (1) above, the Dean may notify a county board of commissioners that the Dean intends to make a grant to a dispute resolution program in the county. The Dean may, after such notification, assume the county's role under subsection (1) above unless the county gives the notice required by subsection (1). If the Dean assumes the county's role, the Dean may contract with a qualified program for a two-year period. The county may, 90 days before the expiration of such contract, notify the Dean under subsection (1) above that the county intends to assume its role under subsection (1).
+(4) All dispute resolution programs identified for funding shall comply with this policy.
+(5) All Grantees shall submit informational reports and statistics as required by this policy.
+G. Termination of Participation by a County
+(1) Any county that receives a grant under ORS 36.155 and this policy may terminate its participation at the end of any month by delivering a resolution of its board of commissioners to the Dean not less than 180 days before the termination date.
+(2) If a county terminates its participation, the remaining portion of the grant made to the county shall revert to the University to be used as specified in ORS 36.155.
+H. County Dispute Resolution Program Coordinator
+(1) Each board of commissioners electing to participate in the expenditure of funds shall designate a person to function as the county dispute resolution program coordinator.
+(2) The coordinator shall maintain public information on any dispute resolution services within the county including name and telephone number of the coordinator, availability of grant monies to fund local programs, the grant solicitation and award process, and the program names and services provided by grantees in that county.
+(3) A coordinator need not be a resident of the county and may serve as the coordinator for more than one county.
+I. Application Process
+(1) A board of commissioners, or the University acting through the Dean, if the Dean has assumed the county's role, shall issue a request for applications to provide dispute resolution services under ORS 36.155. The request for applications shall be advertised in a manner reasonably calculated to ensure that those qualified to provide the requested dispute resolution services receive notice of the request. Such advertising may be in a newspaper, on a web site, by electronic mail, or any other means that meets the requirements of this subsection.
+(2) An applicant shall submit the original application to the participating county and a copy of the application simultaneously to the Dean, unless the Dean has assumed the county's role in which case the application shall be sent solely to the Dean. Applications may be submitted by mail, hand delivery, express delivery, facsimile machine, website submission, or electronic mail (including in portable document format (pdf)).
+(3) The Dean on his or her own behalf or on behalf of a county may in his or her sole discretion accept late or incomplete applications and may seek to clarify any or all portions of applications. The Dean may in his or her sole discretion waive any provisions of the application for sufficient cause.
+J. Application Requirements
+1. Any applicant that:
+(a) did not receive funding in the previous biennium, or does not meet the requirements in subjection J(a)(ii), must submit an application with requirements from section J(2) and section J(3).
+(b) received funding in the previous biennium, and is in substantial compliance with their contract requirements, may submit an application with only the base requirements in section J(2), for up to two (2) additional biennia (an application consisting of the base and additional requirements must be submitted every six (6) years).
+2. Unless waived by the Dean, all applications shall include the following base requirements:
+(a) Benchmarks for the upcoming biennium for citizen education in conflict resolution skills; community mediation services; mediation trainings, publicity and outreach, and other areas determined by the Dean.
+(b) A plan for recruiting, selecting and using volunteer mediators.
+(c) A description of any training activities including the mediation curriculum and apprenticeship.
+(d) A proposed budget including the amount and sources of matching funds for the grant period, and any fee schedule to be used by the applicant. If available, audited financial statements shall also be submitted for the previous two years. An applicant's request for funding shall not exceed the Dean's grant projection made pursuant to this Policy.
+(e) Letters of support from community organizations, judicial and legal system representatives, administrative agencies, or other appropriate public service organizations in the proposed area of service. Such letters should, if appropriate, attest to the organization's willingness to make referrals to the applicant.
+(f) A discussion of the potential for collaboration with other applicants and, if there might be other applicants, a plan for such collaboration.
+(g) The applicant must certify or agree that they will abide by the requirements of 41 CFR 60-1.4(a), 60-300.5(a) and 60-741.5(a). These regulations prohibit discrimination against qualified individuals based on their status as protected veterans or individuals with disabilities, and prohibit discrimination against all individuals based on their race, color, religion, sex, sexual orientation, gender identify or national origin. Moreover, these regulations require that entities that receive grant funds take affirmative action to employ and advance in employment individuals without regard to race, color, religion, sex, sexual orientation, gender identify, national origin, disability or veteran status.
+(h) Any other information required by the Dean.
+(3) Unless waived by the Dean, all applicants that meet the requirements of section J(1)(a) must also submit the following additional requirements:
+(a) A statement of the program's goals, objectives, and activities, including citizen education in conflict resolution skills and community mediation services.
+(b) A description of community problems to be addressed, the proposed geographical area of service, the service population, and the number of persons the applicant will have the capacity to serve on an annual basis; the types of disputes to be handled; the types of dispute resolution services to be offered; and any access restrictions to be imposed by the applicant.
+(c) A plan for publicizing its services and resources to potential referral agencies, individuals, civic groups, courts and agencies of the judicial system.
+(d) The applicant's organizational chart, structure, personnel policies, and resumes of all professional staff members.
+(e) Applicants that did not receive funding in the previous biennium must submit a business plan that contains a three-to-five (3-5) year projected budget of income and expenses.
+(f) Any other information required by the Dean.
+K. Selection Process
+(1) The Dean shall acknowledge receipt of each application and shall review each application to determine whether the applicant is eligible for funding under this policy as of the date of application. The Dean shall send a notice of eligibility determination to each applicant and to the county dispute resolution coordinator.
+(2) If the county has elected to participate as described in this policy, the county shall review the applications of those applicants determined eligible by the Dean and shall select the program(s) for funding. If the county has not elected to participate, the Dean shall select the program(s) for funding from those applicants the Dean has determined to be eligible.
+(3) Criteria for the selection of funding shall be as determined by the Dean and set forth in the Request for Application. Criteria may include, but need not be limited to:
+(a) The ability of the applicant to address unmet community needs in the proposed geographical area of service;
+(b) The structure and scope of the services to be provided by the applicant;
+(c) The applicant's experience and qualifications in dispute resolution services;
+(d) The amount of the requested grant and the reliability of the applicant's other funding sources; and
+(e) The adequacy and cost of personnel, services, and supplies, and capital outlay.
+L. Contracts with Grantees
+(1) The University shall enter into a contract with Grantee which specifies the kinds and level of services the grantee shall provide during the designated grant period. The University shall have sole authority to determine the content of the contract.
+(2) Grants shall be available for the period of July 1 of each odd-numbered year through June 30 of the following odd-numbered year. The University shall contract with the Grantee for up to two years.
+(3) The Dean or designee shall have the power to examine the records of any grantee to determine compliance with the contract and applicable law.
+(4) In the event that the Dean determines that a Grantee is not in substantial compliance with the terms of its contract, the Grantee shall be required to come into compliance within a reasonable amount of time as determined by the Dean. If the program continues to be out of compliance, the Dean shall provide written notice to the program and the county that specifies the areas of non-compliance and requires substantial compliance within 30 days. After the 30 day period, the Dean shall take such steps as the Dean deems necessary or advisable, including but not limited to requiring the Grantee to participate in a form of alternative dispute resolution or terminating the contract. The State of Oregon, the University, the Dean and their agents and employees shall have no liability to any Grantee for any actions taken under this policy.
+M. Available Funds
+Allocation of available funds shall be based upon the need for community dispute resolution services; the availability of funds to create, sustain, and maintain viable programs; the performance of community dispute resolution programs; and innovation and special projects.
+N. Evaluation of Grantees
+Each Grantee shall work cooperatively with the Dean or designee to facilitate the collection of data to measure the effectiveness, integrity, and applicability of dispute resolution services provided by the Grantee. In addition, each Grantee shall:
+(1) Perform an annual evaluation to measure program effectiveness;
+(2) Measure client satisfaction;
+(3) Conduct annual board and director performance evaluations; and
+(4) Cooperate with the Dean in providing aggregate data to analyze the effectiveness of community dispute resolution efforts and to track trends throughout the state.
+O. Reporting Requirements
+(1) Each Grantee shall provide to the Dean such data as the Dean may request, including but not limited to data concerning the Grantee's operating budget, the number and kinds of educational programs, staff and volunteer qualifications, training activities, the number and source of referrals, types of disputes referred, dispute resolution services provided, number of persons served, and case outcome. Data provided to the Dean will exclude all Confidential Information. Each Grantee shall report the information annually and as the Dean shall direct in writing.
+(2) Within ninety days of the close of each grant period, the Grantee shall submit to the Dean a final report on revenues and expenses for the grant period.
+P. Referrals; Confidentiality Agreements
+(1) Although Grantees may accept mandatory referrals to mediation, they shall provide the referred parties with written notice specifying that participation in the mediation session is voluntary.
+(2) A written agreement to maintain the confidentiality of all Confidential Information shall be offered to participants for their acceptance and signature no later than the initial mediation session.
+Q. Qualifications and Minimum Training Requirements for Mediators in Community Dispute Resolution Programs
+(1) Qualifications: Mediators shall possess good communications skills, an ability to respect diversity and differences, and an ability to maintain confidentiality and impartiality.
+(2) Training: Mediators shall complete a basic mediation curriculum and an apprenticeship:
+(a) A basic mediation curriculum shall be at least 30 hours and shall include a minimum of six hours' participation by each trainee in no less than three supervised role plays; a trainee self-assessment; and an evaluation of the trainee by the trainer which identifies areas where trainee improvement is needed for the benefit of both the trainee and the program. A basic mediation curriculum shall seek to develop mediation knowledge and skills, including information gathering, relationship skills, communication skills, problem solving, conflict management and ethical practices. The curriculum shall specifically address the following areas:
+(A) Active listening, empathy and validation;
+(B) Sensitivity and awareness of cross-cultural issues;
+(C) Maintaining neutrality:
+(D) Identifying and reframing issues;
+(E) Establishing trust and respect;
+(F) Using techniques to achieve agreement and settlement, including creating climate conducive to resolution, identifying options, reaching consensus, and working toward agreement;
+(G) Shaping and writing agreements;
+(H) Assisting individuals during intake and case development to resolve their disputes with a minimum of intervention by a third party; and
+(I) Ethical standards for mediator conduct adopted by state and national organizations.
+(b) The apprenticeship shall include participation in a minimum of two mediation cases under the supervision of an experienced mediator or trainer, with at least one case resulting in a completed mediation session.
+(3) An individual who, prior to the effective date of this policy, has participated in substantially similar training or completed 100 hours as a mediator shall have met the training requirements established by this policy.
+(4) An individual who has completed substantially similar training in another state after the effective date of this policy shall have met the training requirements established by this policy.
+(5) Each grantee shall ensure that its mediators have received basic curriculum training from a lead trainer who has completed:
+(a) Mediation training substantially comparable to that required under this policy;
+(b) Fifty hours of mediation experience; and who has
+(c) Substantial background as a mediation trainer or an assistant.
+(6) A Grantee may establish additional training requirements beyond these minimum training requirements. There shall be no formal academic requirements for mediators in community dispute resolution programs.
+(7) An applicant or Grantee may request from the Dean a waiver or modification of training requirements in cases where the application of the policy would place an undue burden on the Grantee.
+Related Resources
+N/A
+Policy Type
+Oregon Administrative Rule

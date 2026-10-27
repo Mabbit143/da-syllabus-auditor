@@ -1,0 +1,14 @@
+# Online Exam Center Proctoring | Teaching Support and Innovation
+
+Source: https://teaching.uoregon.edu/services/online-exam-center-proctoring
+Fetched: 2026-10-27
+Found from: https://teaching.uoregon.edu/syllabus
+
+Online Exam Center Proctoring
+Faculty teaching online and students learning online at the University of Oregon benefit from a strong culture of shared knowledge vested in academic integrity. Building and maintaining that culture can succeed only if the issue of academic integrity is no longer framed as an individual instructor’s responsibility. UO Online’s proctoring service for online course exams is one solution that UO Online provides faculty to mitigate the sense that academic integrity is a pressure they must bear alone.
+The Exam Center offers proctoring for your fully asynchronous online courses. You can request that your UO Online students living in the Eugene-Springfield area attend prescheduled exam appointments in our Knight Library Exam Center. Students living elsewhere can request an off-campus remote proctor from a local college, university, or public library that the Exam Center staff approves. Online proctoring solutions are not currently accepted at the University of Oregon. Please note that requests to have exams proctored through the UO Online Exam Center are subject to capacity constraints.
+Contact Us
+Online Exam Center Proctoring
+UO Online Exam Center
+The UO Online Exam center located in the basement of the Knight Library offers a secure testing environment for on-campus testers that includes classroom management software that not only limits students access to the open internet but allows the proctor to view each testers screen simultaneously, security cameras hosted by the UOPD milestone system, and an in-person proctor that supervises each testing session. All exams are delivered exclusively through Canvas ensuring seamless integration with your course as well as providing the same student experience across units and schools.
+Exam Center staff will coordinate exam deadlines and exam windows with course instructors to prevent scheduling bottlenecks while still allowing the flexibility expected by students taking online courses. While instructors use exam windows of different lengths, we strongly recommend a one-week testing window. Due to the structure of the academic term and concentrations of exams for midterms and finals, we cannot accommodate 1- or 2-day exam windows. We are open Mon-Sat to accommodate those students employed full-time, participating in extracurricular activities, or have other commitments such as dependent care. Using our registration software, students will simply use our online form to reserve a convenient time to come and complete their exams in-person. Students receiving accommodations should work directly with the AEC.

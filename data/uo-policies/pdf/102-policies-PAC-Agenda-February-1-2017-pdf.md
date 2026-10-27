@@ -1,0 +1,8 @@
+# Link to PAC agenda 2/1/2017
+
+Source: https://policies.uoregon.edu/sites/default/files/PAC%20Agenda%20-%20February%201%2C%202017.pdf
+Fetched: 2026-10-27
+Pages: 1
+
+[Page 1]
+Policy Advisory Council February 1, 2017 Page 1 Policy Advisory Council Wednesday, February 1, 2017, 10:00 a.m. Johnson Hall Conference Room Agenda 1. Welcome…………………………………………………………………………………………………………………….……..Kelly Wolf 2. Unmanned Aircraft Systems (New)…………….……………………………………………………...…Cassandra Moseley 3. Protection of Minors (New) ………………..………………………..…………………………………………….…..Kassy Fisher 4. 01.00.13 Environmental Policy (Revise).………………….………………………………………………………..Kassy Fisher 5. 04.00.04 Flag Protocol (Repeal)……………………………………………………………………………….………..Kassy Fisher 6. 03.05.02 Student Employment Philosophy (Repeal)…………………………………………………….……Kassy Fisher 7. 580.023 Criminal Background Checks (Repeal)…………………………………………………………….……Kassy Fisher 8. IMD 4.200 Board Policy on Endowed Chairs (Repeal………………………………………………….Angela Wilhelms 9. 571.023 Student Medical Leave (Revise)…………………………………………………………………..…..Kathie Stanley 10. Officers of Administration (OA) Employment (New) ...…………………………………………..……..Nancy Resnick a. 03.05.01 Performance Appraisals (Repeal) b. 03.05.06 Officer of Administration, Appointment of (Repeal) 11. Officers of Administration (OA) Time Off (New)....……….………………………………………..……..Nancy Resnick a. V.09.01 Parental Leave (Revise) 12. Officers of Administration (OA) Performance Management (New)…….………………….……..Nancy Resnick 13. Officers of Administration (OA) Separations (New)……………………………………..............……..Nancy Resnick 14. Officers of Administration (OA) Grievances (New)……………………………..…………………..……..Nancy Resnick a. 571.003 Grievance Procedures (Revise)

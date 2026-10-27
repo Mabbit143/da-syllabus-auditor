@@ -1,0 +1,9 @@
+# III. Formal Process When an Instructor Denies an Accommodation | UO Accessible Education Center
+
+Source: https://aec.uoregon.edu/iii-formal-process-when-instructor-denies-accommodation
+Fetched: 2026-10-27
+Found from: https://aec.uoregon.edu
+
+III. Formal Process When an Instructor Denies an Accommodation
+If a student has sent an accommodation notification letter from the AEC to their instructor, and an instructor indicates to the student that a specific accommodation described in the letter is academically inappropriate with regard to their course, the student seeking the accommodation should inform their AEC Access Advisor of the instructor’s position and seek resolution through the AEC Access Advisor. Students are encouraged not to discuss any disagreement with the instructor regarding accommodations directly with the instructor. If the instructor initiates such a conversation, the student is encouraged to include their AEC Access Advisor in the conversation to discuss further.
+Notification letters issued through AEC Connect are typically general and are not tailored to a specific course. Instructors provide input as to whether or not accommodations proposed by the AEC notification letter are academically reasonable for an instructor’s specific course and course requirements. If instructors have questions or concerns about fulfilling the approved accommodations or have concerns about the reasonableness of an accommodation in their course, they are to call AEC at (541) 346-1155 or email uoaec@uoregon.edu . They will be connected to the relevant AEC Access Advisor, who will provide support in exploring this concern. If an instructor posits that the accommodation in question would alter the nature of the course or is unreasonable based on any of the below criteria, AEC will conduct a fundamental alteration assessment.

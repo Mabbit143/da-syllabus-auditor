@@ -1,0 +1,61 @@
+# Academic Freedom, Freedom of Inquiry, and Free Speech | University of Oregon Policy Library
+
+Source: https://policies.uoregon.edu/vol-2-academics-instruction-research/ch-5-academic-freedom/academic-freedom-freedom-inquiry-and-free
+Fetched: 2026-10-27
+Found from: https://policies.uoregon.edu
+
+Academic Freedom, Freedom of Inquiry, and Free Speech
+Policy Number
+II.05.01
+Reason for Policy
+This policy outlines the University’s position regarding academic freedom, freedom of inquiry, and free speech.
+Entities Affected
+All members of the UO community, including students, faculty, staff, and others affiliated with the University.
+Responsible Office
+For questions about this policy, please contact the Office of the Provost at 541-346-3486 or otp@uoregon.edu .
+Website Address
+https://policies.uoregon.edu/vol-2-academics-instruction-research/ch-5-academic-freedom/academic-freedom-freedom-inquiry-and-free
+Enactment & Revision History
+May 14, 2024 – New policy approved by President Scholz which revises, consolidates and replaces previous policies OAR 580.022.005 Academic Freedom; 01.00.19 Academic Freedom; and 01.00.16 Freedom of Inquiry and Free Speech.
+OAR 580.022.005
+September 2, 2015 – Technical revisions enacted by the university secretary
+July 1, 2014 – Became a University of Oregon Policy by operation of law
+Former Oregon Administrative Rule Chapter 580 Division 22, Section 0005
+UO Policy 01.00.19
+December 28, 2010 – Approved by the university president
+April 17, 2013 – Senate passed motion US12/13-34: Academic Freedom & Freedom of Speech
+December 4, 2013 – the University Senate passed a motion on the floor to create an Ad Hoc Committee to Evaluate Academic Freedom/Freedom of Speech Policy
+November 13, 2013 – On the recommendation of the Ad Hoc Committee, the University Senate repealed motion US12/13-34 with the passage of US13/14-07
+April 9, 2014 – Policy approved by the University Senate
+May 28, 2014 – Policy approved by the university president < signed document >
+UO Policy 01.00.16
+January 2010 – the Provost charged a work group, led by Russ Tomlin, to review and revise the current Campus Speakers policy. The work group included representatives from the faculty (Margie Paris-Law, Tim Gleason-SOJC), administration (Brian Smith-VPFA, Kathie Stanley-VPSA, and Beverlee Stilwell-Provost Office) and General Counsel (Randy Geller). The workgroup was also supported administratively by Pam Palanuk and Marilyn Skalberg. The workgroup developed a draft policy that was discussed with the Faculty Advisory Council, the Deans, and Leadership Council. The draft policy was posted for comment on both the Provost's and Senate websites.
+The final version incorporating revisions based on the ensuing feedback was reviewed and adopted by the Senate with minor revisions at its last meeting of May 26, 2010.
+June 7, 2010 – Approved by the Executive Leadership Team
+December 28, 2010 – Approved by the university president. <signature document>
+Policy
+I. Freedom of Speech
+The commitment to free speech and freedom of inquiry described in this policy extends to all members of the UO community: faculty, staff, and students. It also extends to all others who visit or participate in activities held on the UO campus.
+Free speech is central to the academic mission and is the central tenet of a free and democratic society. The university encourages and supports open, vigorous, and challenging debate on all issues of interest to the community. Further, as a public institution, the university will sustain a higher and more open standard for freedom of inquiry and free speech than may be expected or preferred in private settings.
+Free inquiry and free speech are the cornerstones of an academic institution committed to the creation and transfer of knowledge. Expression of diverse points of view is crucial for learning and understanding, not solely for those who present and defend a view but for those who hear, disagree, and pass judgment on those views. The belief that an opinion is false, pernicious, despicable, detestable, or offensive cannot be grounds for its suppression.
+The university supports free speech with vigor, including the right of presenters to offer opinion, the right of the audience to hear what is presented, and the right of protesters to challenge ideas, so long as protest does not disrupt or stifle the free exchange of ideas. It is the responsibility of speakers, listeners, and all members of our community to respect others and to promote a culture of mutual inquiry throughout the university community (see Community Standards Affirmation in the Related Resources Section).
+II. Academic Freedom
+The university also affirms its commitment to Academic Freedom including in the special contexts of scholarship, creative production, teaching, governance, and public service.
+a. SCHOLARSHIP. The university's research mission requires that members of the UO community have autonomous freedom to conduct research and produce creative work, and to publish and disseminate that work, limited only by the standards and methods of accountability established by their individual professions and disciplines.
+b. TEACHING. The university’s responsibility to help students think critically and independently requires that members of the university community have the right to investigate and discuss matters, including those that are controversial, inside and outside of class, without fear of institutional restraint. Matters brought up in class should be related to the subjects of courses or otherwise be educationally relevant, as determined primarily by the faculty member in charge of the class.
+c. POLICY AND SHARED GOVERNANCE. Members of the university community have freedom to address, question, or criticize any matter of institutional policy or practice, whether acting as individuals or within an agency of institutional governance.
+d. PUBLIC ENGAGEMENT. Public engagement requires that members of the university community have freedom to participate in public debate, both within and beyond their areas of expertise, and to address both the university community and the larger society on any matter of social, political, economic, cultural, or other interest. In their exercise of this freedom, university community members have the right to identify their association or title but should not claim to be acting or speaking on behalf of the university unless authorized to do so.
+These freedoms derive immediately from the university’s basic commitment to advancing knowledge and understanding. The academic freedoms describe above shall be exercised without fear of institutional reprisal. Only serious abuses of this policy – ones that rise to the level of professional misbehavior or professional incompetence – should lead to adverse consequences. Any such determinations shall be made in accordance with established, formal procedures involving judgment by relevant peers.
+As a matter of policy, the university does not attempt to control, sway, or limit the personal opinion or expression of that opinion of any employee or student. In the exercise of this freedom of expression, employees and students should manifest appropriate restraint, should show respect for the opinions of others, and should make every effort to indicate that they do not speak on behalf of the university.
+Related Resources
+Access to UO facilities and space is governed by a complementary policy, https://policies.uoregon.edu/vol-4-finance-administration-infrastructure/ch-7-property-facilities-planning-sustainability-0
+Community Standards Affirmation, https://policies.uoregon.edu/vol-5-human-resources/ch-4-workplace/community-standards-affirmation
+EMU Policies
+Free Speech and Demonstration Guidelines at the University of Oregon
+Oregon Administrative Rul 165-013-0030 Restrictions on Political Advocacy by Public Employees
+Political Activities Policy
+Proscribed Conduct Policy
+Student Conduct Code Policy
+Student Conduct Code and Procedures
+Policy Type
+UO Policy (New)

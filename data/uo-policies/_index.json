@@ -1,0 +1,3748 @@
+{
+ "fetched": "2026-10-27T16:56:39.578Z",
+ "pages": [
+  {
+   "file": "001-provost-academic-policies-procedures-and-guidance.md",
+   "url": "https://provost.uoregon.edu/academic-policies-procedures-and-guidance",
+   "title": "Academic Policies, Procedures, and Guidance | Office of the Provost",
+   "chars": 8439,
+   "depth": 0,
+   "from": "seed"
+  },
+  {
+   "file": "002-provost-syllabus-requirement-undergraduate-and-graduate-policy.md",
+   "url": "https://provost.uoregon.edu/syllabus-requirement-undergraduate-and-graduate-policy",
+   "title": "Syllabus Requirement- Undergraduate and Graduate (Policy) | Office of the Provost",
+   "chars": 6318,
+   "depth": 0,
+   "from": "seed"
+  },
+  {
+   "file": "003-provost-undergraduate-course-attendance-and-engagement-policy.md",
+   "url": "https://provost.uoregon.edu/undergraduate-course-attendance-and-engagement-policy",
+   "title": "Undergraduate Course Attendance and Engagement (Policy) | Office of the Provost",
+   "chars": 5772,
+   "depth": 0,
+   "from": "seed"
+  },
+  {
+   "file": "004-provost-canvas-use-policy.md",
+   "url": "https://provost.uoregon.edu/canvas-use-policy",
+   "title": "Canvas Use (Policy) | Office of the Provost",
+   "chars": 1315,
+   "depth": 0,
+   "from": "seed"
+  },
+  {
+   "file": "005-aec-home.md",
+   "url": "https://aec.uoregon.edu",
+   "title": "Accessible Education Center | University of Oregon",
+   "chars": 2137,
+   "depth": 0,
+   "from": "seed"
+  },
+  {
+   "file": "006-teaching-syllabus.md",
+   "url": "https://teaching.uoregon.edu/syllabus",
+   "title": "Syllabus Essentials | Teaching Support and Innovation",
+   "chars": 40511,
+   "depth": 0,
+   "from": "seed"
+  },
+  {
+   "file": "007-teaching-guidance-making-your-syllabus-accessible.md",
+   "url": "https://teaching.uoregon.edu/guidance-making-your-syllabus-accessible",
+   "title": "Guidance for Making Your Syllabus Accessible | Teaching Support and Innovation",
+   "chars": 6728,
+   "depth": 0,
+   "from": "seed"
+  },
+  {
+   "file": "008-teaching-digital-accessibility-teaching.md",
+   "url": "https://teaching.uoregon.edu/digital-accessibility-teaching",
+   "title": "Digital Accessibility in Teaching | Teaching Support and Innovation",
+   "chars": 5135,
+   "depth": 0,
+   "from": "seed"
+  },
+  {
+   "file": "009-conduct-home.md",
+   "url": "https://conduct.uoregon.edu",
+   "title": "Student Conduct and Community Standards | Dean of Students",
+   "chars": 1635,
+   "depth": 0,
+   "from": "seed"
+  },
+  {
+   "file": "010-dos-home.md",
+   "url": "https://dos.uoregon.edu",
+   "title": "Dean of Students | University of Oregon",
+   "chars": 6944,
+   "depth": 0,
+   "from": "seed"
+  },
+  {
+   "file": "011-registrar-home.md",
+   "url": "https://registrar.uoregon.edu",
+   "title": "Welcome | Office of the Registrar",
+   "chars": 2589,
+   "depth": 0,
+   "from": "seed"
+  },
+  {
+   "file": "012-policies-home.md",
+   "url": "https://policies.uoregon.edu",
+   "title": "University of Oregon Policy Library | University of Oregon",
+   "chars": 13342,
+   "depth": 0,
+   "from": "seed"
+  },
+  {
+   "file": "013-financialaid-home.md",
+   "url": "https://financialaid.uoregon.edu",
+   "title": "Funding Your Future | Financial Aid & Scholarships",
+   "chars": 1893,
+   "depth": 0,
+   "from": "seed"
+  },
+  {
+   "file": "014-investigations-home.md",
+   "url": "https://investigations.uoregon.edu",
+   "title": "Office of Equal Opportunity and Access | University of Oregon",
+   "chars": 3132,
+   "depth": 0,
+   "from": "seed"
+  },
+  {
+   "file": "015-www-admissions-and-financial-aid.md",
+   "url": "https://www.uoregon.edu/admissions-and-financial-aid?utm_source=banner-module&utm_campaign=banner",
+   "title": "Admissions and Financial Aid | University of Oregon",
+   "chars": 2272,
+   "depth": 1,
+   "from": "https://provost.uoregon.edu/academic-policies-procedures-and-guidance"
+  },
+  {
+   "file": "016-provost-policy-procedure.md",
+   "url": "https://provost.uoregon.edu/policy-procedure",
+   "title": "Academic Policy and Procedure | Office of the Provost",
+   "chars": 3114,
+   "depth": 1,
+   "from": "https://provost.uoregon.edu/academic-policies-procedures-and-guidance"
+  },
+  {
+   "file": "017-provost-teaching-evaluation-standards.md",
+   "url": "https://provost.uoregon.edu/teaching-evaluation-standards",
+   "title": "University of Oregon Teaching Evaluation Standards | Office of the Provost",
+   "chars": 4319,
+   "depth": 1,
+   "from": "https://provost.uoregon.edu/academic-policies-procedures-and-guidance"
+  },
+  {
+   "file": "018-provost-leaves-retirement-parental-leave-faq.md",
+   "url": "https://provost.uoregon.edu/leaves-retirement/parental-leave/faq",
+   "title": "Parental Leave FAQs for Represented and Unrepresented Faculty | Office of the Provost",
+   "chars": 7020,
+   "depth": 1,
+   "from": "https://provost.uoregon.edu/academic-policies-procedures-and-guidance"
+  },
+  {
+   "file": "019-provost-policy.md",
+   "url": "https://provost.uoregon.edu/policy",
+   "title": "Policy | Office of the Provost",
+   "chars": 1908,
+   "depth": 1,
+   "from": "https://provost.uoregon.edu/academic-policies-procedures-and-guidance"
+  },
+  {
+   "file": "020-provost-department-unit-policies.md",
+   "url": "https://provost.uoregon.edu/department-unit-policies",
+   "title": "Department & Unit Policies | Office of the Provost",
+   "chars": 2275,
+   "depth": 1,
+   "from": "https://provost.uoregon.edu/academic-policies-procedures-and-guidance"
+  },
+  {
+   "file": "021-provost-policy-review.md",
+   "url": "https://provost.uoregon.edu/policy-review",
+   "title": "Unit Policy Review | Office of the Provost",
+   "chars": 4971,
+   "depth": 1,
+   "from": "https://provost.uoregon.edu/academic-policies-procedures-and-guidance"
+  },
+  {
+   "file": "022-provost-ay-2025-2026-unit-policy-review-process.md",
+   "url": "https://provost.uoregon.edu/ay-2025-2026-unit-policy-review-process",
+   "title": "AY 2025-2026 Unit Policy Review Process | Office of the Provost",
+   "chars": 5860,
+   "depth": 1,
+   "from": "https://provost.uoregon.edu/academic-policies-procedures-and-guidance"
+  },
+  {
+   "file": "023-provost-accreditation.md",
+   "url": "https://provost.uoregon.edu/accreditation",
+   "title": "Accreditation | Office of the Provost",
+   "chars": 2659,
+   "depth": 1,
+   "from": "https://provost.uoregon.edu/academic-policies-procedures-and-guidance"
+  },
+  {
+   "file": "024-provost-regional-accreditation.md",
+   "url": "https://provost.uoregon.edu/regional-accreditation",
+   "title": "Regional Accreditation | Office of the Provost",
+   "chars": 1088,
+   "depth": 1,
+   "from": "https://provost.uoregon.edu/academic-policies-procedures-and-guidance"
+  },
+  {
+   "file": "025-provost-current-accreditation-cycle-2018-2024.md",
+   "url": "https://provost.uoregon.edu/current-accreditation-cycle-2018-2024",
+   "title": "Current Accreditation Cycle (2025-2032) | Office of the Provost",
+   "chars": 787,
+   "depth": 1,
+   "from": "https://provost.uoregon.edu/academic-policies-procedures-and-guidance"
+  },
+  {
+   "file": "026-provost-academic-allocation-model.md",
+   "url": "https://provost.uoregon.edu/academic-allocation-model",
+   "title": "Academic Allocation Model | Office of the Provost",
+   "chars": 3445,
+   "depth": 1,
+   "from": "https://provost.uoregon.edu/academic-policies-procedures-and-guidance"
+  },
+  {
+   "file": "027-provost-academic-continuity-planning.md",
+   "url": "https://provost.uoregon.edu/academic-continuity-planning",
+   "title": "Academic Continuity Planning | Office of the Provost",
+   "chars": 2629,
+   "depth": 1,
+   "from": "https://provost.uoregon.edu/academic-policies-procedures-and-guidance"
+  },
+  {
+   "file": "028-registrar-faculty-staff.md",
+   "url": "https://registrar.uoregon.edu/faculty-staff",
+   "title": "Faculty and Staff Resources | Office of the Registrar",
+   "chars": 1318,
+   "depth": 1,
+   "from": "https://provost.uoregon.edu/academic-policies-procedures-and-guidance"
+  },
+  {
+   "file": "029-provost-accessible-education-center-aec-accommodations-policy-and-gu.md",
+   "url": "https://provost.uoregon.edu/accessible-education-center-aec-accommodations-policy-and-guidance",
+   "title": "Accessible Education Center (AEC) Accommodations Policy | Office of the Provost",
+   "chars": 7872,
+   "depth": 1,
+   "from": "https://provost.uoregon.edu/academic-policies-procedures-and-guidance"
+  },
+  {
+   "file": "030-provost-cultural-competency-courses-required-syllabi-language-policy.md",
+   "url": "https://provost.uoregon.edu/cultural-competency-courses-required-syllabi-language-policy",
+   "title": "Cultural Competency Courses – Required Syllabi Language (Policy) | Office of the Provost",
+   "chars": 2985,
+   "depth": 1,
+   "from": "https://provost.uoregon.edu/academic-policies-procedures-and-guidance"
+  },
+  {
+   "file": "031-provost-dead-week.md",
+   "url": "https://provost.uoregon.edu/dead-week",
+   "title": "Dead Week | Office of the Provost",
+   "chars": 820,
+   "depth": 1,
+   "from": "https://provost.uoregon.edu/academic-policies-procedures-and-guidance"
+  },
+  {
+   "file": "032-provost-final-exams-policy.md",
+   "url": "https://provost.uoregon.edu/final-exams-policy",
+   "title": "Final Exams (Policy) | Office of the Provost",
+   "chars": 1477,
+   "depth": 1,
+   "from": "https://provost.uoregon.edu/academic-policies-procedures-and-guidance"
+  },
+  {
+   "file": "033-provost-grades-changing-grades-after-submission-duckweb-procedure.md",
+   "url": "https://provost.uoregon.edu/grades-changing-grades-after-submission-duckweb-procedure",
+   "title": "Grades – Changing Grades after submission to Duckweb (Procedure) | Office of the Provost",
+   "chars": 2729,
+   "depth": 1,
+   "from": "https://provost.uoregon.edu/academic-policies-procedures-and-guidance"
+  },
+  {
+   "file": "034-provost-grades-incompletes-policy.md",
+   "url": "https://provost.uoregon.edu/grades-incompletes-policy",
+   "title": "Grades - Incompletes (policy) | Office of the Provost",
+   "chars": 6075,
+   "depth": 1,
+   "from": "https://provost.uoregon.edu/academic-policies-procedures-and-guidance"
+  },
+  {
+   "file": "035-provost-gp-grades-pending-student-conduct-cases.md",
+   "url": "https://provost.uoregon.edu/gp-grades-pending-student-conduct-cases",
+   "title": "GP Grades for Pending Student Conduct Cases | Office of the Provost",
+   "chars": 3297,
+   "depth": 1,
+   "from": "https://provost.uoregon.edu/academic-policies-procedures-and-guidance"
+  },
+  {
+   "file": "036-provost-grades-recording-grades-duckweb-policy.md",
+   "url": "https://provost.uoregon.edu/grades-recording-grades-duckweb-policy",
+   "title": "Grades – Recording Grades in Duckweb (Policy) | Office of the Provost",
+   "chars": 469,
+   "depth": 1,
+   "from": "https://provost.uoregon.edu/academic-policies-procedures-and-guidance"
+  },
+  {
+   "file": "037-provost-grades-and-last-date-attendanceparticipation-policy.md",
+   "url": "https://provost.uoregon.edu/grades-and-last-date-attendanceparticipation-policy",
+   "title": "Grades and Last Date of Attendance/Participation (policy) | Office of the Provost",
+   "chars": 1831,
+   "depth": 1,
+   "from": "https://provost.uoregon.edu/academic-policies-procedures-and-guidance"
+  },
+  {
+   "file": "038-provost-grades-grades-thesis-andor-dissertation-503603-policy.md",
+   "url": "https://provost.uoregon.edu/grades-grades-thesis-andor-dissertation-503603-policy",
+   "title": "Grades - Grades for thesis and/or dissertation (503/603) (policy) | Office of the Provost",
+   "chars": 1591,
+   "depth": 1,
+   "from": "https://provost.uoregon.edu/academic-policies-procedures-and-guidance"
+  },
+  {
+   "file": "039-provost-registration-holds-policy.md",
+   "url": "https://provost.uoregon.edu/registration-holds-policy",
+   "title": "Registration Holds (Policy) | Office of the Provost",
+   "chars": 1302,
+   "depth": 1,
+   "from": "https://provost.uoregon.edu/academic-policies-procedures-and-guidance"
+  },
+  {
+   "file": "040-provost-instructors-record-policy.md",
+   "url": "https://provost.uoregon.edu/instructors-record-policy",
+   "title": "Instructors of Record (policy) | Office of the Provost",
+   "chars": 2927,
+   "depth": 1,
+   "from": "https://provost.uoregon.edu/academic-policies-procedures-and-guidance"
+  },
+  {
+   "file": "041-provost-instructor-availability-and-office-hours-guidance.md",
+   "url": "https://provost.uoregon.edu/instructor-availability-and-office-hours-guidance",
+   "title": "Instructor Availability and Office Hours (Guidance) | Office of the Provost",
+   "chars": 1426,
+   "depth": 1,
+   "from": "https://provost.uoregon.edu/academic-policies-procedures-and-guidance"
+  },
+  {
+   "file": "042-provost-mandatory-first-class-attendance-policy.md",
+   "url": "https://provost.uoregon.edu/mandatory-first-class-attendance-policy",
+   "title": "Mandatory First Class Attendance (Policy) | Office of the Provost",
+   "chars": 1769,
+   "depth": 1,
+   "from": "https://provost.uoregon.edu/academic-policies-procedures-and-guidance"
+  },
+  {
+   "file": "043-provost-mid-term-exams-policy.md",
+   "url": "https://provost.uoregon.edu/mid-term-exams-policy",
+   "title": "Mid-term Exams (Policy) | Office of the Provost",
+   "chars": 2618,
+   "depth": 1,
+   "from": "https://provost.uoregon.edu/academic-policies-procedures-and-guidance"
+  },
+  {
+   "file": "044-provost-military-and-federal-agency-deployment-accommodation-policy.md",
+   "url": "https://provost.uoregon.edu/military-and-federal-agency-deployment-accommodation-policy",
+   "title": "Military and Federal Agency Deployment Accommodation Rights (Policy) | Office of the Provost",
+   "chars": 3344,
+   "depth": 1,
+   "from": "https://provost.uoregon.edu/academic-policies-procedures-and-guidance"
+  },
+  {
+   "file": "045-provost-religious-observance-accommodations-policy.md",
+   "url": "https://provost.uoregon.edu/religious-observance-accommodations-policy",
+   "title": "Religious Observance accommodations (policy) | Office of the Provost",
+   "chars": 1559,
+   "depth": 1,
+   "from": "https://provost.uoregon.edu/academic-policies-procedures-and-guidance"
+  },
+  {
+   "file": "046-provost-student-attendance-and-university-sponsored-events.md",
+   "url": "https://provost.uoregon.edu/student-attendance-and-university-sponsored-events",
+   "title": "Student Attendance and University-sponsored Events | Office of the Provost",
+   "chars": 1517,
+   "depth": 1,
+   "from": "https://provost.uoregon.edu/academic-policies-procedures-and-guidance"
+  },
+  {
+   "file": "047-provost-student-experience-surveys-ses-policy.md",
+   "url": "https://provost.uoregon.edu/student-experience-surveys-ses-policy",
+   "title": "Student Experience Surveys (SES) (policy) | Office of the Provost",
+   "chars": 778,
+   "depth": 1,
+   "from": "https://provost.uoregon.edu/academic-policies-procedures-and-guidance"
+  },
+  {
+   "file": "048-provost-student-grievance-policy.md",
+   "url": "https://provost.uoregon.edu/student-grievance-policy",
+   "title": "Student Grievance (policy) | Office of the Provost",
+   "chars": 13494,
+   "depth": 1,
+   "from": "https://provost.uoregon.edu/academic-policies-procedures-and-guidance"
+  },
+  {
+   "file": "049-provost-student-records-privacy-policy-faculty-and-staff-ferpa-polic.md",
+   "url": "https://provost.uoregon.edu/student-records-privacy-policy-faculty-and-staff-ferpa-policy",
+   "title": "Student Records Privacy Policy for Faculty and Staff (FERPA) (policy) | Office of the Provost",
+   "chars": 4173,
+   "depth": 1,
+   "from": "https://provost.uoregon.edu/academic-policies-procedures-and-guidance"
+  },
+  {
+   "file": "050-teaching-university-course-policies.md",
+   "url": "https://teaching.uoregon.edu/university-course-policies",
+   "title": "University Course Policies: A Guide for Students | Teaching Support and Innovation",
+   "chars": 16535,
+   "depth": 1,
+   "from": "https://provost.uoregon.edu/academic-policies-procedures-and-guidance"
+  },
+  {
+   "file": "051-provost-syllabus-requirement-policy.md",
+   "url": "https://provost.uoregon.edu/syllabus-requirement-policy",
+   "title": "Syllabus Requirement- Undergraduate and Graduate (Policy) | Office of the Provost",
+   "chars": 6318,
+   "depth": 1,
+   "from": "https://provost.uoregon.edu/academic-policies-procedures-and-guidance"
+  },
+  {
+   "file": "052-provost-unregistered-students-attending-courses-and-using-canvas-pol.md",
+   "url": "https://provost.uoregon.edu/unregistered-students-attending-courses-and-using-canvas-policy",
+   "title": "Unregistered Students Attending Courses and Using Canvas (policy) | Office of the Provost",
+   "chars": 2467,
+   "depth": 1,
+   "from": "https://provost.uoregon.edu/academic-policies-procedures-and-guidance"
+  },
+  {
+   "file": "053-provost-credit-and-student-time-commitment.md",
+   "url": "https://provost.uoregon.edu/credit-and-student-time-commitment",
+   "title": "Credit and Student Time Commitment | Office of the Provost",
+   "chars": 4511,
+   "depth": 1,
+   "from": "https://provost.uoregon.edu/academic-policies-procedures-and-guidance"
+  },
+  {
+   "file": "054-provost-course-numbers-policy.md",
+   "url": "https://provost.uoregon.edu/course-numbers-policy",
+   "title": "Course Numbers (Policy) | Office of the Provost",
+   "chars": 3722,
+   "depth": 1,
+   "from": "https://provost.uoregon.edu/academic-policies-procedures-and-guidance"
+  },
+  {
+   "file": "055-provost-grading-options.md",
+   "url": "https://provost.uoregon.edu/grading-options",
+   "title": "Grading Options | Office of the Provost",
+   "chars": 1905,
+   "depth": 1,
+   "from": "https://provost.uoregon.edu/academic-policies-procedures-and-guidance"
+  },
+  {
+   "file": "056-provost-grading-rubric-samples.md",
+   "url": "https://provost.uoregon.edu/grading-rubric-samples",
+   "title": "Grading Rubric Samples | Office of the Provost",
+   "chars": 903,
+   "depth": 1,
+   "from": "https://provost.uoregon.edu/academic-policies-procedures-and-guidance"
+  },
+  {
+   "file": "057-provost-repeatability.md",
+   "url": "https://provost.uoregon.edu/repeatability",
+   "title": "Repeatability | Office of the Provost",
+   "chars": 1119,
+   "depth": 1,
+   "from": "https://provost.uoregon.edu/academic-policies-procedures-and-guidance"
+  },
+  {
+   "file": "058-provost-subject-codes-policy.md",
+   "url": "https://provost.uoregon.edu/subject-codes-policy",
+   "title": "Subject Codes (policy) | Office of the Provost",
+   "chars": 4445,
+   "depth": 1,
+   "from": "https://provost.uoregon.edu/academic-policies-procedures-and-guidance"
+  },
+  {
+   "file": "059-provost-variable-credit-courses.md",
+   "url": "https://provost.uoregon.edu/variable-credit-courses",
+   "title": "Variable Credit Courses | Office of the Provost",
+   "chars": 1330,
+   "depth": 1,
+   "from": "https://provost.uoregon.edu/academic-policies-procedures-and-guidance"
+  },
+  {
+   "file": "060-provost-changing-programs-classification-instructional-programs-cip-.md",
+   "url": "https://provost.uoregon.edu/changing-programs-classification-instructional-programs-cip-code-procedure",
+   "title": "Changing a program’s Classification of Instructional Programs (CIP) Code (procedure) | Office of the Provost",
+   "chars": 2184,
+   "depth": 1,
+   "from": "https://provost.uoregon.edu/academic-policies-procedures-and-guidance"
+  },
+  {
+   "file": "061-provost-honors-program-guidelines-policy.md",
+   "url": "https://provost.uoregon.edu/honors-program-guidelines-policy",
+   "title": "Honors Program Guidelines (Policy) | Office of the Provost",
+   "chars": 4367,
+   "depth": 1,
+   "from": "https://provost.uoregon.edu/academic-policies-procedures-and-guidance"
+  },
+  {
+   "file": "062-provost-course-overlap-between-two-or-more-programs-policy.md",
+   "url": "https://provost.uoregon.edu/course-overlap-between-two-or-more-programs-policy",
+   "title": "Course overlap between two or more programs (Policy) | Office of the Provost",
+   "chars": 2275,
+   "depth": 1,
+   "from": "https://provost.uoregon.edu/academic-policies-procedures-and-guidance"
+  },
+  {
+   "file": "063-provost-premajor-policy-policy.md",
+   "url": "https://provost.uoregon.edu/premajor-policy-policy",
+   "title": "Premajor Policy (policy) | Office of the Provost",
+   "chars": 2321,
+   "depth": 1,
+   "from": "https://provost.uoregon.edu/academic-policies-procedures-and-guidance"
+  },
+  {
+   "file": "064-investigations-nondiscrimination.md",
+   "url": "https://investigations.uoregon.edu/nondiscrimination?utm_source=banner-module&utm_campaign=banner",
+   "title": "Statement of Non-Discrimination | Office of Equal Opportunity and Access",
+   "chars": 1959,
+   "depth": 1,
+   "from": "https://provost.uoregon.edu/academic-policies-procedures-and-guidance"
+  },
+  {
+   "file": "065-www-accessibility.md",
+   "url": "https://www.uoregon.edu/accessibility?utm_source=banner-module&utm_campaign=banner",
+   "title": "Accessibility | University of Oregon",
+   "chars": 4270,
+   "depth": 1,
+   "from": "https://provost.uoregon.edu/academic-policies-procedures-and-guidance"
+  },
+  {
+   "file": "066-secure-u-uo-privacy-notice.md",
+   "url": "https://secure-u.uoregon.edu/uo-privacy-notice?utm_source=banner-module&utm_campaign=banner",
+   "title": "University of Oregon Privacy Notice | Information Security Office",
+   "chars": 12478,
+   "depth": 1,
+   "from": "https://provost.uoregon.edu/academic-policies-procedures-and-guidance"
+  },
+  {
+   "file": "067-provost-academic-excellence.md",
+   "url": "https://provost.uoregon.edu/academic-excellence",
+   "title": "Pillars of Faculty Success | Office of the Provost",
+   "chars": 2193,
+   "depth": 1,
+   "from": "https://provost.uoregon.edu/syllabus-requirement-undergraduate-and-graduate-policy"
+  },
+  {
+   "file": "068-service-TDClient-2030-Portal-KB-Article-141023-Pope-Tech-Alternative.md",
+   "url": "https://service.uoregon.edu/TDClient/2030/Portal/KB/Article/141023/Pope-Tech-Alternative-Formats-for-Students-in-Canvas",
+   "title": "Article - Pope Tech Alternative Forma...",
+   "chars": 40,
+   "depth": 1,
+   "from": "https://provost.uoregon.edu/syllabus-requirement-undergraduate-and-graduate-policy"
+  },
+  {
+   "file": "069-teaching-resources-core-education-syllabus-statements.md",
+   "url": "https://teaching.uoregon.edu/resources/core-education-syllabus-statements",
+   "title": "Core Education Syllabus Statements | Teaching Support and Innovation",
+   "chars": 4642,
+   "depth": 1,
+   "from": "https://provost.uoregon.edu/syllabus-requirement-undergraduate-and-graduate-policy"
+  },
+  {
+   "file": "070-registrar-current-students-grading-system.md",
+   "url": "https://registrar.uoregon.edu/current-students/grading-system",
+   "title": "Grading System | Office of the Registrar",
+   "chars": 1983,
+   "depth": 1,
+   "from": "https://provost.uoregon.edu/syllabus-requirement-undergraduate-and-graduate-policy"
+  },
+  {
+   "file": "071-provost-course-attendance-and-engagement-policy.md",
+   "url": "https://provost.uoregon.edu/course-attendance-and-engagement-policy",
+   "title": "Enacting the Senate’s ‘Course Attendance and Engagement’ Policy | Teaching Support and Innovation",
+   "chars": 16331,
+   "depth": 1,
+   "from": "https://provost.uoregon.edu/syllabus-requirement-undergraduate-and-graduate-policy"
+  },
+  {
+   "file": "072-aec-getting-started-0.md",
+   "url": "https://aec.uoregon.edu/getting-started-0",
+   "title": "Get Started | UO Accessible Education Center",
+   "chars": 1428,
+   "depth": 1,
+   "from": "https://provost.uoregon.edu/syllabus-requirement-undergraduate-and-graduate-policy"
+  },
+  {
+   "file": "073-senate-senate-motions-us2021-13-course-policies-canvas-use-syllabi-.md",
+   "url": "https://senate.uoregon.edu/senate-motions/us2021-13-course-policies-canvas-use-syllabi-and-office-hours",
+   "title": "Course Policies on CANVAS use, Syllabi and Office Hours | The University of Oregon Senate",
+   "chars": 1810,
+   "depth": 1,
+   "from": "https://provost.uoregon.edu/syllabus-requirement-undergraduate-and-graduate-policy"
+  },
+  {
+   "file": "074-aec-important-guidelines-instructors.md",
+   "url": "https://aec.uoregon.edu/important-guidelines-instructors",
+   "title": "Important Guidelines for Instructors | UO Accessible Education Center",
+   "chars": 5502,
+   "depth": 1,
+   "from": "https://provost.uoregon.edu/undergraduate-course-attendance-and-engagement-policy"
+  },
+  {
+   "file": "075-investigations-pregnancy-modifications.md",
+   "url": "https://investigations.uoregon.edu/pregnancy-modifications",
+   "title": "Pregnancy Modifications | Office of Equal Opportunity and Access",
+   "chars": 1930,
+   "depth": 1,
+   "from": "https://provost.uoregon.edu/undergraduate-course-attendance-and-engagement-policy"
+  },
+  {
+   "file": "076-provost-military-and-federal-agency-deployment-accommodation-rights-.md",
+   "url": "https://provost.uoregon.edu/military-and-federal-agency-deployment-accommodation-rights-policy",
+   "title": "Military and Federal Agency Deployment Accommodation Rights (Policy) | Office of the Provost",
+   "chars": 3344,
+   "depth": 1,
+   "from": "https://provost.uoregon.edu/undergraduate-course-attendance-and-engagement-policy"
+  },
+  {
+   "file": "077-provost-course-attendance-and-engagement-policy-interpretation.md",
+   "url": "https://provost.uoregon.edu/course-attendance-and-engagement-policy-interpretation",
+   "title": "Course Attendance and Engagement Policy Interpretation | Office of the Provost",
+   "chars": 9972,
+   "depth": 1,
+   "from": "https://provost.uoregon.edu/undergraduate-course-attendance-and-engagement-policy"
+  },
+  {
+   "file": "078-dos-dos-faq.md",
+   "url": "https://dos.uoregon.edu/dos-faq",
+   "title": "Frequently Asked Questions | Dean of Students",
+   "chars": 12287,
+   "depth": 1,
+   "from": "https://provost.uoregon.edu/undergraduate-course-attendance-and-engagement-policy"
+  },
+  {
+   "file": "079-registrar-calendars-academic.md",
+   "url": "https://registrar.uoregon.edu/calendars/academic",
+   "title": "Academic Dates and Deadlines | Office of the Registrar",
+   "chars": 16579,
+   "depth": 1,
+   "from": "https://provost.uoregon.edu/undergraduate-course-attendance-and-engagement-policy"
+  },
+  {
+   "file": "080-advising-registration-decisions.md",
+   "url": "https://advising.uoregon.edu/registration-decisions",
+   "title": "Registration Decisions | UO Academic Advising",
+   "chars": 5300,
+   "depth": 1,
+   "from": "https://provost.uoregon.edu/undergraduate-course-attendance-and-engagement-policy"
+  },
+  {
+   "file": "081-registrar-current-students-incomplete-policy.md",
+   "url": "https://registrar.uoregon.edu/current-students/incomplete-policy",
+   "title": "Incompletes | Office of the Registrar",
+   "chars": 1027,
+   "depth": 1,
+   "from": "https://provost.uoregon.edu/undergraduate-course-attendance-and-engagement-policy"
+  },
+  {
+   "file": "082-senate-senate-motions-us2122-21-course-attendance-and-engagement-po.md",
+   "url": "https://senate.uoregon.edu/senate-motions/us2122-21-course-attendance-and-engagement-policy",
+   "title": "Course Attendance and Engagement Policy | The University of Oregon Senate",
+   "chars": 3120,
+   "depth": 1,
+   "from": "https://provost.uoregon.edu/undergraduate-course-attendance-and-engagement-policy"
+  },
+  {
+   "file": "083-provost-university-policies-absences-and-attendance.md",
+   "url": "https://provost.uoregon.edu/university-policies-absences-and-attendance",
+   "title": "University Policies and Guidance that Reference Absences and Attendance | Office of the Provost",
+   "chars": 7566,
+   "depth": 1,
+   "from": "https://provost.uoregon.edu/undergraduate-course-attendance-and-engagement-policy"
+  },
+  {
+   "file": "084-teaching-enacting-senates-course-attendance-and-engagement-policy-0.md",
+   "url": "https://teaching.uoregon.edu/enacting-senates-course-attendance-and-engagement-policy-0",
+   "title": "Enacting the Senate’s ‘Course Attendance and Engagement’ Policy | Teaching Support and Innovation",
+   "chars": 16331,
+   "depth": 1,
+   "from": "https://provost.uoregon.edu/undergraduate-course-attendance-and-engagement-policy"
+  },
+  {
+   "file": "085-aec-accessibilityally.md",
+   "url": "https://aec.uoregon.edu/accessibilityally",
+   "title": "Accessibility Ally Program | UO Accessible Education Center",
+   "chars": 1579,
+   "depth": 1,
+   "from": "https://aec.uoregon.edu"
+  },
+  {
+   "file": "086-aec-registration-process-what-expect.md",
+   "url": "https://aec.uoregon.edu/registration-process-what-expect",
+   "title": "Registration Process & What to Expect | UO Accessible Education Center",
+   "chars": 4390,
+   "depth": 1,
+   "from": "https://aec.uoregon.edu"
+  },
+  {
+   "file": "087-aec-supporting-documentation-guidance.md",
+   "url": "https://aec.uoregon.edu/supporting-documentation-guidance",
+   "title": "Supporting Documentation Guidance | UO Accessible Education Center",
+   "chars": 3215,
+   "depth": 1,
+   "from": "https://aec.uoregon.edu"
+  },
+  {
+   "file": "088-aec-accommodations.md",
+   "url": "https://aec.uoregon.edu/accommodations",
+   "title": "Accommodations | UO Accessible Education Center",
+   "chars": 1714,
+   "depth": 1,
+   "from": "https://aec.uoregon.edu"
+  },
+  {
+   "file": "089-aec-examples-available-notetaking-resources.md",
+   "url": "https://aec.uoregon.edu/examples-available-notetaking-resources",
+   "title": "Examples of Available Notetaking Resources | UO Accessible Education Center",
+   "chars": 1485,
+   "depth": 1,
+   "from": "https://aec.uoregon.edu"
+  },
+  {
+   "file": "090-aec-recording-lectures-technology-assisted-notetaking.md",
+   "url": "https://aec.uoregon.edu/recording-lectures-technology-assisted-notetaking",
+   "title": "Recording Lectures for Technology-Assisted Notetaking | UO Accessible Education Center",
+   "chars": 2827,
+   "depth": 1,
+   "from": "https://aec.uoregon.edu"
+  },
+  {
+   "file": "091-aec-accessible-technology.md",
+   "url": "https://aec.uoregon.edu/accessible-technology",
+   "title": "Accessible Formats & Technology | UO Accessible Education Center",
+   "chars": 1063,
+   "depth": 1,
+   "from": "https://aec.uoregon.edu"
+  },
+  {
+   "file": "092-aec-accessible-pdf-resources.md",
+   "url": "https://aec.uoregon.edu/accessible-pdf-resources",
+   "title": "Accessible PDF Resources | UO Accessible Education Center",
+   "chars": 1350,
+   "depth": 1,
+   "from": "https://aec.uoregon.edu"
+  },
+  {
+   "file": "093-aec-canvas-accessibility-considerations.md",
+   "url": "https://aec.uoregon.edu/canvas-accessibility-considerations",
+   "title": "Canvas Accessibility Considerations | UO Accessible Education Center",
+   "chars": 4030,
+   "depth": 1,
+   "from": "https://aec.uoregon.edu"
+  },
+  {
+   "file": "094-aec-accessible-web-resources.md",
+   "url": "https://aec.uoregon.edu/accessible-web-resources",
+   "title": "Accessible Web Resources | UO Accessible Education Center",
+   "chars": 559,
+   "depth": 1,
+   "from": "https://aec.uoregon.edu"
+  },
+  {
+   "file": "095-aec-best-practice-guidelines-creating-accessible-digital-content.md",
+   "url": "https://aec.uoregon.edu/best-practice-guidelines-creating-accessible-digital-content",
+   "title": "Guidelines on Creating Accessible Digital Content | UO Accessible Education Center",
+   "chars": 4071,
+   "depth": 1,
+   "from": "https://aec.uoregon.edu"
+  },
+  {
+   "file": "096-aec-pope-tech-alternative-formats-canvas.md",
+   "url": "https://aec.uoregon.edu/pope-tech-alternative-formats-canvas",
+   "title": "Pope Tech Alternative Formats in Canvas | UO Accessible Education Center",
+   "chars": 892,
+   "depth": 1,
+   "from": "https://aec.uoregon.edu"
+  },
+  {
+   "file": "097-aec-adjustments-class-policies.md",
+   "url": "https://aec.uoregon.edu/adjustments-class-policies",
+   "title": "Adjustments to Class Policies | UO Accessible Education Center",
+   "chars": 660,
+   "depth": 1,
+   "from": "https://aec.uoregon.edu"
+  },
+  {
+   "file": "098-aec-housing-accommodations.md",
+   "url": "https://aec.uoregon.edu/housing-accommodations",
+   "title": "Housing Accommodations | UO Accessible Education Center",
+   "chars": 12204,
+   "depth": 1,
+   "from": "https://aec.uoregon.edu"
+  },
+  {
+   "file": "099-aec-proctoring-your-own-exams.md",
+   "url": "https://aec.uoregon.edu/proctoring-your-own-exams",
+   "title": "Proctoring Your Own Exams | UO Accessible Education Center",
+   "chars": 5441,
+   "depth": 1,
+   "from": "https://aec.uoregon.edu"
+  },
+  {
+   "file": "100-aec-guidance-flexibility-attendance-and-assignment-deadlines.md",
+   "url": "https://aec.uoregon.edu/guidance-flexibility-attendance-and-assignment-deadlines",
+   "title": "Flexibility in Attendance and Assignment Deadlines | UO Accessible Education Center",
+   "chars": 1748,
+   "depth": 1,
+   "from": "https://aec.uoregon.edu"
+  },
+  {
+   "file": "101-aec-additional-resources-instructors.md",
+   "url": "https://aec.uoregon.edu/additional-resources-instructors",
+   "title": "Additional Resources for Instructors | UO Accessible Education Center",
+   "chars": 1573,
+   "depth": 1,
+   "from": "https://aec.uoregon.edu"
+  },
+  {
+   "file": "102-aec-searching-accessible-housing.md",
+   "url": "https://aec.uoregon.edu/searching-accessible-housing",
+   "title": "Searching for Accessible Housing | UO Accessible Education Center",
+   "chars": 4900,
+   "depth": 1,
+   "from": "https://aec.uoregon.edu"
+  },
+  {
+   "file": "103-aec-campus-physical-accessibility.md",
+   "url": "https://aec.uoregon.edu/campus-physical-accessibility",
+   "title": "Campus Physical Accessibility | UO Accessible Education Center",
+   "chars": 881,
+   "depth": 1,
+   "from": "https://aec.uoregon.edu"
+  },
+  {
+   "file": "104-aec-planning-accessible-events.md",
+   "url": "https://aec.uoregon.edu/planning-accessible-events",
+   "title": "Planning Accessible Events | UO Accessible Education Center",
+   "chars": 4548,
+   "depth": 1,
+   "from": "https://aec.uoregon.edu"
+  },
+  {
+   "file": "105-aec-concerns-and-grievances.md",
+   "url": "https://aec.uoregon.edu/concerns-and-grievances",
+   "title": "Concerns and Grievances | UO Accessible Education Center",
+   "chars": 1057,
+   "depth": 1,
+   "from": "https://aec.uoregon.edu"
+  },
+  {
+   "file": "106-aec-summary-appeal-procedures.md",
+   "url": "https://aec.uoregon.edu/summary-appeal-procedures",
+   "title": "Summary of Appeal Procedures | UO Accessible Education Center",
+   "chars": 1109,
+   "depth": 1,
+   "from": "https://aec.uoregon.edu"
+  },
+  {
+   "file": "107-aec-detailed-appeal-procedures.md",
+   "url": "https://aec.uoregon.edu/detailed-appeal-procedures",
+   "title": "Detailed Appeal Procedures | UO Accessible Education Center",
+   "chars": 848,
+   "depth": 1,
+   "from": "https://aec.uoregon.edu"
+  },
+  {
+   "file": "108-aec-ii-formal-process-appealing-aec-decisions.md",
+   "url": "https://aec.uoregon.edu/ii-formal-process-appealing-aec-decisions",
+   "title": "II. Formal Process for Appealing AEC Decisions | UO Accessible Education Center",
+   "chars": 3449,
+   "depth": 1,
+   "from": "https://aec.uoregon.edu"
+  },
+  {
+   "file": "109-aec-iii-formal-process-when-instructor-denies-accommodation.md",
+   "url": "https://aec.uoregon.edu/iii-formal-process-when-instructor-denies-accommodation",
+   "title": "III. Formal Process When an Instructor Denies an Accommodation | UO Accessible Education Center",
+   "chars": 1605,
+   "depth": 1,
+   "from": "https://aec.uoregon.edu"
+  },
+  {
+   "file": "110-aec-types-accommodations-often-considered-unreasonable.md",
+   "url": "https://aec.uoregon.edu/types-accommodations-often-considered-unreasonable",
+   "title": "Types of Accommodations Often Considered \"Unreasonable\" | UO Accessible Education Center",
+   "chars": 1843,
+   "depth": 1,
+   "from": "https://aec.uoregon.edu"
+  },
+  {
+   "file": "111-news-content-uos-accessible-education-center-paves-way-students.md",
+   "url": "https://news.uoregon.edu/content/uos-accessible-education-center-paves-way-students",
+   "title": "UO's Accessible Education Center paves the way for students | OregonNews",
+   "chars": 4398,
+   "depth": 1,
+   "from": "https://aec.uoregon.edu"
+  },
+  {
+   "file": "112-aec-information-about-spring-2020-testing-accommodations.md",
+   "url": "https://aec.uoregon.edu/information-about-spring-2020-testing-accommodations",
+   "title": "Testing | UO Accessible Education Center",
+   "chars": 4477,
+   "depth": 1,
+   "from": "https://aec.uoregon.edu"
+  },
+  {
+   "file": "113-uess-divisions-work.md",
+   "url": "https://uess.uoregon.edu/divisions-work",
+   "title": "Division's Work | Undergraduate Education and Student Success",
+   "chars": 2173,
+   "depth": 1,
+   "from": "https://aec.uoregon.edu"
+  },
+  {
+   "file": "114-canvas-home.md",
+   "url": "https://canvas.uoregon.edu",
+   "title": "Sign in to your account",
+   "chars": 23,
+   "depth": 1,
+   "from": "https://aec.uoregon.edu"
+  },
+  {
+   "file": "115-registrar-calendars-academic.md",
+   "url": "http://registrar.uoregon.edu/calendars/academic",
+   "title": "Academic Dates and Deadlines | Office of the Registrar",
+   "chars": 16579,
+   "depth": 1,
+   "from": "https://aec.uoregon.edu"
+  },
+  {
+   "file": "116-teaching-services-online-exam-center-proctoring.md",
+   "url": "https://teaching.uoregon.edu/services/online-exam-center-proctoring",
+   "title": "Online Exam Center Proctoring | Teaching Support and Innovation",
+   "chars": 2613,
+   "depth": 1,
+   "from": "https://teaching.uoregon.edu/syllabus"
+  },
+  {
+   "file": "117-teaching-syllabus-language-database.md",
+   "url": "https://teaching.uoregon.edu/syllabus-language-database",
+   "title": "Syllabus Language Database | Teaching Support and Innovation",
+   "chars": 37806,
+   "depth": 1,
+   "from": "https://teaching.uoregon.edu/syllabus"
+  },
+  {
+   "file": "118-provost-analytics-practitioner-guides-accessibility.md",
+   "url": "https://provost.uoregon.edu/analytics/practitioner-guides/accessibility",
+   "title": "Practitioner Guide: Accessibility | Office of the Provost",
+   "chars": 30819,
+   "depth": 1,
+   "from": "https://teaching.uoregon.edu/syllabus"
+  },
+  {
+   "file": "119-basicneeds-academic-resources.md",
+   "url": "https://basicneeds.uoregon.edu/academic-resources",
+   "title": "Textbooks | Basic Needs Program",
+   "chars": 3581,
+   "depth": 1,
+   "from": "https://teaching.uoregon.edu/syllabus"
+  },
+  {
+   "file": "120-pdx-wellness-and-basic-needs.md",
+   "url": "https://pdx.uoregon.edu/wellness-and-basic-needs",
+   "title": "Wellness and Basic Needs | Portland",
+   "chars": 3033,
+   "depth": 1,
+   "from": "https://teaching.uoregon.edu/syllabus"
+  },
+  {
+   "file": "121-canvas-home.md",
+   "url": "http://canvas.uoregon.edu",
+   "title": "Sign in to your account",
+   "chars": 23,
+   "depth": 1,
+   "from": "https://teaching.uoregon.edu/syllabus"
+  },
+  {
+   "file": "122-service-TDClient-2030-Portal-Requests-ServiceDet.md",
+   "url": "https://service.uoregon.edu/TDClient/2030/Portal/Requests/ServiceDet?ID=38635",
+   "title": "Service - Canvas Support Services",
+   "chars": 33,
+   "depth": 1,
+   "from": "https://teaching.uoregon.edu/syllabus"
+  },
+  {
+   "file": "123-provost-credit-hour-and-student-workload-policies-policy.md",
+   "url": "https://provost.uoregon.edu/credit-hour-and-student-workload-policies-policy",
+   "title": "Credit Hour and Student Workload Policies (Policy) | Office of the Provost",
+   "chars": 3847,
+   "depth": 1,
+   "from": "https://teaching.uoregon.edu/syllabus"
+  },
+  {
+   "file": "124-policies-vol-3-administration-student-affairs-ch-1-conduct-student-co.md",
+   "url": "https://policies.uoregon.edu/vol-3-administration-student-affairs/ch-1-conduct/student-conduct-code",
+   "title": "Student Conduct Code | University of Oregon Policy Library",
+   "chars": 36216,
+   "depth": 1,
+   "from": "https://teaching.uoregon.edu/syllabus"
+  },
+  {
+   "file": "125-registrar-dates-deadlines-academic.md",
+   "url": "https://registrar.uoregon.edu/dates-deadlines/academic",
+   "title": "Academic Dates and Deadlines | Office of the Registrar",
+   "chars": 16579,
+   "depth": 1,
+   "from": "https://teaching.uoregon.edu/syllabus"
+  },
+  {
+   "file": "126-provost-digital-accessibility-expectations-fall-syllabi.md",
+   "url": "https://provost.uoregon.edu/digital-accessibility-expectations-fall-syllabi",
+   "title": "Digital accessibility: Expectations for Fall syllabi | Office of the Provost",
+   "chars": 2152,
+   "depth": 1,
+   "from": "https://teaching.uoregon.edu/guidance-making-your-syllabus-accessible"
+  },
+  {
+   "file": "127-teaching-resources-canvas-commons.md",
+   "url": "https://teaching.uoregon.edu/resources/canvas-commons",
+   "title": "Canvas Commons | Teaching Support and Innovation",
+   "chars": 10550,
+   "depth": 1,
+   "from": "https://teaching.uoregon.edu/guidance-making-your-syllabus-accessible"
+  },
+  {
+   "file": "128-digitalaccessibility-link-guidelines-headings.md",
+   "url": "https://digitalaccessibility.uoregon.edu/link/guidelines/headings",
+   "title": "3. Headings & Document/Page Structure: UO Digital Content Accessibility: Supplemental Materials",
+   "chars": 112,
+   "depth": 1,
+   "from": "https://teaching.uoregon.edu/guidance-making-your-syllabus-accessible"
+  },
+  {
+   "file": "129-digitalaccessibility-link-guidelines-canvas-headings.md",
+   "url": "https://digitalaccessibility.uoregon.edu/link/guidelines/canvas/headings",
+   "title": "Headings in Canvas : UO Digital Content Accessibility: Supplemental Materials",
+   "chars": 94,
+   "depth": 1,
+   "from": "https://teaching.uoregon.edu/guidance-making-your-syllabus-accessible"
+  },
+  {
+   "file": "130-digitalaccessibility-link-guidelines-word-headings.md",
+   "url": "https://digitalaccessibility.uoregon.edu/link/guidelines/word/headings",
+   "title": "Headings in Word: UO Digital Content Accessibility: Supplemental Materials",
+   "chars": 91,
+   "depth": 1,
+   "from": "https://teaching.uoregon.edu/guidance-making-your-syllabus-accessible"
+  },
+  {
+   "file": "131-digitalaccessibility-link-guidelines-images.md",
+   "url": "https://digitalaccessibility.uoregon.edu/link/guidelines/images",
+   "title": "4. Alt Text for Images: UO Digital Content Accessibility: Supplemental Materials",
+   "chars": 97,
+   "depth": 1,
+   "from": "https://teaching.uoregon.edu/guidance-making-your-syllabus-accessible"
+  },
+  {
+   "file": "132-digitalaccessibility-link-guidelines-canvas-images.md",
+   "url": "https://digitalaccessibility.uoregon.edu/link/guidelines/canvas/images",
+   "title": "Alt Text in Canvas : UO Digital Content Accessibility: Supplemental Materials",
+   "chars": 94,
+   "depth": 1,
+   "from": "https://teaching.uoregon.edu/guidance-making-your-syllabus-accessible"
+  },
+  {
+   "file": "133-digitalaccessibility-link-guidelines-tables.md",
+   "url": "https://digitalaccessibility.uoregon.edu/link/guidelines/tables",
+   "title": "5. Tables & Layout: UO Digital Content Accessibility: Supplemental Materials",
+   "chars": 93,
+   "depth": 1,
+   "from": "https://teaching.uoregon.edu/guidance-making-your-syllabus-accessible"
+  },
+  {
+   "file": "134-digitalaccessibility-link-guidelines-word-tables.md",
+   "url": "https://digitalaccessibility.uoregon.edu/link/guidelines/word/tables",
+   "title": "Tables in Word: UO Digital Content Accessibility: Supplemental Materials",
+   "chars": 89,
+   "depth": 1,
+   "from": "https://teaching.uoregon.edu/guidance-making-your-syllabus-accessible"
+  },
+  {
+   "file": "135-digitalaccessibility-link-guidelines-canvas-tables.md",
+   "url": "https://digitalaccessibility.uoregon.edu/link/guidelines/canvas/tables",
+   "title": "Tables in Canvas: UO Digital Content Accessibility: Supplemental Materials",
+   "chars": 91,
+   "depth": 1,
+   "from": "https://teaching.uoregon.edu/guidance-making-your-syllabus-accessible"
+  },
+  {
+   "file": "136-digitalaccessibility-uocolors.md",
+   "url": "https://digitalaccessibility.uoregon.edu/uocolors",
+   "title": "UO Color Contrast | Digital Accessibility @ UO",
+   "chars": 7560,
+   "depth": 1,
+   "from": "https://teaching.uoregon.edu/guidance-making-your-syllabus-accessible"
+  },
+  {
+   "file": "137-digitalaccessibility-link-guidelines-font.md",
+   "url": "https://digitalaccessibility.uoregon.edu/link/guidelines/font",
+   "title": "7. Fonts: Type, Size, and Color: UO Digital Content Accessibility: Supplemental Materials",
+   "chars": 106,
+   "depth": 1,
+   "from": "https://teaching.uoregon.edu/guidance-making-your-syllabus-accessible"
+  },
+  {
+   "file": "138-digitalaccessibility-link-guidelines-links.md",
+   "url": "https://digitalaccessibility.uoregon.edu/link/guidelines/links",
+   "title": "6. Hyperlinks: UO Digital Content Accessibility: Supplemental Materials",
+   "chars": 88,
+   "depth": 1,
+   "from": "https://teaching.uoregon.edu/guidance-making-your-syllabus-accessible"
+  },
+  {
+   "file": "139-digitalaccessibility-link-guidelines-canvas-links.md",
+   "url": "https://digitalaccessibility.uoregon.edu/link/guidelines/canvas/links",
+   "title": "Descriptive Hyperlinks in Canvas: UO Digital Content Accessibility: Supplemental Materials",
+   "chars": 107,
+   "depth": 1,
+   "from": "https://teaching.uoregon.edu/guidance-making-your-syllabus-accessible"
+  },
+  {
+   "file": "140-digitalaccessibility-link-guidelines-word-links.md",
+   "url": "https://digitalaccessibility.uoregon.edu/link/guidelines/word/links",
+   "title": "Descriptive Hyperlinks in Word: UO Digital Content Accessibility: Supplemental Materials",
+   "chars": 105,
+   "depth": 1,
+   "from": "https://teaching.uoregon.edu/guidance-making-your-syllabus-accessible"
+  },
+  {
+   "file": "141-digitalaccessibility-assessment-tools.md",
+   "url": "https://digitalaccessibility.uoregon.edu/assessment/tools",
+   "title": "Tools | Digital Accessibility @ UO",
+   "chars": 12221,
+   "depth": 1,
+   "from": "https://teaching.uoregon.edu/guidance-making-your-syllabus-accessible"
+  },
+  {
+   "file": "142-teaching-accessible-syllabus.md",
+   "url": "https://teaching.uoregon.edu/accessible-syllabus",
+   "title": "Guidance for Making Your Syllabus Accessible | Teaching Support and Innovation",
+   "chars": 6728,
+   "depth": 1,
+   "from": "https://teaching.uoregon.edu/guidance-making-your-syllabus-accessible"
+  },
+  {
+   "file": "143-teaching-making-your-courses-accessible.md",
+   "url": "https://teaching.uoregon.edu/making-your-courses-accessible",
+   "title": "Making Your Courses Accessible | Teaching Support and Innovation",
+   "chars": 4554,
+   "depth": 1,
+   "from": "https://teaching.uoregon.edu/guidance-making-your-syllabus-accessible"
+  },
+  {
+   "file": "144-teaching-course-digital-accessibility-initiative.md",
+   "url": "https://teaching.uoregon.edu/course-digital-accessibility-initiative",
+   "title": "Course Digital Accessibility Initiative | Teaching Support and Innovation",
+   "chars": 4344,
+   "depth": 1,
+   "from": "https://teaching.uoregon.edu/guidance-making-your-syllabus-accessible"
+  },
+  {
+   "file": "145-provost-digital-accessibility-help-make-uo-inclusive.md",
+   "url": "https://provost.uoregon.edu/digital-accessibility-help-make-uo-inclusive",
+   "title": "Digital accessibility: Help make UO inclusive | Office of the Provost",
+   "chars": 3000,
+   "depth": 1,
+   "from": "https://teaching.uoregon.edu/digital-accessibility-teaching"
+  },
+  {
+   "file": "146-teaching-events-making-your-canvas-pages-accessible.md",
+   "url": "https://teaching.uoregon.edu/events/making-your-canvas-pages-accessible",
+   "title": "Making your Canvas Pages Accessible | Teaching Support and Innovation",
+   "chars": 664,
+   "depth": 1,
+   "from": "https://teaching.uoregon.edu/digital-accessibility-teaching"
+  },
+  {
+   "file": "147-teaching-events-making-your-canvas-pages-accessible-0.md",
+   "url": "https://teaching.uoregon.edu/events/making-your-canvas-pages-accessible-0",
+   "title": "Making your Canvas Pages Accessible | Teaching Support and Innovation",
+   "chars": 673,
+   "depth": 1,
+   "from": "https://teaching.uoregon.edu/digital-accessibility-teaching"
+  },
+  {
+   "file": "148-teaching-events-making-your-canvas-syllabus-accessible.md",
+   "url": "https://teaching.uoregon.edu/events/making-your-canvas-syllabus-accessible",
+   "title": "Making your Canvas Syllabus Accessible | Teaching Support and Innovation",
+   "chars": 591,
+   "depth": 1,
+   "from": "https://teaching.uoregon.edu/digital-accessibility-teaching"
+  },
+  {
+   "file": "149-teaching-events-making-your-canvas-syllabus-accessible-0.md",
+   "url": "https://teaching.uoregon.edu/events/making-your-canvas-syllabus-accessible-0",
+   "title": "Making your Canvas Syllabus Accessible | Teaching Support and Innovation",
+   "chars": 588,
+   "depth": 1,
+   "from": "https://teaching.uoregon.edu/digital-accessibility-teaching"
+  },
+  {
+   "file": "150-is-ict-procedure.md",
+   "url": "https://is.uoregon.edu/ict-procedure",
+   "title": "Information and Communication Technology Accessibility Procedure | Information Services",
+   "chars": 9911,
+   "depth": 1,
+   "from": "https://teaching.uoregon.edu/digital-accessibility-teaching"
+  },
+  {
+   "file": "151-digitalaccessibility-guidelines-color.md",
+   "url": "https://digitalaccessibility.uoregon.edu/guidelines/color",
+   "title": "Color and Contrast | Digital Accessibility @ UO",
+   "chars": 4953,
+   "depth": 1,
+   "from": "https://teaching.uoregon.edu/digital-accessibility-teaching"
+  },
+  {
+   "file": "152-digitalaccessibility-link-guidelines-text.md",
+   "url": "https://digitalaccessibility.uoregon.edu/link/guidelines/text",
+   "title": "2. Real Text: UO Digital Content Accessibility: Supplemental Materials",
+   "chars": 87,
+   "depth": 1,
+   "from": "https://teaching.uoregon.edu/digital-accessibility-teaching"
+  },
+  {
+   "file": "153-digitalaccessibility-home.md",
+   "url": "https://digitalaccessibility.uoregon.edu",
+   "title": "Home | Digital Accessibility @ UO",
+   "chars": 2845,
+   "depth": 1,
+   "from": "https://teaching.uoregon.edu/digital-accessibility-teaching"
+  },
+  {
+   "file": "154-digitalaccessibility-training-content.md",
+   "url": "https://digitalaccessibility.uoregon.edu/training/content",
+   "title": "Digital Content Accessibility Training | Digital Accessibility @ UO",
+   "chars": 2644,
+   "depth": 1,
+   "from": "https://teaching.uoregon.edu/digital-accessibility-teaching"
+  },
+  {
+   "file": "155-digitalaccessibility-guidelines-basics.md",
+   "url": "https://digitalaccessibility.uoregon.edu/guidelines/basics",
+   "title": "Basic Digital Content Accessibility | Digital Accessibility @ UO",
+   "chars": 5905,
+   "depth": 1,
+   "from": "https://teaching.uoregon.edu/digital-accessibility-teaching"
+  },
+  {
+   "file": "156-teaching-uo-canvas-course-templates.md",
+   "url": "https://teaching.uoregon.edu/uo-canvas-course-templates",
+   "title": "UO Canvas Course Templates | Teaching Support and Innovation",
+   "chars": 15739,
+   "depth": 1,
+   "from": "https://teaching.uoregon.edu/digital-accessibility-teaching"
+  },
+  {
+   "file": "157-digitalaccessibility-link-content-training.md",
+   "url": "https://digitalaccessibility.uoregon.edu/link/content-training",
+   "title": "Web Login Service",
+   "chars": 528,
+   "depth": 1,
+   "from": "https://teaching.uoregon.edu/digital-accessibility-teaching"
+  },
+  {
+   "file": "158-uoregon-academics.md",
+   "url": "https://uoregon.edu/academics?utm_source=referral&utm_medium=website&utm_content=footer-sl",
+   "title": "Academics | Explore University of Oregon Degrees",
+   "chars": 5463,
+   "depth": 1,
+   "from": "https://conduct.uoregon.edu"
+  },
+  {
+   "file": "159-financialaid-home.md",
+   "url": "https://financialaid.uoregon.edu/?utm_source=referral&utm_medium=website&utm_content=footer-sl",
+   "title": "Funding Your Future | Financial Aid & Scholarships",
+   "chars": 1893,
+   "depth": 1,
+   "from": "https://conduct.uoregon.edu"
+  },
+  {
+   "file": "160-parents-home.md",
+   "url": "https://parents.uoregon.edu/?utm_source=referral&utm_medium=website&utm_content=footer-sl",
+   "title": "Parent and Family Programs | University of Oregon",
+   "chars": 2659,
+   "depth": 1,
+   "from": "https://conduct.uoregon.edu"
+  },
+  {
+   "file": "161-advising-navigate-student.md",
+   "url": "https://advising.uoregon.edu/navigate-student",
+   "title": "Navigate Student | UO Academic Advising",
+   "chars": 1102,
+   "depth": 1,
+   "from": "https://conduct.uoregon.edu"
+  },
+  {
+   "file": "162-dos-veterans.md",
+   "url": "https://dos.uoregon.edu/veterans",
+   "title": "Veterans | Dean of Students",
+   "chars": 2948,
+   "depth": 1,
+   "from": "https://dos.uoregon.edu"
+  },
+  {
+   "file": "163-dos-student-veterans-center.md",
+   "url": "https://dos.uoregon.edu/student-veterans-center",
+   "title": "Veteran and Military-Affiliated Center | Dean of Students",
+   "chars": 849,
+   "depth": 1,
+   "from": "https://dos.uoregon.edu"
+  },
+  {
+   "file": "164-dos-conduct.md",
+   "url": "https://dos.uoregon.edu/conduct",
+   "title": "Student Conduct and Community Standards | Dean of Students",
+   "chars": 1635,
+   "depth": 1,
+   "from": "https://dos.uoregon.edu"
+  },
+  {
+   "file": "165-dos-code-procedures.md",
+   "url": "https://dos.uoregon.edu/code-procedures",
+   "title": "Student Conduct Code and Procedures | Dean of Students",
+   "chars": 5418,
+   "depth": 1,
+   "from": "https://dos.uoregon.edu"
+  },
+  {
+   "file": "166-dos-appeals.md",
+   "url": "https://dos.uoregon.edu/appeals",
+   "title": "Appeals Process | Dean of Students",
+   "chars": 1293,
+   "depth": 1,
+   "from": "https://dos.uoregon.edu"
+  },
+  {
+   "file": "167-families-home.md",
+   "url": "https://families.uoregon.edu",
+   "title": "Parent and Family Programs | University of Oregon",
+   "chars": 2659,
+   "depth": 1,
+   "from": "https://dos.uoregon.edu"
+  },
+  {
+   "file": "168-calendar-event-portland-food-drop.md",
+   "url": "https://calendar.uoregon.edu/event/portland-food-drop",
+   "title": "Portland Food Drop - University of Oregon",
+   "chars": 1420,
+   "depth": 1,
+   "from": "https://dos.uoregon.edu"
+  },
+  {
+   "file": "169-registrar-parents.md",
+   "url": "https://registrar.uoregon.edu/parents",
+   "title": "Parent Resources | Office of the Registrar",
+   "chars": 1060,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "170-registrar-veterans-benefits.md",
+   "url": "https://registrar.uoregon.edu/veterans-benefits",
+   "title": "Veterans Benefits | Office of the Registrar",
+   "chars": 1673,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "171-registrar-dates-deadlines-refund-reduction-credits.md",
+   "url": "https://registrar.uoregon.edu/dates-deadlines/refund/reduction-credits",
+   "title": "Reduction of Credits | Office of the Registrar",
+   "chars": 4937,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "172-registrar-dates-deadlines-refund-complete-withdrawal.md",
+   "url": "https://registrar.uoregon.edu/dates-deadlines/refund/complete-withdrawal",
+   "title": "Complete Withdrawal | Office of the Registrar",
+   "chars": 4550,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "173-registrar-dates-deadlines-final-exams.md",
+   "url": "https://registrar.uoregon.edu/dates-deadlines/final-exams",
+   "title": "Final Exams | Office of the Registrar",
+   "chars": 6141,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "174-registrar-dates-deadlines-combined-final-exams.md",
+   "url": "https://registrar.uoregon.edu/dates-deadlines/combined-final-exams",
+   "title": "Combined Final Examination Schedules | Office of the Registrar",
+   "chars": 3335,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "175-registrar-registration.md",
+   "url": "https://registrar.uoregon.edu/registration",
+   "title": "Registration | Office of the Registrar",
+   "chars": 1028,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "176-registrar-registration-register-classes.md",
+   "url": "https://registrar.uoregon.edu/registration/register-classes",
+   "title": "Register for Classes | Office of the Registrar",
+   "chars": 10129,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "177-registrar-registration-register-classes-adddrop-courses.md",
+   "url": "https://registrar.uoregon.edu/registration/register-classes/adddrop-courses",
+   "title": "Add/Drop Courses | Office of the Registrar",
+   "chars": 2650,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "178-registrar-registration-register-classes-auditing-courses.md",
+   "url": "https://registrar.uoregon.edu/registration/register-classes/auditing-courses",
+   "title": "Auditing Courses | Office of the Registrar",
+   "chars": 2533,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "179-registrar-registration-register-classes-complete-withdrawal.md",
+   "url": "https://registrar.uoregon.edu/registration/register-classes/complete-withdrawal",
+   "title": "Complete Withdrawal | Office of the Registrar",
+   "chars": 2121,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "180-registrar-registration-register-classes-credit-maximums.md",
+   "url": "https://registrar.uoregon.edu/registration/register-classes/credit-maximums",
+   "title": "Increase the Credit Maximum Petition | Office of the Registrar",
+   "chars": 824,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "181-registrar-registration-register-classes-degree-level-and-enrollment.md",
+   "url": "https://registrar.uoregon.edu/registration/register-classes/degree-level-and-enrollment",
+   "title": "Degree Level and Enrollment | Office of the Registrar",
+   "chars": 782,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "182-registrar-registration-register-classes-grade-option-and-variable-cred.md",
+   "url": "https://registrar.uoregon.edu/registration/register-classes/grade-option-and-variable-credits",
+   "title": "Changing Grade Option and Variable Credits | Office of the Registrar",
+   "chars": 3561,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "183-registrar-registration-register-classes-joint-campus-program.md",
+   "url": "https://registrar.uoregon.edu/registration/register-classes/joint-campus-program",
+   "title": "Joint-Campus Program | Office of the Registrar",
+   "chars": 265,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "184-registrar-registration-register-classes-prerequisites-course-order.md",
+   "url": "https://registrar.uoregon.edu/registration/register-classes/prerequisites-course-order",
+   "title": "Prerequisites and Course Order | Office of the Registrar",
+   "chars": 1769,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "185-registrar-registration-register-classes-prerequisites-course-order-lat.md",
+   "url": "https://registrar.uoregon.edu/registration/register-classes/prerequisites-course-order/later-courses",
+   "title": "Later Courses | Office of the Registrar",
+   "chars": 10359,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "186-registrar-registration-register-classes-prerequisites-course-order-ear.md",
+   "url": "https://registrar.uoregon.edu/registration/register-classes/prerequisites-course-order/earlier-courses",
+   "title": "Earlier Courses | Office of the Registrar",
+   "chars": 10933,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "187-registrar-registration-register-classes-repeating-courses.md",
+   "url": "https://registrar.uoregon.edu/registration/register-classes/repeating-courses",
+   "title": "Repeating Courses | Office of the Registrar",
+   "chars": 2961,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "188-registrar-registration-register-classes-time-conflict.md",
+   "url": "https://registrar.uoregon.edu/registration/register-classes/time-conflict",
+   "title": "Time Conflict | Office of the Registrar",
+   "chars": 1519,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "189-registrar-registration-register-classes-waitlist.md",
+   "url": "https://registrar.uoregon.edu/registration/register-classes/waitlist",
+   "title": "Waitlist | Office of the Registrar",
+   "chars": 1829,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "190-registrar-registration-dual-enrollment-program.md",
+   "url": "https://registrar.uoregon.edu/registration/dual-enrollment-program",
+   "title": "Dual Enrollment Program | Office of the Registrar",
+   "chars": 2063,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "191-registrar-registration-dual-enrollment-program-advising-support.md",
+   "url": "https://registrar.uoregon.edu/registration/dual-enrollment-program/advising-support",
+   "title": "Advising Support | Office of the Registrar",
+   "chars": 333,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "192-registrar-registration-dual-enrollment-program-application-process.md",
+   "url": "https://registrar.uoregon.edu/registration/dual-enrollment-program/application-process",
+   "title": "Application Process | Office of the Registrar",
+   "chars": 996,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "193-registrar-registration-dual-enrollment-program-financial-aid-and-schol.md",
+   "url": "https://registrar.uoregon.edu/registration/dual-enrollment-program/financial-aid-and-scholarships",
+   "title": "Financial Aid and Scholarships | Office of the Registrar",
+   "chars": 1479,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "194-registrar-registration-dual-enrollment-program-tuition-and-fees.md",
+   "url": "https://registrar.uoregon.edu/registration/dual-enrollment-program/tuition-and-fees",
+   "title": "Tuition and Fees | Office of the Registrar",
+   "chars": 1635,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "195-registrar-registration-non-degree-seeking-students.md",
+   "url": "https://registrar.uoregon.edu/registration/non-degree-seeking-students",
+   "title": "Who is a Non-Degree Seeking Student? | Office of the Registrar",
+   "chars": 1367,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "196-registrar-registration-non-degree-seeking-students-registration.md",
+   "url": "https://registrar.uoregon.edu/registration/non-degree-seeking-students/registration",
+   "title": "Registering as a Non-Degree Student | Office of the Registrar",
+   "chars": 889,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "197-registrar-registration-non-degree-seeking-students-resources.md",
+   "url": "https://registrar.uoregon.edu/registration/non-degree-seeking-students/resources",
+   "title": "Resources for Non-Degree Seeking Students | Office of the Registrar",
+   "chars": 903,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "198-registrar-registration-planning-tools.md",
+   "url": "https://registrar.uoregon.edu/registration/planning-tools",
+   "title": "Planning Tools | Office of the Registrar",
+   "chars": 524,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "199-registrar-registration-planning-tools-academic-catalog.md",
+   "url": "https://registrar.uoregon.edu/registration/planning-tools/academic-catalog",
+   "title": "UO Catalog | Office of the Registrar",
+   "chars": 666,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "200-registrar-registration-planning-tools-choose-your-courses.md",
+   "url": "https://registrar.uoregon.edu/registration/planning-tools/choose-your-courses",
+   "title": "Choose Your Courses | Office of the Registrar",
+   "chars": 3587,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "201-registrar-registration-planning-tools-credit-hour-limits.md",
+   "url": "https://registrar.uoregon.edu/registration/planning-tools/credit-hour-limits",
+   "title": "Credit Hour Limits | Office of the Registrar",
+   "chars": 458,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "202-registrar-registration-planning-tools-incompletes.md",
+   "url": "https://registrar.uoregon.edu/registration/planning-tools/incompletes",
+   "title": "Incompletes | Office of the Registrar",
+   "chars": 724,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "203-registrar-registration-planning-tools-meet-your-advisor.md",
+   "url": "https://registrar.uoregon.edu/registration/planning-tools/meet-your-advisor",
+   "title": "Meet With Your Advisor | Office of the Registrar",
+   "chars": 1408,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "204-registrar-registration-planning-tools-register-early.md",
+   "url": "https://registrar.uoregon.edu/registration/planning-tools/register-early",
+   "title": "Register Early | Office of the Registrar",
+   "chars": 419,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "205-registrar-registration-planning-tools-registration-holds.md",
+   "url": "https://registrar.uoregon.edu/registration/planning-tools/registration-holds",
+   "title": "Registration Holds | Office of the Registrar",
+   "chars": 4420,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "206-registrar-registration-planning-tools-registration-tampering.md",
+   "url": "https://registrar.uoregon.edu/registration/planning-tools/registration-tampering",
+   "title": "Registration Tampering | Office of the Registrar",
+   "chars": 259,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "207-registrar-registration-planning-tools-returning-students.md",
+   "url": "https://registrar.uoregon.edu/registration/planning-tools/returning-students",
+   "title": "Returning Students | Office of the Registrar",
+   "chars": 764,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "208-registrar-registration-planning-tools-short-courses.md",
+   "url": "https://registrar.uoregon.edu/registration/planning-tools/short-courses",
+   "title": "Short Courses | Office of the Registrar",
+   "chars": 364,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "209-registrar-registration-planning-tools-students-disabilities.md",
+   "url": "https://registrar.uoregon.edu/registration/planning-tools/students-disabilities",
+   "title": "Students with Disabilities | Office of the Registrar",
+   "chars": 187,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "210-registrar-registration-planning-tools-unauthorized-signatures.md",
+   "url": "https://registrar.uoregon.edu/registration/planning-tools/unauthorized-signatures",
+   "title": "Unauthorized Signatures | Office of the Registrar",
+   "chars": 511,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "211-registrar-transfer-transfer-credit.md",
+   "url": "https://registrar.uoregon.edu/transfer/transfer-credit",
+   "title": "Transfer Credit | Office of the Registrar",
+   "chars": 2836,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "212-registrar-transfer-transfer-credit-additional-guidance.md",
+   "url": "https://registrar.uoregon.edu/transfer/transfer-credit/additional-guidance",
+   "title": "Additional Guidance | Office of the Registrar",
+   "chars": 1133,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "213-registrar-transfer-transfer-credit-credit-prior-learning.md",
+   "url": "https://registrar.uoregon.edu/transfer/transfer-credit/credit-prior-learning",
+   "title": "Credit for Prior Learning and Assessment-Based Learning Credit | Office of the Registrar",
+   "chars": 1319,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "214-registrar-transfer-transfer-credit-reverse-college-transfer.md",
+   "url": "https://registrar.uoregon.edu/transfer/transfer-credit/reverse-college-transfer",
+   "title": "Reverse College Transfer | Office of the Registrar",
+   "chars": 1871,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "215-registrar-transfer-transfer-credit-transfer-credit-reevaluation.md",
+   "url": "https://registrar.uoregon.edu/transfer/transfer-credit/transfer-credit-reevaluation",
+   "title": "Transfer Credit Reevaluation | Office of the Registrar",
+   "chars": 1248,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "216-registrar-transfer-transfer-credit-transfer-equivalency-tools.md",
+   "url": "https://registrar.uoregon.edu/transfer/transfer-credit/transfer-equivalency-tools",
+   "title": "Transfer Equivalency Database (TES®) | Office of the Registrar",
+   "chars": 1432,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "217-registrar-transfer-transfer-credit-transfer-smart-codes.md",
+   "url": "https://registrar.uoregon.edu/transfer/transfer-credit/transfer-smart-codes",
+   "title": "Transfer Smart Codes | Office of the Registrar",
+   "chars": 1806,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "218-registrar-transfer-oregon-transfer-compass.md",
+   "url": "https://registrar.uoregon.edu/transfer/oregon-transfer-compass",
+   "title": "Oregon Transfer Compass | Office of the Registrar",
+   "chars": 2073,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "219-registrar-transfer-credit-exam.md",
+   "url": "https://registrar.uoregon.edu/transfer/credit-exam",
+   "title": "Credit by Examination | Office of the Registrar",
+   "chars": 2585,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "220-registrar-transfer-military-credit.md",
+   "url": "https://registrar.uoregon.edu/transfer/military-credit",
+   "title": "Military Credit Evaluation | Office of the Registrar",
+   "chars": 1003,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "221-registrar-transfer-standardized-tests.md",
+   "url": "https://registrar.uoregon.edu/transfer/standardized-tests",
+   "title": "Standardized Tests for Credit | Office of the Registrar",
+   "chars": 1437,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "222-registrar-grades-records.md",
+   "url": "https://registrar.uoregon.edu/grades-records",
+   "title": "Grades and Records | Office of the Registrar",
+   "chars": 723,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "223-registrar-grades-records-academic-progress.md",
+   "url": "https://registrar.uoregon.edu/grades-records/academic-progress",
+   "title": "Class Standing and Academic Progress | Office of the Registrar",
+   "chars": 1080,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "224-registrar-grades-records-ducks-track.md",
+   "url": "https://registrar.uoregon.edu/grades-records/ducks-track",
+   "title": "Ducks on Track | Office of the Registrar",
+   "chars": 399,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "225-registrar-grades-records-enrollment-verification.md",
+   "url": "https://registrar.uoregon.edu/grades-records/enrollment-verification",
+   "title": "Enrollment Verification | Office of the Registrar",
+   "chars": 1160,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "226-registrar-grades-records-grading-system.md",
+   "url": "https://registrar.uoregon.edu/grades-records/grading-system",
+   "title": "Grading System | Office of the Registrar",
+   "chars": 1983,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "227-registrar-grades-records-grading-system-exam-policies.md",
+   "url": "https://registrar.uoregon.edu/grades-records/grading-system/exam-policies",
+   "title": "Exam Policies | Office of the Registrar",
+   "chars": 4043,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "228-registrar-grades-records-grading-system-gpa-calculator.md",
+   "url": "https://registrar.uoregon.edu/grades-records/grading-system/gpa-calculator",
+   "title": "GPA Calculator | Office of the Registrar",
+   "chars": 14,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "229-registrar-grades-records-grading-system-incompletes.md",
+   "url": "https://registrar.uoregon.edu/grades-records/grading-system/incompletes",
+   "title": "Incompletes | Office of the Registrar",
+   "chars": 1027,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "230-registrar-grades-records-notary-services.md",
+   "url": "https://registrar.uoregon.edu/grades-records/notary-services",
+   "title": "Notary Services | Office of the Registrar",
+   "chars": 1176,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "231-registrar-grades-records-notary-services-authentication-or-apostille.md",
+   "url": "https://registrar.uoregon.edu/grades-records/notary-services/authentication-or-apostille",
+   "title": "Authentication or Apostille | Office of the Registrar",
+   "chars": 1773,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "232-registrar-grades-records-record-updates.md",
+   "url": "https://registrar.uoregon.edu/grades-records/record-updates",
+   "title": "Record Updates | Office of the Registrar",
+   "chars": 304,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "233-registrar-grades-records-record-updates-academic-updates.md",
+   "url": "https://registrar.uoregon.edu/grades-records/record-updates/academic-updates",
+   "title": "Changes to Majors, Minors, and Degrees | Office of the Registrar",
+   "chars": 1191,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "234-registrar-grades-records-record-updates-address-changes.md",
+   "url": "https://registrar.uoregon.edu/grades-records/record-updates/address-changes",
+   "title": "Address Changes | Office of the Registrar",
+   "chars": 911,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "235-registrar-grades-records-record-updates-personal-updates.md",
+   "url": "https://registrar.uoregon.edu/grades-records/record-updates/personal-updates",
+   "title": "Name, Gender, and Ethnicity Changes | Office of the Registrar",
+   "chars": 2268,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "236-registrar-graduation-degree-requirements-academic-requirements-committ.md",
+   "url": "https://registrar.uoregon.edu/graduation/degree-requirements/academic-requirements-committee",
+   "title": "Academic Requirements Committee | Office of the Registrar",
+   "chars": 3231,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "237-registrar-privacy.md",
+   "url": "https://registrar.uoregon.edu/privacy",
+   "title": "Privacy Overview | Office of the Registrar",
+   "chars": 1448,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "238-registrar-privacy-directory-information.md",
+   "url": "https://registrar.uoregon.edu/privacy/directory-information",
+   "title": "Directory Information | Office of the Registrar",
+   "chars": 2023,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "239-registrar-privacy-directory-information-directory-information-restrict.md",
+   "url": "https://registrar.uoregon.edu/privacy/directory-information/directory-information-restriction",
+   "title": "Directory Information Restriction | Office of the Registrar",
+   "chars": 1209,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "240-registrar-privacy-education-records.md",
+   "url": "https://registrar.uoregon.edu/privacy/education-records",
+   "title": "Education Records | Office of the Registrar",
+   "chars": 2982,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "241-registrar-privacy-education-records-processes-inspecting-and-reviewing.md",
+   "url": "https://registrar.uoregon.edu/privacy/education-records/processes-inspecting-and-reviewing-educational-records",
+   "title": "Processes for Inspecting and Reviewing Educational Records | Office of the Registrar",
+   "chars": 4330,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "242-registrar-privacy-ferpa.md",
+   "url": "https://registrar.uoregon.edu/privacy/ferpa",
+   "title": "Family Educational Rights and Privacy Act | Office of the Registrar",
+   "chars": 1138,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "243-registrar-privacy-proxy-access.md",
+   "url": "https://registrar.uoregon.edu/privacy/proxy-access",
+   "title": "Proxy Access | Office of the Registrar",
+   "chars": 3284,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "244-registrar-about-location-mailing-address.md",
+   "url": "https://registrar.uoregon.edu/about/location-mailing-address",
+   "title": "Where are we located? | Office of the Registrar",
+   "chars": 518,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "245-registrar-dates-deadlines-refund.md",
+   "url": "https://registrar.uoregon.edu/dates-deadlines/refund",
+   "title": "Refund Schedules | Office of the Registrar",
+   "chars": 2020,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "246-registrar-current-students-registering-for-classes.md",
+   "url": "https://registrar.uoregon.edu/current-students/registering-for-classes",
+   "title": "Registration | Office of the Registrar",
+   "chars": 1028,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "247-catalog-home.md",
+   "url": "https://catalog.uoregon.edu",
+   "title": "Catalog | University of Oregon Academic Catalog",
+   "chars": 354,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "248-uoregon-academics.md",
+   "url": "https://uoregon.edu/academics?utm_source=referral&utm_medium=website&utm_content=footer-em",
+   "title": "Academics | Explore University of Oregon Degrees",
+   "chars": 5463,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "249-financialaid-home.md",
+   "url": "https://financialaid.uoregon.edu/?utm_source=referral&utm_medium=website&utm_content=footer-em",
+   "title": "Funding Your Future | Financial Aid & Scholarships",
+   "chars": 1893,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "250-parents-home.md",
+   "url": "https://parents.uoregon.edu/?utm_source=referral&utm_medium=website&utm_content=footer-em",
+   "title": "Parent and Family Programs | University of Oregon",
+   "chars": 2659,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "251-canvas-home.md",
+   "url": "https://canvas.uoregon.edu/?utm_source=referral&utm_medium=website&utm_content=footer-em",
+   "title": "Sign in to your account",
+   "chars": 23,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "252-financialaid-using-financial-aid-scholarships.md",
+   "url": "https://financialaid.uoregon.edu/using_financial_aid_scholarships?utm_source=referral&utm_medium=website&utm_content=footer-em",
+   "title": "Disbursement of Financial Aid and Scholarships | Financial Aid & Scholarships",
+   "chars": 1956,
+   "depth": 1,
+   "from": "https://registrar.uoregon.edu"
+  },
+  {
+   "file": "253-policies-search.md",
+   "url": "https://policies.uoregon.edu/search",
+   "title": "Search | University of Oregon Policy Library",
+   "chars": 6,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "254-policies-content-uo-policy-library-z-index-uo-policy-statements.md",
+   "url": "https://policies.uoregon.edu/content/uo-policy-library-z-index-uo-policy-statements",
+   "title": "University of Oregon Policy Library | University of Oregon",
+   "chars": 13342,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "255-policies-content-policy-advisory-council-pac.md",
+   "url": "https://policies.uoregon.edu/content/policy-advisory-council-pac",
+   "title": "Policy Advisory Council (PAC) | University of Oregon Policy Library",
+   "chars": 20841,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "256-policies-content-policies-open-comment-0.md",
+   "url": "https://policies.uoregon.edu/content/policies-open-comment-0",
+   "title": "Policies Open for Comment | University of Oregon Policy Library",
+   "chars": 1219,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "257-policies-content-frequently-asked-questions.md",
+   "url": "https://policies.uoregon.edu/content/frequently-asked-questions",
+   "title": "Frequently Asked Questions | University of Oregon Policy Library",
+   "chars": 6558,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "258-policies-content-contact-us.md",
+   "url": "https://policies.uoregon.edu/content/contact-us",
+   "title": "Contact Us | University of Oregon Policy Library",
+   "chars": 157,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "259-policies-content-a-z-policies-all.md",
+   "url": "https://policies.uoregon.edu/content/a-z-policies/all",
+   "title": "A to Z Index of UO Policy Statements | University of Oregon Policy Library",
+   "chars": 11896,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "260-policies-content-a-z-policies-a.md",
+   "url": "https://policies.uoregon.edu/content/a-z-policies/a",
+   "title": "A to Z Index of UO Policy Statements | University of Oregon Policy Library",
+   "chars": 1273,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "261-policies-content-a-z-policies-b.md",
+   "url": "https://policies.uoregon.edu/content/a-z-policies/b",
+   "title": "A to Z Index of UO Policy Statements | University of Oregon Policy Library",
+   "chars": 220,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "262-policies-content-a-z-policies-c.md",
+   "url": "https://policies.uoregon.edu/content/a-z-policies/c",
+   "title": "A to Z Index of UO Policy Statements | University of Oregon Policy Library",
+   "chars": 1773,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "263-policies-content-a-z-policies-d.md",
+   "url": "https://policies.uoregon.edu/content/a-z-policies/d",
+   "title": "A to Z Index of UO Policy Statements | University of Oregon Policy Library",
+   "chars": 288,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "264-policies-content-a-z-policies-e.md",
+   "url": "https://policies.uoregon.edu/content/a-z-policies/e",
+   "title": "A to Z Index of UO Policy Statements | University of Oregon Policy Library",
+   "chars": 703,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "265-policies-content-a-z-policies-f.md",
+   "url": "https://policies.uoregon.edu/content/a-z-policies/f",
+   "title": "A to Z Index of UO Policy Statements | University of Oregon Policy Library",
+   "chars": 2410,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "266-policies-content-a-z-policies-g.md",
+   "url": "https://policies.uoregon.edu/content/a-z-policies/g",
+   "title": "A to Z Index of UO Policy Statements | University of Oregon Policy Library",
+   "chars": 214,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "267-policies-content-a-z-policies-h.md",
+   "url": "https://policies.uoregon.edu/content/a-z-policies/h",
+   "title": "A to Z Index of UO Policy Statements | University of Oregon Policy Library",
+   "chars": 490,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "268-policies-content-a-z-policies-i.md",
+   "url": "https://policies.uoregon.edu/content/a-z-policies/i",
+   "title": "A to Z Index of UO Policy Statements | University of Oregon Policy Library",
+   "chars": 751,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "269-policies-content-a-z-policies-j.md",
+   "url": "https://policies.uoregon.edu/content/a-z-policies/j",
+   "title": "A to Z Index of UO Policy Statements | University of Oregon Policy Library",
+   "chars": 243,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "270-policies-content-a-z-policies-k.md",
+   "url": "https://policies.uoregon.edu/content/a-z-policies/k",
+   "title": "A to Z Index of UO Policy Statements | University of Oregon Policy Library",
+   "chars": 243,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "271-policies-content-a-z-policies-l.md",
+   "url": "https://policies.uoregon.edu/content/a-z-policies/l",
+   "title": "A to Z Index of UO Policy Statements | University of Oregon Policy Library",
+   "chars": 293,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "272-policies-content-a-z-policies-m.md",
+   "url": "https://policies.uoregon.edu/content/a-z-policies/m",
+   "title": "A to Z Index of UO Policy Statements | University of Oregon Policy Library",
+   "chars": 290,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "273-policies-content-a-z-policies-n.md",
+   "url": "https://policies.uoregon.edu/content/a-z-policies/n",
+   "title": "A to Z Index of UO Policy Statements | University of Oregon Policy Library",
+   "chars": 230,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "274-policies-content-a-z-policies-o.md",
+   "url": "https://policies.uoregon.edu/content/a-z-policies/o",
+   "title": "A to Z Index of UO Policy Statements | University of Oregon Policy Library",
+   "chars": 441,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "275-policies-content-a-z-policies-p.md",
+   "url": "https://policies.uoregon.edu/content/a-z-policies/p",
+   "title": "A to Z Index of UO Policy Statements | University of Oregon Policy Library",
+   "chars": 1206,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "276-policies-content-a-z-policies-q.md",
+   "url": "https://policies.uoregon.edu/content/a-z-policies/q",
+   "title": "A to Z Index of UO Policy Statements | University of Oregon Policy Library",
+   "chars": 243,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "277-policies-content-a-z-policies-r.md",
+   "url": "https://policies.uoregon.edu/content/a-z-policies/r",
+   "title": "A to Z Index of UO Policy Statements | University of Oregon Policy Library",
+   "chars": 1050,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "278-policies-content-a-z-policies-s.md",
+   "url": "https://policies.uoregon.edu/content/a-z-policies/s",
+   "title": "A to Z Index of UO Policy Statements | University of Oregon Policy Library",
+   "chars": 1083,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "279-policies-content-a-z-policies-t.md",
+   "url": "https://policies.uoregon.edu/content/a-z-policies/t",
+   "title": "A to Z Index of UO Policy Statements | University of Oregon Policy Library",
+   "chars": 478,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "280-policies-content-a-z-policies-u.md",
+   "url": "https://policies.uoregon.edu/content/a-z-policies/u",
+   "title": "A to Z Index of UO Policy Statements | University of Oregon Policy Library",
+   "chars": 753,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "281-policies-content-a-z-policies-v.md",
+   "url": "https://policies.uoregon.edu/content/a-z-policies/v",
+   "title": "A to Z Index of UO Policy Statements | University of Oregon Policy Library",
+   "chars": 235,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "282-policies-content-a-z-policies-w.md",
+   "url": "https://policies.uoregon.edu/content/a-z-policies/w",
+   "title": "A to Z Index of UO Policy Statements | University of Oregon Policy Library",
+   "chars": 226,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "283-policies-content-a-z-policies-x.md",
+   "url": "https://policies.uoregon.edu/content/a-z-policies/x",
+   "title": "A to Z Index of UO Policy Statements | University of Oregon Policy Library",
+   "chars": 243,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "284-policies-content-a-z-policies-y.md",
+   "url": "https://policies.uoregon.edu/content/a-z-policies/y",
+   "title": "A to Z Index of UO Policy Statements | University of Oregon Policy Library",
+   "chars": 243,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "285-policies-content-a-z-policies-z.md",
+   "url": "https://policies.uoregon.edu/content/a-z-policies/z",
+   "title": "A to Z Index of UO Policy Statements | University of Oregon Policy Library",
+   "chars": 243,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "286-policies-vol-2-academics-instruction-research-ch-1-curriculum-instruc.md",
+   "url": "https://policies.uoregon.edu/vol-2-academics-instruction-research/ch-1-curriculum-instruction/academic-calendar",
+   "title": "Academic Calendar | University of Oregon Policy Library",
+   "chars": 1313,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "287-policies-vol-2-academics-instruction-research-ch-2-appointments-promo.md",
+   "url": "https://policies.uoregon.edu/vol-2-academics-instruction-research/ch-2-appointments-promotion-tenure/academic-classification-and",
+   "title": "Academic Classification and Rank | University of Oregon Policy Library",
+   "chars": 13571,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "288-policies-vol-2-academics-instruction-research-ch-1-curriculum-instruc.md",
+   "url": "https://policies.uoregon.edu/vol-2-academics-instruction-research/ch-1-curriculum-instruction/academic-continuity-and-emergency",
+   "title": "Academic Continuity and Emergency Grades | University of Oregon Policy Library",
+   "chars": 15068,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "289-policies-academic-employment-appointment-promotion-tenure-salary-proc.md",
+   "url": "https://policies.uoregon.edu/academic-employment-appointment-promotion-tenure-salary-procedures",
+   "title": "Academic Employment: Appointment, Promotion, Tenure & Salary Procedures | University of Oregon Policy Library",
+   "chars": 1747,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "290-policies-vol-2-academics-instruction-research-ch-5-academic-freedom-a.md",
+   "url": "https://policies.uoregon.edu/vol-2-academics-instruction-research/ch-5-academic-freedom/academic-freedom-freedom-inquiry-and-free",
+   "title": "Academic Freedom, Freedom of Inquiry, and Free Speech | University of Oregon Policy Library",
+   "chars": 7724,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "291-policies-acceptable-use-policy.md",
+   "url": "https://policies.uoregon.edu/acceptable-use-policy",
+   "title": "Acceptable Use Policy | University of Oregon Policy Library",
+   "chars": 22097,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "292-policies-vol-4-finance-administration-infrastructure-ch-7-property-fa.md",
+   "url": "https://policies.uoregon.edu/vol-4-finance-administration-infrastructure/ch-7-property-facilities-planning-sustainability/access",
+   "title": "Access Control | University of Oregon Policy Library",
+   "chars": 6206,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "293-policies-content-admission-policy-second-language.md",
+   "url": "https://policies.uoregon.edu/content/admission-policy-second-language",
+   "title": "Admission Policy, Second Language | University of Oregon Policy Library",
+   "chars": 3994,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "294-policies-admission-requirements.md",
+   "url": "https://policies.uoregon.edu/admission-requirements",
+   "title": "Admission Requirements | University of Oregon Policy Library",
+   "chars": 3754,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "295-policies-vol-2-academics-instruction-research-ch-6-research-general-a.md",
+   "url": "https://policies.uoregon.edu/vol-2-academics-instruction-research/ch-6-research-general/allegations-research-misconduct",
+   "title": "Allegations of Research Misconduct/Research Integrity | University of Oregon Policy Library",
+   "chars": 61110,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "296-policies-vol-4-finance-administration-infrastructure-ch-5-public-safe.md",
+   "url": "https://policies.uoregon.edu/vol-4-finance-administration-infrastructure/ch-5-public-safety-risk-services/animal-control",
+   "title": "Animal Control | University of Oregon Policy Library",
+   "chars": 7600,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "297-policies-policy-by-1-0201-personnel-faculty-appointment-and-promotion.md",
+   "url": "https://policies.uoregon.edu/policy/by/1/0201-personnel/faculty-appointment-and-promotion-instructors-and-senior-instructors",
+   "title": "Appointment and Promotion of Instructors and Senior Instructors | University of Oregon Policy Library",
+   "chars": 6251,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "298-policies-vol-4-finance-administration-infrastructure-ch-7-real-proper.md",
+   "url": "https://policies.uoregon.edu/vol-4-finance-administration-infrastructure/ch-7-real-property-facilities-planning/articles-and",
+   "title": "Articles and Activities Prohibited at Athletic Facilities | University of Oregon Policy Library",
+   "chars": 7672,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "299-policies-vol-3-administration-student-affairs-ch-7-intercollegiate-at.md",
+   "url": "https://policies.uoregon.edu/vol-3-administration-student-affairs/ch-7-intercollegiate-athletics/athletic-department-substance",
+   "title": "Athletic Department Substance Use and Drug Testing | University of Oregon Policy Library",
+   "chars": 19565,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "300-policies-availability-faculty-members-objective-information.md",
+   "url": "https://policies.uoregon.edu/availability-faculty-members-objective-information",
+   "title": "Availability to Faculty Members of Objective Information | University of Oregon Policy Library",
+   "chars": 1470,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "301-policies-vol-4-finance-administration-infrastructure-ch-8-parking-veh.md",
+   "url": "https://policies.uoregon.edu/vol-4-finance-administration-infrastructure/ch-8-parking-vehicles/bicycles-and-other-personal",
+   "title": "Bicycles and Other Personal Transportation Devices | University of Oregon Policy Library",
+   "chars": 7446,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "302-policies-vol-4-finance-administration-infrastructure-ch-7-property-fa.md",
+   "url": "https://policies.uoregon.edu/vol-4-finance-administration-infrastructure/ch-7-property-facilities-planning-sustainability/campus",
+   "title": "Campus Planning | University of Oregon Policy Library",
+   "chars": 2013,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "303-policies-vol-4-finance-administration-infrastructure-ch-5-public-safe.md",
+   "url": "https://policies.uoregon.edu/vol-4-finance-administration-infrastructure/ch-5-public-safety-risk-services/campus-violence",
+   "title": "Campus Violence Prevention | University of Oregon Policy Library",
+   "chars": 8864,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "304-policies-vol-4-finance-administration-infrastructure-ch-5-public-safe.md",
+   "url": "https://policies.uoregon.edu/vol-4-finance-administration-infrastructure/ch-5-public-safety-risk-services/campus-visitors",
+   "title": "Campus Visitors | University of Oregon Policy Library",
+   "chars": 2029,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "305-policies-vol-2-academics-instruction-research-ch-1-curriculum-instruc.md",
+   "url": "https://policies.uoregon.edu/vol-2-academics-instruction-research/ch-1-curriculum-instruction/cancellation-classes",
+   "title": "Cancellation of Classes | University of Oregon Policy Library",
+   "chars": 1249,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "306-policies-vol-4-finance-administration-infrastructure-ch-9-purchasing-.md",
+   "url": "https://policies.uoregon.edu/vol-4-finance-administration-infrastructure/ch-9-purchasing-contracting/catering-services-campus",
+   "title": "Catering Services on Campus | University of Oregon Policy Library",
+   "chars": 3097,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "307-policies-vol-4-finance-administration-infrastructure-ch-4-business-af.md",
+   "url": "https://policies.uoregon.edu/vol-4-finance-administration-infrastructure/ch-4-business-affairs/charging-administrative-overhead",
+   "title": "Charging Administrative Overhead Costs | University of Oregon Policy Library",
+   "chars": 1210,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "308-policies-class-size.md",
+   "url": "https://policies.uoregon.edu/class-size",
+   "title": "Class Size | University of Oregon Policy Library",
+   "chars": 1790,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "309-policies-vol-4-finance-administration-infrastructure-ch-2-audits-code.md",
+   "url": "https://policies.uoregon.edu/vol-4-finance-administration-infrastructure/ch-2-audits/code-ethics",
+   "title": "Code of Ethics | University of Oregon Policy Library",
+   "chars": 3600,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "310-policies-commercial-and-charitable-solicitations-commercial-transacti.md",
+   "url": "https://policies.uoregon.edu/commercial-and-charitable-solicitations-commercial-transactions",
+   "title": "Commercial and Charitable Solicitations, Commercial Transactions | University of Oregon Policy Library",
+   "chars": 9268,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "311-policies-vol-1-governance-ch-3-policies-community-dispute-resolution-.md",
+   "url": "https://policies.uoregon.edu/vol-1-governance/ch-3-policies/community-dispute-resolution-program",
+   "title": "Community Dispute Resolution Program | University of Oregon Policy Library",
+   "chars": 22439,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "312-policies-vol-5-human-resources-ch-4-workplace-community-standards-aff.md",
+   "url": "https://policies.uoregon.edu/vol-5-human-resources/ch-4-workplace/community-standards-affirmation",
+   "title": "Community Standards Affirmation | University of Oregon Policy Library",
+   "chars": 2299,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "313-policies-compensation-0.md",
+   "url": "https://policies.uoregon.edu/compensation-0",
+   "title": "Compensation | University of Oregon Policy Library",
+   "chars": 5563,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "314-policies-vol-4-finance-administration-infrastructure-ch-6-information.md",
+   "url": "https://policies.uoregon.edu/vol-4-finance-administration-infrastructure/ch-6-information-technology/computing-priorities",
+   "title": "Computing Priorities: Research and Instructional | University of Oregon Policy Library",
+   "chars": 4268,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "315-policies-conditions-service-0.md",
+   "url": "https://policies.uoregon.edu/conditions-service-0",
+   "title": "Conditions of Service | University of Oregon Policy Library",
+   "chars": 35873,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "316-policies-confidentiality-clientpatient-health-care-and-survivors-serv.md",
+   "url": "https://policies.uoregon.edu/confidentiality-clientpatient-health-care-and-survivors-services-information",
+   "title": "Confidentiality of Client/Patient Health Care and Survivors' Services Information | University of Oregon Policy Library",
+   "chars": 9770,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "317-policies-vol-1-governance-ch-2-legal-affairs-conflict-interest-confli.md",
+   "url": "https://policies.uoregon.edu/vol-1-governance/ch-2-legal-affairs/conflict-interest-conflict-commitment-and-outside-activities",
+   "title": "Conflict of Interest, Conflict of Commitment, and Outside Activities | University of Oregon Policy Library",
+   "chars": 13776,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "318-policies-vol-5-human-resources-ch-4-workplace-conflicts-interest-and-.md",
+   "url": "https://policies.uoregon.edu/vol-5-human-resources/ch-4-workplace/conflicts-interest-and-abuses-power-sexual-physically-intimate",
+   "title": "Conflicts of Interest and Abuses of Power: Sexual, Physically Intimate, or Romantic Relationships with Students | University of Oregon Policy Library",
+   "chars": 9333,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "319-policies-consensual-relationships.md",
+   "url": "https://policies.uoregon.edu/consensual-relationships",
+   "title": "Consensual Relationships | University of Oregon Policy Library",
+   "chars": 3263,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "320-policies-vol-4-finance-administration-infrastructure-ch-7-property-fa.md",
+   "url": "https://policies.uoregon.edu/vol-4-finance-administration-infrastructure/ch-7-property-facilities-planning-sustainability-1",
+   "title": "Construction and Contracting | University of Oregon Policy Library",
+   "chars": 7718,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "321-policies-policy-by-1-06-finance-and-business-affairs-copyright-royalt.md",
+   "url": "https://policies.uoregon.edu/policy/by/1/06-finance-and-business-affairs/copyright-royalty-income-distribution",
+   "title": "Copyright Royalty Income (Distribution of) | University of Oregon Policy Library",
+   "chars": 2020,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "322-policies-vol-3-administration-student-affairs-ch-8-admissions-oregon-.md",
+   "url": "https://policies.uoregon.edu/vol-3-administration-student-affairs/ch-8-admissions-oregon-residency/credit-university-courses",
+   "title": "Credit for University Courses Taught in High Schools | University of Oregon Policy Library",
+   "chars": 2358,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "323-policies-criminal-credit-and-related-background-checks-applicants-uni.md",
+   "url": "https://policies.uoregon.edu/criminal-credit-and-related-background-checks-applicants-university-positions",
+   "title": "Criminal, Credit and Related Background Checks on Applicants for University Positions | University of Oregon Policy Library",
+   "chars": 8128,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "324-policies-vol-4-finance-administration-infrastructure-ch-6-information.md",
+   "url": "https://policies.uoregon.edu/vol-4-finance-administration-infrastructure/ch-6-information-technology/data-security-incident",
+   "title": "Data Security Incident Response | University of Oregon Policy Library",
+   "chars": 3024,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "325-policies-definition-unclassified-staff.md",
+   "url": "https://policies.uoregon.edu/definition-unclassified-staff",
+   "title": "Definition of Unclassified Staff | University of Oregon Policy Library",
+   "chars": 3347,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "326-policies-content-diversity.md",
+   "url": "https://policies.uoregon.edu/content/diversity",
+   "title": "Diversity | University of Oregon Policy Library",
+   "chars": 4367,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "327-policies-vol-4-finance-administration-infrastructure-ch-4-business-af.md",
+   "url": "https://policies.uoregon.edu/vol-4-finance-administration-infrastructure/ch-4-business-affairs/electronic-signatures",
+   "title": "Electronic Signature of Documents | University of Oregon Policy Library",
+   "chars": 7865,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "328-policies-vol-5-human-resources-ch-11-human-resources-other-employee-g.md",
+   "url": "https://policies.uoregon.edu/vol-5-human-resources/ch-11-human-resources-other/employee-grievance-policy",
+   "title": "Employee Grievance Policy | University of Oregon Policy Library",
+   "chars": 18969,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "329-policies-vol-4-finance-administration-infrastructure-ch-7-real-proper.md",
+   "url": "https://policies.uoregon.edu/vol-4-finance-administration-infrastructure/ch-7-real-property-facilities-planning/environmental",
+   "title": "Environment and Sustainability | University of Oregon Policy Library",
+   "chars": 3906,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "330-policies-vol-5-human-resources-ch-1-affirmative-action-equal-opportun.md",
+   "url": "https://policies.uoregon.edu/vol-5-human-resources/ch-1-affirmative-action-equal-opportunity/equal-opportunity",
+   "title": "Equal Opportunity | University of Oregon Policy Library",
+   "chars": 3958,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "331-policies-equipment-and-surplus-property.md",
+   "url": "https://policies.uoregon.edu/equipment-and-surplus-property",
+   "title": "Equipment and Surplus Property | University of Oregon Policy Library",
+   "chars": 8312,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "332-policies-vol-4-finance-administration-infrastructure-ch-9-purchasing-.md",
+   "url": "https://policies.uoregon.edu/vol-4-finance-administration-infrastructure/ch-9-purchasing-contracting/equity-contracting",
+   "title": "Equity Contracting, Purchasing, and Data Reporting Procedures | University of Oregon Policy Library",
+   "chars": 9886,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "333-policies-policy-by-1-0201-personnel-equity-salary-review.md",
+   "url": "https://policies.uoregon.edu/policy/by/1/0201-personnel/equity-salary-review",
+   "title": "Equity Salary Review | University of Oregon Policy Library",
+   "chars": 1303,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "334-policies-vol-2-academics-instruction-research-ch-2-appointments-promo.md",
+   "url": "https://policies.uoregon.edu/vol-2-academics-instruction-research/ch-2-appointments-promotion-tenure/expedited-tenure",
+   "title": "Expedited Tenure | University of Oregon Policy Library",
+   "chars": 5955,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "335-policies-export-control-policy-0.md",
+   "url": "https://policies.uoregon.edu/export-control-policy-0",
+   "title": "Export Control Policy | University of Oregon Policy Library",
+   "chars": 17045,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "336-policies-vol-4-finance-administration-infrastructure-ch-7-real-proper.md",
+   "url": "https://policies.uoregon.edu/vol-4-finance-administration-infrastructure/ch-7-real-property-facilities-planning/facilities-and",
+   "title": "Facilities and Operations, Closure Of | University of Oregon Policy Library",
+   "chars": 6907,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "337-policies-vol-4-finance-administration-infrastructure-ch-7-property-fa.md",
+   "url": "https://policies.uoregon.edu/vol-4-finance-administration-infrastructure/ch-7-property-facilities-planning-sustainability-0",
+   "title": "Facilities Scheduling | University of Oregon Policy Library",
+   "chars": 7830,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "338-policies-faculty-career-support-program.md",
+   "url": "https://policies.uoregon.edu/faculty-career-support-program",
+   "title": "Faculty Career Support Program | University of Oregon Policy Library",
+   "chars": 1310,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "339-policies-faculty-records-policy.md",
+   "url": "https://policies.uoregon.edu/faculty-records-policy",
+   "title": "Faculty Records Policy | University of Oregon Policy Library",
+   "chars": 15615,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "340-policies-policy-by-1-0201-personnel-tenure-hiring-tenure-related-facu.md",
+   "url": "https://policies.uoregon.edu/policy/by/1/0201-personnel/tenure-hiring-tenure-related-faculty-without-terminal-degrees",
+   "title": "Faculty: Hiring of Tenure-Related Faculty Without Terminal Degrees | University of Oregon Policy Library",
+   "chars": 3325,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "341-policies-policy-by-1-0201-personnel-faculty-initial-hire-salary-facto.md",
+   "url": "https://policies.uoregon.edu/policy/by/1/0201-personnel/faculty-initial-hire-salary-factors",
+   "title": "Faculty: Initial Hire Salary Factors | University of Oregon Policy Library",
+   "chars": 2101,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "342-policies-policy-by-1-0201-personnel-faculty-internal-candidates-instr.md",
+   "url": "https://policies.uoregon.edu/policy/by/1/0201-personnel/faculty-internal-candidates-instructional-and-administrative-academic-pos",
+   "title": "Faculty: Internal Candidates, Guidelines for Search Processes | University of Oregon Policy Library",
+   "chars": 3828,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "343-policies-vol-2-academics-instruction-research-ch-3-faculty-general-fa.md",
+   "url": "https://policies.uoregon.edu/vol-2-academics-instruction-research/ch-3-faculty-general/faculty-merit-increase-factors",
+   "title": "Faculty: Merit Increase Factors | University of Oregon Policy Library",
+   "chars": 1828,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "344-policies-content-faculty-non-tenure-track-faculty-nttf.md",
+   "url": "https://policies.uoregon.edu/content/faculty-non-tenure-track-faculty-nttf",
+   "title": "Faculty: Non-Tenure Track Faculty (NTTF) | University of Oregon Policy Library",
+   "chars": 43005,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "345-policies-policy-by-1-0201-personnel-faculty-overload-compensation.md",
+   "url": "https://policies.uoregon.edu/policy/by/1/0201-personnel/faculty-overload-compensation",
+   "title": "Faculty: Overload Compensation | University of Oregon Policy Library",
+   "chars": 2006,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "346-policies-policy-by-1-0201-personnel-faculty-parental-accommodation-po.md",
+   "url": "https://policies.uoregon.edu/policy/by/1/0201-personnel/faculty-parental-accommodation-policy-officers-instruction",
+   "title": "Faculty: Parental Accommodation Policy for Officers of Instruction | University of Oregon Policy Library",
+   "chars": 7534,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "347-policies-policy-by-1-0201-personnel-faculty-promotion-and-tenure-file.md",
+   "url": "https://policies.uoregon.edu/policy/by/1/0201-personnel/faculty-promotion-and-tenure-files-access-information-closed-portion",
+   "title": "Faculty: Promotion and Tenure Files - Access to Information in the Closed Portion | University of Oregon Policy Library",
+   "chars": 3453,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "348-policies-policy-by-1-0201-personnel-faculty-promotion-salary-statemen.md",
+   "url": "https://policies.uoregon.edu/policy/by/1/0201-personnel/faculty-promotion-salary-statement",
+   "title": "Faculty: Promotion Salary Statement | University of Oregon Policy Library",
+   "chars": 1043,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "349-policies-vol-2-academics-instruction-research-ch-2-appointments-promo.md",
+   "url": "https://policies.uoregon.edu/vol-2-academics-instruction-research/ch-2-appointments-promotion-tenure/faculty-rights-and",
+   "title": "Faculty: Rights and Privileges of Faculty Retired With Merit | University of Oregon Policy Library",
+   "chars": 4466,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "350-policies-policy-by-1-0201-personnel-faculty-salary-adjustments.md",
+   "url": "https://policies.uoregon.edu/policy/by/1/0201-personnel/faculty-salary-adjustments",
+   "title": "Faculty: Salary Adjustments | University of Oregon Policy Library",
+   "chars": 1718,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "351-policies-policy-by-1-0201-personnel-faculty-salary-information-provid.md",
+   "url": "https://policies.uoregon.edu/policy/by/1/0201-personnel/faculty-salary-information-provided-finalist-candidates",
+   "title": "Faculty: Salary Information Provided to Finalist Candidates | University of Oregon Policy Library",
+   "chars": 2279,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "352-policies-policy-by-1-0201-personnel-faculty-special-stipends.md",
+   "url": "https://policies.uoregon.edu/policy/by/1/0201-personnel/faculty-special-stipends",
+   "title": "Faculty: Special Stipends | University of Oregon Policy Library",
+   "chars": 1435,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "353-policies-policy-by-1-0201-personnel-faculty-tenure-extension-probatio.md",
+   "url": "https://policies.uoregon.edu/policy/by/1/0201-personnel/faculty-tenure-extension-probationary-period-because-new-baby-or-childbir",
+   "title": "Faculty: Tenure Extension of Probationary Period Because of New Baby or Childbirth or Adoption | University of Oregon Policy Library",
+   "chars": 2748,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "354-policies-vol-3-administration-student-affairs-ch-2-housing-residence-.md",
+   "url": "https://policies.uoregon.edu/vol-3-administration-student-affairs/ch-2-housing-residence-life/family-housing-governance",
+   "title": "Family Housing Governance | University of Oregon Policy Library",
+   "chars": 4931,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "355-policies-vol-3-administration-student-affairs-ch-2-housing-residence-.md",
+   "url": "https://policies.uoregon.edu/vol-3-administration-student-affairs/ch-2-housing-residence-life/family-housing-rental-rates-fees",
+   "title": "Family Housing Rental Rates, Fees, Charges and Eligibility | University of Oregon Policy Library",
+   "chars": 3109,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "356-policies-family-relationships-and-employment-0.md",
+   "url": "https://policies.uoregon.edu/family-relationships-and-employment-0",
+   "title": "Family Relationships and Employment | University of Oregon Policy Library",
+   "chars": 3181,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "357-policies-policy-by-1-0201-personnel-fellowships-payment-uncompensated.md",
+   "url": "https://policies.uoregon.edu/policy/by/1/0201-personnel/fellowships-payment-uncompensated-salary-and-other-personnel-expenses-ope",
+   "title": "Fellowships: Payment of Uncompensated Salary and Other Personnel Expenses (OPE) on Major Fellowships | University of Oregon Policy Library",
+   "chars": 3871,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "358-policies-finance-and-business-affairs.md",
+   "url": "https://policies.uoregon.edu/finance-and-business-affairs",
+   "title": "Finance and Business Affairs | University of Oregon Policy Library",
+   "chars": 40564,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "359-policies-financial-irregularities.md",
+   "url": "https://policies.uoregon.edu/financial-irregularities",
+   "title": "Financial Irregularities | University of Oregon Policy Library",
+   "chars": 8605,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "360-policies-vol-4-finance-administration-infrastructure-ch-5-public-safe.md",
+   "url": "https://policies.uoregon.edu/vol-4-finance-administration-infrastructure/ch-5-public-safety/firearms",
+   "title": "Firearms | University of Oregon Policy Library",
+   "chars": 6192,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "361-policies-fitness-duty-and-drug-free-university.md",
+   "url": "https://policies.uoregon.edu/fitness-duty-and-drug-free-university",
+   "title": "Fitness for Duty and Drug-Free University | University of Oregon Policy Library",
+   "chars": 8587,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "362-policies-vol-5-human-resources-ch-4-workplace-flexible-work-arrangeme.md",
+   "url": "https://policies.uoregon.edu/vol-5-human-resources/ch-4-workplace/flexible-work-arrangements",
+   "title": "Flexible Work Arrangements | University of Oregon Policy Library",
+   "chars": 6785,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "363-policies-fraud-waste-and-abuse-reporting-0.md",
+   "url": "https://policies.uoregon.edu/fraud-waste-and-abuse-reporting-0",
+   "title": "Fraud, Waste, and Abuse Reporting | University of Oregon Policy Library",
+   "chars": 3075,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "364-policies-fund-raising.md",
+   "url": "https://policies.uoregon.edu/fund-raising",
+   "title": "Fund Raising | University of Oregon Policy Library",
+   "chars": 19495,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "365-policies-policy-by-1-06-finance-and-business-affairs-fund-raising-cam.md",
+   "url": "https://policies.uoregon.edu/policy/by/1/06-finance-and-business-affairs/fund-raising-campus-authorization",
+   "title": "Fund Raising on Campus, Authorization of | University of Oregon Policy Library",
+   "chars": 2109,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "366-policies-gifts-grants-and-contract-management.md",
+   "url": "https://policies.uoregon.edu/gifts-grants-and-contract-management",
+   "title": "Gifts, Grants, and Contract Management | University of Oregon Policy Library",
+   "chars": 3629,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "367-policies-vol-3-administration-student-affairs-ch-4-student-health-ser.md",
+   "url": "https://policies.uoregon.edu/vol-3-administration-student-affairs/ch-4-student-health-services/health-insurance-requirements",
+   "title": "Health Insurance Requirements for International Students and Their Dependents | University of Oregon Policy Library",
+   "chars": 3002,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "368-policies-vol-5-human-resources-ch-9-time-leave-holidays.md",
+   "url": "https://policies.uoregon.edu/vol-5-human-resources/ch-9-time-leave/holidays",
+   "title": "Holidays | University of Oregon Policy Library",
+   "chars": 1914,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "369-policies-vol-2-academics-instruction-research-ch-8-academics-other-ho.md",
+   "url": "https://policies.uoregon.edu/vol-2-academics-instruction-research/ch-8-academics-other/honorary-degrees-granting",
+   "title": "Honorary Degrees, Granting of | University of Oregon Policy Library",
+   "chars": 5355,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "370-policies-human-remains-policy.md",
+   "url": "https://policies.uoregon.edu/human-remains-policy",
+   "title": "Human Remains Policy | University of Oregon Policy Library",
+   "chars": 12020,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "371-policies-human-research-protection-program.md",
+   "url": "https://policies.uoregon.edu/human-research-protection-program",
+   "title": "Human Research Protection Program | University of Oregon Policy Library",
+   "chars": 6521,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "372-policies-immigration-enforcement-notification-policy-2.md",
+   "url": "https://policies.uoregon.edu/immigration-enforcement-notification-policy-2",
+   "title": "Immigration Enforcement Notification Policy | University of Oregon Policy Library",
+   "chars": 6483,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "373-policies-vol-3-administration-student-affairs-ch-3-tuition-student-fe.md",
+   "url": "https://policies.uoregon.edu/vol-3-administration-student-affairs/ch-3-tuition-student-fees/incidental-fee-authorization",
+   "title": "Incidental Fee Authorization | University of Oregon Policy Library",
+   "chars": 14265,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "374-policies-vol-4-finance-administration-infrastructure-ch-6-information.md",
+   "url": "https://policies.uoregon.edu/vol-4-finance-administration-infrastructure/ch-6-information-technology/information-and",
+   "title": "Information and Communications Technology Accessibility | University of Oregon Policy Library",
+   "chars": 5183,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "375-policies-vol-4-finance-administration-infrastructure-ch-6-information.md",
+   "url": "https://policies.uoregon.edu/vol-4-finance-administration-infrastructure/ch-6-information-technology/information-asset",
+   "title": "Information Asset Classification & Management | University of Oregon Policy Library",
+   "chars": 11886,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "376-policies-vol-4-finance-administration-infrastructure-ch-6-information.md",
+   "url": "https://policies.uoregon.edu/vol-4-finance-administration-infrastructure/ch-6-information-technology/information-security-program",
+   "title": "Information Security Program | University of Oregon Policy Library",
+   "chars": 7906,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "377-policies-intercollegiate-athletics.md",
+   "url": "https://policies.uoregon.edu/intercollegiate-athletics",
+   "title": "Intercollegiate Athletics | University of Oregon Policy Library",
+   "chars": 14748,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "378-policies-vol-4-finance-administration-infrastructure-ch-2-audits-inte.md",
+   "url": "https://policies.uoregon.edu/vol-4-finance-administration-infrastructure/ch-2-audits/internal-controls",
+   "title": "Internal Controls | University of Oregon Policy Library",
+   "chars": 3884,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "379-policies-vol-2-academics-instruction-research-ch-7-innovation-tech-tr.md",
+   "url": "https://policies.uoregon.edu/vol-2-academics-instruction-research/ch-7-innovation-tech-transfer-economic-development/inventions",
+   "title": "Inventions, License Agreements, Educational & Professional Materials Development, Patents & Copyrights | University of Oregon Policy Library",
+   "chars": 4562,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "380-policies-vol-1-governance-ch-2-legal-affairs-legal-review-agreements-.md",
+   "url": "https://policies.uoregon.edu/vol-1-governance/ch-2-legal-affairs/legal-review-agreements-and-documents",
+   "title": "Legal Review of Agreements and Documents | University of Oregon Policy Library",
+   "chars": 5112,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "381-policies-vol-3-administration-student-affairs-ch-7-intercollegiate-at.md",
+   "url": "https://policies.uoregon.edu/vol-3-administration-student-affairs/ch-7-intercollegiate-athletics/licensing-income-distribution",
+   "title": "Licensing Income Distribution | University of Oregon Policy Library",
+   "chars": 8421,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "382-policies-vol-4-finance-administration-infrastructure-ch-4-business-af.md",
+   "url": "https://policies.uoregon.edu/vol-4-finance-administration-infrastructure/ch-4-business-affairs/mail-and-delivery-service-campus",
+   "title": "Mail and Delivery Service on Campus | University of Oregon Policy Library",
+   "chars": 1635,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "383-policies-vol-4-finance-administration-infrastructure-ch-6-information.md",
+   "url": "https://policies.uoregon.edu/vol-4-finance-administration-infrastructure/ch-6-information-technology/mobile-technology-access",
+   "title": "Mobile Technology, Access To | University of Oregon Policy Library",
+   "chars": 3533,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "384-policies-vol-2-academics-instruction-research-ch-8-museums-museum-art.md",
+   "url": "https://policies.uoregon.edu/vol-2-academics-instruction-research/ch-8-museums/museum-art",
+   "title": "Museum of Art | University of Oregon Policy Library",
+   "chars": 15236,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "385-policies-naming-facilities-significant-spaces-and-academic-units.md",
+   "url": "https://policies.uoregon.edu/naming-facilities-significant-spaces-and-academic-units",
+   "title": "Naming of Facilities, Significant Spaces, and Academic Units | University of Oregon Policy Library",
+   "chars": 4822,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "386-policies-vol-5-human-resources-ch-11-human-resources-other-officer-ad.md",
+   "url": "https://policies.uoregon.edu/vol-5-human-resources/ch-11-human-resources-other/officer-administration-oa-employment",
+   "title": "Officer of Administration (OA) Employment | University of Oregon Policy Library",
+   "chars": 4180,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "387-policies-vol-5-human-resources-ch-11-human-resources-other-officer-ad.md",
+   "url": "https://policies.uoregon.edu/vol-5-human-resources/ch-11-human-resources-other/officer-administration-oa-grievances",
+   "title": "Officer of Administration (OA) Grievances | University of Oregon Policy Library",
+   "chars": 2178,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "388-policies-vol-5-human-resources-ch-6-performance-management-officer-ad.md",
+   "url": "https://policies.uoregon.edu/vol-5-human-resources/ch-6-performance-management/officer-administration-oa-performance-management",
+   "title": "Officer of Administration (OA) Performance Management | University of Oregon Policy Library",
+   "chars": 1442,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "389-policies-vol-5-human-resources-ch-8-separation-officer-administration.md",
+   "url": "https://policies.uoregon.edu/vol-5-human-resources/ch-8-separation/officer-administration-oa-separations",
+   "title": "Officer of Administration (OA) Separations | University of Oregon Policy Library",
+   "chars": 1015,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "390-policies-vol-5-human-resources-ch-9-time-leave-officer-administration.md",
+   "url": "https://policies.uoregon.edu/vol-5-human-resources/ch-9-time-leave/officer-administration-oa-time",
+   "title": "Officer of Administration (OA) Time Off | University of Oregon Policy Library",
+   "chars": 1091,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "391-policies-vol-5-human-resources-ch-9-time-leave-parental-leave.md",
+   "url": "https://policies.uoregon.edu/vol-5-human-resources/ch-9-time-leave/parental-leave",
+   "title": "Parental Leave | University of Oregon Policy Library",
+   "chars": 2923,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "392-policies-vol-4-finance-administration-infrastructure-ch-8-parking-veh.md",
+   "url": "https://policies.uoregon.edu/vol-4-finance-administration-infrastructure/ch-8-parking-vehicles/parking",
+   "title": "Parking | University of Oregon Policy Library",
+   "chars": 2701,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "393-policies-vol-4-finance-administration-infrastructure-ch-4-business-af.md",
+   "url": "https://policies.uoregon.edu/vol-4-finance-administration-infrastructure/ch-4-business-affairs/payment-card-acceptance",
+   "title": "Payment Card Acceptance | University of Oregon Policy Library",
+   "chars": 6429,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "394-policies-vol-4-finance-administration-infrastructure-ch-5-public-safe.md",
+   "url": "https://policies.uoregon.edu/vol-4-finance-administration-infrastructure/ch-5-public-safety-risk-services/physical-and",
+   "title": "Physical and Environmental Security | University of Oregon Policy Library",
+   "chars": 5904,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "395-policies-vol-5-human-resources-ch-11-human-resources-other-political-.md",
+   "url": "https://policies.uoregon.edu/vol-5-human-resources/ch-11-human-resources-other/political-activities",
+   "title": "Political Activities | University of Oregon Policy Library",
+   "chars": 3837,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "396-policies-policy-by-1-0201-personnel-post-tenure-review.md",
+   "url": "https://policies.uoregon.edu/policy/by/1/0201-personnel/post-tenure-review",
+   "title": "Post Tenure Review | University of Oregon Policy Library",
+   "chars": 15345,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "397-policies-vol-2-academics-instruction-research-ch-1-curriculum-instruc.md",
+   "url": "https://policies.uoregon.edu/vol-2-academics-instruction-research/ch-1-curriculum-instruction/posthumous-degrees-conferral",
+   "title": "Posthumous Degrees, Conferral Of | University of Oregon Policy Library",
+   "chars": 3371,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "398-policies-vol-3-administration-student-affairs-ch-9-student-life-gener.md",
+   "url": "https://policies.uoregon.edu/vol-3-administration-student-affairs/ch-9-student-life-general/preferred-first-name",
+   "title": "Preferred First Name | University of Oregon Policy Library",
+   "chars": 5307,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "399-policies-vol-4-finance-administration-infrastructure-ch-4-business-af.md",
+   "url": "https://policies.uoregon.edu/vol-4-finance-administration-infrastructure/ch-4-business-affairs/printing-and-mailing",
+   "title": "Printing and Mailing | University of Oregon Policy Library",
+   "chars": 2214,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  },
+  {
+   "file": "400-policies-privacy-policy.md",
+   "url": "https://policies.uoregon.edu/privacy-policy",
+   "title": "Privacy Policy | University of Oregon Policy Library",
+   "chars": 8078,
+   "depth": 1,
+   "from": "https://policies.uoregon.edu"
+  }
+ ],
+ "pdfsNotRead": [
+  "https://policies.uoregon.edu/sites/default/files/Policy%20Concept%20Form%20%26%20Instructions.pdf | link to policy concept form",
+  "https://investigations.uoregon.edu/sites/default/files/2024-10/title-ix-reporting-faq-58.pdf | Title IX Reporting FAQ",
+  "https://provost.uoregon.edu/sites/default/files/uo_academic_allocation_handbook_5-24-18.pdf | Academic Allocation Model Handbook",
+  "https://senate.uoregon.edu/sites/senate1.uoregon.edu/files/2021-05/Exam%20Policy%20Clarification_May%202016.pdf | https://senate.uoregon.edu/sites/senate1.uoregon.edu/files/2021-05/Exam%20Policy%20Clarification_May%202016.pdf",
+  "https://senate.uoregon.edu/sites/default/files/2024-02/Student%20Registration%20Holds%20policy_02.22.2024docx.pdf | Supplemental Guidelines for implementing the policy",
+  "https://senate.uoregon.edu/sites/default/files/2021-11/Course%20Policy%20Proposals_05.19.2021-FINAL.pdf | Course Policy Proposals_05.19.2021-FINAL.pdf",
+  "https://senate.uoregon.edu/sites/default/files/2022-05/Course%20Attendance-Engagement%20Policy%204-14-22%20Clean_0.pdf | Course Attendance-Engagement Policy 4-14-22 Clean.pdf",
+  "https://provost.uoregon.edu/sites/default/files/2021-10/211004.ada_.pg_.accessibility_0.pdf | Practitioner Guide: Accessibility",
+  "https://dos.uoregon.edu/files/2023-02/SOP-Academic-Misconduct-2023.pdf | Academic Misconduct Procedures",
+  "https://dos.uoregon.edu/files/substance-use-and-general-misconduct-procedures-2020.pdf | Substance Use Misconduct Procedures",
+  "https://dos.uoregon.edu/files/substance-use-and-general-misconduct-procedures-2020.pdf | General Misconduct Procedures",
+  "https://dos.uoregon.edu/files/student-organization-misconduct-procedures-2020.pdf | Student Organization Misconduct Procedures",
+  "https://dos.uoregon.edu/files/residence-life-resolution-process-procedures-2020.pdf | Residence Life Resolution Process Procedures",
+  "https://dos.uoregon.edu/files/2024-12/university-appeals-board-procedures-2024.pdf | University Appeals Board Procedures",
+  "https://registrar.uoregon.edu/sites/default/files/2025-10/form-drop-withdraw-petition-2025.pdf | Late Drop/Withdraw Request",
+  "https://registrar.uoregon.edu/sites/default/files/2023-12/form-auditor.pdf | auditor registration form",
+  "https://registrar.uoregon.edu/sites/default/files/2023-12/form-auditor-senior-citizen.pdf | senior auditor registration form",
+  "https://registrar.uoregon.edu/sites/default/files/2023-12/form-auditor.pdf | Auditor Registration Form",
+  "https://registrar.uoregon.edu/sites/default/files/2023-12/form-auditor-senior-citizen.pdf | Senior Citizen Auditor Registration Form",
+  "https://registrar.uoregon.edu/sites/default/files/2023-12/form-grade-credit-option-change-petition.pdf | Credit Change Petition",
+  "https://registrar.uoregon.edu/sites/default/files/2023-12/form-repeat-petition.pdf | Petition to Repeat a Course",
+  "https://registrar.uoregon.edu/sites/default/files/2023-12/form-time-conflict-registration.pdf | the time conflict registration request form",
+  "https://registrar.uoregon.edu/sites/default/files/2023-12/form-time-conflict-registration.pdf | Time Conflict Registration Form",
+  "https://policies.uoregon.edu/sites/default/files/Policy%20Advisory%20Council%20Charge.pdf | PAC Charge",
+  "https://policies.uoregon.edu/sites/default/files/Policy%20Review%20Guidelines.pdf | Policy Review Guidelines",
+  "https://policies.uoregon.edu/sites/default/files/PAC%20Agenda%20-%2010%20June%202024.pdf | Link to 6/12/2024 meeting agenda",
+  "https://policies.uoregon.edu/sites/default/files/Student%20Registration%20Holds%20Policy%20Concept%20Form%20and%20Proposed%20Policy.pdf | Link to Student Registration Holds proposed policy",
+  "https://policies.uoregon.edu/sites/default/files/Student%20Records%20Policy%20Concept%20Form%2C%20Redline%20and%20Clean%20Version%20.pdf | Link to proposed policy revisions",
+  "https://policies.uoregon.edu/sites/default/files/Consensual%20Relationship%20Policy%20Concept%20Form%2C%20Redline%2C%20Clean%20Version.pdf | Link to proposed policy revisions",
+  "https://policies.uoregon.edu/sites/default/files/Family%20Relationships%20and%20Employment%20%28Consolidate%20with%20More%20Than%20One%20Member%20Household%29.pdf | 571.004.0005 Family Relationships and Employment",
+  "https://policies.uoregon.edu/sites/default/files/Employ%20More%20Than%20One%20Policy%20Concept%20Form.pdf | 580.22.0050 Employment of More Than One Member of Household",
+  "https://policies.uoregon.edu/sites/default/files/Fitness%20for%20Duty%20and%20Drug%20Free%20University%20Policy%20Concept%20Form%2C%20Redline%2C%20Clean.pdf | Link to 03.04.03 proposed revisions",
+  "https://policies.uoregon.edu/sites/default/files/Professional%20Development%20and%20Training%20Policy%20Concept%2C%20Redline%2C%20Clean.pdf | Link to 03.08.01 proposed policy revisions",
+  "https://policies.uoregon.edu/sites/default/files/Proscribed%20Conduct%20Policy%20Concept%20Form%2C%20Redline%2C%20Clean.pdf | Link to 580.022.0045 proposed policy revisions",
+  "https://policies.uoregon.edu/sites/default/files/PAC%20Agenda%20-%2023%20April%202024.pdf | Link to 4/23/2024 meeting agenda",
+  "https://policies.uoregon.edu/sites/default/files/%28Redline%29%20Academic%20Freedom%2C%20Freedom%20of%20Inquiry%2C%20and%20Free%20Speech%20Policy.pdf | OAR 580.022.0005 Academic Freedom; 01.00.19 Freedom of Inquiry; 01.00.16 Free Speech",
+  "https://policies.uoregon.edu/sites/default/files/Policy%20Concept%20Form%20Academic%20Freedom%2C%20Freedom%20of%20Inquiry%2C%20and%20Free%20Speech%20Policy.pdf | Policy Concept Form",
+  "https://policies.uoregon.edu/sites/default/files/%28Clean%29%20Academic%20Freedom%2C%20Freedom%20of%20Inquiry%2C%20and%20Free%20Speech%20Policy%20DRAFT.pdf | Clean version with proposed changes",
+  "https://policies.uoregon.edu/sites/default/files/PAC%20Agenda%20-%2018%20Mar%202024_0.pdf | Link to 3/18/2024 meeting agenda",
+  "https://policies.uoregon.edu/sites/default/files/Redline%20Version_Firearm%20Policy%20IV.05.pdf | IV.05.05 Firearms policy (Revise) - Redline",
+  "https://policies.uoregon.edu/sites/default/files/Clean%20Version_Firearm%20Policy%20IV.05.05_DRAFT_2024_03-11%20.pdf | Firearms policy (clean version)",
+  "https://policies.uoregon.edu/sites/default/files/PAC%20Agenda%20-%2020%20Feb%202024.pdf | Link to 2/20/2024 meeting agenda",
+  "https://policies.uoregon.edu/sites/default/files/Policy%20Concept%20Form%20%28Student%20Grievance%29.pdf | Link to Student Grievance Policy Concept Form",
+  "https://policies.uoregon.edu/sites/default/files/Draft%20Student%20Grievance%20Procedures%20February%202024%20%28PAC%20Copy%29.pdf | Link to Student Grievance Procedures February 2024 (DRAFT)",
+  "https://policies.uoregon.edu/sites/default/files/Website%20version%20-%20PAC%20Agenda%20-%2015%20Dec%202023.pdf | Link to 12/15/2023 meeting agenda",
+  "https://policies.uoregon.edu/sites/default/files/IV.07.02%20Facilities%20and%20Operations%20Policy%20Update%20112023%20Redline.pdf | Closure of Facilities and Operations Concept Form and Redline",
+  "https://policies.uoregon.edu/sites/default/files/IV.07.02%20Facilities%20and%20Operations%20Policy%20Update%20112023%20Clean.pdf | Closure of Facilities and Operations (Clean version)",
+  "https://policies.uoregon.edu/sites/default/files/IV.04.05%20University%20Fiscal%20Policy-Concept%20Form%20and%20Redline.pdf | IV.04.05 Fiscal Policy Concept Form and Redline",
+  "https://policies.uoregon.edu/sites/default/files/University%20Fiscal%20Policy-Clean.pdf | IV.04.05 Fiscal Policy (Clean version)",
+  "https://policies.uoregon.edu/sites/default/files/04.00.06%20Equipment%20and%20Surplus%20Property%20Concept%20Form%20and%20Redlines.pdf | Equipment and Surplus Property Redline",
+  "https://policies.uoregon.edu/sites/default/files/04.00.06%20Equipment%20Policy%20%28Clean%29.pdf | Combined policy (Clean version)",
+  "https://policies.uoregon.edu/sites/default/files/PAC%20Agenda%20-%2029%20Nov%202023.pdf | Link to 11/29/2023 meeting agenda",
+  "https://policies.uoregon.edu/sites/default/files/Policy%20Concept%20Form%20and%20Redline%20Facilities%20Closure.pdf | Closure of Facilities and Operations Concept Form and Redline",
+  "https://policies.uoregon.edu/sites/default/files/Facilities%20and%20Operations%20Policy%20Update%20112023%20Clean.pdf | Closure of Facilities and Operations (Clean Revision)",
+  "https://policies.uoregon.edu/sites/default/files/PAC%20Agenda%20-%2020%20Oct%202023.pdf | Link to 10/20/2023 meeting agenda",
+  "https://policies.uoregon.edu/sites/default/files/Admissions%20policies%20-%20Redline%20and%20Concept%20Form.pdf | Link to Admissions Policies concept form and redline",
+  "https://policies.uoregon.edu/sites/default/files/Admissions%20Policies%20-%20Clean%20Version.pdf | Link to Admissions Policies (clean with proposed changes)",
+  "https://policies.uoregon.edu/sites/default/files/PAC%20Agenda%20-%2014%20June%202023.pdf | Link to 6/14/2023 meeting agenda",
+  "https://policies.uoregon.edu/sites/default/files/Admissions%20Policies.pdf | OAR 580.10.0001-0005 Admissions Requirements",
+  "https://policies.uoregon.edu/sites/default/files/Admissions%20Policies.pdf | 3.001 Review of Undergraduate Admission Requirements",
+  "https://policies.uoregon.edu/sites/default/files/Admissions%20Policies.pdf | OUS 7 Admission Policy-Second Language",
+  "https://policies.uoregon.edu/sites/default/files/PAC%20Agenda%20-%2019%20May%202023.pdf | PAC Agenda",
+  "https://policies.uoregon.edu/sites/default/files/IV.09.05%20Purchasing%20Contracts%20Policy%20Packet%20050123.pdf | IV.09.05 Purchasing Contracts Policy",
+  "https://policies.uoregon.edu/sites/default/files/PAC%20Agenda%20-%2022%20Mar%202023.pdf | PAC Agenda",
+  "https://policies.uoregon.edu/sites/default/files/Packet-Protection%20of%20Minors%20Policy.pdf | IV.05.06 Protection of Minors",
+  "https://policies.uoregon.edu/sites/default/files/Packet-Proscribed%20Conduct.pdf | OAR 580.022.0045 Proscribed Conduct",
+  "https://policies.uoregon.edu/sites/default/files/Packet-Policy%20Concept%20Form%20-Proposed%20Replacement%20Employee%20Grievance%20Policy.pdf | OAR 571.003 Employee Grievance Policy",
+  "https://policies.uoregon.edu/sites/default/files/PAC%20Agenda%20-%2027%20Feb%202023-jl.pdf | PAC Agenda",
+  "https://policies.uoregon.edu/sites/default/files/IV.05.06%20Protection%20of%20Minors%20-Policy%20and%20Procedures%20Revision.pdf | IV.05.06 Protection of Minors",
+  "https://policies.uoregon.edu/sites/default/files/PAC%20Agenda%20-%2026%20Oct%202022.pdf | PAC Agenda 10-26-22",
+  "https://policies.uoregon.edu/sites/default/files/PAC%20Agenda%20-%2017%20May%202022.pdf | PAC Agenda 05-17-22",
+  "https://policies.uoregon.edu/sites/default/files/Policy%20Concept%20Form%20Faculty%20Retired%20With%20Merit_4-26-22.pdf | 02.01.10 Faculty: Rights and Privileges of Emeritus Faculty",
+  "https://policies.uoregon.edu/sites/default/files/PAC%20Agenda%20-%2019%20April%202022.pdf | PAC Agenda 04-19-2022",
+  "https://policies.uoregon.edu/sites/default/files/Community%20Standards%20Affirmation%20concept%20form-policy%20redline%204.12.22.pdf | 01.00.10 Community Standards Affirmation",
+  "https://policies.uoregon.edu/sites/default/files/Policy%20Concept%20Form%20Faculty%20Retired%20With%20Merit%5B34%5D%20Redline.pdf | 02.01.10 Faculty: Rights and Privileges of Emeritus Faculty",
+  "https://policies.uoregon.edu/sites/default/files/PAC%20Agenda%20-%2008%20March%202022.pdf | PAC Agenda 03-08-2022",
+  "https://policies.uoregon.edu/sites/default/files/Policy%20Concept%20Form%20Equal%20Opportunity%20February%202022%20Final%20w-Redline.pdf | 01.00.10 Community Standards Affirmation",
+  "https://policies.uoregon.edu/sites/default/files/Equal%20opportunity%20policy%20redline%20Final%20-concept%20form%203.18.2022.pdf | OUS 22 Equal Opportunity",
+  "https://policies.uoregon.edu/sites/default/files/PAC%20Agenda%20-%2018%20January%202022.pdf | PAC Agenda 01-18-2022",
+  "https://policies.uoregon.edu/sites/default/files/Proprietary%20Research%20Policy%20Packet-with%20redline.pdf | II.06.05 Proprietary Research",
+  "https://policies.uoregon.edu/sites/default/files/PAC%20Agenda%20-%2002%20June%202021.pdf | PAC Agenda 06022021",
+  "https://policies.uoregon.edu/sites/default/files/CONCEPT%20FORM%20-%20Repeal%20-%20571.060%20-%20May%202021.pdf | 571.060 Special Fees, Penalties, Service Charges",
+  "https://policies.uoregon.edu/sites/default/files/Concept%20Form%20-%20Revision%20-%20IMD6%20-%20May%202021%20Final.pdf | IMD 6 Finance and Business Affairs",
+  "https://policies.uoregon.edu/sites/default/files/PAC%20Agenda%20-%2005%20May%202021.pdf | PAC Agenda 050521",
+  "https://policies.uoregon.edu/sites/default/files/Prohibited%20Discrimination%20Policy%20Concept%20Form%20Final.pdf | V.11.02 Prohibited Discrimination",
+  "https://policies.uoregon.edu/sites/default/files/PAC%20Agenda%20-%2003%20Mar%202021.pdf | PAC Agenda 030321",
+  "https://policies.uoregon.edu/sites/default/files/IV.04.02%20-%20Revisions%20-%2003%20Mar%202021%20PAC.pdf | IV.04.02 Travel Policy",
+  "https://policies.uoregon.edu/sites/default/files/PAC%20Agenda%20-%2007%20Oct%202020.pdf | PAC Agenda 100720",
+  "https://policies.uoregon.edu/sites/default/files/PAC%20Agenda%20-%2006%20May%202020_0.pdf | PAC Agenda 050620",
+  "https://policies.uoregon.edu/sites/default/files/580.022.0047%20-%20Concept%20Form%20-%20REPEAL%20-%20May%202020.pdf | 580.022.0047 - Interpersonal Dispute Mediation Communications",
+  "https://policies.uoregon.edu/sites/default/files/New%20Policy%20-%20Academic%20Administrator%20Search%20Procedures.pdf | New Policy - Academic Administrator Search Procedures",
+  "https://policies.uoregon.edu/sites/default/files/PAC%20Agenda%20-%2005%20Feb%202020_0.pdf | PAC Agenda 020520",
+  "https://policies.uoregon.edu/sites/default/files/Concept%20-%2001.00.09%20Student%20Employment%20Interviews%20-%20REVISE%20Feb%202020%20V2.pdf | 01.00.09 - Student Employment Interviews",
+  "https://policies.uoregon.edu/sites/default/files/Concept%20-%20III.05.05%20Student%20Medical%20Leave%20-%20REVISE%20Feb%202020%20V2.pdf | III.05.05 - Student Medical Leave",
+  "https://policies.uoregon.edu/sites/default/files/PAC%20Agenda%20-%2011.06.19.pdf | PAC Agenda 110619",
+  "https://policies.uoregon.edu/sites/default/files/REVISIONS%20to%20Legal%20Review%20of%20Docs.pdf | OUS IMD 7 Legal Review of Documents",
+  "https://policies.uoregon.edu/sites/default/files/REVISIONS%20to%20Smoke%20Tobacco%20Free%20University.pdf | IV.07.09 Smoking and Tobacco Restrictions",
+  "https://policies.uoregon.edu/sites/default/files/NEW%20%2B%20REPEAL%20Flexible%20Work%20Policy.pdf | 03.12.13 Telecommuting Policy and (New) Flexible Work Policy",
+  "https://policies.uoregon.edu/sites/default/files/NEW%20%2B%20REPEAL%20Work-Life.pdf | Work Life Policy (New), 03.12.01 Family Support, and 03.12.03 Child Care Support Parent Initiated Child Care in the Workplace",
+  "https://policies.uoregon.edu/sites/default/files/PAC%20Agenda%20-%2010.02.19.pdf | PAC Agenda 100219",
+  "https://policies.uoregon.edu/sites/default/files/Repeal%20IV.06.06.pdf | IV.06.06 Customer Information Security Program",
+  "https://policies.uoregon.edu/sites/default/files/PAC%20Agenda%2005%20June%202019.pdf | PAC Agenda 060519",
+  "https://policies.uoregon.edu/sites/default/files/_REVISE%20IV.06.02%20Data%20Classification%20UPDATED%20May%202019%20B.pdf | IV.06.02 Data Classification",
+  "https://policies.uoregon.edu/sites/default/files/NEW%20POLICY%20-%20Info%20and%20Comms%20Accessibility%20050219.pdf | Information and Communications Technology Accessibility",
+  "https://policies.uoregon.edu/sites/default/files/PAC%20Agenda%20-%2001%20May%202019.pdf | PAC Agenda 050119",
+  "https://policies.uoregon.edu/sites/default/files/CONCEPT%20-%20IV.06.02%20Data%20Classifiction%20-%20REVISION%20APRIL%202019.pdf | IV.06.02 Data Classification",
+  "https://policies.uoregon.edu/sites/default/files/CONCEPT%20-%20Personal%20Transportation%20Devices%20-%20New%20%2B%20Repeal%20-%20April%202019.pdf | Bicycles and Personal Transportation",
+  "https://policies.uoregon.edu/sites/default/files/CONCEPT%20-%20IMD%204.0003%20Career%20Support%20for%20Unclass%20Emps%20-%20REPEAL%20-%20April%202019.pdf | IMD 4.0003 Career Support for Unclassified Employees",
+  "https://policies.uoregon.edu/sites/default/files/CONCEPT%20-%20580.022.0025-0040%20Holidays%20REVISION%20April%202019.pdf | 580.022.0025-0040 Holidays and Miscellaneous Privileges",
+  "https://policies.uoregon.edu/sites/default/files/PAC%20Agenda%20-%2003%20April%202019.pdf | PAC Agenda 040319",
+  "https://policies.uoregon.edu/sites/default/files/Concept%20Form%20-%20Revisions%20to%20Reporting%20Policy%20February%202019_2.pdf | Sex and Gender Based Discrimination Reporting Policy",
+  "https://policies.uoregon.edu/sites/default/files/Concept%20Form%20-%20Repeal%20and%20Replace%209.00.05%20COI%20COC%20March%202019.pdf | Conflict of Interest/Commitment Policy",
+  "https://policies.uoregon.edu/sites/default/files/Concept%20Form%20-%20Repeal%204.111-022%20Compensation%20January%202019.pdf | Compensation – OUS IMD 4.111-4.022",
+  "https://policies.uoregon.edu/sites/default/files/Concept%20Form%20-%20Revisions%20580.062%20PCS%20March%202019.pdf | Purchasing and Contracting Policy",
+  "https://policies.uoregon.edu/sites/default/files/PAC%20Agenda%20-%202.6.2019.pdf | PAC Agenda 020619",
+  "https://policies.uoregon.edu/sites/default/files/eSignature%20Policy%20-%20New%20Proposal%20-%20December%2012%202018.pdf | eSignature Policy",
+  "https://policies.uoregon.edu/sites/default/files/Concept%20Form%20-%20Repeal%204.111-022.pdf | OUS IMD 4.111-4.022 Compensation",
+  "https://policies.uoregon.edu/sites/default/files/Concept%20Form%20-%20Repeal%2008.00.05.pdf | 08.00.05 Respiratory Protection Program",
+  "https://policies.uoregon.edu/sites/default/files/Concept%20Form%20-%20Revision%20Cap%20Const%20580.063.pdf | OAR 580.063 et seq Capital Construction",
+  "https://policies.uoregon.edu/sites/default/files/PAC%20Agenda%20-%2012.05.2018.pdf | PAC Agenda 120518",
+  "https://policies.uoregon.edu/sites/default/files/1%20Campus%20Violence%20Prevention%20-%20NEW%20POLICY.pdf | Campus Violence Prevention",
+  "https://policies.uoregon.edu/sites/default/files/2%20Building%20Use%20Credits%20-%20REPEAL.pdf | 06.00.03 - Building Use Credits",
+  "https://policies.uoregon.edu/sites/default/files/3%20Revolving%20Charge%20Accounts%20-%20REPEAL.pdf | 580.040.0041 - Revolving Charge Accounts",
+  "https://policies.uoregon.edu/sites/default/files/4%20Standards%20for%20Student%20and%20Employee%20Programs%20-%20REPEAL.pdf | 580.019 - Standards for Student and Employee Programs",
+  "https://policies.uoregon.edu/sites/default/files/PAC%20Agenda%20-%2011.7.18.pdf | PAC Agenda 110718",
+  "https://policies.uoregon.edu/sites/default/files/PAC%20Agenda%20-%20June%206_0.pdf | Link to PAC agenda 6/6/2018",
+  "https://policies.uoregon.edu/sites/default/files/III.08.01%20Residence%20Classification%20-%20REVISION.pdf | III.08.01 – Residence Classification",
+  "https://policies.uoregon.edu/sites/default/files/IV.07.04%20Articles%20Activities%20Prohibited%20at%20Ath%20Fac%20REVISIONjl.pdf | IV.07.04 Articles Activities Prohibited at Athletic Facilities",
+  "https://policies.uoregon.edu/sites/default/files/I.03.02%20CDR%20Program%20-%20REVISION.pdf | I.03.02 – Community Dispute Resolution Program",
+  "https://policies.uoregon.edu/sites/default/files/Security%20-%20Physical%20Space%20and%20Environment%20-%20NEW.pdf | Security – Physical Space and Environment",
+  "https://policies.uoregon.edu/sites/default/files/Records%20Management%20NEW%20PROPOSAL.pdf | Records Management",
+  "https://policies.uoregon.edu/sites/default/files/OUS%2023%20Equity%20Contracting%20Policy%20-%20REVISION.pdf | OUS 23 – Equity Contracting",
+  "https://policies.uoregon.edu/sites/default/files/04.00.01%20Catering%20Concept%20REVISION.pdf | 04.00.01 – Catering (Re-Submission)",
+  "https://policies.uoregon.edu/sites/default/files/IV.04.02%20Travel%20Policy%20-%20REVISION.pdf | IV.04.02 – Travel Policy",
+  "https://policies.uoregon.edu/sites/default/files/06.00.11%20Payment%20Options%20for%20Mobile%20Tech%20REVISIONjl.pdf | 06.00.11 – Payment Options for Mobile Technology",
+  "https://policies.uoregon.edu/sites/default/files/Fiscal%20Policy%20-%20NEW%20PROPOSAL.pdf | Fiscal Policy",
+  "https://policies.uoregon.edu/sites/default/files/06.00.08%20Expenditure%20Guidelines%20-%20REPEAL.pdf | 06.00.08 – Expenditure Guidelines",
+  "https://policies.uoregon.edu/sites/default/files/V2%20PAC%20Agenda%20-%20Mar%207%202018.pdf | Link to PAC agenda 3/7/2018",
+  "https://policies.uoregon.edu/sites/default/files/1%2007.00.03%20Trademark%20Licensing%20February%202018.pdf | 07.00.03 Trademark Licensing",
+  "https://policies.uoregon.edu/sites/default/files/5%20Vehicles%20Consolidated%20Concept%20Form%20February%202018.pdf | Vehicles Policy",
+  "https://policies.uoregon.edu/sites/default/files/3%2004.00.01%20Catering%20Services%20on%20Campus%20February%202018_0.pdf | 04.00.01 Catering Services on Campus",
+  "https://policies.uoregon.edu/sites/default/files/4%20571.022.0100-105%20Fam%20Housing%20February%202018.pdf | 571.022.0100-105 Family Housing Rental Rates, Fees, Charges and Eligibility",
+  "https://policies.uoregon.edu/sites/default/files/5%20580.011.0015-0040%20Student%20Housing%20Feb%202018.pdf | 580.011.0015-0040 Student Housing",
+  "https://policies.uoregon.edu/sites/default/files/6%20UVDF%20Policy%20580.043.0060-100%20Revision%20Mar%202018.pdf | 580.043.0060-0100 University Venture Development Fund",
+  "https://policies.uoregon.edu/sites/default/files/PAC%20Agenda%20-%20Dec%206%202017%20%28final2%29.pdf | Link to PAC agenda 12/6/2017",
+  "https://policies.uoregon.edu/sites/default/files/Concept%20Form%2009.00.01%20Repeal%20-%2010.31.17.pdf | 09.00.01 — Institutional Use of Animals in Research and Construction",
+  "https://policies.uoregon.edu/sites/default/files/Concept%20Form%20580.043.0060-0100%2011.28.17%20UPDATE.pdf | 580.043.0060-0010 — University Venture Development Funds",
+  "https://policies.uoregon.edu/sites/default/files/Concept%20Form%2007.00.03%20Revise%20-%2011.2.17.pdf | 07.00.03 — Trademark Licensing",
+  "https://policies.uoregon.edu/sites/default/files/Concept%20Form%20571.004.0015%20Revise%20-%2012.4.17.pdf | 571.004.0015 — Health Insurance Requirements for Non-Immigrant Foreign Students and their Dependents",
+  "https://policies.uoregon.edu/sites/default/files/PAC%20Agenda%20-%20Oct%204%202017%20final.pdf | Link to PAC agenda 10/4/2017",
+  "https://policies.uoregon.edu/sites/default/files/PAC%20Agenda%20-%20June%207%2C%202017-2.pdf | Link to PAC agenda 6/7/2017",
+  "https://policies.uoregon.edu/sites/default/files/571.022.0020-80%20Family%20Housing%20Governance%20-%20PAC.pdf | 571.022.0020-80 Family Housing Governance",
+  "https://policies.uoregon.edu/sites/default/files/571.022.005-15%20Residence%20Hall%20Governance%20-%20PAC.pdf | 571.022.0005-15 Residence Hall Governance",
+  "https://policies.uoregon.edu/sites/default/files/III.04.01%20Student%20Health%20Services%20-%20PAC.pdf | III.04.01 Student Health Services",
+  "https://policies.uoregon.edu/sites/default/files/OUS%2032%20Joint%20Campus%20-%20PAC.pdf | OUS 32 Joint Campus Programs, for Graduate Students",
+  "https://policies.uoregon.edu/sites/default/files/OUS%2037%20New%20Graduate%20Programs%20-%20PAC.pdf | OUS 37 New Graduate Programs, External Review",
+  "https://policies.uoregon.edu/sites/default/files/OUS%2038%20New%20Instrutional%20Programs%20-%20PAC.pdf | OUS 38 New Instructional Programs, Follow-Up",
+  "https://policies.uoregon.edu/sites/default/files/OUS%2018%20Curricular%20Allocations%20-%20PAC.pdf | OUS 18 Curricular Allocations, Policies and Procedures",
+  "https://policies.uoregon.edu/sites/default/files/02.01.13%20Faculty%20Vacancy%20Announcements%20-%20PAC.pdf | 02.01.13 Faculty Vacancy Announcements",
+  "https://policies.uoregon.edu/sites/default/files/02.01.03%20Faculty%20Merit%20Increase%20Factors%20-%20PAC.pdf | 02.01.03 Faculty Merit Increase Factors",
+  "https://policies.uoregon.edu/sites/default/files/IMD%202.030%20Credit%20for%20Courses%20-%20PAC.pdf | IMD 2.030 Credit for Courses Taught in High Schools or Through Distance Education",
+  "https://policies.uoregon.edu/sites/default/files/OUS%2001%20Academic%20Calendar%20-%20PAC.pdf | OUS 01 Academic Calendar",
+  "https://policies.uoregon.edu/sites/default/files/IMD%202.025%20Academic%20Calendar%20-%20PAC.pdf | IMD 2.025 Academic Calendar",
+  "https://policies.uoregon.edu/sites/default/files/580.010.0100-140%20Student%20Billing%20Fee%20Project%20-%20PAC.pdf | 580.010.0100-140 Student Building Project Fee Process",
+  "https://policies.uoregon.edu/sites/default/files/Incidental%20Fee%20Auth%20-%20PAC.pdf | Incidental Fee Authorization",
+  "https://policies.uoregon.edu/sites/default/files/580.010.0080-90%20Payment%20of%20Student%20Fees%20-%20PAC_0.pdf | 580.010.0080-0090 Payment of Student Fees",
+  "https://policies.uoregon.edu/sites/default/files/03.99.01%20Volunteer%20Recognition%20-%20PAC.pdf | 03.99.01 Volunteer Recognition",
+  "https://policies.uoregon.edu/sites/default/files/571.010.0005-65%20Parking%20Regs%20-%20PAC.pdf | 571.010.0005-65 Parking Regulations",
+  "https://policies.uoregon.edu/sites/default/files/571.050.0025%20Animal%20Control%20-%20PAC%20-%202.pdf | 571.050.0025 Animal Control",
+  "https://policies.uoregon.edu/sites/default/files/PAC%20Agenda%20-%20May%203%2C%202017-7.pdf | Link to PAC agenda 5/3/2017",
+  "https://policies.uoregon.edu/sites/default/files/Strategic%20Purchasing%20of%20Services%20and%20Goods%20050317%20-%20post%20PAC.pdf | Strategic Purchasing of Services and Goods",
+  "https://policies.uoregon.edu/sites/default/files/RRWG%20Policy%20-%20PAC-1.pdf | Student Sexual and Gender-Based Harassment & Violence Complaint & Response",
+  "https://policies.uoregon.edu/sites/default/files/Charging%20Admin%20Costs%20NEW.pdf | Charging Adminstrative Overhead Costs",
+  "https://policies.uoregon.edu/sites/default/files/580.010.0080-90%20Payment%20of%20Student%20Fees%20-%20PAC.pdf | 580.010.0080-90 Payment of Student Fees",
+  "https://policies.uoregon.edu/sites/default/files/580.011.0045%20Charging%20Admin%2C%20etc.%20%20-%20PAC.pdf | 580.011.0045 Charging Administrative Costs to Auxiliary Enterprises",
+  "https://policies.uoregon.edu/sites/default/files/06.00.07%20Return%20of%20Overhead%2C%20etc.%20-%20PAC.pdf | 06.00.07 Return of Overhead Charges on Continuing Education and Designated Operations",
+  "https://policies.uoregon.edu/sites/default/files/01.0014%20Recycled%20Paper%20-%20PAC.pdf | 01.00.14 Recycled Paper Policy",
+  "https://policies.uoregon.edu/sites/default/files/06.00.06%20Facilities%20Minor%20Renovation%20Needs%20-%20PAC.pdf | 06.00.06 Facilities: Minor Renovation Needs",
+  "https://policies.uoregon.edu/sites/default/files/PAC%20Agenda%20-%20April%205%2C%202017.pdf | Link to PAC agenda 4/5/2017",
+  "https://policies.uoregon.edu/sites/default/files/Naming%20Academic%20Units%20-%20PAC%20April.pdf | Naming Academic Units",
+  "https://policies.uoregon.edu/sites/default/files/580.011.0005%20Student%20Health%20Services%20-%20PAC.pdf | 580.011.0005 Student Health Services",
+  "https://policies.uoregon.edu/sites/default/files/571.023%20Student%20Medical%20Leave%20-%20PAC%20April.pdf | 571.023 Student Medical Leave",
+  "https://policies.uoregon.edu/sites/default/files/01.00.05%20Honorary%20Degrees%20-%20PAC%20April.pdf | 01.00.05 Honorary Degrees",
+  "https://policies.uoregon.edu/sites/default/files/OUS%2008%20Air%20Travel%20-%20PAC%20April.pdf | OUS 08 Air Travel and Use of Mileage Bonuses",
+  "https://policies.uoregon.edu/sites/default/files/580.040.0007-10%20Bds%20Finanicial%20Powers%20-%20PAC%20April.pdf | 580.040.0007-10 Board's Financial Powers",
+  "https://policies.uoregon.edu/sites/default/files/OUS%2045%20Risk%20Management%20Program%20-%20PAC%20April.pdf | OUS 45 Risk Management Program Policy",
+  "https://policies.uoregon.edu/sites/default/files/08.00.06%20Fire%20Marshal%20Safety%20-%20PAC%20April.pdf | 08.00.06 Fire Marshal Safety Inspections",
+  "https://policies.uoregon.edu/sites/default/files/OUS%2044%20Risk%20Management%20Fund%20-%20PAC%20April.pdf | OUS 44 Risk Fund Policy",
+  "https://policies.uoregon.edu/sites/default/files/571.024%20EMU%20Child%20Care%20%26%20Dev%20Centers%20-%20PAC%20April.pdf | 571.024 EMU Child Care and Development Centers",
+  "https://policies.uoregon.edu/sites/default/files/PAC%20Agenda%20%26%20Materials%20-%20March%206%2C%202017%20-%20v1.pdf | Link to PAC agenda 3/6/2017",
+  "https://policies.uoregon.edu/sites/default/files/New%20Travel%20Policy%20021517%20-%20post%20public%20comment.pdf | Travel Policy",
+  "https://policies.uoregon.edu/sites/default/files/04.00.08%20Campus%20Planning%20%20-%20PAC.pdf | 04.00.08 Campus Planning",
+  "https://policies.uoregon.edu/sites/default/files/580.060%20Real%20Property%2C%20Faciltity%20%26%20Campus%20Planning%20-%20PAC.pdf | 580.060 Real Property, Facility and Campus Planning",
+  "https://policies.uoregon.edu/sites/default/files/03.05.03%20Nepotism%20Repeal%20-%20PAC.pdf | 03.05.03 Nepotism",
+  "https://policies.uoregon.edu/sites/default/files/OUS%2048%20Space%20Use%20Objectives%20-%20PAC.pdf | OUS 48 Space Use Objectives and Building",
+  "https://policies.uoregon.edu/sites/default/files/OUS%2028%20Historical%20and-or%20Architectural%2C%20etc.%20-%20PAC.pdf | OUS 28 Historical and/or Architectural Value, Properties of",
+  "https://policies.uoregon.edu/sites/default/files/06.00.07%20Return%20of%20Overhead%2C%20etc.%20-%20PAC.pdf | 06.00.07 Return of Overhead Charges on Continuing Education and Designated Operations Activities",
+  "https://policies.uoregon.edu/sites/default/files/PAC%20Agenda%20-%20February%201%2C%202017.pdf | Link to PAC agenda 2/1/2017",
+  "https://policies.uoregon.edu/sites/default/files/Unmanned%20Aircraft%20Systems%20Policy%20-%20PAC-1.pdf | Unmanned Aircraft Systems",
+  "https://policies.uoregon.edu/sites/default/files/Protection%20of%20Minors%20-%20PAC.pdf | Protection of Minors",
+  "https://policies.uoregon.edu/sites/default/files/OA%20Employment%20-%20PAC-%20updated.pdf | Officers of Administration (OA) Employment",
+  "https://policies.uoregon.edu/sites/default/files/OA%20Time%20Off%20-%20PAC.pdf | Officers of Administration (OA) Time Off",
+  "https://policies.uoregon.edu/sites/default/files/OA%20Separations%20-%20PAC.pdf | Officers of Administration (OA) Separations",
+  "https://policies.uoregon.edu/sites/default/files/OA%20Grievances%20-%20PAC.pdf | Officers of Administration (OA) Grievances",
+  "https://policies.uoregon.edu/sites/default/files/01.00.13%20Environmental%20policy%20-%20PAC.pdf | 01.00.13 Environmental Policy",
+  "https://policies.uoregon.edu/sites/default/files/571.023%20Student%20Medical%20Leave%20-%20PAC.pdf | 571.023 Student Medical Leave",
+  "https://policies.uoregon.edu/sites/default/files/V.09.01%20Parental%20Leave.pdf | V.09.01 Parental Leave",
+  "https://policies.uoregon.edu/sites/default/files/571.003%20Grievance%20Procedures%20-%20Redline.pdf | 571.003 Grievance Procedures",
+  "https://policies.uoregon.edu/sites/default/files/04.00.04%20Flag%20Protocol%20-%20PAC.pdf | 04.00.04 Flag Protocol",
+  "https://policies.uoregon.edu/sites/default/files/03.05.02%20Student%20Employment%20Philosophy%20-%20PAC.pdf | 03.05.02 Student Employment Philosophy",
+  "https://policies.uoregon.edu/sites/default/files/580.023%20Criminal%20Background%20Checks%20-%20PAC.pdf | 580.023 Criminal Backgroud Checks",
+  "https://policies.uoregon.edu/sites/default/files/IMD%204.200%20Board%20Policy%20on%20Endowed%20Chairs%20-%20PAC.pdf | IMD 4.200 Board Policy on Endowed Chairs",
+  "https://policies.uoregon.edu/sites/default/files/PAC%20Agenda%20-%20January%204%2C%202017.pdf | Link to PAC agenda 1/4/2017",
+  "https://policies.uoregon.edu/sites/default/files/Acceptable%20Use%20Policy%20-%20PAC-%20r.pdf | Acceptable Use Policy for UO Information Technology Resources",
+  "https://policies.uoregon.edu/sites/default/files/571.050.0011%20Articles%2C%20Activities%20Prohibited%20-%20PAC.pdf | OAR 571.050.0011 Articles, Activities Prohibited at Athletic Facilities",
+  "https://policies.uoregon.edu/sites/default/files/580.010.0029-47%20Residence%20Classification%20-%20PAC.pdf | OAR 580.010.0029-47 Residence Classification",
+  "https://policies.uoregon.edu/sites/default/files/571.004.0016%20Required%20Immunizations%20-%20PAC.pdf | OAR 571.004.0016 Required Immunizations",
+  "https://policies.uoregon.edu/sites/default/files/OUS%2051%20Transfer%20and%20Articulation%20-%20PAC.pdf | OUS 51 Transfer and Articulation (1998)",
+  "https://policies.uoregon.edu/sites/default/files/OUS%2015%20Community%20College%20Transfer%20-%20PAC.pdf | OUS 15 Community College Transfer",
+  "https://policies.uoregon.edu/sites/default/files/IMD%203.010-015%20Financial%20Aid%20to%20Students%20-%20PAC.pdf | IMD 3.010-015 Financial Aid to Students",
+  "https://policies.uoregon.edu/sites/default/files/05.00.04%20Student%20Records%20Policy%20-%20PAC.pdf | UO 05.00.04 Student Records Policy",
+  "https://policies.uoregon.edu/sites/default/files/IMD%202.035%20Undergraduate%20Transfer%20and%20Articulation%20-%20PAC.pdf | IMD 2.035 Undergraduate Transfer and Articulation",
+  "https://policies.uoregon.edu/sites/default/files/OUS%2041%20Oregon%20Honors%20Scholarship%20-%20PAC.pdf | OUS 41 Oregon Honors Scholarship",
+  "https://policies.uoregon.edu/sites/default/files/OUS%2049%20Student%20Loan%20Debt%20Management%20%26%20Outreach%20-%20PAC.pdf | OUS 49 Student Loan Debt Management and Outreach",
+  "https://policies.uoregon.edu/sites/default/files/PAC%20Agenda%20-%20December%20%207%2C%202016s.pdf | Link to PAC agenda 12/7/2016",
+  "https://policies.uoregon.edu/sites/default/files/TPM%20Policy%20Proposal.pdf | Time, Place and Manner Rules for Campus Speech and Protest Activities",
+  "https://policies.uoregon.edu/sites/default/files/DRAFT%20Email%20Use%20for%20Official%20U%20Communication%20-%20NOV%202016.pdf | 01.00.11 and 01.00.05 Use of E-mail for Official and Mass Communications",
+  "https://policies.uoregon.edu/sites/default/files/Memo%20to%20Senate%20re%2005.00.03%2C%20w%20encls%20110416.pdf | 05.00.03 Student Eligibility for Activities",
+  "https://policies.uoregon.edu/sites/default/files/PAC%20Agenda%20%26%20Materials%20-%20October%205%2C%202016%20-%20amended.pdf | Link to PAC agenda 10/5/2016",
+  "https://policies.uoregon.edu/sites/default/files/Travel%20policy%20-%20October%202016%20-%20n.pdf | Travel Policy",
+  "https://policies.uoregon.edu/sites/default/files/Policy%20Concept%20Form%20-%20strategic%20sourcing%20policy%20-%20web.pdf | Strategic Sourcing Policy",
+  "https://policies.uoregon.edu/sites/default/files/Safety%20policy%20concept%20and%20revisions%20-%20October%205%2C%202016.pdf | 08.00.02 Safety and 08.00.07 Safety Inspection and Correction",
+  "https://policies.uoregon.edu/sites/default/files/571.050.0035%20Access%20control%20-%20Sept%202016%20redline.pdf | OAR 571.050.0035 Key Control",
+  "https://policies.uoregon.edu/sites/default/files/OUS%2024%20Concept%20Form%20-%20Repeal%20-%20June%202016.pdf | OUS 24 Administration of FCC Licenses Operated Within OUS",
+  "https://policies.uoregon.edu/sites/default/files/OUS%2036%20Minority%20Student%20Enrollment%20Initiative.pdf | OUS 36 Minority Student Enrollment Initiative",
+  "https://policies.uoregon.edu/sites/default/files/580.001.0030%20Confidentiality%20-%20repeal.pdf | OAR 580.01.0030 Confidentiality & Inadmissibility of Mediation Communications",
+  "https://policies.uoregon.edu/sites/default/files/PAC%20Agenda%20050416.pdf | Link to PAC agenda 5/4/2016",
+  "https://policies.uoregon.edu/sites/default/files/08.00.02%20Safety%20and%2008.00.07%20Safety%20Inspection%20and%20Correction.pdf | 08.00.02 Safety and 08.00.07 Safety Inspection and Correction",
+  "https://policies.uoregon.edu/sites/default/files/571.050.0020%20Rollerskates%20and%20skateboards%20revision.pdf | 571.050.0020 Rollerskates and skateboards revision",
+  "https://policies.uoregon.edu/sites/default/files/OUS%2010%20Business%20Practices%20REPEAL.pdf | OUS 10 Business Practices",
+  "https://policies.uoregon.edu/sites/default/files/580.041%20Accounting%20Receivables%20REPEAL.pdf | 580.041 Accounting Receivables",
+  "https://policies.uoregon.edu/sites/default/files/PAC%20Agenda%20040616.pdf | Link to PAC agenda 4/6/2016",
+  "https://policies.uoregon.edu/sites/default/files/580%20020%200005%20Academic%20Classification%20and%20Rank%20Redline.pdf | 580.020.0005 Academic Classification and Rank",
+  "https://policies.uoregon.edu/sites/default/files/580.021.0200-245%20Sabbatical%20Leave%20Redline.pdf | 580.021.0200-245 Sabbatical Leave",
+  "https://policies.uoregon.edu/sites/default/files/08.00.02%20Safety%20Policy%20Revision.pdf | 08.00.02 Safety Policy",
+  "https://policies.uoregon.edu/sites/default/files/03%2004%2001%20Prohibited%20Political%20Activities%20REPEAL.pdf | 03.04.01 Prohibited Political Activities",
+  "https://policies.uoregon.edu/sites/default/files/08.00.04%20Outbreaks%20of%20Illness.pdf | 08.00.04 Outbreaks of Illness.pdf",
+  "https://policies.uoregon.edu/sites/default/files/OUS%2030%20%20Fiscal%20Policies%20for%20Intercollegiate%20Athletics%20REPEAL.pdf | OUS 30 Fiscal Policies for Intercollegiate Athletics",
+  "https://policies.uoregon.edu/sites/default/files/OUS%2031%20Statement%20Regarding%20Intercollegiate%20Athletics%20REPEAL.pdf | OUS 31 Statement Regarding Intercollegiate Athletics",
+  "https://policies.uoregon.edu/sites/default/files/OUS%2035%20Legal%20Services%20REPEAL.pdf | OUS 35 Legal Services",
+  "https://policies.uoregon.edu/sites/default/files/OUS%2052%20Tuition%20Policy%20REPEAL.pdf | OUS 52 Tuition Policy",
+  "https://policies.uoregon.edu/sites/default/files/OUS%2012%20Centers%20and%20Institutes%20in%20OUS%20REPEAL.pdf | OUS 12 Centers and Institutes in OUS",
+  "https://policies.uoregon.edu/sites/default/files/OUS%2050%20Sustainability%20recommendation_0.pdf | OUS 50 Sustainability recommendation.pdf",
+  "https://policies.uoregon.edu/sites/default/files/Revise-%20Skateboards-%20571%20050%200020.pdf | 517.050.0020 Roller Skates and Skateboards",
+  "https://policies.uoregon.edu/sites/default/files/IV.06.01%20Information%20Security%20Program%20Concept%20Form.docx.pdf | IV.06.01 Information Security Program",
+  "https://policies.uoregon.edu/sites/default/files/IV.06.02%20Data%20Classification%20Concept%20Form.pdf | IV.06.02 Data Classification",
+  "https://policies.uoregon.edu/sites/default/files/IV.06.03%20Data%20Security%20Incident%20Concept%20Form.pdf | IV.06.03 Data Security Incident Response",
+  "https://policies.uoregon.edu/sites/default/files/Repeal%20OUS%2027_Hearings%20Officers%20Appointment%20of.pdf | OUS 27 Appointment of Hearing Officers",
+  "https://policies.uoregon.edu/sites/default/files/Repeal%20OUS%2033_%20Joint%20Statement%20by%20the%20State%20Board%20of%20Education%20and%20the%20State%20Board%20of%20Higher%20Education%20%281978%29.pdf | OUS 33 Joint Statement by the State Board of Education and State Board of Higher Education, 1978",
+  "https://policies.uoregon.edu/sites/default/files/Repeal%20OUS%2034_Joint%20Statement%20by%20the%20State%20Board%20of%20Education%20and%20the%20State%20Board%20of%20Higher%20Education%20%282003-2004%29.pdf | OUS 34 Joint Statement by the State Board of Education and State Board of Higher Education, 2003-04",
+  "https://policies.uoregon.edu/sites/default/files/Repeal%20OUS%2040_Off%20Campus%20Instruction.pdf | OUS 40 Off-Campus Instruction",
+  "https://policies.uoregon.edu/sites/default/files/Repeal%20OUS%2042_Program%20Closures%20Suspensions%20and%20Eliminations.pdf | OUS 42 Program Closures, Suspensions and Eliminations",
+  "https://policies.uoregon.edu/sites/default/files/PAC%20Agenda%20010616.pdf | Link to PAC agenda 1/6/2016",
+  "https://policies.uoregon.edu/sites/default/files/07.00.02%20Naming%20of%20Facilities.pdf | 07.00.02 Naming of Facilities.pdf",
+  "https://policies.uoregon.edu/sites/default/files/02.99.02%20Posthumous%20Degrees.pdf | 02.99.02 Posthumous Degrees.pdf",
+  "https://policies.uoregon.edu/sites/default/files/04.00.03%20Facilities%20and%20Operations%2C%20Closure.pdf | 04.00.03 Facilities and Operations, Closure.pdf",
+  "https://policies.uoregon.edu/sites/default/files/06.00.01%20Printing%20and%20Publications_1.pdf | 06.00.01 Printing and Publications.pdf",
+  "https://policies.uoregon.edu/sites/default/files/03.05.05%20Mobile%20Technology%2C%20Access%20to.pdf | 03.05.05 Mobile Technology, Access to.pdf",
+  "https://policies.uoregon.edu/sites/default/files/Electronic%20Commerce%2C%20Policies%20Guidelines%20for.pdf | Electronic Commerce, Policies Guidelines for.pdf",
+  "https://policies.uoregon.edu/sites/default/files/Coordinated%20System%20of%20Libraries.pdf | Coordinated System of Libraries.pdf",
+  "https://policies.uoregon.edu/sites/default/files/PAC%20Agenda%20110415.pdf | Link to PAC agenda 11/4/2015",
+  "https://policies.uoregon.edu/sites/default/files/IV.02.01%20Code%20of%20Ethics%20Concept%20Form.pdf | IV.02.01 Code of Ethics Concept Form.pdf",
+  "https://policies.uoregon.edu/sites/default/files/IV%2002%2001%20Code%20of%20Ethics%20-%20proposed%20revisions%20redline%20Oct%202015.pdf | IV.02.01 Code of Ethics - proposed revisions redline Oct 2015.pdf",
+  "https://policies.uoregon.edu/sites/default/files/IV.02.02%20Internal%20Controls%20Concept%20Form.pdf | IV.02.02 Internal Controls Concept Form.pdf",
+  "https://policies.uoregon.edu/sites/default/files/IV.02.02%20Internal%20Controls%20proposed%20revisions.pdf | IV.02.02 Internal Controls proposed revisions.pdf",
+  "https://policies.uoregon.edu/sites/default/files/IMD5%20Fraud%20Waste%20and%20Abuse%20Concept%20Form.pdf | IMD5 Fraud, Waste, and Abuse Concept Form.pdf",
+  "https://policies.uoregon.edu/sites/default/files/IMD5%20Fraud%20Waste%20and%20Abuse%20proposed%20revisions.pdf | IMD5 Fraud, Waste, and Abuse proposed revisions.pdf",
+  "https://policies.uoregon.edu/sites/default/files/06.00.09%20Financial%20Irregularities%20REPEAL.pdf | 06.00.09 Financial Irregularities",
+  "https://policies.uoregon.edu/sites/default/files/PAC%20agenda%20100715.pdf | Link to PAC agenda 10/7/2015",
+  "https://policies.uoregon.edu/sites/default/files/uploads/PAC%20Agenda%20052115.pdf | Link to PAC agenda 5/21/2015",
+  "https://policies.uoregon.edu/sites/default/files/uploads/SBHE%20Policy%20Statement%20on%20COI.pdf | OSBHE Policy Statement Regarding Conflict of Interest",
+  "https://policies.uoregon.edu/sites/default/files/uploads/Policy%20Concept%20Form%20-%20Former%20OUS%20IMDs%202.0.pdf | OUS IMB 2.010 Missions of Universities and 2.015 Approval of New Academic Programs",
+  "https://policies.uoregon.edu/sites/default/files/uploads/UO%20Policy%20Concept%20Form%20-%20Use%20of%20Seal%2C%20Logo%20and%20Images.pdf | UO Policy 07.00.01: Use of Seal, Logo, and Images Policy",
+  "https://policies.uoregon.edu/sites/default/files/uploads/PAC%20Agenda%20042315.pdf | Link to PAC agenda 4/23/2015",
+  "https://policies.uoregon.edu/sites/default/files/uploads/University%20Foundation%20Policy%20Redline.pdf | University Foundation",
+  "https://policies.uoregon.edu/sites/default/files/uploads/Information%20Security%20Program%20Policy.pdf | Information Security Program Policy DRAFT",
+  "https://policies.uoregon.edu/sites/default/files/uploads/Data%20Classification%20Policy.pdf | Data Classification Policy DRAFT",
+  "https://policies.uoregon.edu/sites/default/files/uploads/Minimum%20Security%20Procedure%20for%20Devices%20with%20Public%20or%20Internal%20Information.pdf | Minimum Security Procedures for Devices with Public or Internal Information",
+  "https://policies.uoregon.edu/sites/default/files/uploads/Minimum%20Security%20Procedure%20for%20Devices%20with%20Sensitive%20Information.pdf | Minimum Security Procedures for Devices with Sensitive Information",
+  "https://policies.uoregon.edu/sites/default/files/uploads/Minimum%20Security%20Procedure%20for%20Handling%20Physical%20University%20Data.pdf | Minimum Security Procedures for Handling Physical University Data",
+  "https://policies.uoregon.edu/sites/default/files/uploads/Data%20Security%20Incident%20Response%20Policy.pdf | Data Security Incident Response Policy DRAFT",
+  "https://policies.uoregon.edu/sites/default/files/uploads/UO%20Data%20Security%20Incident%20Response%20Procedure.pdf | UO Data Security Incident Response Procedure",
+  "https://policies.uoregon.edu/sites/default/files/uploads/PAC%20Agenda%20040915.pdf | Link to PAC agenda 4/8/2015",
+  "https://policies.uoregon.edu/sites/default/files/uploads/Employee%20Morale%20Policy%20Revised-Final-CLEAN.pdf | Employee Morale - Building Event Expenditures",
+  "https://policies.uoregon.edu/sites/default/files/uploads/Information%20Security%20Program%20Policy%20Concept%20Form.pdf | Information Security Program Policy Concept Form",
+  "https://policies.uoregon.edu/sites/default/files/uploads/Information%20Security%20Program%20Policy_0.pdf | Information Security Program Policy DRAFT",
+  "https://policies.uoregon.edu/sites/default/files/uploads/Data%20Classification%20Policy%20Concept%20Form.pdf | Data Classification Policy Concept Form",
+  "https://policies.uoregon.edu/sites/default/files/uploads/Data%20Security%20Incident%20Response%20Policy%20Concept%20Form.pdf | Data Security Incident Response Policy Concept Form",
+  "https://policies.uoregon.edu/sites/default/files/uploads/Data%20Security%20Incident%20Response%20Policy_0.pdf | Data Security Incident Response Policy Policy DRAFT",
+  "https://policies.uoregon.edu/sites/policies.uoregon.edu/files/uploads/PAC%20Agenda%20021815.pdf | Link to PAC agenda 2/18/2015",
+  "https://policies.uoregon.edu/sites/policies.uoregon.edu/files/uploads/Policy%20on%20Policies%20-%202015%20revision.pdf | Policy on Policies - 2015 revision",
+  "https://policies.uoregon.edu/sites/policies.uoregon.edu/files/uploads/UO%20Policy%20Authorities.pdf | UO Policy Authorities",
+  "https://policies.uoregon.edu/sites/default/files/uploads/01.03.01%20-%20Policy%20on%20University%20Policies_0.pdf | Policy on University Policies",
+  "https://policies.uoregon.edu/sites/default/files/Policy%20Concept%20Form%20%26%20Instructions%20-%20Website.pdf | Policy Concept Form",
+  "https://policies.uoregon.edu/sites/policies.uoregon.edu/files/uploads/Signed%20document%20%285-28-14%29.pdf | signed document",
+  "https://policies.uoregon.edu/files/policy-library/uploads/Lariviere_12-28-10_approval.pdf | <signature document>",
+  "https://policies.uoregon.edu/sites/policies2.uoregon.edu/files/uploads/Admissions%20Policy%2C%20Second%20Language%20College.pdf | Policy Document",
+  "https://police.uoregon.edu/sites/default/files/2023-07/2023_university-of-oregon-police-department-policy-manual_0.pdf | Link to UOPD Policy Manual",
+  "https://infosec.uoregon.edu/sites/infosec1.uoregon.edu/files/data_security_incident_response_procedure.pdf | The University of Oregon Data Security Incident Response Procedure",
+  "https://policies.uoregon.edu/sites/policies2.uoregon.edu/files/uploads/Diversity.pdf | Policy Document",
+  "https://policies.uoregon.edu/sites/partnerships2-stage.uoregon.edu/files/Closure%20Reference%20Tables.pdf | Closure Reference Tables.pdf",
+  "http://academicaffairs.uoregon.edu/nttf/NTTF-Policy.pdf | http://academicaffairs.uoregon.edu/nttf/NTTF-Policy.pdf",
+  "https://policies.uoregon.edu/sites/policies.uoregon.edu/files/uploads/Parental%20Accomm_guidelines_%287-31-13%29.pdf | Guidelines for Modified Duties Benefit",
+  "https://policies.uoregon.edu/files/policy-library/uploads/Parental_Accommodation_signed.pdf | <document>",
+  "https://policies.uoregon.edu/sites/policies.uoregon.edu/files/uploads/Emeritus_final_signed_by_Berdahl.pdf | <signed copy>",
+  "https://infosec.uoregon.edu/files/informationsecurityquick_reference.pdf | Data Classification Examples, Quick Reference",
+  "https://is.uoregon.edu/system/files/UO_IS_ElectronicRecordsAccessProcedure.pdf | Employee Electronic Records Procedure",
+  "https://hr.uoregon.edu/oa-performance-management-procedure.pdf | V.06.01-1 Officer of Administration (OA) Performance Management - Procedures",
+  "https://hr.uoregon.edu/oa-separation-procedure.pdf | V.08.01 - 1 Officer of Administration (OA) Separations - Procedure",
+  "https://hr.uoregon.edu/sites/hr1.uoregon.edu/files/V.09.03_OA_Time_Off-Procedures_12-19-23.pdf | V.09.02 Officer of Administration (OA) Time Off - Procedure",
+  "https://policies.uoregon.edu/sites/partnerships2-stage.uoregon.edu/files/uploads/PaymentCardAcceptance.pdf | Download Policy",
+  "https://policies.uoregon.edu/sites/partnerships2-stage.uoregon.edu/files/Physical%20Security%20Supplementary%20Materials.pdf | Physical Security Supplemental Materials"
+ ],
+ "failed": [
+  {
+   "url": "https://provost.uoregon.edu/academic-policy-reminders",
+   "why": "403 text/html; charset=utf-8"
+  },
+  {
+   "url": "https://aec.uoregon.edu/syllabus-statement",
+   "why": "404 text/html; charset=utf-8"
+  },
+  {
+   "url": "https://catalog.uoregon.edu/academicregulations",
+   "why": "404 text/html; charset=UTF-8"
+  },
+  {
+   "url": "https://provost.uoregon.edu/university-course-policies",
+   "why": "404 text/html; charset=utf-8"
+  },
+  {
+   "url": "https://teaching.uoregon.edu/resources/pope-tech-dashboard-and-accessibility-guide",
+   "why": "403 text/html; charset=utf-8"
+  },
+  {
+   "url": "https://teaching.uoregon.edu/resources/popetech-accessibility-guide",
+   "why": "403 text/html; charset=utf-8"
+  },
+  {
+   "url": "https://conduct.uoregon.edu/search",
+   "why": "404 text/html; charset=utf-8"
+  },
+  {
+   "url": "https://conduct.uoregon.edu/help",
+   "why": "404 text/html; charset=utf-8"
+  },
+  {
+   "url": "https://conduct.uoregon.edu/report-concern",
+   "why": "404 text/html; charset=utf-8"
+  },
+  {
+   "url": "https://conduct.uoregon.edu/dos-faq",
+   "why": "404 text/html; charset=utf-8"
+  },
+  {
+   "url": "https://conduct.uoregon.edu/student-care-team",
+   "why": "404 text/html; charset=utf-8"
+  },
+  {
+   "url": "https://conduct.uoregon.edu/assisting-students",
+   "why": "404 text/html; charset=utf-8"
+  },
+  {
+   "url": "https://conduct.uoregon.edu/helping-friend",
+   "why": "404 text/html; charset=utf-8"
+  },
+  {
+   "url": "https://conduct.uoregon.edu/food",
+   "why": "404 text/html; charset=utf-8"
+  },
+  {
+   "url": "https://conduct.uoregon.edu/food/how-to-help",
+   "why": "404 text/html; charset=utf-8"
+  },
+  {
+   "url": "https://conduct.uoregon.edu/community",
+   "why": "404 text/html; charset=utf-8"
+  },
+  {
+   "url": "https://conduct.uoregon.edu/bcc",
+   "why": "404 text/html; charset=utf-8"
+  },
+  {
+   "url": "https://conduct.uoregon.edu/about-lrp",
+   "why": "404 text/html; charset=utf-8"
+  },
+  {
+   "url": "https://conduct.uoregon.edu/bcc/graduation",
+   "why": "404 text/html; charset=utf-8"
+  },
+  {
+   "url": "https://conduct.uoregon.edu/bcc/blm",
+   "why": "404 text/html; charset=utf-8"
+  },
+  {
+   "url": "https://conduct.uoregon.edu/lgbt",
+   "why": "404 text/html; charset=utf-8"
+  },
+  {
+   "url": "https://conduct.uoregon.edu/multicultural-center",
+   "why": "404 text/html; charset=utf-8"
+  },
+  {
+   "url": "https://conduct.uoregon.edu/mcc/about-us",
+   "why": "404 text/html; charset=utf-8"
+  },
+  {
+   "url": "https://conduct.uoregon.edu/mcc/student-unions",
+   "why": "404 text/html; charset=utf-8"
+  },
+  {
+   "url": "https://conduct.uoregon.edu/sswana-center",
+   "why": "404 text/html; charset=utf-8"
+  },
+  {
+   "url": "https://conduct.uoregon.edu/veterans",
+   "why": "404 text/html; charset=utf-8"
+  },
+  {
+   "url": "https://conduct.uoregon.edu/student-veterans-center",
+   "why": "404 text/html; charset=utf-8"
+  },
+  {
+   "url": "https://conduct.uoregon.edu/women",
+   "why": "404 text/html; charset=utf-8"
+  },
+  {
+   "url": "https://conduct.uoregon.edu/multicultural-events",
+   "why": "404 text/html; charset=utf-8"
+  },
+  {
+   "url": "https://conduct.uoregon.edu/raices-unida-youth-conference",
+   "why": "404 text/html; charset=utf-8"
+  },
+  {
+   "url": "https://conduct.uoregon.edu/ruyc",
+   "why": "404 text/html; charset=utf-8"
+  },
+  {
+   "url": "https://conduct.uoregon.edu/weaving-new-beginnings",
+   "why": "404 text/html; charset=utf-8"
+  },
+  {
+   "url": "https://conduct.uoregon.edu/offcampus",
+   "why": "404 text/html; charset=utf-8"
+  },
+  {
+   "url": "https://conduct.uoregon.edu/off-campus-index",
+   "why": "404 text/html; charset=utf-8"
+  },
+  {
+   "url": "https://conduct.uoregon.edu/off-campus-tips",
+   "why": "404 text/html; charset=utf-8"
+  },
+  {
+   "url": "https://conduct.uoregon.edu/nontrad",
+   "why": "404 text/html; charset=utf-8"
+  },
+  {
+   "url": "https://conduct.uoregon.edu/conduct",
+   "why": "404 text/html; charset=utf-8"
+  },
+  {
+   "url": "https://conduct.uoregon.edu/make-report",
+   "why": "404 text/html; charset=utf-8"
+  },
+  {
+   "url": "https://conduct.uoregon.edu/code-procedures",
+   "why": "404 text/html; charset=utf-8"
+  },
+  {
+   "url": "https://conduct.uoregon.edu/appeals",
+   "why": "404 text/html; charset=utf-8"
+  },
+  {
+   "url": "https://conduct.uoregon.edu/fsl-status",
+   "why": "404 text/html; charset=utf-8"
+  },
+  {
+   "url": "https://conduct.uoregon.edu/hazing-prevention",
+   "why": "404 text/html; charset=utf-8"
+  },
+  {
+   "url": "https://conduct.uoregon.edu/resources",
+   "why": "404 text/html; charset=utf-8"
+  },
+  {
+   "url": "https://conduct.uoregon.edu/faculty-resources",
+   "why": "404 text/html; charset=utf-8"
+  },
+  {
+   "url": "https://conduct.uoregon.edu/faq",
+   "why": "404 text/html; charset=utf-8"
+  },
+  {
+   "url": "https://conduct.uoregon.edu/about",
+   "why": "404 text/html; charset=utf-8"
+  },
+  {
+   "url": "https://conduct.uoregon.edu/team",
+   "why": "404 text/html; charset=utf-8"
+  },
+  {
+   "url": "https://conduct.uoregon.edu/student-advisory-board",
+   "why": "404 text/html; charset=utf-8"
+  },
+  {
+   "url": "https://conduct.uoregon.edu/events",
+   "why": "404 text/html; charset=utf-8"
+  },
+  {
+   "url": "https://conduct.uoregon.edu/forms",
+   "why": "404 text/html; charset=utf-8"
+  },
+  {
+   "url": "https://conduct.uoregon.edu/internships",
+   "why": "404 text/html; charset=utf-8"
+  },
+  {
+   "url": "https://calendar.uoregon.edu/event/portland-food-drop.ics",
+   "why": "200 text/calendar"
+  },
+  {
+   "url": "https://calendar.uoregon.edu/event/careercloset.ics",
+   "why": "200 text/calendar"
+  },
+  {
+   "url": "https://calendar.uoregon.edu/event/food-for-lane-countys-mobile-pantry.ics",
+   "why": "200 text/calendar"
+  }
+ ],
+ "leftInQueue": 7983
+}
