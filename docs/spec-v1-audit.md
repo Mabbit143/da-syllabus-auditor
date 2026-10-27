@@ -1,14 +1,14 @@
 # Spec: v1 Syllabus Audit (upload → graded report)
 
-Status: DRAFT, awaiting approval. Source: `docs/prd-da-syllabus-auditor.md`. The PRD wins on any conflict.
+Status: IMPLEMENTED — project started 2026-10-26 and built; app is live. Source: `docs/prd-da-syllabus-auditor.md`. The PRD wins on any conflict. Current build contract: `docs/spec-da-syllabus-auditor-v1.md`.
 
-**Code gate:** no application code is written until the hackathon starts. This spec, once approved, does not lift that gate. If implementation needs to deviate from this spec, stop, update the spec, and get approval first.
+**Code gate: passed.** The hackathon started 2026-10-26 and the audit below is implemented. If implementation needs to deviate from this spec, stop, update the spec, and get approval first.
 
-## Decisions this spec still needs (blocking approval)
+## Decisions (resolved 2026-10-26; kept for the record)
 
-1. **Stack** (PRD open question 1). The API below is written as logical operations, not framework routes. The $0 free-tier constraint applies to whatever is chosen, including Meta Model API access.
-2. **Dimension weighting** (PRD open question 3). Until answered, the overall read uses equal weights (see Behavior 4). Do not invent a weighted formula.
-3. **Meta Model API details**: exact Muse Spark model ID, endpoint, free-tier limits, and whether it accepts structured output. Unverified; verify before build.
+1. **Stack: DECIDED** — Next.js 16 on Vercel free tier, Supabase, `pdfjs-dist`. The API below maps to the implemented routes (`app/api/audit` and siblings). The $0 free-tier constraint applies throughout, including Meta Model API access.
+2. **Dimension weighting: DECIDED** — equal weights (see Behavior 4 and `lib/rubric.ts`). No weighted formula is invented.
+3. **Meta Model API details: VERIFIED and implemented** — base URL `https://api.meta.ai/v1`, `POST /v1/responses`, model `muse-spark-1.3` (never `-contributor`), `store: false`, low reasoning effort. See `lib/meta.ts`.
 
 ## Scope
 
@@ -32,7 +32,7 @@ Out (non-goals): see the final section.
 ### 3. Dimension grading
 Dimensions: Transparency; Punitive vs. flexible; Accessibility in practice; Whose perspectives are in the room; Hidden curriculum.
 - Each dimension returns: grade, rationale, 1–3 supporting passages, and a missing-evidence note.
-- **Grade scale: TBD, needs approval.** Proposal: A–F is not used; use three plain labels (Strong / Mixed / Weak) so the overall read maps cleanly to old-guard / mixed / inclusive and avoids implying a school grade. Confirm or replace.
+- **Grade scale: APPROVED and implemented.** A–F is not used; three plain labels (Strong / Mixed / Weak) map to old-guard / mixed / inclusive without implying a school grade. See `lib/rubric.ts`.
 - Given no evidence for a dimension (e.g. no accessibility section), then show "not found in this syllabus" with no grade inferred from silence beyond that statement. The dimension is marked "Not found," not "Weak."
 - Given contradictory passages, then show both passages and mark the dimension "Mixed / unclear." The model does not resolve the contradiction.
 
@@ -60,7 +60,7 @@ Types: attendance, grade-weight, late-policy (plus the four dimension-linked fla
 - Fixed footer: "This audits the text of a document. It is not legal or academic advice and does not claim the course is discriminatory or say what the instructor intended."
 - Language describes what the text shows, never author identity, demographics, or intent.
 
-## API contract (logical; map to routes once the stack is chosen)
+## API contract (implemented routes; logical operations below map to `app/api/`)
 
 **Create audit** — input: one PDF file. Output: audit id, file name, page count, status.
 Errors: 400 not a PDF / corrupt; 413 too large; 422 no extractable text; 502 Meta Model API failed after one retry; 504 audit exceeded the time budget.
@@ -75,7 +75,7 @@ Errors: 404 unknown id; 410 expired or deleted.
 New app, no migration. Entities exactly as in the PRD: Syllabus, Passage, Flag, DimensionScore, AuditReport. Additions this spec needs, none of which change the PRD's meaning:
 - `Passage.verified` (true/false), set by the citation gate; only verified passages are ever stored for display.
 - `AuditReport.skipped_sections` and `AuditReport.dropped_finding_count`.
-- Retention: **TBD by stack.** Default proposal: uploaded text is deleted after a fixed period (suggest 24 hours) or on student request; nothing is used for training or shared.
+- Retention (implemented): unsaved audits are transient (browser memory; server holds text only during the request). A signed-in student may save an audit to their own account (row-level security) and delete it; nothing is used for training or shared, apart from the disclosed `policy_gaps` exception in `docs/spec-da-syllabus-auditor-v1.md`.
 
 ## UI states
 
@@ -92,7 +92,7 @@ Multi-syllabus term view, crunch-week map, cross-course comparison; Canvas/LMS s
 
 ## Acceptance checklist
 
-Pass/fail, each checkable by a person. Tied to PRD metrics and stories.
+Pass/fail, each checkable by a person. Tied to PRD metrics and stories. The app is built and live; leave a box unticked until you have seen the evidence (open checks are tracked in `docs/handoff-muse-code.md`).
 
 - [ ] Typical syllabus PDF audits end to end in under 60 seconds (measured, not assumed).
 - [ ] 100% of displayed grades and flags have a verbatim passage that exists in the extracted text.

@@ -1,6 +1,6 @@
 # Handoff for Muse Code: DA Syllabus Auditor
 
-Written 2026-10-27 for an AI coding assistant that will continue this project with the owner. Read this file first, then `CLAUDE.md`, then the files listed under "Where things are". `CLAUDE.md` was brought up to date on 2026-10-27 and agrees with this file. Everything here was checked against the repository on 2026-10-27 unless marked **unverified**.
+Written 2026-10-27 for an AI coding assistant that will continue this project with the owner. Read this file first, then `CLAUDE.md`, then the files listed under "Where things are". `CLAUDE.md` was brought up to date on 2026-10-27 and agrees with this file. Still-applicable guidance from this file was merged into `AGENTS.md` on 2026-10-27. Everything here was checked against the repository on 2026-10-27 unless marked **unverified**. Tick the `- [ ]` boxes below as each item is verified or done; leave a box unticked until you have seen the evidence yourself.
 
 ## 1. What this is, in one paragraph
 
@@ -21,6 +21,7 @@ The owner's motto: tools that only point out problems and give no solutions are 
 - Verified 2026-10-27: the site loads and `/api/audit` returned a real report in 6 seconds for a one-page test syllabus. **Not verified on Vercel:** a full 9-page audit (about 54 s locally on Meta, about 75 s on Baseten), the 300-second `maxDuration` on the free plan, sign-in, and the policy check. Routes set `maxDuration = 300` (audit, opportunities, policy-check) and 120 (fixes).
 - Supabase (free tier): Postgres, email/password auth, row-level security. The redirect URLs include the Vercel address (the owner confirmed doing this).
 - Git state when this was written: `main` is **2 commits ahead of `origin/main`** (`8ee6923` policy check, `d3a9e8c` UO corpus) plus an uncommitted edit to `lib/policy/lookup.ts` (the UO domain fix, section 9). The owner pushes only after explicit approval each time.
+  - Update 2026-10-27 (checked against the repo): the UO domain fix is now committed as `14ace8b` (`fix(policy): require the school's own site for UO`), the handoff and `CLAUDE.md` updates are committed (`6de34ad`, `cc7ff88`, `e039968`), and the working tree is clean. Tick item 1 in section 11 only after the live lookup test passes; the commit alone is not the test.
 
 ## 4. Commands
 
@@ -96,16 +97,16 @@ Decided by the owner on 2026-10-27:
 - `school_policies` (cache per school, readable and writable by signed-in users) is safe only because every row is re-verified against its page on use.
 
 **Setup the owner still has to do in Supabase (unverified whether done):**
-1. Run `db/schema.sql` once (done earlier).
-2. Run `db/002-policy-gaps.sql` once.
-3. Add the owner to `app_owners` in the SQL editor: `insert into public.app_owners (user_id) select id from auth.users where email = '<owner email>';` (the email is deliberately not in the repo).
-4. In the app: the school field is stored in the auth user's metadata at sign-up; an account created before this change shows a "Which school are you at?" box on the home page.
+- [x] 1. Run `db/schema.sql` once (done earlier).
+- [ ] 2. Run `db/002-policy-gaps.sql` once.
+- [ ] 3. Add the owner to `app_owners` in the SQL editor: `insert into public.app_owners (user_id) select id from auth.users where email = '<owner email>';` (the email is deliberately not in the repo).
+- [ ] 4. In the app: the school field is stored in the auth user's metadata at sign-up; an account created before this change shows a "Which school are you at?" box on the home page.
 
 ## 9. University of Oregon focus (decided 2026-10-27)
 
 The owner attends UO (3 to 4 semesters of Canvas syllabi) and wants the whole effort UO-first, because one school makes the 5-syllabus flag reachable, and because "build your own world" and being concretely involved is part of the hackathon brief. Findings may or may not be taken to UO later.
 
-Done in the working tree, uncommitted: `lib/policy/lookup.ts` now rejects a policy page unless it is on `uoregon.edu` (for the school "University of Oregon") or, for other schools, names the school's full name. This fixes a real risk: Oregon State pages contain the word "Oregon" and passed the old word check. A domain map `SCHOOL_DOMAIN` holds known schools; add more as schools are added. Typecheck passes. It has **not** been tested against the live lookup.
+Done and committed in `14ace8b`: `lib/policy/lookup.ts` now rejects a policy page unless it is on `uoregon.edu` (for the school "University of Oregon") or, for other schools, names the school's full name. This fixes a real risk: Oregon State pages contain the word "Oregon" and passed the old word check. A domain map `SCHOOL_DOMAIN` holds known schools; add more as schools are added. Typecheck passes. It has **not** been tested against the live lookup.
 
 Findings so far from reading UO's own pages (all from public pages; quotes verified against fetched pages on 2026-10-27, so re-verify before using in the demo):
 - Provost "Syllabus Requirement" policy (undergraduate, revised 2/25/2025): the syllabus "must be made available to students (hard copy or online as a downloadable document)" by the first day of class, and also: "Instructors with a syllabus created in Canvas do not need to create an additional downloadable syllabus." UO's teaching site says the same about Canvas pages. These two lines are the owner's first example of UO's pages not lining up cleanly, and a model for the planned "policy versus policy" finder.
@@ -124,17 +125,17 @@ Findings so far from reading UO's own pages (all from public pages; quotes verif
 
 ## 11. Prioritized work, with what "done" looks like
 
-1. **Commit and test the UO domain fix.** Done when the policy check run against "University of Oregon" returns verified quotes for at least accommodations, late work, attendance, academic integrity and incompletes, all on `uoregon.edu` pages. Check the dropped-reason logs (`[policy] ... dropped`).
-2. **Use the local corpus as the primary reference for UO** instead of live web search: search `data/uo-policies/` for the topic, take a passage, and verify it by exact match against the saved page text, keeping the source URL. Faster, cheaper, repeatable. Keep live lookup as a fallback for other schools.
-3. **Add topics.** First `required syllabus contents` (UO's Syllabus Essentials and the Provost policy list the required elements; this should be the cleanest comparison in the app). Then grade appeals, withdrawal/drop deadlines, final exam and dead-week rules, religious observance, and mandatory reporting.
-4. **Policy-versus-policy finder.** Read pairs of UO documents on the same topic and report where they differ, each side with a verified quote and URL. Needs no uploads, so it can be demoed immediately. Use the existing consistency agent pattern (`lib/agent.ts`). The Provost-versus-teaching-site "downloadable" wording is the seed example.
-5. **"Who do I go to" navigator.** For situations (need an accommodation, dispute a grade, report harassment, instructor does not follow policy), show the office each UO page names, the page that says so, where pages name different offices or none, and a ready-to-send message. This is the solution half of the owner's motto.
-6. **Canvas-style syllabi.** The audit takes one PDF. Add input for pasted text or several files merged into one audit, with each piece labeled by where it came from, so a syllabus scattered across Canvas pages can be audited and the scattering itself reported. The owner's current course is the first test.
-7. **Owner "Schools" page.** `app/gaps/page.tsx` exists (flag at 5, evidence list with instructor and both quotes). Polish it, add a per-instructor view and a count of distinct syllabi, and keep it owner-only.
-8. **Server-side gap insertion** with a service key (section 8) before any outreach to a school.
-9. **Persist verified listings** across funding searches so repeat searches agree; decide how to treat emergency funds with no stated amount (pin them or give emergency funding its own section).
-10. **Research and grad-program planner** (professors and open assistantships). Lower priority now that the accountability record is the main aim.
-11. **Demo.** Start the script around Oct 30. Suggested arc: upload the owner's real syllabus, show the verified findings, show the side-by-side with UO's own policy, show the "UO against itself" finding, show the "who do I go to" answer and the drafted message, then the owner-only Schools page with counts. Be honest on camera about sample size (real numbers, from the owner's own syllabi and any friends' syllabi who consent).
+- [ ] 1. **Commit and test the UO domain fix.** Commit done in `14ace8b`; the live test below is still open. Done when the policy check run against "University of Oregon" returns verified quotes for at least accommodations, late work, attendance, academic integrity and incompletes, all on `uoregon.edu` pages. Check the dropped-reason logs (`[policy] ... dropped`).
+- [ ] 2. **Use the local corpus as the primary reference for UO** instead of live web search: search `data/uo-policies/` for the topic, take a passage, and verify it by exact match against the saved page text, keeping the source URL. Faster, cheaper, repeatable. Keep live lookup as a fallback for other schools.
+- [ ] 3. **Add topics.** First `required syllabus contents` (UO's Syllabus Essentials and the Provost policy list the required elements; this should be the cleanest comparison in the app). Then grade appeals, withdrawal/drop deadlines, final exam and dead-week rules, religious observance, and mandatory reporting.
+- [ ] 4. **Policy-versus-policy finder.** Read pairs of UO documents on the same topic and report where they differ, each side with a verified quote and URL. Needs no uploads, so it can be demoed immediately. Use the existing consistency agent pattern (`lib/agent.ts`). The Provost-versus-teaching-site "downloadable" wording is the seed example.
+- [ ] 5. **"Who do I go to" navigator.** For situations (need an accommodation, dispute a grade, report harassment, instructor does not follow policy), show the office each UO page names, the page that says so, where pages name different offices or none, and a ready-to-send message. This is the solution half of the owner's motto.
+- [ ] 6. **Canvas-style syllabi.** The audit takes one PDF. Add input for pasted text or several files merged into one audit, with each piece labeled by where it came from, so a syllabus scattered across Canvas pages can be audited and the scattering itself reported. The owner's current course is the first test.
+- [ ] 7. **Owner "Schools" page.** `app/gaps/page.tsx` exists (flag at 5, evidence list with instructor and both quotes). Polish it, add a per-instructor view and a count of distinct syllabi, and keep it owner-only.
+- [ ] 8. **Server-side gap insertion** with a service key (section 8) before any outreach to a school.
+- [ ] 9. **Persist verified listings** across funding searches so repeat searches agree; decide how to treat emergency funds with no stated amount (pin them or give emergency funding its own section).
+- [ ] 10. **Research and grad-program planner** (professors and open assistantships). Lower priority now that the accountability record is the main aim.
+- [ ] 11. **Demo.** Start the script around Oct 30. Suggested arc: upload the owner's real syllabus, show the verified findings, show the side-by-side with UO's own policy, show the "UO against itself" finding, show the "who do I go to" answer and the drafted message, then the owner-only Schools page with counts. Be honest on camera about sample size (real numbers, from the owner's own syllabi and any friends' syllabi who consent).
 
 ## 12. Known issues and caveats
 
@@ -155,8 +156,8 @@ Findings so far from reading UO's own pages (all from public pages; quotes verif
 
 ## 14. Unverified items to confirm early
 
-- The 300-second function limit on Vercel's free plan, and a full audit plus policy check running on the live site.
-- Whether `db/002-policy-gaps.sql` has been run, and whether the owner is in `app_owners`.
-- Whether a Meta billing spend limit is set.
-- That the GitHub Actions E2E workflow passes.
-- UO policy wording used in the demo: re-fetch and re-quote it on the day, since pages change.
+- [ ] The 300-second function limit on Vercel's free plan, and a full audit plus policy check running on the live site.
+- [ ] Whether `db/002-policy-gaps.sql` has been run, and whether the owner is in `app_owners`.
+- [ ] Whether a Meta billing spend limit is set.
+- [ ] That the GitHub Actions E2E workflow passes.
+- [ ] UO policy wording used in the demo: re-fetch and re-quote it on the day, since pages change.

@@ -1,5 +1,7 @@
 <!-- Transcribed from the user-attached DA_Syllabus_Auditor_PRD.pdf; PDF line wrapping retained. -->
 
+> **Status (2026-10-27): project started and built.** The hackathon began 2026-10-26 (kickoff 12:00 PM ET); the app described here is implemented and live on Vercel. This PRD remains the product authority. Current build contract and open checks: `docs/spec-da-syllabus-auditor-v1.md` and `docs/handoff-muse-code.md`. Open questions below were answered during the build (stack: Next.js on Vercel + Supabase; grading: equal weights, approved 2026-10-26).
+
 PRD: DA Syllabus Auditor
 Repo: da-syllabus-auditor — PRD lives at docs/prd-da-syllabus-auditor.md in that repo.
 Feature: Upload a university syllabus, get a graded audit for bias and transparency, with

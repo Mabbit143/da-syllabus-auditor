@@ -1,13 +1,13 @@
 # DA Syllabus Auditor v1 specification
 
-Status: draft for product approval. Written 2026-10-26. No implementation exists.
-Product authority: `prd-da-syllabus-auditor.md`. This document specifies proposed v1 behavior; additions and unresolved decisions below are not previously approved requirements.
+Status: IMPLEMENTED — project started 2026-10-26 (kickoff 12:00 PM ET) and built; app is live on Vercel. Written 2026-10-26; status updated 2026-10-27. This spec remains the build contract: if reality requires a deviation, stop the affected work, update this spec, and obtain approval before proceeding.
+Product authority: `prd-da-syllabus-auditor.md`. This document specifies v1 behavior as built; decisions below marked DECIDED or APPROVED are the approved requirements.
 
 ## Execution gate
 
-**Do not write application code until the hackathon starts.** Do not scaffold, install application packages, create migrations, configure deployments, or implement tests before that gate opens. Planning and documentation are allowed. Verify the official start and applicable rules before implementation; a date assumption or approval of this spec does not open the gate.
+**Gate passed.** The hackathon started 2026-10-26 at 12:00 PM ET and building is underway; the app is built and live. (Before kickoff, no application code, scaffolding, installs, migrations, deployments or tests were allowed; that pre-start restriction no longer applies.)
 
-After the start gate opens, implementation also requires approval of this specification and resolution of its blocking decisions. If reality requires a deviation, stop the affected work, update the spec, and obtain approval before proceeding.
+This specification and its blocking decisions were approved on 2026-10-26 (see "Decisions" at the end). If reality requires a deviation, stop the affected work, update the spec, and obtain approval before proceeding.
 
 ## Purpose and users
 
@@ -17,7 +17,7 @@ Success means a typical text-based syllabus is audited end to end in under 60 se
 
 ## Current versus target behavior
 
-Current: repository documentation only, with no application, dependency manifest, runtime, API routes, storage, or tests.
+Current (2026-10-27): built and live — Next.js app with dependency manifest, API routes, Supabase storage and Playwright tests. See `CLAUDE.md` and `docs/handoff-muse-code.md` for what is verified and what is still open.
 
 Target: single PDF -> page-preserving extraction -> Meta Model API analysis -> deterministic evidence verification -> report with five dimensions, policy risks, and passage context -> local print/save workflow.
 
@@ -38,11 +38,11 @@ The user moved these into scope on day 1 of the hackathon, in this order: (1) st
 | A. Browser extraction + thin server analysis boundary, transient state | Small system; no database; original PDF stays in the browser; deterministic verification can use retained page text | Browser parser performance and server request/time limits need checking; extracted text still goes to Meta |
 | B. Server extraction + transient analysis pipeline | Centralized extraction and validation; one consistent parsing environment | Original PDF crosses the server boundary; greater memory/upload/hosting constraints and deletion responsibility |
 
-Recommend A, subject to verified free-tier and parser feasibility.
+Chosen: A (approved 2026-10-26) and implemented — browser extraction with `pdfjs-dist`, server analysis routes, no PDF uploaded to the server.
 It minimizes infrastructure and avoids uploading the original PDF to the application server.
 The server owns credentials and validates evidence against submitted page text; this does not establish PDF authenticity against a malicious client.
 
-Neither path selects a framework, host, parser, SDK, model ID, or version. Meta Model API (Muse Spark series) is required by the PRD; free access, integration details, provider retention/training settings, and runtime feasibility must be verified before transmitting a real syllabus. No paid fallback and no silent provider substitution.
+Decided 2026-10-26 and implemented: Next.js 16 on Vercel free tier, `pdfjs-dist`, Meta Model API model `muse-spark-1.3` (never `-contributor`, `store: false`). No paid fallback and no silent provider substitution.
 
 ## Behavior: given / when / then
 
@@ -97,7 +97,7 @@ Student profile data is the user's own and is deleted on request. Nothing is use
 
 Keep extracted text per physical PDF page, indexed from 1. Preserve original extracted text as the canonical quotation source. Quotes are exact substrings of this source, not paraphrases or reconstructed PDF layout. Display page text in context so users can inspect extraction artifacts.
 
-Candidate quotes must resolve to the claimed page and exact character span. A proposed verifier may normalize line-wrap whitespace for matching only, then recover and display the exact source substring and span; no fuzzy semantic matching or silent word/punctuation changes. Ambiguous matches without a disambiguated location fail verification. The final matching policy needs approval before implementation.
+Candidate quotes must resolve to the claimed page and exact character span. The verifier (`lib/verify.ts`) normalizes line-wrap whitespace for matching only, then recovers and displays the exact source substring and span; no fuzzy semantic matching or silent word/punctuation changes. Ambiguous matches without a disambiguated location fail verification. Matching policy approved 2026-10-26 and implemented.
 
 Verification checks quote existence, location, referenced document, allowed types, and referential integrity. It does not prove a rationale is logically supported: manual acceptance review must also check that the cited passage supports each claim. Unsupported implications and invented percentages must be rejected or rewritten before release.
 
@@ -105,11 +105,11 @@ Each dimension returns one of: supported assessment, mixed/unclear with evidence
 
 The five dimensions are Transparency; Punitive vs. flexible; Accessibility in practice; Whose perspectives are in the room; Hidden curriculum. Author identity is judged only from sources, never from names or photos: see "Source authorship check". A missing readings list does not establish anything about authors. Do not infer absence of accessibility support outside the document.
 
-**Grading is a blocking product decision:** letter versus descriptive grades, dimension rubrics, severity thresholds, equal versus weighted aggregation, and mapping to overall lean are not defined by the PRD. Before implementation, approve explicit rules with worked examples, including contradictory and missing-evidence cases. Do not let the model invent the rubric or formula. A dimension lacking support cannot receive an invented low grade.
+**Grading (DECIDED 2026-10-26, implemented in `lib/rubric.ts`):** descriptive grades, equal-weight aggregation, and the rules with worked examples in "Grading rules" below. The model never invents the rubric or formula. A dimension lacking support cannot receive an invented low grade.
 
 Overall read uses only approved aggregation rules and verified dimension assessments. If coverage or evidence is insufficient, show `Overall read unavailable` with the reason rather than forcing one of the three labels. Biggest-risk text must reference a verified flag; if none is supported, say no supported policy risk was identified in assessed text, not that the course is risk-free.
 
-## Proposed grading rules (drafted 2026-10-26, awaiting approval)
+## Grading rules (approved 2026-10-26, implemented in `lib/rubric.ts`)
 
 Principle: the model never grades. It may only (a) propose a passage and (b) tag it with one signal code from the tables below. The app verifies the quote, rejects unknown codes, and computes every grade and the overall read by the fixed rules here. A passage counts for at most one signal per dimension. Signals describe what the text says, never intent, author identity, or anything outside the document.
 
@@ -189,11 +189,11 @@ Biggest risk: the highest-severity verified flag; ties go to the earliest page. 
 
 Thresholds (10%, 35%, 50%, S = +/-2, the 3-dimension minimum) are proposed defaults, not research-backed values; the demo syllabus will show whether they behave sensibly.
 
-## Proposed API contract (not existing routes)
+## API contract (implemented routes: `app/api/audit`, `fixes`, `opportunities`, `policy-check`)
 
-One synchronous endpoint is proposed for path A: `POST /api/audits`, JSON over HTTPS. No persistent job queue or polling API. Confirm free-host execution and request limits before committing to this transport; if unsuitable, revise this spec before implementation.
+Implemented for path A as synchronous JSON-over-HTTPS routes (`POST /api/audit` and siblings; no job queue or polling). Route `maxDuration`: 300 on audit, opportunities and policy-check; 120 on fixes.
 
-Input fields: `requestId` (client correlation string), `fileName` (display string), `pageCount` (positive integer), `pages` (ordered array of `{pageNumber, text}`). Page numbers must be unique, contiguous, and agree with pageCount. The server validates types, finite lengths, nonempty readable text, and total request limits independently of the browser. Exact byte/page/character limits are blocking decisions based on verified platform and parser constraints.
+Input fields: `requestId` (client correlation string), `fileName` (display string), `pageCount` (positive integer), `pages` (ordered array of `{pageNumber, text}`). Page numbers must be unique, contiguous, and agree with pageCount. The server validates types, finite lengths, nonempty readable text, and total request limits independently of the browser.
 
 Success `200`: `requestId`, `report`, `passages`, `coverage`, `warnings`. A partial report uses the same envelope with `coverage.status = partial` and explicit skipped/failed page ranges. `report` follows the data definitions below; only verified passages and supported assessments leave the server. No provider keys, prompts, hidden reasoning, or unvalidated model JSON are returned.
 
@@ -214,7 +214,7 @@ Error envelope: `error` with `code`, human-readable `message`, `retryable` boole
 
 Explicit try/catch handling must wrap server processing, provider calls, and client requests. Log stage, request ID, and safe error category; never log source text or secrets. The app has no user-auth 401/403 flow; upstream provider authorization errors map to analysis unavailable.
 
-## Data and lifecycle (logical schema, not a database)
+## Data and lifecycle (implemented; Supabase schema in `db/schema.sql` and `db/002-policy-gaps.sql`)
 
 | Entity | Required logical fields |
 | --- | --- |
@@ -227,7 +227,7 @@ Explicit try/catch handling must wrap server processing, provider calls, and cli
 
 Flag types: attendance, grade-weight, late-policy, transparency, accessibility, perspective, hidden-curriculum. Overall labels: old-guard leaning, mixed, inclusive leaning. IDs are scoped to the current audit; references may not point to another syllabus. Timestamps use an unambiguous timezone-aware format. Exact serialization names may be finalized with stack choice, without changing behavior.
 
-Proposed lifecycle: original file and report live in browser memory; server holds extracted text only during request processing. No database, migration, saved history, public report URL, local-storage persistence, or automatic publication. Reset/replacement removes app references; refresh loses the report. Do not promise secure deletion from underlying memory or provider systems.
+Implemented lifecycle: original file and report live in browser memory; the server holds extracted text only during request processing, unless a signed-in student chooses to save the audit (private to their account by row-level security). No public report URL or automatic publication. Reset/replacement removes app references. Do not promise secure deletion from underlying memory or provider systems.
 
 Before Audit, disclose that extracted syllabus text is sent to Meta for analysis. Verify provider retention/training configuration meets the PRD; if it cannot, the integration remains blocked. Print/save is initiated by the student; the app does not publish the source PDF. Report wording must avoid unnecessary identifying information.
 
@@ -258,9 +258,9 @@ Use plain student-facing language. File input, buttons, citation controls, and c
 | Sensitive data retained or logged | Transient lifecycle and safe logs; inspect provider settings | Disable uploads/analysis, remove application-owned retained copies and unsafe logging, disclose unresolved provider retention before re-enabling |
 | Scope/time expansion | Freeze single-PDF acceptance scope | Remove unapproved work from active scope; keep v1 behavior and spec authoritative |
 
-Auth and payments are out of scope. Production syllabus data is not authorized for testing or publication. Any proposal introducing auth, payments, persistent storage, public sharing, or production-data handling requires explicit user sign-off and an updated spec first.
+Payments remain out of scope. Auth and private per-account storage were added by later owner decisions (opportunity dashboard 2026-10-26; policy-gaps master list 2026-10-27) and are in scope as documented above. Production syllabus data is not authorized for testing or publication; any new public sharing requires explicit user sign-off and an updated spec first.
 
-## Ordered implementation plan after both gates open
+## Implementation plan (executed after both gates opened; kept for the record)
 
 1. You + Agent: approve grading rubric, aggregation, limits, stack and data lifecycle; verify official start, API access and $0 feasibility. Check: record evidence and approved decisions in this spec.
 2. Agent: build upload/extraction boundary. Check: readable, invalid, corrupt, encrypted, scanned, oversized and partial-extraction fixtures; verify page locators.
@@ -272,10 +272,10 @@ Auth and payments are out of scope. Production syllabus data is not authorized f
 
 ## Acceptance checklist
 
-Unchecked means unverified. No implementation or tests are claimed by this document.
+Unchecked means unverified. The app is implemented and live; tick a box only with evidence in hand (see `docs/handoff-muse-code.md` sections 11 and 14 for the current open checks).
 
-- [ ] Official hackathon start and applicable rules verified before any application code.
-- [ ] User approves this spec and all blocking decisions below.
+- [x] Official hackathon start and applicable rules verified before any application code.
+- [x] User approves this spec and all blocking decisions below.
 - [ ] Required Meta API access, exact model/version, $0 usage path, retention/training compatibility and host feasibility verified.
 - [ ] No paid services, paid fallback, LMS integration, accounts, database, or unapproved persistence.
 - [ ] Valid PDF shows file name/page count and runs without transcription.
@@ -297,7 +297,7 @@ Unchecked means unverified. No implementation or tests are claimed by this docum
 - [ ] Clean demo PDF and separate 19-note checklist obtained and inspected; notes excluded from analysis input.
 - [ ] Typical demo audit measured under 60 seconds; student review demonstrates biggest risk and lean understood within two minutes.
 
-## Blocking decisions to resolve before implementation
+## Decisions (resolved 2026-10-26; kept for the record)
 
 1. Official start and rules: RESOLVED 2026-10-26. The event runs Oct 26 12:00 PM ET to Nov 4 9:00 PM ET (7 PM MT); kickoff was Oct 26 12 PM ET (Cerebral Valley emails and participant guide). Rules: public repo, new work only built during the event, three-minute demo video, must use Meta models. Track: Build for Your World.
 2. Stack: DECIDED by user 2026-10-26: Next.js on Vercel's free tier, with server routes holding the Meta key and per-section analysis calls to stay inside serverless time limits. Parser, exact versions, request deadline and input limits are still to be verified.
