@@ -1,4 +1,6 @@
-export type Dimension = "transparency" | "punitive" | "accessibility" | "perspectives" | "hidden";
+import type { PolicyCheck } from "./policy/types";
+
+export type Dimension ="transparency" | "punitive" | "accessibility" | "perspectives" | "hidden";
 
 export type DimensionStatus = "strong" | "weak" | "mixed" | "not_found" | "not_assessed";
 
@@ -70,6 +72,7 @@ export interface Assessment {
 }
 
 export interface AuditReport {
+  policyCheck?: PolicyCheck;
   assessments: Assessment[];
   fileName: string;
   pageCount: number;

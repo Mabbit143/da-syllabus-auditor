@@ -66,7 +66,7 @@ function parse(text: string): Candidate[] {
   return Array.isArray(o.candidates) ? o.candidates : [];
 }
 
-async function fetchPage(url: string): Promise<string | null> {
+export async function fetchPage(url: string): Promise<string | null> {
   if (!isPublicHttp(url)) return null;
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), 8_000);

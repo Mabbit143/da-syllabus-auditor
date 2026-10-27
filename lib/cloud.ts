@@ -1,6 +1,7 @@
 "use client";
 
 import type { RankedOpportunity, Profile } from "./opps/types";
+import type { PolicyComparison, PolicyTopic, SchoolPolicy } from "./policy/types";
 import type { AuditReport, Page } from "./types";
 import { supabase } from "./supabase";
 
@@ -106,5 +107,78 @@ export async function deleteAudit(auditId: string): Promise<void> {
     if (error) throw error;
   } catch (err) {
     log("delete audit", err);
+  }
+}
+
+// Policy check: the school's rules are cached per school, and differences from them go to a private master list.
+
+export const schoolKey = (school: string) => school.toLowerCase().replace(/\s+/g, " ").trim();
+
+export async function loadSchoolPolicies(school: string): Promise<SchoolPolicy[]> {
+  try {
+    if (!(await uid())) return [];
+    const { data, error } = await supabase()!.from("school_policies").select("policies").eq("school_key", schoolKey(school)).maybeSingle();
+    if (error) throw error;
+    return (data?.policies as SchoolPolicy[]) ?? [];
+  } catch (err) {
+    log("load school policies", err);
+    return [];
+  }
+}
+
+export async function saveSchoolPolicies(school: string, policies: SchoolPolicy[]): Promise<void> {
+  try {
+    if (!(await uid())) return;
+    const { error } = await supabase()!.from("school_policies").upsert({ school_key: schoolKey(school), policies, updated_at: new Date().toISOString() });
+    if (error) throw error;
+  } catch (err) {
+    log("save school policies", err);
+  }
+}
+
+async function fingerprint(pages: Page[]): Promise<string> {
+  const text = pages.map((p) => p.text).join("\n").replace(/\s+/g, " ").trim().toLowerCase();
+  const bytes = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));
+  return [...new Uint8Array(bytes)].map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+
+/** Adds the differences to the master list. No user id is sent; the fingerprint only stops one syllabus counting twice. */
+export async function recordGaps(school: string, pages: Page[], items: PolicyComparison[]): Promise<void> {
+  try {
+    if (!(await uid())) return;
+    const gaps = items.filter((i) => i.relation !== "matches");
+    if (gaps.length === 0) return;
+    const hash = await fingerprint(pages);
+    const rows = gaps.map((g) => ({
+      school: schoolKey(school), topic: g.topic, kind: g.relation, instructor: g.instructor,
+      syllabus_quote: g.syllabusQuote ?? null, syllabus_page: g.syllabusPage ?? null,
+      school_quote: g.schoolQuote, school_url: g.schoolUrl, syllabus_hash: hash,
+    }));
+    const { error } = await supabase()!.from("policy_gaps").upsert(rows, { onConflict: "school,topic,syllabus_hash", ignoreDuplicates: true });
+    if (error) throw error;
+  } catch (err) {
+    log("record gaps", err);
+  }
+}
+
+export interface GapGroup {
+  school: string;
+  topic: PolicyTopic;
+  kind: "conflicts" | "adds_requirement" | "silent";
+  syllabi: number;
+  flagged: boolean;
+  entries: { instructor: string | null; syllabusQuote: string | null; syllabusPage: number | null; schoolQuote: string; schoolUrl: string; at: string }[];
+}
+
+/** Owner only: the database refuses anyone who is not listed in app_owners. */
+export async function loadGapReport(): Promise<GapGroup[] | null> {
+  try {
+    if (!(await uid())) return null;
+    const { data, error } = await supabase()!.rpc("gap_report", { threshold: 5 });
+    if (error) throw error;
+    return data as GapGroup[];
+  } catch (err) {
+    log("load gap report", err);
+    return null;
   }
 }
