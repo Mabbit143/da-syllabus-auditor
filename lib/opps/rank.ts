@@ -1,3 +1,4 @@
+import { schoolMatches } from "./fit";
 import type { Opportunity, Profile, RankedOpportunity } from "./types";
 
 const DAY = 86_400_000;
@@ -20,6 +21,11 @@ export function rankOpportunities(
     const why: string[] = [];
     if (o.requires.some((r) => !profile.flags.includes(r))) continue;
     if (o.requires.length) why.push(`Matches your profile: ${o.requires.join(", ").replace(/_/g, " ")}`);
+    const limitedTo = o.schools ?? [];
+    if (limitedTo.length) {
+      if (!schoolMatches(limitedTo, profile.school)) continue;
+      why.push(`Limited to students at ${profile.school}`);
+    }
     if (o.majors.length) {
       const m = profile.major.trim().toLowerCase();
       if (!m || !o.majors.some((x) => x.toLowerCase().includes(m) || m.includes(x.toLowerCase()))) continue;

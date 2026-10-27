@@ -25,6 +25,7 @@ export interface Candidate {
   url: string;
   requires: string[];
   majors: string[];
+  schools?: string[];
   feeOrMembership: boolean;
   quotes: { amount?: string; deadline?: string; eligibility?: string };
 }
@@ -38,6 +39,7 @@ export interface Opportunity {
   url: string;
   requires: RequirementFlag[];
   majors: string[];
+  schools: string[];
   quotes: { amount?: string; deadline?: string; eligibility: string };
 }
 

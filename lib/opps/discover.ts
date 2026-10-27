@@ -1,5 +1,6 @@
 import type { SearchResult } from "../meta";
 import { isPublicHttp, pageText, squash } from "../sources";
+import { levelFlags } from "./fit";
 import {
   FUNDING_TYPES, REQUIREMENT_FLAGS,
   type Candidate, type FundingType, type Opportunity, type Profile, type RequirementFlag,
@@ -11,12 +12,13 @@ const MONTHS = ["january", "february", "march", "april", "may", "june", "july", 
 const FEE_PATTERN = /application fee|processing fee|fee to apply|membership (is )?required|requires? (a )?(paid )?membership|must (be|become) a (paid )?member|join (now )?to apply/i;
 
 export const DISCOVER_INSTRUCTIONS = `You find real funding opportunities for a student. Use web search. Never invent an opportunity.
-Return ONLY one valid JSON object: {"candidates":[{"type":"scholarship","title":"","sponsor":"","amount":2000,"deadline":"2026-12-01","url":"https://...","requires":["first_gen"],"majors":[],"feeOrMembership":false,"quotes":{"amount":"exact text from the page","deadline":"exact text from the page","eligibility":"exact text from the page"}}]}
+Return ONLY one valid JSON object: {"candidates":[{"type":"scholarship","title":"","sponsor":"","amount":2000,"deadline":"2026-12-01","url":"https://...","requires":["first_gen"],"majors":[],"schools":[],"feeOrMembership":false,"quotes":{"amount":"exact text from the page","deadline":"exact text from the page","eligibility":"exact text from the page"}}]}
 Rules:
 - "type" is one of: ${FUNDING_TYPES.join(", ")}.
 - "url" must be the opportunity's own page, from your search results. "sponsor" must be named on the page.
 - Each quote must be copied exactly from that page. "amount" is a number in US dollars or null. "deadline" is YYYY-MM-DD or null (null for rolling).
 - "requires" may only use: ${REQUIREMENT_FLAGS.join(", ")}. Use [] if open to all. "majors" lists required majors, else [].
+- "schools" lists the colleges or universities whose students are the ONLY ones who may apply (for example an emergency fund run by one school). Use [] if students at any school may apply. Name each school exactly as the page does.
 - Set "feeOrMembership" true if applying costs money or needs a paid membership.
 - Return at most 5 candidates. Return {"candidates":[]} if you find none.`;
 
@@ -101,10 +103,15 @@ export function verifyCandidate(c: Candidate, text: string, searched: Set<string
   }
   const type = FUNDING_TYPES.includes(c.type as FundingType) ? (c.type as FundingType) : null;
   if (!type) return "unknown type";
-  const requires = (c.requires ?? []).filter((r): r is RequirementFlag => (REQUIREMENT_FLAGS as readonly string[]).includes(r));
+  const tagged = (c.requires ?? []).filter((r): r is RequirementFlag => (REQUIREMENT_FLAGS as readonly string[]).includes(r));
+  const requires = [...new Set<RequirementFlag>([...tagged, ...levelFlags(`${c.title}. ${c.quotes.eligibility}`)])];
+  const pageLower = squash(text).toLowerCase();
+  const claimed = (c.schools ?? []).map(String).filter(Boolean);
+  const schools = claimed.filter((s) => pageLower.includes(s.toLowerCase())).slice(0, 5);
+  if (claimed.length > 0 && schools.length === 0) return "school restriction not on page";
   return {
     type, title: String(c.title).slice(0, 160), sponsor: String(c.sponsor).slice(0, 120), amount, deadline, url: c.url,
-    requires, majors: (c.majors ?? []).map(String).slice(0, 5),
+    requires, majors: (c.majors ?? []).map(String).slice(0, 5), schools,
     quotes: { amount: c.quotes.amount, deadline: c.quotes.deadline, eligibility: c.quotes.eligibility! },
   };
 }
