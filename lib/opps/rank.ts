@@ -7,9 +7,25 @@ const DAY = 86_400_000;
  * Deterministic ranking. The model never ranks. Order:
  * 1. hard filters (deadline passed, requirements the profile lacks, major mismatch) remove a listing,
  * 2. listings due in a crunch week sink,
- * 3. sooner deadline tier first (<=14 days, <=45 days, later, no deadline),
- * 4. bigger amount first.
+ * 3. higher expected value first: the dollar amount, weighted up 25% for each way the award targets this
+ *    student (a profile flag other than study level, a major, or their school), since targeted awards
+ *    draw smaller applicant pools. A missing amount counts as $0, not as a reason to hide the listing,
+ * 4. sooner deadline breaks ties.
  */
+const TARGET_WEIGHT = 0.25;
+
+function targeting(o: Opportunity): number {
+  return (
+    o.requires.filter((r) => r !== "undergrad" && r !== "grad").length +
+    (o.majors.length > 0 ? 1 : 0) +
+    ((o.schools ?? []).length > 0 ? 1 : 0)
+  );
+}
+
+export function expectedValue(o: Opportunity): number {
+  return (o.amount ?? 0) * (1 + TARGET_WEIGHT * targeting(o));
+}
+
 export function rankOpportunities(
   opps: Opportunity[],
   profile: Profile,
@@ -44,18 +60,20 @@ export function rankOpportunities(
       if (crunchWeeks.includes(week)) crunchWeek = week;
     }
 
+    if (o.amount !== null) {
+      const t = targeting(o);
+      why.push(t > 0 ? `Worth $${o.amount.toLocaleString("en-US")}, weighted up for targeting you` : `Worth $${o.amount.toLocaleString("en-US")}`);
+    }
     if (daysLeft !== null) why.push(daysLeft <= 14 ? `Due soon: ${daysLeft} days left` : `${daysLeft} days left`);
     if (crunchWeek !== null) why.push(`Deadline lands in week ${crunchWeek}, one of your crunch weeks`);
     kept.push({ ...o, rank: 0, why, daysLeft, crunchWeek });
   }
 
-  const tier = (d: number | null) => (d === null ? 0 : d <= 14 ? 3 : d <= 45 ? 2 : 1);
   kept.sort(
     (a, b) =>
       Number(a.crunchWeek !== null) - Number(b.crunchWeek !== null) ||
-      tier(b.daysLeft) - tier(a.daysLeft) ||
-      (a.daysLeft ?? 9e9) - (b.daysLeft ?? 9e9) ||
-      (b.amount ?? 0) - (a.amount ?? 0),
+      expectedValue(b) - expectedValue(a) ||
+      (a.daysLeft ?? 9e9) - (b.daysLeft ?? 9e9),
   );
   kept.forEach((o, i) => (o.rank = i + 1));
   return kept;
