@@ -1,98 +1,99 @@
 # DA Syllabus Auditor
 
-DA Syllabus Auditor is a planned student-facing web app that audits a single university syllabus PDF for bias, transparency, and policy risks.
-It must explain five dimension grades and an overall old-guard versus inclusive read using verified verbatim passages from that syllabus.
+A student-facing web app, built for the Meta Global AI Developer Hackathon. A student uploads a syllabus; the app audits it for bias, transparency and policy risks, suggests fixes per finding, finds funding, and (the main aim since 2026-10-27) compares the syllabus to the school's own written policies and keeps a private master list of discrepancies. University of Oregon (UO) comes first.
 
-## Source of truth and current state
+Every displayed finding rests on a verbatim quote that is verified against the source page. Tools that only point out problems and give no fixes are not acceptable.
 
-- Read `docs/prd-da-syllabus-auditor.md` before changing scope. It is transcribed from the user-attached PRD PDF.
-- Actual repository: `Mabbit143/da-syllabus-auditor`; default branch: `main`.
-- Inspected on 2026-10-26: the checkout contained only `README.md`, `.gitattributes`, and Git metadata before this documentation update. Nothing is built yet.
-- Blindspot is shelved. Do not apply its architecture, five-source evidence rules, or implementation plan to this project.
-- Follow the user-provided plan-first and spec-first workflows. The v1 specification is `docs/spec-da-syllabus-auditor-v1.md`; it is a draft awaiting approval.
+## State (2026-10-27)
 
-## Verified stack and versions
-
-| Area | Verified status |
-| --- | --- |
-| Product | Planned web app; no application code yet |
-| Frontend, language, runtime | Decided 2026-10-26: Next.js on Vercel free tier; no manifest or version pin yet |
-| Analysis | PRD requires Meta Model API, Muse Spark series; exact model ID, endpoint, SDK, and version are unverified |
-| Backend, hosting, storage | Open decisions; free tier only, total budget $0 |
-| Database, authentication, state management | No implementation or dependencies present |
-| Package manager and tooling | No lockfile, build configuration, test runner, or lint configuration present |
-
-Do not present PRD intentions as installed dependencies. Verify chosen services, access, exact model identifiers, versions, and free-tier feasibility before implementation. Do not silently substitute another AI provider.
+- Built and live on Vercel (short domain `da-syllabus-auditor-hkrr.vercel.app`, Deployment Protection off). Repository: `Mabbit143/da-syllabus-auditor`, branch `main`.
+- Built: audit, fixes per finding, opportunity search, term view, Supabase sign-in and saved audits, policy check against the school's policies, owner-only gap list, UO policy corpus.
+- Not verified: a full 9-page audit on Vercel (the 300 s function limit on the free tier is unconfirmed), the policy lookup against the live UO site after the domain fix, the Playwright E2E run, and GitHub Actions.
+- Submission is due Nov 4, 2026, 9 PM ET (7 PM MT): public repo, 3-minute demo video, Meta models. Judging: Impact 30%, Meta tooling 25%, Demo 25%, Technical 20%.
+- `docs/handoff-muse-code.md` is the full handoff (priorities, acceptance criteria, known issues, unverified items). Read it first when picking up work.
 
 ## Commands
 
-Run commands from the repository root. There are currently no application commands to run.
+Run from the repository root.
 
-| Task | Actual command |
+| Task | Command |
 | --- | --- |
-| Install dependencies | Not configured; no dependency manifest |
-| Development server | Not configured |
-| Build / production start | Not configured |
-| Tests | Not configured |
-| Lint / formatting | Not configured |
+| Install | `npm install` |
+| Dev server | `npm run dev` |
+| Build / start | `npm run build`, `npm run start` |
+| Lint | `npm run lint` |
+| E2E tests | `npm run test:e2e` (`:headed` for a visible browser) |
+| Typecheck | `npx tsc --noEmit` |
 
-Repository inspection commands: `git status --short`, `git ls-files`, `git diff --check`.
-After scaffolding, replace this table with commands verified against the actual scripts/configuration and record whether they were executed successfully. Do not invent `npm` scripts.
+Environment variable names (values live in `.env.local` and the Vercel dashboard, never in Git): `MODEL_API_KEY`, `MODEL_PROVIDER` (`baseten` switches to Baseten Muse Spark Open; otherwise Meta), `BASETEN_API_KEY`, `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
+
+## Stack
+
+Next.js 16 App Router, React 19, TypeScript, Supabase (Postgres, email/password auth, row-level security; anon key only, no service key), `pdfjs-dist` for PDF text, Playwright for E2E, Vercel free tier. Route `maxDuration`: 300 on audit, opportunities and policy-check; 120 on fixes.
+
+Meta Model API: `https://api.meta.ai/v1`, POST `/v1/responses`, model `muse-spark-1.3` (never `-contributor`), `store:false`, `reasoning:{effort:"low"}`, `web_search` tool for lookups. Baseten uses `max_tokens` 30000.
 
 ## Architecture
 
-Current files:
-
 ```text
-README.md                         Repository title only
-.gitattributes                    * text=auto (Git text normalization)
-CLAUDE.md                         Contributor and assistant guidance
-docs/prd-da-syllabus-auditor.md    Product requirements
+app/page.tsx              Upload, audit, policy check, saved audits
+app/opportunities/        Funding, research, grad programs
+app/gaps/page.tsx         Owner-only master list of policy discrepancies
+app/api/audit|fixes|opportunities|policy-check/route.ts
+components/               Nav (sign-in, school, consent), Report, FixKit, OppCard, TermView
+lib/audit.ts, rubric.ts   Audit pipeline and code-side grading
+lib/verify.ts, sources.ts Quote verification, author bio check
+lib/meta.ts, agent.ts     Model calls (Meta or Baseten), consistency agent
+lib/fixes.ts              Student and instructor fixes per finding
+lib/opps/                 Discovery, fit, ranking of opportunities
+lib/policy/               types (topics), lookup (find and verify a school policy), compare (syllabus vs policy)
+lib/cloud.ts, supabase.ts Saved audits, school policies, gap recording, gap report
+db/schema.sql             Part 1 (audits, saved data)
+db/002-policy-gaps.sql    Part 2 (school_policies, policy_gaps, app_owners, gap_report)
+e2e/                      Playwright tests and fixtures
+data/uo-policies/         400 UO web pages and 177 PDFs as text, each with Source URL and fetch date
+docs/                     PRD, spec, spec audit, handoff
 ```
 
-The PRD defines this intended flow; no modules implement it yet:
+Flow: PDF or text, page-level extraction, model proposes passages and signal codes, code verifies each quote as an exact substring of the page (whitespace-normalized, ambiguous matches rejected) and grades, report shown.
 
-`Single PDF upload -> text extraction with page/section locators -> Meta Model API analysis -> verbatim-citation verification -> audit report`
+## Grading rules (code decides, never the model)
 
-- Upload: validate PDF, display file name and page count, require no manual transcription.
-- Analysis: grade Transparency, Punitive vs. flexible, Accessibility in practice, Whose perspectives are in the room, and Hidden curriculum. Show 1-3 supporting passages per dimension where evidence exists, rationale, and missing evidence.
-- Risks: attendance penalties, grade-weight concentration, and late-work rules, including weights/percentages only where stated.
-- Report: overall `old-guard leaning`, `mixed`, or `inclusive leaning`, derived transparently from the dimension breakdown; readable in under two minutes, printable/shareable as a page. Every grade and flag links to its passage in context.
-- Planned entities: `Syllabus`, `Passage`, `Flag`, `DimensionScore`, `AuditReport`. Their PRD fields are requirements, not an existing database schema. No migration exists.
-- Target: a typical PDF audit completes end to end in under 60 seconds. This is not a measured result.
+- Per dimension: Strong needs P>=2 and N=0; Weak needs N>=2 and P=0; any other mix with at least one signal is Mixed; no signals with full coverage is Not found; no signals with partial coverage is Not assessed.
+- Overall read needs at least 3 included dimensions: S = Strong - Weak; S>=2 inclusive leaning, S<=-2 old-guard leaning, otherwise mixed.
+- Policy comparison: the model proposes a relation per topic (`matches`, `conflicts`, `adds_requirement`, `silent`). Code verifies the syllabus quote, the instructor name (must sit inside a verified quote) and silence (`TOPIC_WORDS`). Saved policies are re-fetched and re-verified on every use. UO policy pages must be on `uoregon.edu` (`SCHOOL_DOMAIN` in `lib/policy/lookup.ts`).
 
-## Observed conventions and working style
+## Non-negotiables
 
-- The only pre-existing code-related convention is Git automatic text normalization (`* text=auto`). No naming, component, API, styling, or testing conventions can yet be inferred.
-- User-directed conventions: prioritize the smallest functional implementation; use isolated reusable components and split complex files.
-- Explain major changes and their effects in plain language before implementing them. Review dependencies and existing behavior before edits; flag concrete regression risks.
-- Provide complete files or contextual diffs without omitted-code placeholders.
-- Every API route, server action, and data fetch needs explicit try/catch handling, readable error logs, and user-facing error states. Keep automated logs clean and development messages descriptive.
-- At a genuine technical fork, present exactly two paths with brief pros and cons. Summarize package installations or migrations in 1-2 sentences.
-- Update this document as implementation establishes actual conventions; do not fill gaps with assumptions.
+- **$0 total, free-tier services only.** Credits may be spent to build and test, not wastefully. Set no paid plans.
+- **Meta Model API is the analysis layer.** Never substitute another provider silently.
+- **Citation verification is a display gate.** No finding, flag or grade is shown without a verified verbatim quote and locator. Drop unsupported findings; say `not found in this syllabus` for absent evidence.
+- **Intent and identity are never inferred.** Author background comes only from the author's own public bio, with a verified quote and link. Describe what the document shows; do not label a course discriminatory or give legal or academic advice. Policy-check entries are document-versus-document comparisons.
+- Unreadable or image-only PDFs fail plainly (`could not read text from this file`). Never fabricate an audit from a file name.
+- Contradictory policies keep both passages. Long documents are processed by section; disclose skipped sections.
+- **Privacy.** Uploaded syllabi are not shared, published or used to train anything. Saved syllabus text is private to the student's account (row-level security). One exception (user decision 2026-10-27, disclosed on the upload page and in a required sign-up checkbox): where a syllabus differs from its school's written policy, the verified quotes, instructor name and school go to the private master list `policy_gaps` (no user id, SHA-256 syllabus fingerprint for dedupe, insert-only RLS, readable only by `app_owners` through `gap_report()`). Five distinct syllabi on one school and topic flag it. **Never make the list public without the user's say-so.**
+- Known gap: a signed-in bad actor can insert fake rows with the anon key. Add a server route with a service key before any outreach.
+- Keys are entered through the terminal prompt, never typed in chat or committed. `.env.local` and `private-demo/` stay out of Git.
+- **Push to `main` only after explicit approval each time.**
+- New work only. Scholarship HQ (Floot) must be rebuilt fresh with no code reused. Blindspot is shelved; do not apply its architecture here, though the policy check is the first Blindspot Engine-style algorithm.
 
-## Confirmed non-negotiables
+## Conventions
 
-- **$0 total, free-tier services only:** no paid hosting or paid services. Do not incur charges or silently upgrade plans. Verify free access for the required analysis API as well.
-- **Meta Model API is the analysis layer.** Muse Spark series is specified by the PRD; exact integration details still need verification.
-- **Citation verification is a display gate:** 100% of displayed findings, flags, and grades must cite verbatim text verified against the uploaded syllabus, with a page/section locator. Model-supplied quotes alone do not establish verification. Drop unsupported model findings before display; say `not found in this syllabus` for absent evidence.
-- Intent is never inferred. Author background is judged only from the author's own public bio (verified quote and link), never from names or photos; see the spec's "Source authorship check" (user decision 2026-10-26). Describe what the document shows; do not label a course discriminatory or give legal/academic advice.
-- Unreadable or image-only PDFs fail plainly (`could not read text from this file`); never fabricate an audit from the file name.
-- Contradictory policies retain both passages and a mixed/unclear assessment. Long documents are processed by section; disclose any skipped sections.
-- Uploaded syllabi are not shared, published, or used to train anything. Implement a printable/shareable report without automatically publishing the source document. One exception (user decision 2026-10-27, disclosed in the upload text and a required sign-up checkbox): where a syllabus differs from its school's written policy, the verified quotes, instructor name and school go to a private master list (`policy_gaps`, no user id, readable only by `app_owners` through `gap_report()`); 5 distinct syllabi on one school and topic flag it. Never make this list public without the user's say-so.
-- Scope (user decision 2026-10-26): term view, crunch-week map, the agentic consistency auditor and the opportunity dashboard (funding, research, grad programs; Supabase free tier with accounts) are IN scope; see the spec sections "Scope expansion" and "Opportunity dashboard". Still out: LMS/Canvas sync, calendar integration, grade simulation, institutional dashboards, paid services. Saved syllabus text is private to the student's own account (row-level security), saved only by their choice, and never shown to others or used to train anything.
+- Smallest functional implementation; isolated reusable components; split complex files.
+- Every API route, server action and data fetch has try/catch, a readable error log and a user-facing error state.
+- Complete files or contextual diffs, no omitted-code placeholders. At a real technical fork, present two paths with brief pros and cons.
+- Conventional commits: `type(scope): subject` under 50 characters, body wrapped at 72, ending with `Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>`.
+- Brand (DA Visual System V2 "Field Guide"): fonts Anton, Roboto Condensed, Roboto, Roboto Mono, Special Elite; pink light #F797C7, pink dark #D6006B, cyan dark #097771, violet light #BBA0EE; no lime text on paper; squarish corners; no gradients.
+- The user dictates by voice and dislikes hedging, repeated caveats and moralizing. State findings plainly.
 
-## Onboarding gotchas and unresolved decisions
+## Setup the owner still has to do (unconfirmed)
 
-- The local checkout is nested: `C:/Users/mabbi/dev/da-syllabus-auditor/da-syllabus-auditor`. Its parent is not the Git root; confirm with `git rev-parse --show-toplevel`.
-- There is no app to start, no `.env` template, no verified credential-variable names, no tests, and no deployment configuration. Do not claim setup/build/test success until these exist and have been checked.
-- Decide frontend/hosting/storage and verify the $0 path before scaffolding. Aggregation is decided as equal weights (plain count of dimensions per lean); rubric, thresholds and incomplete-evidence rules still need approved worked examples, so do not invent them.
-- Hackathon facts verified 2026-10-26 from the Cerebral Valley guide: event started Oct 26 12 PM ET; submissions due Nov 4 9 PM ET (7 PM MT); public repo, new work only, three-minute demo video, Meta models required. $150 Meta credits claimed and a card is on file, so set a Billing Spend Limit and stay on the Standard model ID (`muse-spark-1.3`), never `-contributor`.
-- The PRD names `GamesSyllabus2025_clean.pdf` (9 pages) as the demo input and `GamesSyllabus2025_highlight_notes.md` (19 notes) as a separate evaluation checklist. Both now exist outside the repo in `C:/Users/mabbi/dev/da-syllabus-auditor/private-demo/` (created 2026-10-26 from the annotated PDF: 9 pages, 19 notes, 0 annotations left in the clean copy, about 21k characters of extractable text); never commit that folder or copy it into the repo. Do not feed evaluation notes into the audit as syllabus evidence. Preserve the original annotated PDF.
-- The PRD lists a November 4 target of 3 PM PT and hard stop of 6 PM PT for the hackathon submission. These are planning dates from the PRD, not independently verified event rules.
-- Keep secrets out of Git. When integration exists, document required variable names and setup without secret values.
-- This documentation task does not authorize building the application or choosing an unresolved stack.
+1. Run `db/002-policy-gaps.sql` once in the Supabase SQL editor.
+2. Add the owner to `app_owners`: `insert into public.app_owners (user_id) select id from auth.users where email = '<owner email>';`.
 
-## Mandatory implementation gate
+## Gotchas
 
-No application code, scaffolding or installs before kickoff on 2026-10-26 at 9:00 AM PT (12:00 PM ET). After kickoff, building is allowed, and the user permits spending API credits to build and test as long as it is not wasteful. Remaining pre-build items: parser/versions/size limits and unconfirmed Meta details, settled during scaffolding. Planning and documentation are permitted; approved plans or specs do not override this gate. After the start, obtain approval of the spec and resolve its blocking decisions before implementation. If a deviation is required, stop affected work, update the spec, and get approval before continuing.
+- The checkout is nested: `C:/Users/mabbi/dev/da-syllabus-auditor/da-syllabus-auditor`. Confirm the Git root with `git rev-parse --show-toplevel`.
+- `private-demo/` (outside the repo) holds `GamesSyllabus2025_clean.pdf` (9 pages, the demo input) and the 19-note evaluation checklist. Never commit it, and never feed the notes into an audit as evidence.
+- Known audit weaknesses: no check that stated grade weights sum to 100%; the "Mixed / unclear" label is redundant; the "Verified" stamp adds noise; "invited to let me know" accessibility wording is graded as supportive though the school routes students through the Accessible Education Center.
+- Corpus gaps: 56 scanned PDFs, a 403 on the provost academic-policy-reminders page, moved catalog and AEC syllabus-statement pages, thin grade-appeal coverage.
