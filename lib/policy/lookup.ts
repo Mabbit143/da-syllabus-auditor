@@ -26,6 +26,20 @@ function schoolWords(school: string): string[] {
   return school.toLowerCase().split(/[^a-z0-9]+/).filter((w) => w.length > 2 && !SKIP_WORDS.has(w));
 }
 
+// Schools whose web address is known. A page from any other site is rejected (Oregon State pages also say "Oregon").
+const SCHOOL_DOMAIN: Record<string, string> = { "university of oregon": "uoregon.edu" };
+
+/** The page must be on the school's own site when known, and must say the school's full name. */
+function pageIsSchool(school: string, url: string, lowerPage: string): boolean {
+  const name = school.toLowerCase().replace(/\s+/g, " ").trim();
+  const domain = SCHOOL_DOMAIN[name];
+  if (domain) {
+    const host = new URL(url).hostname.toLowerCase();
+    return host === domain || host.endsWith(`.${domain}`);
+  }
+  return lowerPage.includes(name) || schoolWords(school).every((w) => lowerPage.includes(w));
+}
+
 function isEdu(url: string): boolean {
   try {
     return new URL(url).hostname.toLowerCase().endsWith(".edu");
@@ -47,7 +61,7 @@ export async function verifyPolicy(school: string, topic: PolicyTopic, url: unkn
   if (!text) return drop("page could not be fetched");
   const page = squash(text);
   const lower = page.toLowerCase();
-  if (!schoolWords(school).every((w) => lower.includes(w))) return drop("school not named on page");
+  if (!pageIsSchool(school, url, lower)) return drop("page is not from this school");
   if (page.includes(q)) return { topic, url, quote: q };
   // The model's wording drifted from the page. Ask it to copy the passage from the page itself, then check again.
   if (ask) {
