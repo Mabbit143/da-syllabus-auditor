@@ -8,7 +8,7 @@ Every displayed finding rests on a verbatim quote that is verified against the s
 
 - Built and live on Vercel (short domain `da-syllabus-auditor-hkrr.vercel.app`, Deployment Protection off). Repository: `Mabbit143/da-syllabus-auditor`, branch `main`.
 - Built: audit, fixes per finding, opportunity search, term view, Supabase sign-in and saved audits, policy check against the school's policies, owner-only gap list, UO policy corpus.
-- Not verified: a full 9-page audit on Vercel (the 300 s function limit on the free tier is unconfirmed), the policy lookup against the live UO site after the domain fix, the Playwright E2E run, and GitHub Actions.
+- Not verified: a full 9-page audit on Vercel (the 300 s function limit on the free tier is unconfirmed), the policy check on Vercel, the Playwright E2E run, and GitHub Actions. Verified 2026-10-27 locally: the policy lookup after the domain fix returns all five topics on `uoregon.edu` pages (see handoff item 1).
 - Submission is due Nov 4, 2026, 9 PM ET (7 PM MT): public repo, 3-minute demo video, Meta models. Judging: Impact 30%, Meta tooling 25%, Demo 25%, Technical 20%.
 - `docs/handoff-muse-code.md` is the full handoff (priorities, acceptance criteria, known issues, unverified items). Read it first when picking up work.
 
