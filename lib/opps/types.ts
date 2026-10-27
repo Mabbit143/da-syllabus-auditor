@@ -37,6 +37,8 @@ export interface Opportunity {
   amount: number | null;
   deadline: string | null;
   url: string;
+  amountUpTo?: boolean;
+  deadlineNote?: string;
   requires: RequirementFlag[];
   majors: string[];
   schools: string[];

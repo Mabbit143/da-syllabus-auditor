@@ -26,8 +26,8 @@ export default function OppCard({ opp, status, onStatus }: {
         #{opp.rank} {opp.title} <span className="grade">{TYPE_LABEL[opp.type]}</span>
       </h4>
       <p className="muted">
-        {opp.sponsor} · {opp.amount !== null ? `$${opp.amount.toLocaleString("en-US")}` : "amount not stated"} ·{" "}
-        {opp.deadline ? `due ${opp.deadline}` : "no fixed deadline stated"}
+        {opp.sponsor} · {opp.amount !== null ? `${opp.amountUpTo ? "up to " : ""}$${opp.amount.toLocaleString("en-US")}` : "amount not stated on the page"} ·{" "}
+        {opp.deadline ? `due ${opp.deadline}` : opp.deadlineNote ?? "no deadline stated on the page"}
       </p>
       <ul className="why">{opp.why.map((w) => <li key={w}>{w}</li>)}</ul>
       <Quote label="Eligibility, from the page" text={opp.quotes.eligibility} />

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { callMetaSearch } from "@/lib/meta";
+import { callMeta, callMetaSearch } from "@/lib/meta";
 import { discoverFunding } from "@/lib/opps/discover";
 import { rankOpportunities } from "@/lib/opps/rank";
 import { REQUIREMENT_FLAGS, type Profile, type RequirementFlag } from "@/lib/opps/types";
@@ -36,7 +36,7 @@ export async function POST(request: Request) {
       ? ((body as { crunchWeeks: unknown[] }).crunchWeeks.filter((n) => Number.isInteger(n)) as number[])
       : [];
 
-    const { found, dropped, queries } = await discoverFunding(profile, callMetaSearch);
+    const { found, dropped, queries } = await discoverFunding(profile, callMetaSearch, callMeta);
     return NextResponse.json({ opportunities: rankOpportunities(found, profile, crunchWeeks), dropped, searches: queries });
   } catch (err) {
     console.error("[api/opportunities] failed:", err instanceof Error ? err.message : err);
