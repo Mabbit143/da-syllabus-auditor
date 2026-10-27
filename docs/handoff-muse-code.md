@@ -1,6 +1,6 @@
 # Handoff for Muse Code: DA Syllabus Auditor
 
-Written 2026-10-27 for an AI coding assistant that will continue this project with the owner. Read this file first, then `CLAUDE.md`, then the files listed under "Where things are". **`CLAUDE.md`'s "current state", "stack", "commands" and "architecture" sections are out of date (they still say nothing is built); its "Confirmed non-negotiables" are current. Where they disagree, this file wins.** Everything here was checked against the repository on 2026-10-27 unless marked **unverified**.
+Written 2026-10-27 for an AI coding assistant that will continue this project with the owner. Read this file first, then `CLAUDE.md`, then the files listed under "Where things are". `CLAUDE.md` was brought up to date on 2026-10-27 and agrees with this file. Everything here was checked against the repository on 2026-10-27 unless marked **unverified**.
 
 ## 1. What this is, in one paragraph
 
