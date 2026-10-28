@@ -6,8 +6,10 @@ export function analysisProvider(env: Record<string, string | undefined> = proce
   return value;
 }
 
+export const FALLBACK_NOTE = "Some steps of this analysis ran on Baseten's Muse Spark Open model because Meta did not answer.";
+
 export function analysisDisclosure(provider: AnalysisProvider): string {
   return provider === "baseten"
     ? "Extracted syllabus text is sent to Baseten, which hosts Meta's Muse Spark Open model. Meta receives public web-research queries when needed."
-    : "Extracted syllabus text is sent to Meta for analysis and public web research when needed.";
+    : "Extracted syllabus text is sent to Meta for analysis and public web research when needed. If Meta does not answer, the same text goes to Baseten, which hosts Meta's Muse Spark Open model, and the report says so.";
 }

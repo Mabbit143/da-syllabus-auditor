@@ -78,6 +78,8 @@ export interface Assessment {
 export interface AuditReport {
   /** Set when the page text came from OCR of page images, so it may contain reading errors. */
   textSource?: "ocr";
+  /** Set when some model steps ran on the Baseten fallback because Meta did not answer. */
+  modelNote?: string;
   policyCheck?: PolicyCheck;
   assessments: Assessment[];
   fileName: string;

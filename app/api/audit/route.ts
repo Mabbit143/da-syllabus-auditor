@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { runAudit } from "@/lib/audit";
 import { callMeta, callMetaSearch } from "@/lib/meta";
+import { FALLBACK_NOTE } from "@/lib/providers";
 import type { AuditRequest } from "@/lib/types";
 
 export const maxDuration = 300;
@@ -43,7 +44,9 @@ export async function POST(request: Request) {
     const req = validate(body);
     if (typeof req === "string") return fail(400, "invalid_request", req);
 
-    const report = await runAudit(req, callMeta, callMetaSearch);
+    let fellBack = false;
+    const report = await runAudit(req, (instructions, input) => callMeta(instructions, input, () => { fellBack = true; }), callMetaSearch);
+    if (fellBack) report.modelNote = FALLBACK_NOTE;
     return NextResponse.json({ requestId: req.requestId, report });
   } catch (err) {
     console.error("[api/audit] failed:", err instanceof Error ? err.message : err);

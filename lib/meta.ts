@@ -44,19 +44,33 @@ function metaBody(instructions: string, input: unknown) {
   return { model: "muse-spark-1.3", instructions, input, store: false, reasoning: { effort: "low" }, temperature: 0, max_output_tokens: 6000 };
 }
 
-export async function callMeta(instructions: string, input: string): Promise<string> {
-  if (isBaseten()) {
-    const message = await basetenChat([{ role: "system", content: instructions }, { role: "user", content: input }]);
-    if (typeof message.content !== "string" || !message.content.trim()) throw new ProviderError("Baseten response had no text output.");
-    return message.content;
-  }
-  const output = metaItems(await providerJson("Meta", metaBody(instructions, input)));
-  const text = metaText(output);
-  if (!text.trim()) throw new ProviderError("Meta response had no text output.");
-  return text;
+async function basetenText(instructions: string, input: string): Promise<string> {
+  const message = await basetenChat([{ role: "system", content: instructions }, { role: "user", content: input }]);
+  if (typeof message.content !== "string" || !message.content.trim()) throw new ProviderError("Baseten response had no text output.");
+  return message.content;
 }
 
-/** Search always stays on Meta; there is no implicit cross-provider retry. */
+/**
+ * Meta is the analysis layer. If a Meta call fails and a Baseten key is set, the same call is retried once on
+ * Baseten (Meta's Muse Spark Open) and `onFallback` is told, so the caller can say so on the page.
+ */
+export async function callMeta(instructions: string, input: string, onFallback?: () => void): Promise<string> {
+  if (isBaseten()) return basetenText(instructions, input);
+  try {
+    const output = metaItems(await providerJson("Meta", metaBody(instructions, input)));
+    const text = metaText(output);
+    if (!text.trim()) throw new ProviderError("Meta response had no text output.");
+    return text;
+  } catch (err) {
+    if (!(err instanceof ProviderError) || !process.env.BASETEN_API_KEY) throw err;
+    console.error("[meta] Meta failed, retrying on Baseten:", err.message);
+    const text = await basetenText(instructions, input);
+    onFallback?.();
+    return text;
+  }
+}
+
+/** Search always stays on Meta: Baseten has no web search tool here. */
 export async function callMetaSearch(instructions: string, input: string): Promise<{ text: string; results: SearchResult[] }> {
   const output = metaItems(await providerJson("Meta", { ...metaBody(instructions, input), tools: [{ type: "web_search" }], include: ["web_search_call.results"] }));
   const text = metaText(output);

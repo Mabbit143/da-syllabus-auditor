@@ -47,3 +47,30 @@ test("provider transports route once and reject unsafe responses", async (t) => 
     Object.assign(process.env, saved);
   }
 });
+
+test("a failed Meta call is retried on Baseten only when a key is set, and says so", async () => {
+  // @ts-expect-error Native Node TS entry point.
+  const { callMeta } = await import("./meta.ts");
+  const original = globalThis.fetch;
+  const saved = { ...process.env };
+  process.env.MODEL_PROVIDER = "meta";
+  process.env.MODEL_API_KEY = "synthetic-meta";
+  process.env.BASETEN_API_KEY = "synthetic-baseten";
+  const urls: string[] = [];
+  globalThis.fetch = async (url) => {
+    urls.push(String(url));
+    return String(url).includes("baseten") ? Response.json({ choices: [{ message: { role: "assistant", content: "from baseten" } }] }) : new Response("no", { status: 500 });
+  };
+  try {
+    let told = 0;
+    assert.equal(await callMeta("x", "y", () => { told++; }), "from baseten");
+    assert.equal(told, 1);
+    assert.ok(urls[0].startsWith("https://api.meta.ai/") && urls[1].includes("baseten"));
+    delete process.env.BASETEN_API_KEY;
+    await assert.rejects(callMeta("x", "y"), /Meta returned HTTP 500/);
+  } finally {
+    globalThis.fetch = original;
+    for (const name of Object.keys(process.env)) if (!(name in saved)) delete process.env[name];
+    Object.assign(process.env, saved);
+  }
+});

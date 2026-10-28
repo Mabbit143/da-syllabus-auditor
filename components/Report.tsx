@@ -80,6 +80,7 @@ export default function Report({ report, pages, policy }: { report: AuditReport;
       <header>
         <h2>{report.fileName}</h2>
         <p className="muted">{report.pageCount} pages. This audit describes what the document says; it is not legal or academic advice.</p>
+        {report.modelNote && <p className="warn">{report.modelNote}</p>}
         {report.textSource === "ocr" && <p className="warn">This file was a scan. Its text was read from page images by OCR, so quotes may contain reading errors.</p>}
         {report.coverage.status === "partial" && (
           <p className="warn">Partial audit. Skipped: {report.coverage.skipped.join(", ")}.</p>

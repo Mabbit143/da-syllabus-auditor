@@ -9,6 +9,7 @@ export default function FixKit({ report }: { report: AuditReport }) {
   const [kits, setKits] = useState<Kit[] | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const [note, setNote] = useState("");
 
   if (findings.length === 0) return null;
 
@@ -24,6 +25,7 @@ export default function FixKit({ report }: { report: AuditReport }) {
       const data = await res.json();
       if (!res.ok) throw new Error(data?.error?.message ?? "The fixes failed.");
       setKits(data.kits);
+      setNote(typeof data.note === "string" ? data.note : "");
     } catch (err) {
       console.error("[fixes] failed:", err);
       setError(err instanceof Error ? err.message : "Something went wrong.");
@@ -45,6 +47,7 @@ export default function FixKit({ report }: { report: AuditReport }) {
         </>
       )}
       {error && <p role="alert" className="warn">{error}</p>}
+      {note && <p className="muted">{note}</p>}
       {kits && kits.length === 0 && <p>No fixes could be written for these findings. Try again.</p>}
       {kits?.map((k) => {
         const f = findings.find((x) => x.id === k.id);

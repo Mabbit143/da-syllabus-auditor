@@ -1,8 +1,9 @@
 import { NextResponse } from "next/server";
 import { cleanKits, FIX_INSTRUCTIONS, type Finding } from "@/lib/fixes";
 import { callMeta } from "@/lib/meta";
+import { FALLBACK_NOTE } from "@/lib/providers";
 
-export const maxDuration = 120;
+export const maxDuration = 300;
 
 function fail(status: number, code: string, message: string) {
   return NextResponse.json({ error: { code, message } }, { status });
@@ -42,13 +43,16 @@ export async function POST(request: Request) {
       .map((f) => `FINDING ${f.id} (${f.kind}): ${f.label}\nQuote (page ${f.page}): ${f.quote || "(none: nothing was found)"}${f.quote2 ? `\nConflicting quote (page ${f.page2}): ${f.quote2}` : ""}`)
       .join("\n\n");
 
+    let fellBack = false;
     for (let attempt = 1; ; attempt++) {
       try {
-        const raw = await callMeta(FIX_INSTRUCTIONS, input);
+        const raw = await callMeta(FIX_INSTRUCTIONS, input, () => { fellBack = true; });
         const a = raw.indexOf("{");
         const b = raw.lastIndexOf("}");
         if (a === -1 || b <= a) throw new Error("Model output contained no JSON object");
-        return NextResponse.json({ kits: cleanKits(JSON.parse(raw.slice(a, b + 1)), findings) });
+        const kits = cleanKits(JSON.parse(raw.slice(a, b + 1)), findings);
+        if (kits.length === 0) throw new Error("Model returned no usable fixes"); // an empty result is a failure, not a success
+        return NextResponse.json({ kits, ...(fellBack ? { note: FALLBACK_NOTE } : {}) });
       } catch (err) {
         console.error(`[api/fixes] attempt ${attempt} failed:`, err instanceof Error ? err.message : err);
         if (attempt >= 2) throw err;
