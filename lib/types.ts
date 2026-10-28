@@ -43,6 +43,8 @@ export interface DimensionResult {
   positive: number;
   negative: number;
   hits: SignalHit[];
+  /** Plain statements about text that is present but did not count, such as a statement naming no route. */
+  notes?: string[];
 }
 
 export interface FlagResult {

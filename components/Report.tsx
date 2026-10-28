@@ -88,8 +88,9 @@ export default function Report({ report, pages, policy }: { report: AuditReport;
           return (
             <div key={d.dimension} className={`card ${d.status}`}>
               <h4>
-                {d.title}: <span className="grade">{STATUS_TEXT[d.status]}</span>
+                {d.title}: <span className="grade">{d.status === "not_found" && d.notes?.length ? "No supported signal" : STATUS_TEXT[d.status]}</span>
               </h4>
+              {d.notes?.map((n) => <p key={n} className="muted">{n}</p>)}
               {d.hits.length > 0 && (
                 <p className="muted">
                   {d.positive} supportive and {d.negative} burdensome signal{d.hits.length === 1 ? "" : "s"} found.

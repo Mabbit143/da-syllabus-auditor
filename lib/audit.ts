@@ -90,10 +90,15 @@ export function parseCandidates(raw: string): Candidates {
 // Ranges, extra credit and dropped scores cannot be summed from quotes, so they stop the sum check.
 const UNSCORED = /extra credit|bonus|drop(ped)?\b[^.]{0,40}lowest|lowest[^.]{0,40}drop|\d\s*[-–—]\s*\d+\s*(%|percent)/i;
 
-// A1 needs a named route (office, letter, form or process), not just an invitation to tell the instructor.
+// Some positive signals need a named route, not just an invitation or a bare "case by case".
 const ACCOMMODATION_ROUTE = new RegExp(
-  ["accessible education", "\\bAEC\\b", "disabilit", "accessibility (center|services|office|resource)", "student access",
-   "accommodation (letter|request|form|process|plan)", "letter of accommodation", "documentation"].join("|"), "i");
+  ["accessible education", "\\bAEC\\b", "accessibility (center|services|office|resource)", "student access",
+   "accommodation (letter|request|form|process|plan)", "letter of accommodation"].join("|"), "i");
+const EXTENSION_ROUTE = /extension|extend|grace|resubmi|\b\d+\s*(hours?|days?)\b|\b(email|contact|notify|ask|request)\b/i;
+const NEEDS_ROUTE: Record<string, { route: RegExp; note: string }> = {
+  A1: { route: ACCOMMODATION_ROUTE, note: "An accommodation statement is present but names no office, letter or process." },
+  F1: { route: EXTENSION_ROUTE, note: "Late-work wording is present but names no extension or process." },
+};
 
 const RANK: Record<Severity, number> = { high: 2, medium: 1 };
 
@@ -175,13 +180,18 @@ export async function runAudit(
 
   const dimensions: DimensionResult[] = DIMENSIONS.map(({ id, title }) => {
     const used = new Set<string>();
+    const notes: string[] = [];
     const hits: DimensionResult["hits"] = [];
     for (const s of candidates.signals) {
       const def = SIGNALS[s?.code];
       if (!def || def.dimension !== id || s.code === "P6" || s.code === "P7" || s.code === "T7") continue;
       const m = verifyQuote(req.pages, Number(s.page), s.quote);
       if (!m) continue;
-      if (s.code === "A1" && !ACCOMMODATION_ROUTE.test(m.text)) continue; // an invitation to ask is not a stated process
+      const gate = NEEDS_ROUTE[s.code];
+      if (gate && !gate.route.test(m.text)) { // stated, but it names no route: say so instead of "not found"
+        if (!notes.includes(gate.note)) notes.push(gate.note);
+        continue;
+      }
       const passageId = intern(m.page, m.start, m.end, m.text);
       if (used.has(passageId)) continue; // a passage counts once per dimension
       used.add(passageId);
@@ -214,7 +224,7 @@ export async function runAudit(
     }
     const positive = hits.filter((h) => h.polarity === 1).length;
     const negative = hits.length - positive;
-    return { dimension: id, title, status: gradeDimension(positive, negative, fullCoverage), positive, negative, hits };
+    return { dimension: id, title, status: gradeDimension(positive, negative, fullCoverage), positive, negative, hits, ...(notes.length ? { notes } : {}) };
   });
 
   const flags: FlagResult[] = [];
