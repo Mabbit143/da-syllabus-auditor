@@ -1,6 +1,6 @@
 # AGENTS.md: context for coding agents (Muse Code, Claude Code, others)
 
-Read this first, then `docs/handoff-muse-code.md` (current priorities, acceptance criteria, known issues), then `docs/spec-da-syllabus-auditor-v1.md` (the build contract) and `docs/prd-da-syllabus-auditor.md` (the product). `CLAUDE.md` has longer notes and agrees with the handoff. If anything here conflicts with the spec, the spec wins; stop and ask.
+Read this first, then `docs/handoff-branch-verify.md` (immediate next steps: verify and land the current feature branch), then `docs/handoff-muse-code.md` (current priorities, acceptance criteria, known issues), then `docs/spec-da-syllabus-auditor-v1.md` (the build contract) and `docs/prd-da-syllabus-auditor.md` (the product). `CLAUDE.md` has longer notes and agrees with the handoff. If anything here conflicts with the spec, the spec wins; stop and ask.
 
 ## What this is
 
@@ -10,7 +10,7 @@ Since 2026-10-27 the main aim, by the owner's decision, is an accountability rec
 
 ## Status (2026-10-27)
 
-Built and live. Next.js app on Vercel (`da-syllabus-auditor-hkrr.vercel.app`, Deployment Protection off), repo `Mabbit143/da-syllabus-auditor`, branch `main`.
+Built and live. Next.js app on Vercel (`da-syllabus-auditor-hkrr.vercel.app`, Deployment Protection off), repo `Mabbit143/da-syllabus-auditor`. `main` is pushed at `61ccc85`. The current checkout is on `feat/required-syllabus-contents` (`621654f`, pushed; required-contents check and local-corpus lookup) — that branch is unverified: run the steps in `docs/handoff-branch-verify.md` before merging, and merge only with the owner's approval.
 
 Built: audit, fixes per finding, opportunity search, term view, Supabase sign-in and saved audits, policy check against the school's policies, owner-only gap list, UO policy corpus (`data/uo-policies/`: 400 web pages and 177 PDFs as text).
 
