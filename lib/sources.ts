@@ -25,7 +25,7 @@ export interface BioCheck {
   page: number;
   quote: string;
   evidence: AuthorEvidence;
-  relation: "insider_stated" | "outsider_stated";
+  relation: "insider_stated";
 }
 
 export function isPublicHttp(url: string): boolean {
@@ -98,7 +98,8 @@ export async function checkAuthors(
         if (a === -1 || b <= a) return null;
         const o = JSON.parse(text.slice(a, b + 1));
         console.log(`[sources] ${r.author}: found=${o.found} relation=${o.relation} url=${o.url}`);
-        if (!o.found || (o.relation !== "insider_stated" && o.relation !== "outsider_stated")) return null;
+        // Only an author's own stated insider background is reported; "outside" would be an inference about identity.
+        if (!o.found || o.relation !== "insider_stated") return null;
         if (!(await verifyBio(results, o.url, o.quote))) {
           console.log(`[sources] ${r.author}: bio quote failed verification (${results.length} results)`);
           return null;

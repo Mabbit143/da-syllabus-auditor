@@ -43,7 +43,6 @@ export const SIGNALS: Record<string, SignalDef> = {
   P4: { dimension: "perspectives", polarity: -1, label: "Course framed around a single canon, tradition or viewpoint" },
   P5: { dimension: "perspectives", polarity: -1, label: "Text assumes uniform student circumstances" },
   P6: { dimension: "perspectives", polarity: 1, label: "Author's own bio states they belong to or come from the community or tradition the reading covers" },
-  P7: { dimension: "perspectives", polarity: -1, label: "Author's own bio states a background outside the community or tradition the reading covers" },
   H1: { dimension: "hidden", polarity: 1, label: "Unwritten expectations made explicit" },
   H2: { dimension: "hidden", polarity: 1, label: "Jargon or terms explained" },
   H3: { dimension: "hidden", polarity: 1, label: "Weekly workload or how to succeed stated" },

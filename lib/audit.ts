@@ -219,7 +219,7 @@ export async function runAudit(
         const passageId = intern(m.page, m.start, m.end, m.text);
         if (used.has(passageId)) continue;
         used.add(passageId);
-        const code = b.relation === "insider_stated" ? "P6" : "P7";
+        const code = "P6";
         hits.push({ code, label: SIGNALS[code].label, polarity: SIGNALS[code].polarity, passageId, evidence: b.evidence });
       }
     }
