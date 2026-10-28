@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import FixKit from "@/components/FixKit";
+import RequiredContents from "@/components/RequiredContents";
+import type { CourseContext } from "@/lib/policy/contents-types";
 import { TOPIC_LABEL, type Relation } from "@/lib/policy/types";
 import type { AuditReport, Page, Passage } from "@/lib/types";
 
@@ -49,9 +51,13 @@ export interface PolicyProps {
   busy: boolean;
   error: string;
   onRun: () => void;
+  contentsBusy?: boolean;
+  contentsError?: string;
+  onRunContents?: (context: CourseContext) => void;
 }
 
 export default function Report({ report, pages, policy }: { report: AuditReport; pages: Page[]; policy?: PolicyProps }) {
+  const policySchool = policy?.school ?? report.policyCheck?.school;
   const byId = new Map(report.passages.map((p) => [p.id, p]));
   const risk = report.biggestRiskIndex === null ? null : report.flags[report.biggestRiskIndex];
 
@@ -128,13 +134,13 @@ export default function Report({ report, pages, policy }: { report: AuditReport;
       {policy && (
         <section>
           <h3>Against your school&rsquo;s own policies</h3>
-          {!policy.school && <p className="muted">Sign in and add your school to compare this syllabus with its published policies.</p>}
-          {policy.school && !report.policyCheck && !policy.busy && (
-            <button type="button" className="noprint" onClick={policy.onRun}>Check against {policy.school}</button>
+          {!policySchool && <p className="muted">Sign in and add your school to compare this syllabus with its published policies.</p>}
+          {policySchool && (!report.policyCheck || report.policyCheck.comparisonStatus === "not_run") && !policy.busy && (
+            <button type="button" className="noprint" onClick={policy.onRun}>Check against {policySchool}</button>
           )}
           {policy.busy && <p role="status">Looking up {policy.school}&rsquo;s published policies and comparing. The first time for a school can take a minute or two.</p>}
           {policy.error && <p role="alert" className="warn">{policy.error}</p>}
-          {report.policyCheck && report.policyCheck.items.length === 0 && (
+          {report.policyCheck && report.policyCheck.comparisonStatus !== "not_run" && report.policyCheck.items.length === 0 && (
             <p>No policies could be verified for {report.policyCheck.school}, so nothing was compared.</p>
           )}
           {report.policyCheck?.items.map((it) => (
@@ -146,9 +152,14 @@ export default function Report({ report, pages, policy }: { report: AuditReport;
                 <p className="muted">Not found in this syllabus.</p>
               )}
               <blockquote className="quote"><p>&ldquo;{it.schoolQuote}&rdquo;</p><span className="where">{report.policyCheck!.school}: <a href={it.schoolUrl} target="_blank" rel="noopener noreferrer">official page</a></span></blockquote>
+              {it.schoolProvenance && <p className="where">Reviewed document, PDF page {it.schoolProvenance.page}; image region {it.schoolProvenance.region.join(", ")}. Source extraction: {it.schoolProvenance.extractionMethod}. Reviewed {it.schoolProvenance.reviewedAt}.</p>}
             </div>
           ))}
         </section>
+      )}
+
+      {policy?.onRunContents && (policy.school ?? report.policyCheck?.school ?? "").trim().replace(/\s+/g, " ").toLowerCase() === "university of oregon" && (
+        <RequiredContents result={report.policyCheck?.requiredContents} busy={policy.contentsBusy ?? false} error={policy.contentsError ?? ""} onRun={policy.onRunContents} />
       )}
 
       <FixKit report={report} />

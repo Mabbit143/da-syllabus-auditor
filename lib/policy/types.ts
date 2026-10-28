@@ -29,6 +29,7 @@ export const TOPIC_WORDS: Record<PolicyTopic, RegExp> = {
 
 /** A school rule, with the exact words and the page they came from. */
 export interface SchoolPolicy {
+  provenance?: PolicyProvenance;
   topic: PolicyTopic;
   url: string;
   quote: string;
@@ -37,6 +38,7 @@ export interface SchoolPolicy {
 export type Relation = "matches" | "conflicts" | "adds_requirement" | "silent";
 
 export interface PolicyComparison {
+  schoolProvenance?: PolicyProvenance;
   topic: PolicyTopic;
   relation: Relation;
   syllabusPage?: number;
@@ -46,7 +48,20 @@ export interface PolicyComparison {
   instructor: string | null;
 }
 
+export interface PolicyProvenance {
+  method: "reviewed_ocr";
+  extractionMethod: "text" | "ocr";
+  page: number;
+  region: [number, number, number, number];
+  sourcePdfSha256: string;
+  artifactSha256: string;
+  imageSha256: string;
+  reviewedAt: string;
+}
+
 export interface PolicyCheck {
+  comparisonStatus?: "complete" | "not_run";
+  requiredContents?: import("./contents-types").RequiredContents;
   school: string;
   checkedAt: string;
   items: PolicyComparison[];

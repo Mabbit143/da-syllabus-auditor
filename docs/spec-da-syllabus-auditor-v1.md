@@ -27,11 +27,59 @@ In scope: single PDF upload; file name/page count; extraction; five dimension as
 
 Out of scope: LMS/Canvas or calendar integration, grade simulation, professor/advisor email drafting, institutional dashboards, paid services, identity/demographic/intent inference, and automated claims of discrimination. OCR is not required for v1: unreadable scans fail explicitly. Accounts and a free hosted database are allowed for the opportunity dashboard (see "Opportunity dashboard"). Syllabus audits stay browser-only unless the student saves a summary.
 
+## Provider/document expansion (owner approved 2026-10-27)
+
+Approved design and execution plan: `superpowers/specs/2026-10-27-three-service-documents-design.md`
+and `superpowers/plans/2026-10-27-three-service-documents.md`. Baseten's exact hackathon
+Muse Spark Open model may supply analysis, Meta remains web research, and Modal may
+process public UO reference PDFs with text extraction/OCR. Keep the existing Meta
+default until actual grant/billing and applicable privacy checks precede activation.
+No automatic provider fallback or paid plan is authorized.
+
+Modal is authenticated owner-CLI-only, with bounded CPU jobs and no student PDF
+uploads. OCR remains review_required until explicit source-image review and
+previewed admission. Selected reviewed passages carry optional PDF page/region and
+hash provenance; the application verifies artifact/quote consistency on each use.
+An empty admission manifest preserves all existing reference choices. Students'
+scanned PDFs retain the current unreadable-file error; this expansion concerns
+public reference documents only. Setup and observed verification status live in
+`provider-document-setup.md`. Original grading and syllabus quote gates still apply.
+
 ## Scope expansion (user decision 2026-10-26, supersedes the single-syllabus rule)
 
 The user moved these into scope on day 1 of the hackathon, in this order: (1) stronger grading with ambiguity and contradiction signals, (2) an agentic consistency auditor in which the model uses tools to read the syllabus and find internal contradictions, (3) a multi-syllabus term view with a crunch-week map and a ranking of which course is riskiest. Still out of scope: LMS/Canvas sync, calendar integration, grade simulation, institutional dashboards, paid services. Accounts and server storage are now in scope for the opportunity dashboard only. Syllabus text is stored server-side only in a signed-in student's own private account, by their choice; it is never shown to other users or used to train anything.
 
 ## Architecture choices proposed for approval
+
+### Required syllabus contents (owner approved 2026-10-27)
+
+The approved design is `superpowers/specs/2026-10-27-required-syllabus-contents-design.md`.
+For UO, a separate check reports eight required-content groups with component-level
+evidence: instructor information, office hours, objectives, grading, absences,
+materials/activities, classroom behavior, and the university policies/accommodations
+statement. Results are Found, Needs review, Not assessed, or Not applicable; these
+are content observations, not new grades or certification of compliance.
+
+Students supply term/year, course level and Core Education applicability, defaulting
+to unknown. Keep this context with the result. Historical applicability remains
+unverified without an applicable policy version; do not apply the Fall 2026 standard
+statement to Fall 2025. Sources are the 2026-10-27 UO corpus snapshots with original
+URLs, not a claim about unchanged live pages. Graduate checks use graduate wording.
+
+The model proposes component passages; code verifies exact source quotes and
+applicability. References to outside material need review. Failed verification or
+model omission never establishes absence. Process page text in bounded batches and
+disclose partial extraction or failed batches. The full mandated statement has its
+own exact normalized check because it exceeds ordinary quote length; ordinary quote
+gates remain unchanged. No overall pass/fail is added.
+
+Use the existing policy endpoint with optional context and a contents-only mode that
+avoids repeating the five-topic check. Errors preserve the existing audit and allow
+retry. Store optional results with saved reports; old reports remain readable. Every
+component includes policy evidence, available syllabus evidence and a factual
+question to ask. Print includes evidence from collapsed groups. These component
+results are excluded from automatic `policy_gaps` insertion. No migration or new
+package is needed.
 
 | Path | Pros | Cons |
 | --- | --- | --- |

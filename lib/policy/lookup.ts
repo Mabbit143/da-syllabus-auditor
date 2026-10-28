@@ -2,6 +2,7 @@ import type { SearchResult } from "../meta";
 import { fetchPage } from "../opps/discover";
 import { squash } from "../sources";
 import { POLICY_TOPICS, TOPIC_SEARCH, type PolicyTopic, type SchoolPolicy } from "./types";
+import { loadReviewedPolicies } from "./reviewed-ocr";
 
 type Ask = (instructions: string, input: string) => Promise<string>;
 type Search = (instructions: string, input: string) => Promise<{ text: string; results: SearchResult[] }>;
@@ -106,8 +107,11 @@ export async function lookupPolicies(school: string, topics: readonly PolicyTopi
 
 /** Re-checks policies saved earlier. A saved row is never trusted: its page is fetched again. */
 export async function recheckPolicies(school: string, saved: SchoolPolicy[]): Promise<SchoolPolicy[]> {
+  const reviewed = school.toLowerCase().replace(/\s+/g, " ").trim() === "university of oregon" ? await loadReviewedPolicies(POLICY_TOPICS) : [];
   const checked = await Promise.all(
-    saved.filter((p) => (POLICY_TOPICS as readonly string[]).includes(p.topic)).map((p) => verifyPolicy(school, p.topic, p.url, p.quote)),
+    saved.filter((p) => (POLICY_TOPICS as readonly string[]).includes(p.topic)).map((p) => p.provenance
+      ? Promise.resolve(reviewed.find((r) => r.topic === p.topic && r.url === p.url && r.quote === p.quote) ?? null)
+      : verifyPolicy(school, p.topic, p.url, p.quote)),
   );
   return checked.filter((p): p is SchoolPolicy => p !== null);
 }

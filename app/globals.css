@@ -60,12 +60,18 @@ table.term th { font-family: var(--font-label), sans-serif; text-transform: uppe
 .week.crunch { border: 2px solid var(--pink); background: rgba(255, 22, 140, 0.18); }
 @media (max-width: 520px) { .weeks { grid-template-columns: repeat(4, 1fr); } h1 { font-size: 1.9rem; } }
 @media print {
+  .required-contents details::details-content { content-visibility: visible; display: block; }
+  .required-contents .contents-evidence { display: block; }
   :root { --bg: #fff; --fg: var(--black); --muted: #444; --line: rgba(13, 11, 18, 0.35); --link: var(--cyan-dark); }
   .noprint { display: none !important; } main { padding: 0; } .card { break-inside: avoid; }
   .big, mark, .stamp { border: 2px solid var(--black); } .stamp { color: var(--black); }
   .card.strong .grade { color: var(--cyan-dark); } .card.weak .grade, .card.sev-high .grade { color: var(--pink-dark); }
   .card.mixed .grade, .card.sev-medium .grade { color: var(--violet); } .warn { color: var(--pink-dark); }
 }
+.required-contents select { font: inherit; color: var(--fg); background: var(--bg); padding: 6px; border: 2px solid var(--line); }
+.required-contents fieldset label { display: flex; flex-direction: column; gap: 4px; }
+.required-contents summary { cursor: pointer; font-family: var(--font-label), sans-serif; font-weight: 700; }
+.required-contents select:focus-visible, .required-contents summary:focus-visible { outline: 3px solid var(--cyan); outline-offset: 2px; }
 .nav { max-width: 780px; margin: 0 auto; padding: 14px 16px 0; display: flex; gap: 20px; font-family: var(--font-label), sans-serif; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; }
 .form { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: 12px 0; }
 .form label, fieldset label.check { display: flex; flex-direction: column; gap: 4px; font-family: var(--font-label), sans-serif; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.04em; }
