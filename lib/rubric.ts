@@ -85,6 +85,23 @@ export function overallRead(dimensions: DimensionResult[]): Overall {
   };
 }
 
+/**
+ * Stated grade weights should reach 100%. Null means the sum cannot be judged from what was verified:
+ * a component failed verification, one name has two different figures, or fewer than two components exist.
+ */
+export function weightSum(parts: { what: string; percent: number }[], unassessable: boolean): { sum: number; reaches100: boolean } | null {
+  if (unassessable) return null;
+  const byName = new Map<string, number>();
+  for (const p of parts) {
+    const key = p.what.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+    if (byName.has(key) && byName.get(key) !== p.percent) return null;
+    byName.set(key, p.percent);
+  }
+  if (byName.size < 2) return null;
+  const sum = Math.round([...byName.values()].reduce((a, b) => a + b, 0) * 100) / 100;
+  return { sum, reaches100: Math.abs(sum - 100) <= 1 }; // 1 point of slack covers 33.3 x 3
+}
+
 export const FLAG_BASES: Record<FlagKind, string[]> = {
   attendance: ["fail_or_drop", "penalty_percent", "counted_no_figure"],
   weight: ["single_assessment_percent"],

@@ -126,7 +126,7 @@ export default function Report({ report, pages, policy }: { report: AuditReport;
               <span className="grade">{f.severity}</span>
             </h4>
             <p>{f.explanation}</p>
-            <Quote passage={byId.get(f.passageId)!} pages={pages} />
+            {(f.passageIds ?? [f.passageId]).map((id) => <Quote key={id} passage={byId.get(id)!} pages={pages} />)}
           </div>
         ))}
       </section>

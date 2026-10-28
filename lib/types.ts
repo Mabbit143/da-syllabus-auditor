@@ -50,6 +50,8 @@ export interface FlagResult {
   severity: Severity;
   explanation: string;
   passageId: string;
+  /** Set when a finding rests on several passages, such as grade weights that do not add up. */
+  passageIds?: string[];
 }
 
 export interface Overall {
@@ -95,6 +97,7 @@ export interface Candidates {
   assessments: { what: string; week: number; percent: number | null; page: number; quote: string }[];
   readings: { author: string; title: string; topic?: string; page: number; quote: string }[];
   signals: { code: string; page: number; quote: string }[];
+  weights?: { what: string; percent: number | null; page: number; quote: string }[];
   flags: {
     kind: string;
     basis: string;
