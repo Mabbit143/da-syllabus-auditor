@@ -100,7 +100,7 @@ Decided by the owner on 2026-10-27:
 - [x] 1. Run `db/schema.sql` once (done earlier).
 - [x] 2. Run `db/002-policy-gaps.sql` once (owner confirmed 2026-10-27, section 14).
 - [x] 3. Add the owner to `app_owners` (owner confirmed 2026-10-27, section 14) in the SQL editor: `insert into public.app_owners (user_id) select id from auth.users where email = '<owner email>';` (the email is deliberately not in the repo).
-- [ ] 4. In the app: the school field is stored in the auth user's metadata at sign-up; an account created before this change shows a "Which school are you at?" box on the home page.
+- [x] 4. In the app (owner signed up on the live site and was asked for a school, 2026-10-28): the school field is stored in the auth user's metadata at sign-up; an account created before this change shows a "Which school are you at?" box on the home page.
 
 ## 9. University of Oregon focus (decided 2026-10-27)
 
