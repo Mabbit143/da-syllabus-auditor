@@ -6,13 +6,10 @@ import { supabase } from "@/lib/supabase";
 
 export function useUserId(): string | null | undefined {
   // undefined = still checking, null = signed out
-  const [id, setId] = useState<string | null | undefined>(undefined);
+  const [id, setId] = useState<string | null | undefined>(() => (supabase() ? undefined : null));
   useEffect(() => {
     const db = supabase();
-    if (!db) {
-      setId(null);
-      return;
-    }
+    if (!db) return;
     db.auth.getSession().then(({ data }) => setId(data.session?.user.id ?? null));
     const { data } = db.auth.onAuthStateChange((_e, session) => setId(session?.user.id ?? null));
     return () => data.subscription.unsubscribe();
@@ -23,22 +20,20 @@ export function useUserId(): string | null | undefined {
 /** The school lives in the account's metadata, so it is set once at sign-up and follows the account. */
 export function useSchool(): [string | null | undefined, (school: string) => Promise<void>] {
   const id = useUserId();
-  const [school, setSchool] = useState<string | null | undefined>(undefined);
+  const [fetched, setFetched] = useState<string | null | undefined>(undefined);
+  const school = id === null ? null : id ? fetched : undefined;
   useEffect(() => {
-    if (!id) {
-      setSchool(id === null ? null : undefined);
-      return;
-    }
+    if (!id) return;
     supabase()?.auth.getUser().then(({ data }) => {
       const s = data.user?.user_metadata?.school;
-      setSchool(typeof s === "string" && s.trim() ? s : null);
+      setFetched(typeof s === "string" && s.trim() ? s : null);
     });
   }, [id]);
   async function save(next: string) {
     try {
       const { error } = await supabase()!.auth.updateUser({ data: { school: next.trim().slice(0, 100) } });
       if (error) throw error;
-      setSchool(next.trim().slice(0, 100));
+      setFetched(next.trim().slice(0, 100));
     } catch (err) {
       console.error("[auth] saving school failed:", err);
     }

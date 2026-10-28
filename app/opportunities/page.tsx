@@ -56,7 +56,9 @@ export default function Opportunities() {
   const [savedOpps, setSavedOpps] = useState<Record<string, RankedOpportunity>>({});
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  // Device storage is read after mount so server and first client render match.
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setProfile(read(PROFILE_KEY, EMPTY));
     setStatuses(read(STATUS_KEY, {}));
   }, []);

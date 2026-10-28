@@ -8,8 +8,8 @@ function mockReport(fileName: string, week: number) {
   const passage = (id: string, text: string) => ({ id, page: 1, start: 0, end: text.length, text });
   const dim = (dimension: string, title: string, status: string, hits: object[] = []) => ({
     dimension, title, status,
-    positive: hits.filter((h: any) => h.polarity === 1).length,
-    negative: hits.filter((h: any) => h.polarity === -1).length,
+    positive: hits.filter((h: { polarity?: number }) => h.polarity === 1).length,
+    negative: hits.filter((h: { polarity?: number }) => h.polarity === -1).length,
     hits,
   });
   return {
