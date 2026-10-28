@@ -6,6 +6,7 @@ import TermView, { type Course } from "@/components/TermView";
 import { useSchool, useUserId } from "@/components/Nav";
 import { deleteAudit, loadAudits, loadSchoolPolicies, recordGaps, saveAudit, saveSchoolPolicies } from "@/lib/cloud";
 import { extractPages } from "@/lib/extract";
+import { ocrPages } from "@/lib/ocr";
 import type { PolicyCheck } from "@/lib/policy/types";
 import type { CourseContext } from "@/lib/policy/contents-types";
 import type { AuditReport, Page } from "@/lib/types";
@@ -141,10 +142,23 @@ export default function AuditorHome({ disclosure }: { disclosure: string }) {
     }
     try {
       setStatus({ step: "working", message: `Reading ${file.name}…` });
-      const { pageCount, pages } = await extractPages(file);
+      const extracted = await extractPages(file);
+      const pageCount = extracted.pageCount;
+      let pages = extracted.pages;
+      let scanned = false;
       if (pages.reduce((n, p) => n + p.text.length, 0) < 200) {
-        setStatus({ step: "error", message: "Could not read text from this file." });
-        return;
+        // No selectable text: try OCR. If it is unavailable or finds nothing, fail plainly.
+        try {
+          setStatus({ step: "working", message: "This PDF has no selectable text. Reading its page images with OCR…" });
+          pages = await ocrPages(file, (done, total) => setStatus({ step: "working", message: `Reading scanned pages with OCR: ${done} of ${total}…` }));
+          scanned = true;
+        } catch (err) {
+          console.error("[ocr] failed:", err instanceof Error ? err.message : err);
+        }
+        if (!scanned || pages.reduce((n, p) => n + p.text.length, 0) < 200) {
+          setStatus({ step: "error", message: "Could not read text from this file." });
+          return;
+        }
       }
       setStatus({ step: "working", message: `Auditing ${pageCount} pages. This can take a minute or two…` });
       const res = await fetch("/api/audit", {
@@ -154,7 +168,7 @@ export default function AuditorHome({ disclosure }: { disclosure: string }) {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data?.error?.message ?? "The audit failed.");
-      const report: AuditReport = data.report;
+      const report: AuditReport = scanned ? { ...data.report, textSource: "ocr" } : data.report;
       const id = crypto.randomUUID();
       update([...courses, { id, report, pages }]);
       void saveAudit({ id, report, pages });
@@ -173,7 +187,7 @@ export default function AuditorHome({ disclosure }: { disclosure: string }) {
     <main>
       <h1 className="noprint">DA Syllabus Auditor</h1>
       <section className="noprint">
-        <p>Upload a syllabus PDF to see how it treats students, with quotes you can check yourself. The PDF stays in your browser; only its text is sent for analysis. {disclosure} Audits are saved in this browser, and in your account if you are signed in. Add several syllabi to compare your term. If you are signed in, quotes where a syllabus differs from your school&rsquo;s published policy, and the instructor&rsquo;s name, are also recorded in our system, not linked to your account.</p>
+        <p>Upload a syllabus PDF to see how it treats students, with quotes you can check yourself. The PDF stays in your browser; only its text is sent for analysis. If a PDF is a scan with no selectable text, its page images are sent to Modal to be read by OCR; they are not stored. {disclosure} Audits are saved in this browser, and in your account if you are signed in. Add several syllabi to compare your term. If you are signed in, quotes where a syllabus differs from your school&rsquo;s published policy, and the instructor&rsquo;s name, are also recorded in our system, not linked to your account.</p>
         {userId && school === null && (
           <form onSubmit={(e) => { e.preventDefault(); if (schoolDraft.trim().length >= 3) void saveSchool(schoolDraft); }}>
             <label>Which school are you at? <input type="text" value={schoolDraft} onChange={(e) => setSchoolDraft(e.target.value)} placeholder="University of Oregon" required minLength={3} /></label>{" "}

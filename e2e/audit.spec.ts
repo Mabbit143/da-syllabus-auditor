@@ -105,6 +105,7 @@ test("a non-PDF is rejected with a plain message", async ({ page }) => {
 
 test("a PDF with no readable text fails plainly and never calls the API", async ({ page }) => {
   let called = false;
+  await page.route("**/api/ocr", (route) => route.fulfill({ status: 503, json: { error: { message: "unavailable" } } }));
   await page.route("**/api/audit", (route) => {
     called = true;
     return route.abort();

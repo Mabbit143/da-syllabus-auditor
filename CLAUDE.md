@@ -25,7 +25,7 @@ Run from the repository root.
 | E2E tests | `npm run test:e2e` (`:headed` for a visible browser) |
 | Typecheck | `npx tsc --noEmit` |
 
-Environment variable names (values live in `.env.local` and the Vercel dashboard, never in Git): `MODEL_API_KEY`, `MODEL_PROVIDER` (`baseten` switches to Baseten Muse Spark Open; otherwise Meta), `BASETEN_API_KEY`, `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
+Environment variable names (values live in `.env.local` and the Vercel dashboard, never in Git): `MODEL_API_KEY`, `MODEL_PROVIDER` (`baseten` switches to Baseten Muse Spark Open; otherwise Meta), `BASETEN_API_KEY`, `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `MODAL_OCR_URL`, `OCR_TOKEN` (the OCR token also lives in the Modal secret `da-ocr`).
 
 ## Stack
 
@@ -40,6 +40,8 @@ app/page.tsx              Upload, audit, policy check, saved audits
 app/opportunities/        Funding, research, grad programs
 app/gaps/page.tsx         Owner-only master list of policy discrepancies
 app/api/audit|fixes|opportunities|policy-check/route.ts
+app/api/ocr/route.ts     Scanned-PDF page images to the Modal OCR service (modal/ocr.py, tesseract)
+lib/ocr.ts                Browser: renders scanned pages, sends them in batches
 components/               Nav (sign-in, school, consent), Report, FixKit, OppCard, TermView
 lib/audit.ts, rubric.ts   Audit pipeline and code-side grading
 lib/verify.ts, sources.ts Quote verification, author bio check

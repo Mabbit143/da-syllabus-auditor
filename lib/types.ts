@@ -76,6 +76,8 @@ export interface Assessment {
 }
 
 export interface AuditReport {
+  /** Set when the page text came from OCR of page images, so it may contain reading errors. */
+  textSource?: "ocr";
   policyCheck?: PolicyCheck;
   assessments: Assessment[];
   fileName: string;
