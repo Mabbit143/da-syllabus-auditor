@@ -110,6 +110,7 @@ export default function Nav() {
     <nav className="nav noprint" aria-label="Main">
       <Link href="/">Syllabus audit</Link>
       <Link href="/opportunities">Find funding</Link>
+      <Link href="/policies">UO against itself</Link>
       <AuthBox />
     </nav>
   );

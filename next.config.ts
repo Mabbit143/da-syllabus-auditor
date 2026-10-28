@@ -6,6 +6,7 @@ const nextConfig: NextConfig = {
   partialPrefetching: true,
   outputFileTracingIncludes: {
     "/api/policy-check": ["./data/uo-policies/*.md", "./data/uo-policies/reviewed-ocr/**/*"],
+    "/api/policy-pairs": ["./data/uo-policies/*.md"],
   },
 };
 
