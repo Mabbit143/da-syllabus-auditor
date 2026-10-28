@@ -62,7 +62,7 @@ function AuthBox() {
       if (mode === "up" && !form.agreed) throw new Error("Please confirm the notice below to create an account.");
       const res = mode === "in"
         ? await db.auth.signInWithPassword({ email: form.email, password: form.password })
-        : await db.auth.signUp({ email: form.email, password: form.password, options: { data: { school: form.school.trim().slice(0, 100) } } });
+        : await db.auth.signUp({ email: form.email, password: form.password, options: { emailRedirectTo: window.location.origin, data: { school: form.school.trim().slice(0, 100) } } });
       if (res.error) throw res.error;
       if (mode === "up" && !res.data.session) setMsg("Check your email to confirm your account, then sign in.");
       else setOpen(false);
