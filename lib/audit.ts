@@ -21,6 +21,7 @@ ${Object.entries(SIGNALS).map(([c, s]) => `${c}: ${s.label}`).join("\n")}
 - Flags: kind "attendance" with basis fail_or_drop | penalty_percent | counted_no_figure; kind "weight" (one assessment's share of the grade) with basis single_assessment_percent; kind "late" with basis zero_or_none | deduction | grace. Set "percent" to the number stated in the quote, or null. Never invent a number.
 - "assessments": each graded assessment or deadline that the text places in a numbered week (week as an integer); "percent" is its share of the grade if stated, else null. Skip items with no stated week.
 - "weights": every graded component whose share of the final grade is stated as a percent, whether or not the text places it in a week. Never list a total line. Use null for "percent" if the share is a range or given in points.
+- Use A1 only when the quote names how or where to get an accommodation (an office, letter, form or process). An invitation to tell the instructor is not A1.
 - Do not use codes P6, P7 or T7; they are decided elsewhere.
 - Report at most 3 signals per code and at most 8 flags.`;
 
@@ -88,6 +89,11 @@ export function parseCandidates(raw: string): Candidates {
 
 // Ranges, extra credit and dropped scores cannot be summed from quotes, so they stop the sum check.
 const UNSCORED = /extra credit|bonus|drop(ped)?\b[^.]{0,40}lowest|lowest[^.]{0,40}drop|\d\s*[-–—]\s*\d+\s*(%|percent)/i;
+
+// A1 needs a named route (office, letter, form or process), not just an invitation to tell the instructor.
+const ACCOMMODATION_ROUTE = new RegExp(
+  ["accessible education", "\\bAEC\\b", "disabilit", "accessibility (center|services|office|resource)", "student access",
+   "accommodation (letter|request|form|process|plan)", "letter of accommodation", "documentation"].join("|"), "i");
 
 const RANK: Record<Severity, number> = { high: 2, medium: 1 };
 
@@ -175,6 +181,7 @@ export async function runAudit(
       if (!def || def.dimension !== id || s.code === "P6" || s.code === "P7" || s.code === "T7") continue;
       const m = verifyQuote(req.pages, Number(s.page), s.quote);
       if (!m) continue;
+      if (s.code === "A1" && !ACCOMMODATION_ROUTE.test(m.text)) continue; // an invitation to ask is not a stated process
       const passageId = intern(m.page, m.start, m.end, m.text);
       if (used.has(passageId)) continue; // a passage counts once per dimension
       used.add(passageId);
