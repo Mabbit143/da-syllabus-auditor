@@ -60,7 +60,7 @@ export async function comparePolicies(pages: Page[], policies: SchoolPolicy[], a
     const policy = byTopic.get(c.topic as SchoolPolicy["topic"]);
     if (!policy || !RELATIONS.includes(c.relation as Relation)) continue;
     if (out.some((x) => x.topic === policy.topic)) continue;
-    const base = { topic: policy.topic, schoolQuote: policy.quote, schoolUrl: policy.url, instructor };
+    const base = { topic: policy.topic, schoolQuote: policy.quote, schoolUrl: policy.url, instructor, ...(policy.provenance ? { schoolProvenance: policy.provenance } : {}) };
     if (c.relation === "silent") {
       if (TOPIC_WORDS[policy.topic].test(allText)) continue; // the syllabus does mention it; do not claim silence
       out.push({ ...base, relation: "silent" });

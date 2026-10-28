@@ -6,3 +6,7 @@ node_modules/
 *.tsbuildinfo
 test-results/
 playwright-report/
+.document-review/
+.document-venv/
+__pycache__/
+*.pyc
