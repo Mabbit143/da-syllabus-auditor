@@ -94,6 +94,7 @@ const UNSCORED = /extra credit|bonus|drop(ped)?\b[^.]{0,40}lowest|lowest[^.]{0,4
 const ACCOMMODATION_ROUTE = new RegExp(
   ["accessible education", "\\bAEC\\b", "accessibility (center|services|office|resource)", "student access",
    "accommodation (letter|request|form|process|plan)", "letter of accommodation"].join("|"), "i");
+const ACCOMMODATION_MENTION = new RegExp(["accessible education", "\\bAEC\\b", "disabilit", "accommodat"].join("|"), "i");
 const EXTENSION_ROUTE = /extension|extend|grace|resubmi|\b\d+\s*(hours?|days?)\b|\b(email|contact|notify|ask|request)\b/i;
 const NEEDS_ROUTE: Record<string, { route: RegExp; note: string }> = {
   A1: { route: ACCOMMODATION_ROUTE, note: "An accommodation statement is present but names no office, letter or process." },
@@ -224,7 +225,13 @@ export async function runAudit(
     }
     const positive = hits.filter((h) => h.polarity === 1).length;
     const negative = hits.length - positive;
-    return { dimension: id, title, status: gradeDimension(positive, negative, fullCoverage), positive, negative, hits, ...(notes.length ? { notes } : {}) };
+    let status = gradeDimension(positive, negative, fullCoverage);
+    // Never say "not found" about text that is plainly there: the model simply proposed nothing verifiable.
+    if (id === "accessibility" && status === "not_found" && req.pages.some((p) => ACCOMMODATION_MENTION.test(p.text))) {
+      status = "not_assessed";
+      notes.push("The syllabus mentions accommodations or disability services, but no signal could be verified. Read the policy comparison below.");
+    }
+    return { dimension: id, title, status, positive, negative, hits, ...(notes.length ? { notes } : {}) };
   });
 
   const flags: FlagResult[] = [];

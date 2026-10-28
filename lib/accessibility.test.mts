@@ -45,3 +45,15 @@ test("late work needs a named extension or process to count", async () => {
   const named = "Late work is accepted with a 2 day extension if you email me before the deadline.";
   assert.equal(punitive(await report(named, "F1")).hits.length, 1);
 });
+
+test("an accommodation statement the model missed is not reported as absent", async () => {
+  // @ts-expect-error Native Node TS entry point.
+  const { runAudit } = await import("./audit.ts");
+  const model = async () => JSON.stringify({ assessments: [], flags: [], weights: [], signals: [] });
+  const text = "Students with disabilities should contact the Accessible Education Center.";
+  const r = await runAudit({ requestId: "t", fileName: "t.pdf", pageCount: 1, pages: [{ pageNumber: 1, text }] }, model);
+  const dim = r.dimensions.find((d: { dimension: string }) => d.dimension === "accessibility");
+  assert.equal(dim?.status, "not_assessed");
+  const none = await runAudit({ requestId: "t", fileName: "t.pdf", pageCount: 1, pages: [{ pageNumber: 1, text: "Grading is by exams." }] }, model);
+  assert.equal(none.dimensions.find((d: { dimension: string }) => d.dimension === "accessibility")?.status, "not_found");
+});
