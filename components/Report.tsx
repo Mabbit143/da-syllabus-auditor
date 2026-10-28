@@ -15,12 +15,26 @@ const STATUS_TEXT = {
   not_assessed: "Not assessed",
 } as const;
 
+/** The rest of the sentence around a verified quote, so a cut-off fragment still reads. Display only. */
+function sentenceAround(text: string, start: number, end: number): [string, string] {
+  const before = text.slice(Math.max(0, start - 200), start);
+  const cut = Math.max(before.lastIndexOf(". "), before.lastIndexOf("? "), before.lastIndexOf("! "), before.lastIndexOf("\n"));
+  const after = text.slice(end, end + 200);
+  const stop = after.search(/[.!?](\s|$)/);
+  return [cut === -1 ? "" : before.slice(cut + 1).trimStart(), stop === -1 ? "" : after.slice(0, stop + 1)];
+}
+
 function Quote({ passage, pages }: { passage: Passage; pages: Page[] }) {
   const [open, setOpen] = useState(false);
   const text = pages.find((p) => p.pageNumber === passage.page)?.text ?? "";
+  const [lead, trail] = sentenceAround(text, passage.start, passage.end);
   return (
     <blockquote className="quote">
-      <p>&ldquo;{passage.text}&rdquo;</p>
+      <p>
+        &ldquo;{lead && <span className="muted">{lead} </span>}
+        {passage.text}
+        {trail && <span className="muted">{trail}</span>}&rdquo;
+      </p>
       <span className="where">
         <span className="stamp">Verified</span>
         Page {passage.page}{" "}
