@@ -35,7 +35,7 @@ export interface SchoolPolicy {
   quote: string;
 }
 
-export type Relation = "matches" | "conflicts" | "adds_requirement" | "silent";
+export type Relation = "matches" | "conflicts" | "adds_requirement" | "silent" | "disputed";
 
 export interface PolicyComparison {
   schoolProvenance?: PolicyProvenance;

@@ -146,7 +146,7 @@ async function fingerprint(pages: Page[]): Promise<string> {
 export async function recordGaps(school: string, pages: Page[], items: PolicyComparison[]): Promise<void> {
   try {
     if (!(await uid())) return;
-    const gaps = items.filter((i) => i.relation !== "matches");
+    const gaps = items.filter((i) => i.relation !== "matches" && i.relation !== "disputed"); // only agreed differences reach the master list
     if (gaps.length === 0) return;
     const hash = await fingerprint(pages);
     const rows = gaps.map((g) => ({

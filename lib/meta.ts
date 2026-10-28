@@ -50,6 +50,9 @@ async function basetenText(instructions: string, input: string): Promise<string>
   return message.content;
 }
 
+/** Runs one call on Baseten (Meta's Muse Spark Open) as a second, independent reader. */
+export const callBaseten = basetenText;
+
 /**
  * Meta is the analysis layer. If a Meta call fails and a Baseten key is set, the same call is retried once on
  * Baseten (Meta's Muse Spark Open) and `onFallback` is told, so the caller can say so on the page.

@@ -58,6 +58,7 @@ const RELATION_TEXT: Record<Relation, string> = {
   conflicts: "Conflicts with the school policy",
   adds_requirement: "Adds a step the school policy does not require",
   silent: "Not stated in this syllabus",
+  disputed: "Two checks read this differently, so no verdict is shown",
 };
 
 export interface PolicyProps {
@@ -161,7 +162,7 @@ export default function Report({ report, pages, policy }: { report: AuditReport;
             <p>No policies could be verified for {report.policyCheck.school}, so nothing was compared.</p>
           )}
           {report.policyCheck?.items.map((it) => (
-            <div key={it.topic} className={`card ${it.relation === "matches" ? "strong" : it.relation === "silent" ? "mixed" : "sev-medium"}`}>
+            <div key={it.topic} className={`card ${it.relation === "matches" ? "strong" : (it.relation === "silent" || it.relation === "disputed") ? "mixed" : "sev-medium"}`}>
               <h4>{TOPIC_LABEL[it.topic]}: <span className="grade">{RELATION_TEXT[it.relation]}</span></h4>
               {it.syllabusQuote ? (
                 <blockquote className="quote"><p>&ldquo;{it.syllabusQuote}&rdquo;</p><span className="where">This syllabus, page {it.syllabusPage}</span></blockquote>
