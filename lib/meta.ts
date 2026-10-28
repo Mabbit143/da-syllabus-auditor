@@ -68,7 +68,7 @@ export async function callMetaSearch(instructions: string, input: string): Promi
 
 async function basetenChat(messages: ChatMessage[], tools?: AgentTool[]): Promise<ChatMessage> {
   const data = await providerJson("Baseten", {
-    model: "meta-models/muse-spark-open-1026", messages, max_tokens: 30000, temperature: 0,
+    model: "meta-models/muse-spark-open", messages, max_tokens: 30000, temperature: 0,
     ...(tools ? { tools: tools.map((t) => ({ type: "function", function: t })) } : {}),
   });
   const choices = data.choices;

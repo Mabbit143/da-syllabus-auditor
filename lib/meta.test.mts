@@ -20,7 +20,7 @@ test("provider transports route once and reject unsafe responses", async (t) => 
       assert.equal(await callMeta("instructions", "synthetic input"), "analysis");
       assert.equal((await callMetaSearch("instructions", "public query")).text, "research");
       assert.equal(requests.length, 2);
-      assert.equal(requests[0].body.model, "meta-models/muse-spark-open-1026");
+      assert.equal(requests[0].body.model, "meta-models/muse-spark-open");
       assert.ok(requests[1].url.startsWith("https://api.meta.ai/"));
       assert.equal(requests[1].body.store, false);
     });
