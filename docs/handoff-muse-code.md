@@ -158,7 +158,7 @@ Findings so far from reading UO's own pages (all from public pages; quotes verif
 ## 14. Unverified items to confirm early
 
 - [x] The 300-second function limit on Vercel's free plan, and a full audit plus policy check running on the live site. Verified 2026-10-27 against the live API: 9-page audit HTTP 200 in 14 s (full coverage, overall "mixed" on 5 of 5, 24 verified passages) and UO policy check HTTP 200 in 23 s (5 of 5 topics on `uoregon.edu`). Both are synthetic test syllabi and finish far under 300 s, so the cap itself is not stressed; still confirm timing with the real 9-page demo PDF in the browser before the demo.
-- [ ] Whether `db/002-policy-gaps.sql` has been run, and whether the owner is in `app_owners`.
-- [ ] Whether a Meta billing spend limit is set.
-- [ ] That the GitHub Actions E2E workflow passes.
+- [x] `db/002-policy-gaps.sql` run and owner added to `app_owners` (owner confirmed 2026-10-27).
+- [x] Meta billing spend limit set (owner confirmed 2026-10-27).
+- [x] GitHub Actions E2E workflow passes (green on `main`, run 40617882009, 2026-10-28).
 - [ ] UO policy wording used in the demo: re-fetch and re-quote it on the day, since pages change.
