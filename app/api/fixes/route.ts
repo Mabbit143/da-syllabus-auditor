@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { cleanKits, FIX_INSTRUCTIONS, type Finding } from "@/lib/fixes";
+import { cleanKits, FIX_INSTRUCTIONS, type Finding, type FixKit } from "@/lib/fixes";
 import { callMeta } from "@/lib/meta";
 import { FALLBACK_NOTE } from "@/lib/providers";
 
@@ -28,6 +28,26 @@ function readFindings(body: unknown): Finding[] | null {
   return out;
 }
 
+async function fixBatch(findings: Finding[], onFallback: () => void): Promise<FixKit[]> {
+  const input = findings
+    .map((f) => `FINDING ${f.id} (${f.kind}): ${f.label}\nQuote (page ${f.page}): ${f.quote || "(none: nothing was found)"}${f.quote2 ? `\nConflicting quote (page ${f.page2}): ${f.quote2}` : ""}`)
+    .join("\n\n");
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    try {
+      const raw = await callMeta(FIX_INSTRUCTIONS, input, onFallback);
+      const a = raw.indexOf("{");
+      const b = raw.lastIndexOf("}");
+      if (a === -1 || b <= a) throw new Error("Model output contained no JSON object");
+      const kits = cleanKits(JSON.parse(raw.slice(a, b + 1)), findings);
+      if (kits.length === 0) throw new Error("Model returned no usable fixes"); // an empty result is a failure, not a success
+      return kits;
+    } catch (err) {
+      console.error(`[api/fixes] batch attempt ${attempt} failed:`, err instanceof Error ? err.message : err);
+    }
+  }
+  return []; // this batch is skipped; the others still count
+}
+
 export async function POST(request: Request) {
   try {
     let body: unknown;
@@ -39,25 +59,14 @@ export async function POST(request: Request) {
     const findings = readFindings(body);
     if (!findings) return fail(400, "invalid_request", "Between 1 and 10 findings are required.");
 
-    const input = findings
-      .map((f) => `FINDING ${f.id} (${f.kind}): ${f.label}\nQuote (page ${f.page}): ${f.quote || "(none: nothing was found)"}${f.quote2 ? `\nConflicting quote (page ${f.page2}): ${f.quote2}` : ""}`)
-      .join("\n\n");
-
     let fellBack = false;
-    for (let attempt = 1; ; attempt++) {
-      try {
-        const raw = await callMeta(FIX_INSTRUCTIONS, input, () => { fellBack = true; });
-        const a = raw.indexOf("{");
-        const b = raw.lastIndexOf("}");
-        if (a === -1 || b <= a) throw new Error("Model output contained no JSON object");
-        const kits = cleanKits(JSON.parse(raw.slice(a, b + 1)), findings);
-        if (kits.length === 0) throw new Error("Model returned no usable fixes"); // an empty result is a failure, not a success
-        return NextResponse.json({ kits, ...(fellBack ? { note: FALLBACK_NOTE } : {}) });
-      } catch (err) {
-        console.error(`[api/fixes] attempt ${attempt} failed:`, err instanceof Error ? err.message : err);
-        if (attempt >= 2) throw err;
-      }
-    }
+    // Small batches keep each answer short, so a failure costs one batch, not everything.
+    const batches: Finding[][] = [];
+    for (let i = 0; i < findings.length; i += 4) batches.push(findings.slice(i, i + 4));
+    const results = await Promise.all(batches.map((batch) => fixBatch(batch, () => { fellBack = true; })));
+    const kits = results.flat();
+    if (kits.length === 0) throw new Error("No batch produced usable fixes");
+    return NextResponse.json({ kits, ...(fellBack ? { note: FALLBACK_NOTE } : {}) });
   } catch (err) {
     console.error("[api/fixes] failed:", err instanceof Error ? err.message : err);
     return fail(500, "fixes_failed", "The fixes could not be generated. Please try again.");

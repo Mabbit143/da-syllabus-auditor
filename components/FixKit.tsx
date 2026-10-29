@@ -56,6 +56,7 @@ export default function FixKit({ report }: { report: AuditReport }) {
           <div key={k.id} className="card mixed">
             <h4>{f.label}</h4>
             {f.quote && <blockquote className="quote"><p>&ldquo;{f.quote}&rdquo;</p><span className="where">Page {f.page}</span></blockquote>}
+            {f.quote2 && <blockquote className="quote"><p>&ldquo;{f.quote2}&rdquo;</p><span className="where">Page {f.page2}</span></blockquote>}
             {k.questions.length > 0 && (
               <>
                 <p className="signal">Questions to ask</p>

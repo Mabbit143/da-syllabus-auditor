@@ -105,7 +105,7 @@ export default function Report({ report, pages, policy }: { report: AuditReport;
           return (
             <div key={d.dimension} className={`card ${d.status}`}>
               <h4>
-                {d.title}: <span className="grade">{d.status === "not_found" && d.notes?.length ? "No supported signal" : STATUS_TEXT[d.status]}</span>
+                {d.title}: <span className="grade">{d.status === "not_found" && d.notes?.length ? "No supported signal" : d.status === "mixed" && (d.positive === 0 || d.negative === 0) ? "Limited evidence" : STATUS_TEXT[d.status]}</span>
               </h4>
               {d.notes?.map((n) => <p key={n} className="muted">{n}</p>)}
               {d.hits.length > 0 && (
@@ -126,7 +126,7 @@ export default function Report({ report, pages, policy }: { report: AuditReport;
                   )}
                 </div>
               ))}
-              {d.status === "mixed" && d.hits.length > 0 && (
+              {d.status === "mixed" && d.positive > 0 && d.negative > 0 && (
                 <p className="muted">Mixed signals are shown as found; the audit does not decide which one governs.</p>
               )}
             </div>
