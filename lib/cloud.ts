@@ -2,6 +2,7 @@
 
 import type { RankedOpportunity, Profile } from "./opps/types";
 import type { PolicyComparison, PolicyTopic, SchoolPolicy } from "./policy/types";
+import { agreedGaps } from "./gaps";
 import type { AuditReport, Page } from "./types";
 import { supabase } from "./supabase";
 
@@ -146,7 +147,7 @@ async function fingerprint(pages: Page[]): Promise<string> {
 export async function recordGaps(school: string, pages: Page[], items: PolicyComparison[]): Promise<void> {
   try {
     if (!(await uid())) return;
-    const gaps = items.filter((i) => i.relation !== "matches" && i.relation !== "disputed"); // only agreed differences reach the master list
+    const gaps = agreedGaps(items);
     if (gaps.length === 0) return;
     const hash = await fingerprint(pages);
     const rows = gaps.map((g) => ({
