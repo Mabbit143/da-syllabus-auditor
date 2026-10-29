@@ -9,7 +9,7 @@ import sys
 from .cli import ROOT, OUTPUT, manifest_urls
 from .download import public_url
 
-TOPICS = {"accommodations", "late_work", "attendance", "academic_integrity", "incompletes"}
+TOPICS = {"accommodations", "late_work", "attendance", "academic_integrity", "incompletes", "final_exams", "dead_week", "religious_observance", "grievances", "mandatory_reporting"}
 ADMITTED = ROOT / "data/uo-policies/reviewed-ocr"
 
 

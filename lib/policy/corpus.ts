@@ -28,6 +28,29 @@ const SOURCES: Record<PolicyTopic, { file: string; start: string; end?: string }
     start: 'A grade of "I" (Incomplete) represents',
     end: "requests an Incomplete by the published deadline",
   },
+  final_exams: {
+    file: "032-provost-final-exams-policy.md",
+    start: "Final examinations must be given",
+    end: "prohibits the early administration of final examinations.",
+  },
+  dead_week: {
+    file: "031-provost-dead-week.md",
+    start: "In the week preceding final examinations",
+    end: "the day of the formally assigned final examination for the class in question.",
+  },
+  religious_observance: {
+    file: "045-provost-religious-observance-accommodations-policy.md",
+    start: "The University of Oregon makes reasonable accommodations, upon request",
+    end: "providing an opportunity to make up coursework.",
+  },
+  grievances: {
+    file: "048-provost-student-grievance-policy.md",
+    start: "Before filing a formal grievance",
+  },
+  mandatory_reporting: {
+    file: "050-teaching-university-course-policies.md",
+    start: "All instructors are designated reporters",
+  },
 };
 
 export function usesUoCorpus(school: string): boolean {

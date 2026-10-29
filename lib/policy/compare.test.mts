@@ -57,3 +57,16 @@ test("without a second model nothing is disputed", async () => {
   const r = await agreed(answer("matches", "matches"));
   assert.deepEqual(r.map((c) => c.relation), ["matches", "matches"]);
 });
+
+test("silence on the new topics is decided by code from topic words", async () => {
+  // @ts-expect-error Native Node TS entry point.
+  const { comparePolicies } = await import("./compare.ts");
+  const topics = ["final_exams", "dead_week", "religious_observance", "grievances", "mandatory_reporting"];
+  const policies = topics.map((topic) => ({ topic, url: "https://provost.uoregon.edu/x", quote: `School rule for ${topic}.` }));
+  const silentAnswer = async () => JSON.stringify({ instructor: { name: "", page: 1, quote: "" }, comparisons: topics.map((topic) => ({ topic, relation: "silent", syllabusPage: 0, syllabusQuote: "" })) });
+  const bare = await comparePolicies([{ pageNumber: 1, text: "Readings and quizzes only." }], policies as never, silentAnswer);
+  assert.deepEqual(bare.map((c: { topic: string }) => c.topic), topics);
+  const mentions = "The final exam is on Friday. Dead week has no new projects. Religious holidays are excused. Send any complaint to me. I am a designated reporter.";
+  const said = await comparePolicies([{ pageNumber: 1, text: mentions }], policies as never, silentAnswer);
+  assert.equal(said.length, 0); // the syllabus does mention them, so silence is not claimed
+});

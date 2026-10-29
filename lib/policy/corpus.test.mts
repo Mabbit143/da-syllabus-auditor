@@ -7,8 +7,8 @@ const { corpusPolicies, usesUoCorpus } = await import("./corpus.ts");
 import { readFile } from "node:fs/promises";
 import { readdir } from "node:fs/promises";
 
-test("all five UO topics retain exact snapshot quotes and original URLs", async () => {
-  const topics = ["accommodations", "late_work", "attendance", "academic_integrity", "incompletes"] as const;
+test("all ten UO topics retain exact snapshot quotes and original URLs", async () => {
+  const topics = ["accommodations", "late_work", "attendance", "academic_integrity", "incompletes", "final_exams", "dead_week", "religious_observance", "grievances", "mandatory_reporting"] as const;
   const policies = await corpusPolicies(topics);
   assert.deepEqual(policies.map((p) => p.topic), [...topics]);
   const files = await readdir("data/uo-policies");
