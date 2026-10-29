@@ -3,6 +3,7 @@ import type {
   AuditReport, AuditRequest, Candidates, DimensionResult, FlagKind, FlagResult, Page, Passage, Severity,
 } from "./types";
 import { findConflicts } from "./agent";
+import { withScaleCheck } from "./gradecheck";
 import { checkAuthors } from "./sources";
 import type { SearchResult } from "./meta";
 import { verifyQuote } from "./verify";
@@ -147,7 +148,8 @@ export async function runAudit(
     return [];
   });
 
-  const [results, { bios }, conflicts] = await Promise.all([extraction, authorLookups, consistency]);
+  const [results, { bios }, modelConflicts] = await Promise.all([extraction, authorLookups, consistency]);
+  const conflicts = withScaleCheck(modelConflicts, req.pages);
 
   const candidates: Candidates = { assessments: [], readings: [], signals: [], flags: [], weights: [] };
   results.forEach((r, i) => {
@@ -202,8 +204,10 @@ export async function runAudit(
     if (id === "transparency") {
       for (const c of conflicts.slice(0, 3)) {
         const passageId = intern(c.a.page, c.a.start, c.a.end, c.a.text);
-        if (used.has(passageId)) continue;
-        used.add(passageId);
+        // A conflict is shown even if its first passage also backs another signal; only the same pair is not repeated.
+        const pairKey = `${passageId}|${intern(c.b.page, c.b.start, c.b.end, c.b.text)}`;
+        if (used.has(pairKey)) continue;
+        used.add(pairKey);
         hits.push({
           code: "T7",
           label: `${SIGNALS.T7.label}: ${c.explanation}`,
