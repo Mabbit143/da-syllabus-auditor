@@ -4,11 +4,11 @@ A student-facing web app, built for the Meta Global AI Developer Hackathon. A st
 
 Every displayed finding rests on a verbatim quote that is verified against the source page. Tools that only point out problems and give no fixes are not acceptable.
 
-## State (2026-10-27)
+## State (2026-10-28)
 
 - Built and live on Vercel (short domain `da-syllabus-auditor-hkrr.vercel.app`, Deployment Protection off). Repository: `Mabbit143/da-syllabus-auditor`, branch `main`.
-- Built: audit, fixes per finding, opportunity search, term view, Supabase sign-in and saved audits, policy check against the school's policies, owner-only gap list, UO policy corpus.
-- Not verified: sign-in on Vercel, timing with the real 9-page demo PDF in the browser, the Playwright E2E run, and GitHub Actions. Verified 2026-10-27: the policy lookup after the domain fix returns all five topics on `uoregon.edu` pages locally, and on Vercel a synthetic 9-page audit (14 s) and the UO policy check (23 s, 5 of 5 topics) both return HTTP 200 (see handoff sections 11 and 14).
+- Built: audit, fixes per finding, opportunity search, term view, Supabase sign-in and saved audits, policy check against ten UO policies read by Meta and Baseten (verdict only where both agree), Modal OCR for scanned PDFs, "Who do I go to?" navigator, owner-only gap list with by-instructor view, UO policy corpus.
+- Verified 2026-10-28: env vars and Supabase redirects set (owner), the real 9-page demo PDF audits in 47 s on the live site, E2E 15 of 15, 54 unit tests. Not verified: scanned-PDF run on the live site, sign-in and saved-audit persistence on the live site, the five navigator answers against UO pages, and the Schools page with real data. Earlier, 2026-10-27: the policy lookup after the domain fix returns all five topics on `uoregon.edu` pages locally, and on Vercel a synthetic 9-page audit (14 s) and the UO policy check (23 s, 5 of 5 topics) both return HTTP 200 (see handoff sections 11 and 14).
 - Submission is due Nov 4, 2026, 9 PM ET (7 PM MT): public repo, 3-minute demo video, Meta models. Judging: Impact 30%, Meta tooling 25%, Demo 25%, Technical 20%.
 - `docs/handoff-muse-code.md` is the full handoff (priorities, acceptance criteria, known issues, unverified items). Read it first when picking up work.
 
