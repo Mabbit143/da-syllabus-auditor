@@ -70,6 +70,7 @@ test("a student uploads a syllabus and reads a verified audit", async ({ page })
   for (const title of ["Transparency", "Punitive vs. flexible", "Accessibility in practice", "Whose perspectives are in the room", "Hidden curriculum"]) {
     await expect(page.getByRole("heading", { name: new RegExp(`^${title}`) })).toBeVisible();
   }
+  await expect(page.locator(".dim-explainer")).toHaveCount(5);
   await expect(page.getByText("Not found in this syllabus")).toBeVisible();
   await expect(page.getByText("Verified").first()).toBeVisible();
 

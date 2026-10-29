@@ -5,6 +5,7 @@ import FixKit from "@/components/FixKit";
 import RequiredContents from "@/components/RequiredContents";
 import type { CourseContext } from "@/lib/policy/contents-types";
 import { findingsFromReport } from "@/lib/fixes";
+import { DIMENSION_EXPLAINER } from "@/lib/rubric";
 import { TOPIC_LABEL, TOPIC_PLAIN, type Relation } from "@/lib/policy/types";
 import type { AuditReport, Page, Passage } from "@/lib/types";
 
@@ -139,6 +140,7 @@ export default function Report({ report, pages, policy }: { report: AuditReport;
               <h4>
                 {d.title}: <span className="grade">{d.status === "not_found" && d.notes?.length ? "No supported signal" : d.status === "mixed" && (d.positive === 0 || d.negative === 0) ? "Limited evidence" : STATUS_TEXT[d.status]}</span>
               </h4>
+              <p className="muted dim-explainer">{DIMENSION_EXPLAINER[d.dimension]}</p>
               {d.notes?.map((n) => <p key={n} className="muted">{n}</p>)}
               {d.hits.length > 0 && (
                 <p className="muted">

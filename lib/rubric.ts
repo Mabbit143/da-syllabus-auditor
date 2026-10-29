@@ -8,6 +8,15 @@ export const DIMENSIONS: { id: Dimension; title: string }[] = [
   { id: "hidden", title: "Hidden curriculum" },
 ];
 
+/** One plain line per dimension, for a student who has never read a syllabus critically. */
+export const DIMENSION_EXPLAINER: Record<Dimension, string> = {
+  transparency: "Can you tell how you will be graded, when things are due, and what is expected?",
+  punitive: "What happens when life gets in the way: late work, missed class, a bad day.",
+  accessibility: "Whether the syllabus says how to ask for support, and who to ask.",
+  perspectives: "Whether the course makes room for different backgrounds and experiences.",
+  hidden: "Unwritten expectations: the workload and rules you are expected to guess.",
+};
+
 interface SignalDef {
   dimension: Dimension;
   polarity: 1 | -1;
