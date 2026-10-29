@@ -7,7 +7,7 @@ import { POLICY_PAIRS, type PairDifference, type PairResult } from "./pairs-type
 
 type Ask = (instructions: string, input: string) => Promise<string>;
 
-interface Doc { name: string; url: string; pages: Page[] }
+export interface Doc { name: string; url: string; pages: Page[] }
 
 const PAGE_CHARS = 6000;
 const MAX_DIFFERENCES = 5;
@@ -35,7 +35,7 @@ function toPages(body: string): Page[] {
   return pages;
 }
 
-async function loadDoc(side: { file: string; name: string }): Promise<Doc> {
+export async function loadDoc(side: { file: string; name: string }): Promise<Doc> {
   const text = await readFile(path.join(process.cwd(), "data/uo-policies", side.file), "utf8");
   const url = /^Source: (https:\/\/\S+)\s*$/m.exec(text)?.[1];
   if (!url) throw new Error("Missing source URL");

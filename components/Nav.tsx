@@ -106,6 +106,7 @@ export default function Nav() {
       <Link href="/">Syllabus audit</Link>
       <Link href="/opportunities">Find funding</Link>
       <Link href="/policies">UO against itself</Link>
+      <Link href="/navigator">Who do I go to?</Link>
       <AuthBox />
     </nav>
   );
