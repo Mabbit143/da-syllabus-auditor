@@ -4,7 +4,8 @@ import { useState } from "react";
 import FixKit from "@/components/FixKit";
 import RequiredContents from "@/components/RequiredContents";
 import type { CourseContext } from "@/lib/policy/contents-types";
-import { TOPIC_LABEL, type Relation } from "@/lib/policy/types";
+import { findingsFromReport } from "@/lib/fixes";
+import { TOPIC_LABEL, TOPIC_PLAIN, type Relation } from "@/lib/policy/types";
 import type { AuditReport, Page, Passage } from "@/lib/types";
 
 const STATUS_TEXT = {
@@ -22,6 +23,27 @@ function sentenceAround(text: string, start: number, end: number): [string, stri
   const after = text.slice(end, end + 200);
   const stop = after.search(/[.!?](\s|$)/);
   return [cut === -1 ? "" : before.slice(cut + 1).trimStart(), stop === -1 ? "" : after.slice(0, stop + 1)];
+}
+
+/** A short plain summary computed from the findings, so a new reader knows what to do first. */
+function StartHere({ report }: { report: AuditReport }) {
+  const asks = findingsFromReport(report);
+  const differs = (report.policyCheck?.items ?? []).filter((i) => i.relation === "conflicts" || i.relation === "adds_requirement").length;
+  return (
+    <section className="start-here">
+      <h3>Start here</h3>
+      {asks.length === 0 ? (
+        <p>No problems with a quote behind them were found. The sections below show what the syllabus does say.</p>
+      ) : (
+        <>
+          <p>{asks.length} thing{asks.length === 1 ? "" : "s"} worth asking your instructor about. The first few:</p>
+          <ul>{asks.slice(0, 3).map((f) => <li key={f.id}>{f.label}</li>)}</ul>
+        </>
+      )}
+      {differs > 0 && <p>{differs} place{differs === 1 ? "" : "s"} where this syllabus differs from your school&rsquo;s written policy. See &ldquo;Against your school&rsquo;s own policies&rdquo; below.</p>}
+      <p className="muted noprint">Questions to ask, messages you can send and suggested wording are in <a href="#fixes">What to do about it</a>, at the end.</p>
+    </section>
+  );
 }
 
 function Quote({ passage, pages }: { passage: Passage; pages: Page[] }) {
@@ -52,6 +74,14 @@ function Quote({ passage, pages }: { passage: Passage; pages: Page[] }) {
     </blockquote>
   );
 }
+
+const RELATION_PLAIN: Record<Relation, string> = {
+  matches: "The syllabus agrees with the school's written rule.",
+  conflicts: "The syllabus and the school's written rule say different things. You may want to ask the instructor which one applies to you.",
+  adds_requirement: "The syllabus asks for something the school's rule does not, or sends you somewhere first. That may be fine, but check the school's rule below.",
+  silent: "The syllabus does not mention this topic, but the school has a written rule about it.",
+  disputed: "Two separate checks read this differently, so treat it as unclear and read both quotes yourself.",
+};
 
 const RELATION_TEXT: Record<Relation, string> = {
   matches: "Matches the school policy",
@@ -88,12 +118,14 @@ export default function Report({ report, pages, policy }: { report: AuditReport;
         )}
       </header>
 
+      <StartHere report={report} />
+
       <section className="overall">
         <h3>Overall read</h3>
         <p className="big">{report.overall.label ?? "Overall read unavailable"}</p>
         <p className="muted">{report.overall.reason}</p>
         <p>
-          <strong>Biggest risk: </strong>
+          <strong>Biggest risk among attendance, grade weight and late work: </strong>
           {risk ? `${risk.explanation} (page ${byId.get(risk.passageId)?.page})` : "No supported policy risk was identified in the assessed text."}
         </p>
       </section>
@@ -164,6 +196,8 @@ export default function Report({ report, pages, policy }: { report: AuditReport;
           {report.policyCheck?.items.map((it) => (
             <div key={it.topic} className={`card ${it.relation === "matches" ? "strong" : (it.relation === "silent" || it.relation === "disputed") ? "mixed" : "sev-medium"}`}>
               <h4>{TOPIC_LABEL[it.topic]}: <span className="grade">{RELATION_TEXT[it.relation]}</span></h4>
+              <p className="muted">{TOPIC_PLAIN[it.topic]}</p>
+              <p><strong>What this means:</strong> {RELATION_PLAIN[it.relation]}</p>
               {it.syllabusQuote ? (
                 <blockquote className="quote"><p>&ldquo;{it.syllabusQuote}&rdquo;</p><span className="where">This syllabus, page {it.syllabusPage}</span></blockquote>
               ) : (

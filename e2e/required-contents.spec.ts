@@ -62,8 +62,9 @@ test("old report can run separate contents checks, retry, and print evidence", a
   await section.locator("summary").first().focus();
   await page.keyboard.press("Enter");
   await expect(section.getByText("Professor Robin teaches this course.", { exact: true })).toBeVisible();
-  await expect(section.getByText("Historical applicability unverified", { exact: true }).first()).toBeVisible();
-  await expect(section.getByText("Where can I find the instructor contact information?").first()).toBeVisible();
+  await expect(section.getByText("Compared with UO's current wording. Your term's wording may have been different.", { exact: true }).first()).toBeVisible();
+  await expect(section.locator("details").first().locator(".card").first()).not.toContainText("Question to ask"); // a found item no longer asks where to find it
+  await expect(section.locator("details").nth(1).locator(".card").first()).toContainText("Question to ask"); // a missing one still does
   await section.getByLabel("Course year").fill("2026");
   await expect(section.getByText(/Results for: fall 2025/i)).toBeVisible();
   await section.locator("summary").first().click();

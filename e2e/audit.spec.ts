@@ -66,7 +66,7 @@ test("a student uploads a syllabus and reads a verified audit", async ({ page })
 
   await expect(page.getByRole("heading", { name: "Overall read" })).toBeVisible();
   await expect(page.getByText("mixed", { exact: true }).first()).toBeVisible();
-  await expect(page.locator("p", { hasText: "Biggest risk:" })).toContainText("Late work gets zero credit");
+  await expect(page.locator("p", { hasText: "Biggest risk" })).toContainText("Late work gets zero credit");
   for (const title of ["Transparency", "Punitive vs. flexible", "Accessibility in practice", "Whose perspectives are in the room", "Hidden curriculum"]) {
     await expect(page.getByRole("heading", { name: new RegExp(`^${title}`) })).toBeVisible();
   }

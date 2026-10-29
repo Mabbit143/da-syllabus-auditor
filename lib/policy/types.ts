@@ -9,6 +9,15 @@ export const TOPIC_LABEL: Record<PolicyTopic, string> = {
   incompletes: "Incompletes",
 };
 
+// Plain meaning of each topic, for a student who has never read a syllabus policy.
+export const TOPIC_PLAIN: Record<PolicyTopic, string> = {
+  accommodations: "Changes that remove barriers for students with disabilities, arranged through the school's disability office.",
+  late_work: "Whether and how work turned in after the deadline is accepted.",
+  attendance: "Whether attendance counts toward your grade, and what happens when you miss class.",
+  academic_integrity: "Rules against cheating, plagiarism and unauthorized help.",
+  incompletes: "An Incomplete is a temporary grade that can give you more time to finish coursework after the term ends, in some situations.",
+};
+
 // What to search for, per topic.
 export const TOPIC_SEARCH: Record<PolicyTopic, string> = {
   accommodations: "how students with disabilities request academic accommodations",

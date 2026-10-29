@@ -35,7 +35,7 @@ export default function FixKit({ report }: { report: AuditReport }) {
   }
 
   return (
-    <section>
+    <section id="fixes">
       <h3>What to do about it</h3>
       {!kits && (
         <>

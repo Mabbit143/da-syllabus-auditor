@@ -3,8 +3,8 @@
 import { useState } from "react";
 import { UNKNOWN_CONTEXT, type CourseContext, type RequiredContents as ContentsResult } from "@/lib/policy/contents-types";
 
-const STATUS = { found: "Found", needs_review: "Needs review", not_assessed: "Not assessed", not_applicable: "Not applicable" };
-const APPLICABILITY = { current_snapshot: "Compared with the saved policy snapshot", historical_unverified: "Historical applicability unverified", unknown: "Policy applicability unknown", not_applicable: "Not applicable to this course context" };
+const STATUS = { found: "Found", needs_review: "Needs review", not_assessed: "Could not verify", not_applicable: "Not applicable" };
+const APPLICABILITY = { current_snapshot: "Compared with the saved policy snapshot", historical_unverified: "Compared with UO's current wording. Your term's wording may have been different.", unknown: "Policy applicability unknown", not_applicable: "Not applicable to this course context" };
 
 export default function RequiredContents({ result, busy, error, onRun }: {
   result?: ContentsResult;
@@ -48,7 +48,7 @@ export default function RequiredContents({ result, busy, error, onRun }: {
               {component.passages.map((passage) => <blockquote key={passage.id} className="quote"><p>{passage.text}</p><span className="where">This syllabus, page {passage.page}</span></blockquote>)}
               {component.passages.length === 0 && <p>{component.status === "not_applicable" ? "This requirement is not assessed for the selected course context." : "No verified content evidence was obtained. This does not establish that the content is absent."}</p>}
               <blockquote className="quote"><p>{component.policyQuote}</p><span className="where">UO policy snapshot: <a href={component.policyUrl} target="_blank" rel="noopener noreferrer">official source</a></span></blockquote>
-              <p><strong>Question to ask:</strong> {component.question}</p>
+              {component.status !== "found" && component.status !== "not_applicable" && <p><strong>Question to ask:</strong> {component.question}</p>}
             </div>)}
           </div>
         </details>)}
