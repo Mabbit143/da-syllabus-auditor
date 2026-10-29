@@ -144,7 +144,7 @@ export default function Report({ report, pages, policy }: { report: AuditReport;
               {d.notes?.map((n) => <p key={n} className="muted">{n}</p>)}
               {d.hits.length > 0 && (
                 <p className="muted">
-                  {d.positive} supportive and {d.negative} burdensome signal{d.hits.length === 1 ? "" : "s"} found.
+                  {d.positive} supportive and {d.negative} burdensome signal{d.positive + d.negative === 1 ? "" : "s"} found.
                 </p>
               )}
               {hits.map((h) => (
