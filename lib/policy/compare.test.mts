@@ -41,6 +41,18 @@ test("if the second model fails, the first model's result stands alone", async (
   assert.deepEqual(r.map((c) => c.relation), ["matches", "adds_requirement"]);
 });
 
+test("a quote that is not about the topic is not evidence for it", async () => {
+  // @ts-expect-error Native Node TS entry point.
+  const { comparePolicies } = await import("./compare.ts");
+  const integrity = [{ topic: "academic_integrity", url: "https://policies.uoregon.edu/c", quote: "Students are prohibited from committing academic misconduct." }];
+  const offTopic = "You are prohibited from posting course material on websites.";
+  const ask = async () => JSON.stringify({ instructor: { name: "", page: 1, quote: "" }, comparisons: [{ topic: "academic_integrity", relation: "adds_requirement", syllabusPage: 1, syllabusQuote: offTopic }] });
+  const silent = await comparePolicies([{ pageNumber: 1, text: `Rules. ${offTopic}` }], integrity as never, ask);
+  assert.deepEqual(silent.map((c: { relation: string }) => c.relation), ["silent"]); // topic never mentioned: silence, not a mismatch
+  const mentioned = await comparePolicies([{ pageNumber: 1, text: `Rules. ${offTopic} Plagiarism is cheating.` }], integrity as never, ask);
+  assert.equal(mentioned.length, 0); // topic is mentioned elsewhere: the wrong quote is dropped, no silence claimed
+});
+
 test("without a second model nothing is disputed", async () => {
   const r = await agreed(answer("matches", "matches"));
   assert.deepEqual(r.map((c) => c.relation), ["matches", "matches"]);

@@ -15,9 +15,10 @@ Rules:
 - Return one comparison for every policy topic you are given.
 - "relation" is one of:
   "matches": the syllabus covers the topic consistently with the school policy.
-  "conflicts": the syllabus says something that contradicts the school policy.
+  "conflicts": following the syllabus would mean breaking the school policy. Naming the same office the policy names, or inviting students to ask for what the policy offers, is not a conflict.
   "adds_requirement": the syllabus asks students to do something the school policy does not require, or sends them somewhere other than where the school policy does.
   "silent": the syllabus says nothing about the topic.
+- The syllabus quote must be about the same topic as the policy; a passage about something else is not evidence for this topic.
 - For every relation except "silent", "syllabusQuote" must be copied exactly from the syllabus (one passage, on one page) and "syllabusPage" is that page number. For "silent", leave both empty.
 - "instructor" is the course instructor's name exactly as the syllabus gives it, with a quote from the syllabus that contains the name and its page. If no name is given, use empty strings.
 - Never guess. If unsure whether it matches, use "matches" only when the syllabus plainly agrees.`;
@@ -94,6 +95,11 @@ export async function comparePolicies(pages: Page[], policies: SchoolPolicy[], a
     }
     const m = typeof c.syllabusQuote === "string" ? verifyQuote(pages, Number(c.syllabusPage), c.syllabusQuote) : null;
     if (!m) continue; // an unverifiable quote is dropped, not shown
+    if (!TOPIC_WORDS[policy.topic].test(m.text)) {
+      // The quote is not about this topic. If the syllabus never mentions the topic, that is silence; otherwise drop it.
+      if (!TOPIC_WORDS[policy.topic].test(allText)) out.push({ ...base, relation: "silent" });
+      continue;
+    }
     out.push({ ...base, relation: c.relation as Relation, syllabusPage: m.page, syllabusQuote: m.text });
   }
   return out;
