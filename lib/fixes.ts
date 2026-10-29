@@ -59,7 +59,7 @@ For each finding return one object. Return ONLY one valid JSON object, no prose.
 Rules:
 - "questions": 2 or 3 short, polite questions the student could ask the instructor to clear this up. Base them only on the quote.
 - "request": a short message (2 to 4 sentences) the student could send, written in the first person. Refer to the syllabus page. It must not claim any rule outside the quote. For accommodation topics, mention the campus disability services office in general terms only. Never state facts about the student (for example that they have a disability, are already in contact with an office, or have tried anything) beyond what the finding itself says.
-- "rewrite.original": 8 or more words copied exactly from the finding's quote, or "" for a gap. "rewrite.suggested": plain, flexible wording that keeps the instructor's goal (for a gap, a short statement they could add). For a conflict, "original" must be copied from the FIRST quote only (never join the two), and "suggested" should remove the contradiction without choosing which side is right.
+- "rewrite.original": 8 or more words copied exactly from the finding's quote, or "" for a gap. "rewrite.suggested": plain, flexible wording that keeps the instructor's goal (for a gap, a short statement they could add). For a conflict, "original" must be copied from the FIRST quote only (never join the two), and "suggested" should remove the contradiction without choosing which side is right: use one unit (points or percent) and write [instructor to fill in] for any number you do not know, never an instruction to read other text.
 - Keep every item brief.`;
 
 function squash(s: string): string {

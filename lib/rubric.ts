@@ -87,7 +87,7 @@ export function overallRead(dimensions: DimensionResult[]): Overall {
   const label = score >= 2 ? "inclusive leaning" : score <= -2 ? "old-guard leaning" : "mixed";
   return {
     label,
-    reason: `Based on ${included.length} of 5 dimensions: ${score >= 0 ? "+" : ""}${score} (Strong minus Weak).`,
+    reason: `Based on ${included.length} of 5 areas. Strong areas minus weak areas: ${score >= 0 ? "+" : ""}${score}.`,
     included: included.length,
     score,
   };

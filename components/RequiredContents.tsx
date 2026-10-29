@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { UNKNOWN_CONTEXT, type CourseContext, type RequiredContents as ContentsResult } from "@/lib/policy/contents-types";
 
-const STATUS = { found: "Found", needs_review: "Needs review", not_assessed: "Could not verify", not_applicable: "Not applicable" };
+const STATUS = { found: "Found", needs_review: "Needs review", not_assessed: "Not confirmed", not_applicable: "Not applicable" };
 const APPLICABILITY = { current_snapshot: "Compared with the saved policy snapshot", historical_unverified: "Compared with UO's current wording. Your term's wording may have been different.", unknown: "Policy applicability unknown", not_applicable: "Not applicable to this course context" };
 
 export default function RequiredContents({ result, busy, error, onRun }: {
@@ -42,12 +42,14 @@ export default function RequiredContents({ result, busy, error, onRun }: {
         {result.groups.map((group) => <details key={group.id} className="card">
           <summary>{group.label}</summary>
           <div className="contents-evidence">
-            {group.components.map((component) => <div key={component.id} className="card">
+            {group.components.map((component, index) => <div key={component.id} className="card">
               <h4>{component.label}: <span className="grade">{STATUS[component.status]}</span></h4>
               <p className="muted">{APPLICABILITY[component.applicability]}</p>
               {component.passages.map((passage) => <blockquote key={passage.id} className="quote"><p>{passage.text}</p><span className="where">This syllabus, page {passage.page}</span></blockquote>)}
-              {component.passages.length === 0 && <p>{component.status === "not_applicable" ? "This requirement is not assessed for the selected course context." : "No verified content evidence was obtained. This does not establish that the content is absent."}</p>}
-              <blockquote className="quote"><p>{component.policyQuote}</p><span className="where">UO policy snapshot: <a href={component.policyUrl} target="_blank" rel="noopener noreferrer">official source</a></span></blockquote>
+              {component.passages.length === 0 && <p>{component.status === "not_applicable" ? "This requirement is not assessed for the selected course context." : "The audit could not confirm this in the syllabus. That does not mean it is missing: it may be written in a way the audit could not read."}</p>}
+              {index > 0 && group.components[index - 1].policyQuote === component.policyQuote
+                ? <p className="muted">Same UO requirement as above.</p>
+                : <blockquote className="quote"><p>{component.policyQuote}</p><span className="where">UO policy snapshot: <a href={component.policyUrl} target="_blank" rel="noopener noreferrer">official source</a></span></blockquote>}
               {component.status !== "found" && component.status !== "not_applicable" && <p><strong>Question to ask:</strong> {component.question}</p>}
             </div>)}
           </div>

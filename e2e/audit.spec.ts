@@ -38,7 +38,7 @@ function mockReport(fileName: string, week: number) {
       { what: "Paper", week, percent: 30, passageId: "p1" },
     ],
     biggestRiskIndex: 0,
-    overall: { label: "mixed", reason: "Based on 4 of 5 dimensions: +0 (Strong minus Weak).", included: 4, score: 0 },
+    overall: { label: "mixed", reason: "Based on 4 of 5 areas. Strong areas minus weak areas: +0.", included: 4, score: 0 },
     passages: [
       passage("p1", "Midterm 25 percent"),
       passage("p2", "I reply to email within 48 hours"),

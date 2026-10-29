@@ -112,7 +112,7 @@ test("partial contents results disclose skipped text and preserve ordinary findi
   await section.getByRole("button", { name: /check required contents/i }).click();
   await expect(section.getByText(/Partial assessment/)).toContainText("batch 2");
   await section.locator("summary").nth(1).click();
-  await expect(section.getByText(/This does not establish that the content is absent/).first()).toBeVisible();
+  await expect(section.getByText(/That does not mean it is missing/).first()).toBeVisible();
   await expect(page.getByRole("heading", { name: "Overall read", exact: true })).toBeVisible();
 });
 

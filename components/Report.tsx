@@ -6,7 +6,7 @@ import RequiredContents from "@/components/RequiredContents";
 import type { CourseContext } from "@/lib/policy/contents-types";
 import { findingsFromReport } from "@/lib/fixes";
 import { DIMENSION_EXPLAINER } from "@/lib/rubric";
-import { TOPIC_LABEL, TOPIC_PLAIN, type Relation } from "@/lib/policy/types";
+import { POLICY_TOPICS, TOPIC_LABEL, TOPIC_PLAIN, type Relation } from "@/lib/policy/types";
 import type { AuditReport, Page, Passage } from "@/lib/types";
 
 const STATUS_TEXT = {
@@ -197,6 +197,9 @@ export default function Report({ report, pages, policy }: { report: AuditReport;
           {policy.error && <p role="alert" className="warn">{policy.error}</p>}
           {report.policyCheck && report.policyCheck.comparisonStatus !== "not_run" && report.policyCheck.items.length === 0 && (
             <p>No policies could be verified for {report.policyCheck.school}, so nothing was compared.</p>
+          )}
+          {report.policyCheck && report.policyCheck.comparisonStatus !== "not_run" && report.policyCheck.items.length > 0 && report.policyCheck.items.length < POLICY_TOPICS.length && (
+            <p className="muted">Not compared this time (no verified quote): {POLICY_TOPICS.filter((t) => !report.policyCheck!.items.some((i) => i.topic === t)).map((t) => TOPIC_LABEL[t]).join(", ")}.</p>
           )}
           {report.policyCheck?.items.map((it) => (
             <div key={it.topic} className={`card ${it.relation === "matches" ? "strong" : (it.relation === "silent" || it.relation === "disputed") ? "mixed" : "sev-medium"}`}>

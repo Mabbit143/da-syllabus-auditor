@@ -63,7 +63,7 @@ table.term th { font-family: var(--font-label), sans-serif; text-transform: uppe
   .required-contents details::details-content { content-visibility: visible; display: block; }
   .required-contents .contents-evidence { display: block; }
   :root { --bg: #fff; --fg: var(--black); --muted: #444; --line: rgba(13, 11, 18, 0.35); --link: var(--cyan-dark); }
-  .noprint { display: none !important; } main { padding: 0; } .card { break-inside: avoid; }
+  .noprint { display: none !important; } main { padding: 0; } .card { break-inside: avoid; } h2, h3, h4 { break-after: avoid; }
   .big, mark, .stamp { border: 2px solid var(--black); } .stamp { color: var(--black); }
   .card.strong .grade { color: var(--cyan-dark); } .card.weak .grade, .card.sev-high .grade { color: var(--pink-dark); }
   .card.mixed .grade, .card.sev-medium .grade { color: var(--violet); } .warn { color: var(--pink-dark); }
