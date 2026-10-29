@@ -188,7 +188,10 @@ export default function Report({ report, pages, policy }: { report: AuditReport;
           <h3>Against your school&rsquo;s own policies</h3>
           {!policySchool && <p className="muted">Sign in and add your school to compare this syllabus with its published policies.</p>}
           {policySchool && (!report.policyCheck || report.policyCheck.comparisonStatus === "not_run") && !policy.busy && (
-            <button type="button" className="noprint" onClick={policy.onRun}>Check against {policySchool}</button>
+            <>
+              <p className="muted">The comparison with {policySchool}&rsquo;s written policies has not been run for this report.</p>
+              <button type="button" className="noprint" onClick={policy.onRun}>Check against {policySchool}</button>
+            </>
           )}
           {policy.busy && <p role="status">Looking up {policy.school}&rsquo;s published policies and comparing. The first time for a school can take a minute or two.</p>}
           {policy.error && <p role="alert" className="warn">{policy.error}</p>}
