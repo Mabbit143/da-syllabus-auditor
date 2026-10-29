@@ -22,6 +22,7 @@ ${Object.entries(SIGNALS).map(([c, s]) => `${c}: ${s.label}`).join("\n")}
 - "assessments": each graded assessment or deadline that the text places in a numbered week (week as an integer); "percent" is its share of the grade if stated, else null. Skip items with no stated week.
 - "weights": every graded component whose share of the final grade is stated as a percent, whether or not the text places it in a week. Never list a total line. Use null for "percent" if the share is a range or given in points.
 - Use A1 only when the quote names how or where to get an accommodation (an office, letter, form or process). An invitation to tell the instructor is not A1.
+- Use T9 only for a visible marker the author left behind, such as [TBD], [?], "insert here" or a note to self. A reading title, citation or heading that looks cut off is not T9.
 - Do not use codes P6, P7 or T7; they are decided elsewhere.
 - Report at most 3 signals per code and at most 8 flags.`;
 
