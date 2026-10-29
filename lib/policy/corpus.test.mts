@@ -7,8 +7,8 @@ const { corpusPolicies, usesUoCorpus } = await import("./corpus.ts");
 import { readFile } from "node:fs/promises";
 import { readdir } from "node:fs/promises";
 
-test("all ten UO topics retain exact snapshot quotes and original URLs", async () => {
-  const topics = ["accommodations", "late_work", "attendance", "academic_integrity", "incompletes", "final_exams", "dead_week", "religious_observance", "grievances", "mandatory_reporting"] as const;
+test("all eleven UO topics retain exact snapshot quotes and original URLs", async () => {
+  const topics = ["accommodations", "late_work", "attendance", "academic_integrity", "incompletes", "final_exams", "dead_week", "religious_observance", "grievances", "mandatory_reporting", "withdrawal"] as const;
   const policies = await corpusPolicies(topics);
   assert.deepEqual(policies.map((p) => p.topic), [...topics]);
   const files = await readdir("data/uo-policies");
@@ -19,6 +19,7 @@ test("all ten UO topics retain exact snapshot quotes and original URLs", async (
   }
   assert.match(policies.find((p) => p.topic === "incompletes")!.quote, /requests an Incomplete by the published deadline/);
   assert.match(policies.find((p) => p.topic === "academic_integrity")!.quote, /required to contact the Office/);
+  assert.match(policies.find((p) => p.topic === "withdrawal")!.quote, /withdrawal deadline each term/);
 });
 
 test("school routing excludes Oregon State and supports normalized UO names", async () => {

@@ -51,6 +51,11 @@ const SOURCES: Record<PolicyTopic, { file: string; start: string; end?: string }
     file: "050-teaching-university-course-policies.md",
     start: "All instructors are designated reporters",
   },
+  withdrawal: {
+    file: "177-registrar-registration-register-classes-adddrop-courses.md",
+    start: "Students can drop or withdraw from a course in MyUO through the withdrawal deadline each term.",
+    end: "impact your refund for the course throughout the term.",
+  },
 };
 
 export function usesUoCorpus(school: string): boolean {

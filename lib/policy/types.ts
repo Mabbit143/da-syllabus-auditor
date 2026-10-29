@@ -1,4 +1,4 @@
-export const POLICY_TOPICS = ["accommodations", "late_work", "attendance", "academic_integrity", "incompletes", "final_exams", "dead_week", "religious_observance", "grievances", "mandatory_reporting"] as const;
+export const POLICY_TOPICS = ["accommodations", "late_work", "attendance", "academic_integrity", "incompletes", "final_exams", "dead_week", "religious_observance", "grievances", "mandatory_reporting", "withdrawal"] as const;
 export type PolicyTopic = (typeof POLICY_TOPICS)[number];
 
 export const TOPIC_LABEL: Record<PolicyTopic, string> = {
@@ -12,6 +12,7 @@ export const TOPIC_LABEL: Record<PolicyTopic, string> = {
   religious_observance: "Religious observance",
   grievances: "Complaints and grievances",
   mandatory_reporting: "Instructors as mandatory reporters",
+  withdrawal: "Withdrawal and drop deadlines",
 };
 
 // Plain meaning of each topic, for a student who has never read a syllabus policy.
@@ -26,6 +27,7 @@ export const TOPIC_PLAIN: Record<PolicyTopic, string> = {
   religious_observance: "How to ask for time off or schedule changes for a religious observance.",
   grievances: "How to file a formal complaint about a decision or treatment at the school, and who can help first.",
   mandatory_reporting: "What instructors are required to report, so you know what is confidential when you tell them something.",
+  withdrawal: "Deadlines to drop a course or withdraw from the term, and how late requests are handled.",
 };
 
 // What to search for, per topic.
@@ -40,6 +42,7 @@ export const TOPIC_SEARCH: Record<PolicyTopic, string> = {
   religious_observance: "religious observance accommodations for students",
   grievances: "student grievance policy and informal resolution",
   mandatory_reporting: "instructors as designated or mandatory reporters",
+  withdrawal: "course drop and withdrawal deadlines",
 };
 
 // Code, not the model, decides a syllabus is silent: none of these words may appear in it.
@@ -54,6 +57,7 @@ export const TOPIC_WORDS: Record<PolicyTopic, RegExp> = {
   religious_observance: /religious (observance|holiday|accommodation|obligation)|holy ?day|observance/i,
   grievances: /grievance|complaint|appeal|dispute/i,
   mandatory_reporting: /mandatory report|designated reporter|required to report|title ix/i,
+  withdrawal: /withdraw|\bdrop(ping|ped)? (a |the )?(course|class)|\bW\/D\b|drop deadline/i,
 };
 
 /** A school rule, with the exact words and the page they came from. */
