@@ -1,4 +1,4 @@
-import { DIMENSIONS, FLAG_BASES, SIGNALS, flagSeverity, gradeDimension, overallRead, weightSum } from "./rubric";
+import { DIMENSIONS, FLAG_BASES, SIGNALS, characterizeDimension, flagSeverity, gradeDimension, overallRead, weightSum } from "./rubric";
 import type {
   AuditReport, AuditRequest, Candidates, DimensionResult, FlagKind, FlagResult, Page, Passage, Severity,
 } from "./types";
@@ -249,7 +249,7 @@ export async function runAudit(
       status = "not_assessed";
       notes.push("The syllabus mentions accommodations or disability services, but no signal could be verified. Read the policy comparison below.");
     }
-    return { dimension: id, title, status, positive, negative, hits, ...(notes.length ? { notes } : {}) };
+    return { dimension: id, title, status, positive, negative, hits, ...(notes.length ? { notes } : {}), ...(characterizeDimension(id, status) ? { characterization: characterizeDimension(id, status) } : {}) };
   });
 
   const flags: FlagResult[] = [];

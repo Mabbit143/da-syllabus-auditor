@@ -60,6 +60,23 @@ export const SIGNALS: Record<string, SignalDef> = {
   H6: { dimension: "hidden", polarity: -1, label: "Grading described as subjective or discretionary with no criteria" },
 };
 
+// Owner decision 2026-10-30: when the code-graded status is "strong" or "weak", name the stance plainly
+// instead of only showing a status word. Grounded only in the dimension's own already-verified signal
+// codes — nothing new is inferred, this just picks the plain word the existing evidence already supports.
+const CHARACTERIZATION: Record<Dimension, { weak: string; strong: string }> = {
+  transparency: { weak: "Opaque", strong: "Transparent" },
+  punitive: { weak: "Punitive", strong: "Flexible" },
+  accessibility: { weak: "Exclusionary", strong: "Accessible" },
+  perspectives: { weak: "Single-tradition", strong: "Pluralistic" },
+  hidden: { weak: "Discretionary", strong: "Explicit" },
+};
+
+export function characterizeDimension(dimension: Dimension, status: DimensionStatus): string | undefined {
+  if (status === "weak") return CHARACTERIZATION[dimension].weak;
+  if (status === "strong") return CHARACTERIZATION[dimension].strong;
+  return undefined;
+}
+
 export function gradeDimension(
   positive: number,
   negative: number,
@@ -85,11 +102,20 @@ export function overallRead(dimensions: DimensionResult[]): Overall {
     };
   }
   const label = score >= 2 ? "inclusive leaning" : score <= -2 ? "old-guard leaning" : "mixed";
+  const weakWords = included.filter((d) => d.status === "weak").map((d) => d.characterization).filter(Boolean);
+  const strongWords = included.filter((d) => d.status === "strong").map((d) => d.characterization).filter(Boolean);
+  const characterization = weakWords.length || strongWords.length
+    ? [
+        weakWords.length ? `${weakWords.join(", ")} on ${weakWords.length === 1 ? "the area" : "the areas"} graded weak` : null,
+        strongWords.length ? `${strongWords.join(", ")} on ${strongWords.length === 1 ? "the area" : "the areas"} graded strong` : null,
+      ].filter(Boolean).join("; ")
+    : undefined;
   return {
     label,
     reason: `Based on ${included.length} of 5 areas. Strong areas minus weak areas: ${score >= 0 ? "+" : ""}${score}.`,
     included: included.length,
     score,
+    ...(characterization ? { characterization } : {}),
   };
 }
 

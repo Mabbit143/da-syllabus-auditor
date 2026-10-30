@@ -47,6 +47,8 @@ export interface DimensionResult {
   hits: SignalHit[];
   /** Plain statements about text that is present but did not count, such as a statement naming no route. */
   notes?: string[];
+  /** A direct, named characterization of this dimension's verified stance (e.g. "Punitive"), code-decided from hits. Owner decision 2026-10-30: name it plainly instead of only reporting a status. */
+  characterization?: string;
 }
 
 export interface FlagResult {
@@ -63,6 +65,8 @@ export interface Overall {
   reason: string;
   included: number;
   score: number;
+  /** A one-line plain-language characterization built from the dimensions' own characterizations. Owner decision 2026-10-30. */
+  characterization?: string;
 }
 
 export interface Coverage {

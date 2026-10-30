@@ -130,6 +130,7 @@ export default function Report({ report, pages, policy }: { report: AuditReport;
       <section className="overall">
         <h3>Overall read</h3>
         <p className="big">{report.overall.label ?? "Overall read unavailable"}</p>
+        {report.overall.characterization && <p className="big" style={{ marginTop: "-0.5em" }}>{report.overall.characterization}.</p>}
         <p className="muted">{report.overall.reason}</p>
         <p>
           <strong>Biggest risk among attendance, grade weight and late work: </strong>
@@ -145,6 +146,7 @@ export default function Report({ report, pages, policy }: { report: AuditReport;
             <div key={d.dimension} className={`card ${d.status}`}>
               <h4>
                 {d.title}: <span className="grade">{d.status === "not_found" && d.notes?.length ? "No supported signal" : d.status === "mixed" && (d.positive === 0 || d.negative === 0) ? "Limited evidence" : STATUS_TEXT[d.status]}</span>
+                {d.characterization && <span className="grade characterization"> — {d.characterization}</span>}
               </h4>
               <p className="muted dim-explainer">{DIMENSION_EXPLAINER[d.dimension]}</p>
               {d.notes?.map((n) => <p key={n} className="muted">{n}</p>)}
