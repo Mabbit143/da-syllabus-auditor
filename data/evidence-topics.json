@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "topics": [
+    { "id": "accommodations", "label": "Disability accommodations", "description": "Changes that remove barriers for students with disabilities, arranged through the school's disability office.", "syllabusComparable": true },
+    { "id": "late_work", "label": "Late work and extensions", "description": "Whether and how work turned in after the deadline is accepted.", "syllabusComparable": true },
+    { "id": "attendance", "label": "Attendance", "description": "Whether attendance counts toward your grade, and what happens when you miss class.", "syllabusComparable": true },
+    { "id": "academic_integrity", "label": "Academic integrity", "description": "Rules against cheating, plagiarism and unauthorized help.", "syllabusComparable": true },
+    { "id": "incompletes", "label": "Incompletes", "description": "An Incomplete is a temporary grade that can give you more time to finish coursework after the term ends, in some situations.", "syllabusComparable": true },
+    { "id": "final_exams", "label": "Final exams", "description": "When final exams may be given, and what happens if you have several at once.", "syllabusComparable": true },
+    { "id": "dead_week", "label": "Dead week", "description": "The last week before finals, when big exams and surprise projects are limited.", "syllabusComparable": true },
+    { "id": "religious_observance", "label": "Religious observance", "description": "How to ask for time off or schedule changes for a religious observance.", "syllabusComparable": true },
+    { "id": "grievances", "label": "Complaints and grievances", "description": "How to file a formal complaint about a decision or treatment at the school, and who can help first.", "syllabusComparable": true },
+    { "id": "mandatory_reporting", "label": "Instructors as mandatory reporters", "description": "What instructors are required to report, so you know what is confidential when you tell them something.", "syllabusComparable": true },
+    { "id": "withdrawal", "label": "Withdrawal and drop deadlines", "description": "Deadlines to drop a course or withdraw from the term, and how late requests are handled.", "syllabusComparable": true },
+    { "id": "registration_holds", "label": "Registration holds", "description": "Administrative or financial holds that block a student from registering for or staying enrolled in courses \u2014 independent of anything in a syllabus.", "syllabusComparable": false }
+  ]
+}
