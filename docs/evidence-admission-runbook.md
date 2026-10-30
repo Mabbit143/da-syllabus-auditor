@@ -17,7 +17,7 @@ Source list: `data/uo-policies/pdf/_index.json` (`manifest_urls()` in
 `document_jobs/cli.py` reads it). Work in batches of 5–10 URLs.
 
 On a first pass, **skip** filenames containing any of: `PAC Agenda`,
-`REPEAL`, `Redline`, `REVISION`, `Proposal`. These are committee-process or
+`REPEAL`, `Redline`, `REVISION`, `Proposal`, `Packet-`, `DRAFT`. These are committee-process or
 superseded-version documents, not stated rules — low value for an
 accountability record and more likely to be drafts.
 
@@ -235,3 +235,19 @@ a topic) as one `data: admit <topic> evidence record` commit.
    A bundle's `result.json` with `"status": "failed"` and `"pages": []`
    means the Modal worker couldn't process it within its limits (download
    size, page count, or format) — there's nothing to review.
+
+7. **A whole source can be unsuitable even past the cover page.** The
+   accessibility "Practitioner Guide" PDF (`211004.ada_.pg_.accessibility_0.pdf`)
+   was rejected once already for its title-page cover (step 3); pages 4-7
+   turned out to be raw student survey comments, not policy text at all —
+   qualitative research data, not a stated rule. If a source's substance
+   turns out to be survey results, meeting notes, or similar non-rule
+   content even after skipping the cover, reject the whole source rather
+   than trying to extract a "rule" from an anecdote.
+
+8. **Filenames starting `Packet-` are proposal packets, not adopted
+   policy.** `Packet-Proscribed Conduct.pdf` is a Policy Concept Form for a
+   revision still in stakeholder consultation (dated Jan-Feb 2023 sign-offs,
+   "Revision" checkbox, no effective date) — not the current, adopted
+   policy text. Treat `Packet-` the same as `PAC Agenda`/`Proposal` in the
+   batch-selection skip list (step 1).
