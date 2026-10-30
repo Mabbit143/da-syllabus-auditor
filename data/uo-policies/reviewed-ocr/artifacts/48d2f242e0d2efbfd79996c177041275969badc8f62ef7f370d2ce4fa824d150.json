@@ -1,0 +1,31 @@
+{
+  "fetchedAt": "2026-10-30T00:44:46.612047+00:00",
+  "jobId": "de81cb75c463c60052979dff",
+  "pageCount": 3,
+  "pages": [
+    {
+      "height": 2200,
+      "imageFile": "page-1.png",
+      "imageSha256": "60fb0ac53ac212d7e8ec5ed33004404824c6b8067e03cb9544c05bb45f6cdf08",
+      "method": "text",
+      "page": 1,
+      "text": "HOLDS ON STUDENT REGISTRATION\r\nUniversity of Oregon\r\n1. The UO utilizes administrative holds to support student success and protect the institution’s \r\ninterests by enforcing policy. Registration holds prevent course enrollment and should only be \r\nused when other options are not available and the prevention of future enrollment is a \r\nreasonable consequence.\r\n2. Registration holds may be proposed only to enforce university or administrative policy, laws, or \r\nregulations. University units may only place holds that have been approved.\r\nFor approval, proposed registration holds must meet all of the following criteria: \r\nA. Prevention of future enrollment is a reasonable and intended consequence of non-compliance\r\nB. An alternative, less-restrictive option of comparable value is not available \r\nC. The responsible unit has capacity to effectively administer hold and adhere to best practices \r\noutlined by the Registration Hold Governance Committee (RHGC)\r\n(Please see the Supplemental Guidelines for additional details around the administration and use of \r\nregistration holds.)",
+      "width": 1700,
+      "words": []
+    },
+    {
+      "height": 2200,
+      "imageFile": "page-2.png",
+      "imageSha256": "e9c58765c8a8338e6b3b33589ef9177b0064df7dc2ba650790dd24dc6674af0c",
+      "method": "text",
+      "page": 2,
+      "text": "Supplemental Guidelines for the Administration and Oversight of Registration Holds\r\nTo support and oversee the administration of registration holds, the Office of the Provost will charge \r\nand convene a Registration Hold Governance Committee (RHGC). The RHGC will meet every spring term \r\nto 1) review proposals to establish new holds (submitted by April 1); 2) evaluate impact and processes of \r\nexisting holds; and, 3) update registration hold policy and practice.\r\nAll registration holds must have RHGC approval.\r\nRegistration hold policy refers to the “Holds on Student Registration” policy adopted by the University \r\nSenate; and, registration hold practice refers to the \"Supplemental Guidelines for the Administration \r\nand Oversight of Registration Holds.” Registration hold practice may also include related processes and \r\nprocedures, including student appeal process and processes associated with the administration of the \r\nRHGC. \r\nThe RHGC will inform the Undergraduate Council of proposed changes to hold policy and specific holds \r\nreviews; and, will confer with Undergraduate Council when additional perspective is needed. \r\nTo increase awareness of registration holds, the RHGC will update and publish the following table, for all \r\napproved registration holds, prior to the beginning of fall term.\r\n• Name of Registration Hold\r\n• Administering Office\r\n• Date/Timeframe of Hold Placement\r\n• Type of Hold: Current and/or Future Term Hold; or PIN\r\n• Link to Hold Information on Administering Unit’s Website\r\nProposed registration holds must meet all of the following criteria for initial and continuing approval. \r\nThe RHGC is responsible for evaluating the following:\r\nD. Prevention of future enrollment is a reasonable and intended consequence of non-compliance\r\nE. An alternative, less-restrictive option of comparable value is not available \r\nF. Responsible unit has capacity to effectively administer the hold and adhere to best practices \r\noutlined by the Registration Hold Governance Committee (RHGC)\r\nRHGC Best Practices for Registration Hold Administration:\r\n1. Clear Communication. The unit website and hold-related student messaging must contain clear \r\ninformation detailing the policy and procedure for registration holds within that unit, including \r\ninformation on how to address/remove the hold and how to appeal the hold placement.\r\n2. Timing of Holds. \r\na. For most registration holds:\r\ni. The notice of a potential registration hold must be sent to students at least two \r\nweeks prior to its placement\r\nii. Registration holds must be placed prior to the beginning of Week 6 of the term",
+      "width": 1700,
+      "words": []
+    }
+  ],
+  "sourcePdfSha256": "65dab0d0f6109edc3186ea9b64b21dfdada3503933daed979c0e74be82d60917",
+  "sourceUrl": "https://senate.uoregon.edu/sites/default/files/2024-02/Student%20Registration%20Holds%20policy_02.22.2024docx.pdf",
+  "status": "ready_for_review",
+  "version": 1
+}

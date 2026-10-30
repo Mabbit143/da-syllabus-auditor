@@ -21,6 +21,27 @@
       "reviewedAt": "2026-10-30T00:02:51.402019+00:00",
       "id": "5e056b051ff42a84c4239451bedf3e8290885a2e61bb9af96f3932f2276cf864",
       "selected": false
+    },
+    {
+      "version": 1,
+      "approved": true,
+      "topic": "registration_holds",
+      "sourceUrl": "https://senate.uoregon.edu/sites/default/files/2024-02/Student%20Registration%20Holds%20policy_02.22.2024docx.pdf",
+      "sourcePdfSha256": "65dab0d0f6109edc3186ea9b64b21dfdada3503933daed979c0e74be82d60917",
+      "artifactSha256": "48d2f242e0d2efbfd79996c177041275969badc8f62ef7f370d2ce4fa824d150",
+      "page": 1,
+      "region": [
+        195,
+        368,
+        1350,
+        152
+      ],
+      "quote": "The UO utilizes administrative holds to support student success and protect the institution’s \r\ninterests by enforcing policy. Registration holds prevent course enrollment and should only be \r\nused when other options are not available and the prevention of future enrollment is a \r\nreasonable consequence.",
+      "imageSha256": "60fb0ac53ac212d7e8ec5ed33004404824c6b8067e03cb9544c05bb45f6cdf08",
+      "extractionMethod": "text",
+      "reviewedAt": "2026-10-30T00:45:45.428663+00:00",
+      "id": "ed97b81d9fa8d02512127c77cc6e365ecc9ed0e37537fb4be0f7f0fb913b9c9a",
+      "selected": true
     }
   ]
 }
