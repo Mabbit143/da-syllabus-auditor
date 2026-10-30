@@ -12,7 +12,7 @@ export async function openPdf(file: File) {
 }
 
 /** Browser-only: reads text per page. The PDF never leaves the browser. */
-export async function extractPages(file: File): Promise<Extracted> {
+export async function extractPages(file: File, source?: string): Promise<Extracted> {
   const doc = await openPdf(file);
   const pages: Page[] = [];
   for (let n = 1; n <= doc.numPages; n++) {
@@ -22,7 +22,7 @@ export async function extractPages(file: File): Promise<Extracted> {
       if (!("str" in item)) continue;
       text += item.str + (item.hasEOL ? "\n" : " ");
     }
-    pages.push({ pageNumber: n, text: text.trim() });
+    pages.push({ pageNumber: n, text: text.trim(), ...(source ? { source } : {}) });
   }
   return { pageCount: doc.numPages, pages };
 }
