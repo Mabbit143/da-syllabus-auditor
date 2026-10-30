@@ -55,7 +55,20 @@ async function callJson(
 }
 
 function pageBlock(p: Page): string {
-  return `=== PAGE ${p.pageNumber} ===\n${p.text}`;
+  return `=== PAGE ${p.pageNumber}${p.source ? ` (${p.source})` : ""} ===\n${p.text}`;
+}
+
+/** Distinct source labels, in first-appearance order, with a page count each. Omitted when there's only one. */
+function sourcesOf(pages: Page[]): AuditReport["sources"] {
+  const order: string[] = [];
+  const counts = new Map<string, number>();
+  for (const p of pages) {
+    if (!p.source) continue;
+    if (!counts.has(p.source)) order.push(p.source);
+    counts.set(p.source, (counts.get(p.source) ?? 0) + 1);
+  }
+  if (order.length <= 1) return undefined;
+  return order.map((label) => ({ label, pageCount: counts.get(label) ?? 0 }));
 }
 
 export function chunkPages(pages: Page[]): Page[][] {
@@ -312,5 +325,6 @@ export async function runAudit(
     biggestRiskIndex,
     overall: overallRead(dimensions),
     passages,
+    ...(sourcesOf(req.pages) ? { sources: sourcesOf(req.pages) } : {}),
   };
 }
