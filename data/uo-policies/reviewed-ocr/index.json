@@ -168,6 +168,27 @@
       "reviewedAt": "2026-10-30T01:08:04.838474+00:00",
       "id": "b045bfd9435425e9d18c22f4ec724749b65b583bd4135afee5ff5326264eef39",
       "selected": true
+    },
+    {
+      "version": 1,
+      "approved": true,
+      "topic": "academic_integrity",
+      "sourceUrl": "https://dos.uoregon.edu/files/2023-02/SOP-Academic-Misconduct-2023.pdf",
+      "sourcePdfSha256": "e6533e38de0de70bc6130043642b24ee22aa42f68d89eae4adabe0a384e1332c",
+      "artifactSha256": "5e85394952703f38b0c5cd0ddc5978ae2032424cca91500da8d048fb5a41819c",
+      "page": 4,
+      "region": [
+        215,
+        1292,
+        1270,
+        58
+      ],
+      "quote": "A grade penalty should not be put in place prior to the resolution of the case and a finding of in \r\nviolation.",
+      "imageSha256": "42c4b0c9e87912442a50991d0c51aa714e2283c3e7dd3493514c1995dec3e919",
+      "extractionMethod": "text",
+      "reviewedAt": "2026-10-30T15:48:15.913149+00:00",
+      "id": "fbae7aa4866dff15c76aa6bfcc93fd8859740c7bf8298e2d24be47c844af39b0",
+      "selected": true
     }
   ]
 }
