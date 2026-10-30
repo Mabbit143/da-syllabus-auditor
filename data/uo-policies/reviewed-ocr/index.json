@@ -36,7 +36,7 @@
         1350,
         152
       ],
-      "quote": "The UO utilizes administrative holds to support student success and protect the institution’s \r\ninterests by enforcing policy. Registration holds prevent course enrollment and should only be \r\nused when other options are not available and the prevention of future enrollment is a \r\nreasonable consequence.",
+      "quote": "The UO utilizes administrative holds to support student success and protect the institution\u2019s \r\ninterests by enforcing policy. Registration holds prevent course enrollment and should only be \r\nused when other options are not available and the prevention of future enrollment is a \r\nreasonable consequence.",
       "imageSha256": "60fb0ac53ac212d7e8ec5ed33004404824c6b8067e03cb9544c05bb45f6cdf08",
       "extractionMethod": "text",
       "reviewedAt": "2026-10-30T00:45:45.428663+00:00",
@@ -189,6 +189,21 @@
       "reviewedAt": "2026-10-30T15:48:15.913149+00:00",
       "id": "fbae7aa4866dff15c76aa6bfcc93fd8859740c7bf8298e2d24be47c844af39b0",
       "selected": true
+    },
+    {
+      "version": 1,
+      "approved": true,
+      "topic": "dept_uo_anthropology",
+      "sourceUrl": "https://catalog.uoregon.edu/arts-sciences/social-sciences/anthropology/ug-anthropology/",
+      "sourcePdfSha256": "2bb149f1dba3434a091e68a8379bf89365e8804868664a562a5dfa12a2c1ab29",
+      "artifactSha256": "7a3788a3be5d770a6c5547c4a3bfb7e500703823d377763f4b7b43c2a8c5f927",
+      "page": 1,
+      "quote": "Explain how knowledge is produced and how incorporation of diverse perspectives leads to broader understandings of the human experience.",
+      "imageSha256": "77f1b9c90a0c7cbdbd9a63b8c25e479b1310abb8832dffd17d93c53dc6f2d64d",
+      "extractionMethod": "text",
+      "reviewedAt": "2026-10-30T23:38:15.534561+00:00",
+      "id": "affc06279603f129b7cad6c5d81972b75a9f6ade68100a9b43e4eabe9b8f54c8",
+      "selected": false
     }
   ]
 }

@@ -57,3 +57,13 @@ test("an unknown topic id still renders, falling back to its raw id as the label
   assert.equal(info.label, "not_yet_registered_topic");
   assert.equal(info.syllabusComparable, false);
 });
+
+test("loadAllEvidence includes the admitted UO Anthropology department record", async () => {
+  // @ts-expect-error Native Node TS entry point.
+  const { loadAllEvidence } = await import("./evidence.ts");
+  const records = await loadAllEvidence(); // default ROOT: the real data/uo-policies/reviewed-ocr
+  const dept = records.find((r) => r.topic.id === "dept_uo_anthropology");
+  assert.ok(dept, "expected an admitted dept_uo_anthropology record");
+  assert.ok(dept!.quote.length >= 40 && dept!.quote.length <= 700);
+  assert.match(dept!.sourceUrl, /uoregon\.edu/);
+});
