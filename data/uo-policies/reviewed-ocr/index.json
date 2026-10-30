@@ -125,6 +125,48 @@
       "extractionMethod": "text",
       "reviewedAt": "2026-10-30T01:03:43.999756+00:00",
       "id": "4f68a75c0aed5394183b259f52a9fcfe69973dd3ebbd04e4026574ef6eb53364",
+      "selected": false
+    },
+    {
+      "version": 1,
+      "approved": true,
+      "topic": "general_misconduct",
+      "sourceUrl": "https://dos.uoregon.edu/files/student-organization-misconduct-procedures-2020.pdf",
+      "sourcePdfSha256": "bfda1c5fe6ec73c3d33fa496d4a6b4c678d3d1cccc97be952f87e78367bebe89",
+      "artifactSha256": "2ff9f586d66df7ebb01404bcb41263e8330f67d20a9cfeb4e27d6040f0a535bf",
+      "page": 1,
+      "region": [
+        150,
+        1908,
+        1390,
+        55
+      ],
+      "quote": "The following procedures implement the Student Conduct Code (Code) as it relates to allegations of Prohibited \r\nConduct when the Respondent is a Student Organization.",
+      "imageSha256": "83d5c81ff46f9408bdce6cc5d20d22028a25affa3b70a643a24339e97ba2d119",
+      "extractionMethod": "text",
+      "reviewedAt": "2026-10-30T01:08:03.936320+00:00",
+      "id": "d772f37411cd8b9077caa2d2e5bdd20a4b750a3f8856a8241011b31a0eab1e7d",
+      "selected": true
+    },
+    {
+      "version": 1,
+      "approved": true,
+      "topic": "admissions_policy",
+      "sourceUrl": "https://policies.uoregon.edu/sites/default/files/Admissions%20Policies%20-%20Clean%20Version.pdf",
+      "sourcePdfSha256": "41aa6cd0633c3fd857e11544b4f845564a35875cf3b9c383b949a1588eb503ae",
+      "artifactSha256": "b83b194fb91f0f7abf9bb8e92974f94f0518db0ba7fe709c8ec68e92f8756d80",
+      "page": 1,
+      "region": [
+        290,
+        1000,
+        1300,
+        140
+      ],
+      "quote": "The University sets standards for admissions. Standards for undergraduate admission \r\nmay include but need not be limited to high school graduation, curriculum requirements, \r\nprior college-level coursework, standardized test scores and grades. Standards for \r\ngraduate admission may include but need not be limited to holding an undergraduate \r\ndegree, curriculum requirements, prior college-level coursework, standardized test scores \r\nand grades.",
+      "imageSha256": "6055c34aed17c47191a6943aa66aa2d52ca0c9422555d52167e5ea3d0e8004c4",
+      "extractionMethod": "text",
+      "reviewedAt": "2026-10-30T01:08:04.838474+00:00",
+      "id": "b045bfd9435425e9d18c22f4ec724749b65b583bd4135afee5ff5326264eef39",
       "selected": true
     }
   ]
