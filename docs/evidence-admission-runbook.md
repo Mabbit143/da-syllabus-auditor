@@ -217,3 +217,21 @@ a topic) as one `data: admit <topic> evidence record` commit.
 4. **Filenames lie about draft status.** Always visually check the rendered
    page for a DRAFT watermark before admitting, regardless of what the
    manifest filename says.
+
+5. **A "Clean Version" or non-draft-looking document can still be
+   superseded.** The Student Records Policy PDF (`05.00.04 Student Records
+   Policy - PAC.pdf`) had no DRAFT watermark, but page 1 was a Policy
+   Concept Form stating "This policy has been replaced by UO Policy
+   III.05.03" with "Proposed Action: Repeal." Admitting a repealed policy's
+   text as current evidence would misrepresent what's actually in effect.
+   Read page 1 for repeal/replacement/superseded language before checking
+   anything else — a document can pass the draft check and still not be
+   current.
+
+6. **Some manifest URLs fail to download or extract entirely** (confirmed
+   with the 2016 Exam Policy Clarification PDF and the 2023 UOPD policy
+   manual — both returned `status: "failed"` with no page data). Don't
+   retry the same URL blindly; log it as a known-failed source and move on.
+   A bundle's `result.json` with `"status": "failed"` and `"pages": []`
+   means the Modal worker couldn't process it within its limits (download
+   size, page count, or format) — there's nothing to review.
