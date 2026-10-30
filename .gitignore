@@ -10,3 +10,4 @@ playwright-report/
 .document-venv/
 __pycache__/
 *.pyc
+.hermes/
