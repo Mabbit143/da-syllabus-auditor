@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Report from "@/components/Report";
 import TermView, { type Course } from "@/components/TermView";
+import DepartmentView from "@/components/DepartmentView";
 import { useSchool, useUserId } from "@/components/Nav";
 import { deleteAudit, loadAudits, loadSchoolPolicies, recordGaps, saveAudit, saveSchoolPolicies } from "@/lib/cloud";
 import { extractPages } from "@/lib/extract";
@@ -10,6 +11,7 @@ import { mergePieces } from "@/lib/merge";
 import { ocrPages } from "@/lib/ocr";
 import type { PolicyCheck } from "@/lib/policy/types";
 import type { CourseContext } from "@/lib/policy/contents-types";
+import type { EvidenceRecord } from "@/lib/policy/evidence";
 import type { AuditReport, Page } from "@/lib/types";
 
 type StoredCourse = Course & { pages: Page[] };
@@ -35,7 +37,7 @@ function save(courses: StoredCourse[]) {
   }
 }
 
-export default function AuditorHome({ disclosure }: { disclosure: string }) {
+export default function AuditorHome({ disclosure, departmentEvidence }: { disclosure: string; departmentEvidence: EvidenceRecord[] }) {
   const [courses, setCourses] = useState<StoredCourse[]>([]);
   const [openId, setOpenId] = useState<string | null>(null);
   const [status, setStatus] = useState<Status>({ step: "idle" });
@@ -297,6 +299,7 @@ export default function AuditorHome({ disclosure }: { disclosure: string }) {
           }}
         />
       )}
+      {!open && <DepartmentView courses={courses} evidence={departmentEvidence} />}
     </main>
   );
 }
