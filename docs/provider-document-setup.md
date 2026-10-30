@@ -1,6 +1,8 @@
 # Provider and public-document setup
 
-2026-10-27: offline integration implemented. Live activation is unfinished.
+2026-10-27: offline integration implemented. 2026-10-29: owner confirmed the
+Modal grant/spend-limit checks below; both Modal apps are now deployed and
+have each completed a real job.
 
 | Check | Current evidence |
 | --- | --- |
@@ -8,9 +10,9 @@
 | Analysis setting | Meta remains the current default |
 | Baseten inference | Mocked routing tested; new live smoke not run |
 | Modal SDK | 1.6.2 installed in `.document-venv` |
-| Modal login | No usual profile file or environment token pair found |
-| Credit balances and no-charge controls | Not verified from either dashboard |
-| Modal deployment/actual OCR | Not run |
+| Modal login | Authenticated profile present (`mabbit143`) |
+| Credit balances and no-charge controls | Owner-confirmed 2026-10-29 |
+| Modal deployment/actual OCR | `da-syllabus-ocr` deployed and invoked live through `/api/ocr`: HTTP 200, correct text returned. `da-public-policy-documents` deployed; one real job against a live `provost.uoregon.edu` PDF completed (download, extract, page render) and sits in `.document-review/` awaiting owner quote review/approve/import — that step still requires manual source-image attestation and was not done automatically. |
 | Baseten published terms | Model APIs zero retention and no training stated in published Security Practices; account-specific overrides not inspected |
 | Native document processing | Real PDFium extraction/rendering tested locally; Tesseract engine is not on local PATH; OCR parsing tested with mocked engine output |
 
