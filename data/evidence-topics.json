@@ -12,6 +12,8 @@
     { "id": "grievances", "label": "Complaints and grievances", "description": "How to file a formal complaint about a decision or treatment at the school, and who can help first.", "syllabusComparable": true },
     { "id": "mandatory_reporting", "label": "Instructors as mandatory reporters", "description": "What instructors are required to report, so you know what is confidential when you tell them something.", "syllabusComparable": true },
     { "id": "withdrawal", "label": "Withdrawal and drop deadlines", "description": "Deadlines to drop a course or withdraw from the term, and how late requests are handled.", "syllabusComparable": true },
-    { "id": "registration_holds", "label": "Registration holds", "description": "Administrative or financial holds that block a student from registering for or staying enrolled in courses \u2014 independent of anything in a syllabus.", "syllabusComparable": false }
+    { "id": "registration_holds", "label": "Registration holds", "description": "Administrative or financial holds that block a student from registering for or staying enrolled in courses \u2014 independent of anything in a syllabus.", "syllabusComparable": false },
+    { "id": "general_misconduct", "label": "General and substance-use misconduct", "description": "Non-academic student conduct violations and how UO investigates and resolves them, separate from academic integrity cases.", "syllabusComparable": false },
+    { "id": "conduct_appeals", "label": "Student conduct appeals", "description": "How a student (or faculty member) appeals a student conduct code decision \u2014 a separate process from academic grade grievances.", "syllabusComparable": false }
   ]
 }
