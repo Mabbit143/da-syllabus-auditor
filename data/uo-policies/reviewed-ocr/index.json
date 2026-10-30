@@ -1,4 +1,26 @@
 {
   "version": 1,
-  "records": []
+  "records": [
+    {
+      "version": 1,
+      "approved": true,
+      "topic": "academic_integrity",
+      "sourceUrl": "https://dos.uoregon.edu/files/2023-02/SOP-Academic-Misconduct-2023.pdf",
+      "sourcePdfSha256": "e6533e38de0de70bc6130043642b24ee22aa42f68d89eae4adabe0a384e1332c",
+      "artifactSha256": "0b037b364acfbdddc6d6ee5296a685310211c7c6659cb8d259a256f02f0b1a1b",
+      "page": 2,
+      "region": [
+        195,
+        255,
+        1275,
+        80
+      ],
+      "quote": "The following procedures implement the Student Conduct Code (Code) as it relates to allegations of \r\nAcademic Misconduct when the Respondent is an individual student.",
+      "imageSha256": "12fb3dfc035c72970c4405d935b5957e3756b81354d870d0d3a5949bcd0c54fc",
+      "extractionMethod": "text",
+      "reviewedAt": "2026-10-30T00:02:51.402019+00:00",
+      "id": "5e056b051ff42a84c4239451bedf3e8290885a2e61bb9af96f3932f2276cf864",
+      "selected": false
+    }
+  ]
 }
