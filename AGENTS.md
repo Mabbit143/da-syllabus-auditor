@@ -56,4 +56,4 @@ Run from the repo root (`da-syllabus-auditor/da-syllabus-auditor`; the parent fo
 | E2E tests | `npm run test:e2e` (`npm run test:e2e:headed` for a visible browser) |
 | Typecheck | `npx tsc --noEmit` |
 
-Environment variable names (values live in `.env.local` and the Vercel dashboard, never in Git): `MODEL_API_KEY`, `MODEL_PROVIDER` (`baseten` switches to Baseten Muse Spark Open; otherwise Meta), `BASETEN_API_KEY`, `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
+Environment variable names (values live in `.env.local` and the Vercel dashboard, never in Git): `MODEL_API_KEY`, `MODEL_PROVIDER` (`baseten` switches to Baseten Muse Spark Open; otherwise Meta), `BASETEN_API_KEY`, `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY` (server-only, Vercel dashboard only — `app/api/record-gaps` uses it to insert into `policy_gaps` after re-verifying quotes; never expose it to the browser).

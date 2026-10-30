@@ -2,7 +2,6 @@
 
 import type { RankedOpportunity, Profile } from "./opps/types";
 import type { PolicyComparison, PolicyTopic, SchoolPolicy } from "./policy/types";
-import { agreedGaps } from "./gaps";
 import type { AuditReport, Page } from "./types";
 import { supabase } from "./supabase";
 
@@ -141,26 +140,24 @@ export async function saveSchoolPolicies(school: string, policies: SchoolPolicy[
   }
 }
 
-async function fingerprint(pages: Page[]): Promise<string> {
-  const text = pages.map((p) => p.text).join("\n").replace(/\s+/g, " ").trim().toLowerCase();
-  const bytes = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));
-  return [...new Uint8Array(bytes)].map((b) => b.toString(16).padStart(2, "0")).join("");
-}
-
-/** Adds the differences to the master list. No user id is sent; the fingerprint only stops one syllabus counting twice. */
+/**
+ * Adds the differences to the master list, through a server route that re-verifies every quote
+ * with a service-role key (db/003-policy-gaps-server-only.sql). The browser is never trusted to
+ * insert directly — see the "Known weakness" note in db/002-policy-gaps.sql for why.
+ */
 export async function recordGaps(school: string, pages: Page[], items: PolicyComparison[]): Promise<void> {
   try {
-    if (!(await uid())) return;
-    const gaps = agreedGaps(items);
-    if (gaps.length === 0) return;
-    const hash = await fingerprint(pages);
-    const rows = gaps.map((g) => ({
-      school: schoolKey(school), topic: g.topic, kind: g.relation, instructor: g.instructor,
-      syllabus_quote: g.syllabusQuote ?? null, syllabus_page: g.syllabusPage ?? null,
-      school_quote: g.schoolQuote, school_url: g.schoolUrl, syllabus_hash: hash,
-    }));
-    const { error } = await supabase()!.from("policy_gaps").upsert(rows, { onConflict: "school,topic,syllabus_hash", ignoreDuplicates: true });
-    if (error) throw error;
+    const db = supabase();
+    if (!db) return;
+    const { data } = await db.auth.getSession();
+    const token = data.session?.access_token;
+    if (!token) return;
+    const res = await fetch("/api/record-gaps", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ school: schoolKey(school), pages, items }),
+    });
+    if (!res.ok) throw new Error(`record-gaps responded ${res.status}`);
   } catch (err) {
     log("record gaps", err);
   }

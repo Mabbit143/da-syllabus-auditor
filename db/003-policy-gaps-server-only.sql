@@ -1,0 +1,13 @@
+-- DA Syllabus Auditor, part 3: run once in the Supabase SQL editor after 002-policy-gaps.sql.
+--
+-- Gap rows are now inserted only through app/api/record-gaps (lib/policy/record-gaps-handler.ts),
+-- which re-verifies every syllabus quote (exact substring of the uploaded page, same check as the
+-- rest of the app) and every school quote (re-fetched from its live page) before writing, using a
+-- service-role key that bypasses row-level security entirely.
+--
+-- Before this migration, any signed-in user could insert an arbitrary row directly with the public
+-- anon key (the "add policy gaps" policy below only checked `with check (true)`) — see the "Known
+-- weakness" note in 002-policy-gaps.sql. Dropping it closes that: the anon key can no longer write
+-- to this table at all, only the server route (holding SUPABASE_SERVICE_ROLE_KEY, set in Vercel
+-- only, never in the browser or in git) can.
+drop policy if exists "add policy gaps" on public.policy_gaps;

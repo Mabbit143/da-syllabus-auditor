@@ -56,7 +56,7 @@ cp .env.example .env.local   # fill in the keys
 npm run dev                  # http://localhost:3000
 ```
 
-Checks: `npx tsc --noEmit`, `npm run lint`, `node --test "lib/**/*.test.mts"`, `npm run test:e2e` (the model and OCR calls are mocked). Environment variables: `MODEL_API_KEY`, `MODEL_PROVIDER`, `BASETEN_API_KEY`, `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `MODAL_OCR_URL`, `OCR_TOKEN`. Database: run `db/schema.sql`, then `db/002-policy-gaps.sql`.
+Checks: `npx tsc --noEmit`, `npm run lint`, `node --test "lib/**/*.test.mts"`, `npm run test:e2e` (the model and OCR calls are mocked). Environment variables: `MODEL_API_KEY`, `MODEL_PROVIDER`, `BASETEN_API_KEY`, `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `MODAL_OCR_URL`, `OCR_TOKEN`, `SUPABASE_SERVICE_ROLE_KEY` (server-only; set in Vercel, never the browser). Database: run `db/schema.sql`, then `db/002-policy-gaps.sql`, then `db/003-policy-gaps-server-only.sql`.
 
 ## Judging criteria
 
