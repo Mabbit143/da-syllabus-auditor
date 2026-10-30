@@ -6,6 +6,7 @@ import TermView, { type Course } from "@/components/TermView";
 import { useSchool, useUserId } from "@/components/Nav";
 import { deleteAudit, loadAudits, loadSchoolPolicies, recordGaps, saveAudit, saveSchoolPolicies } from "@/lib/cloud";
 import { extractPages } from "@/lib/extract";
+import { mergePieces } from "@/lib/merge";
 import { ocrPages } from "@/lib/ocr";
 import type { PolicyCheck } from "@/lib/policy/types";
 import type { CourseContext } from "@/lib/policy/contents-types";
@@ -13,6 +14,7 @@ import type { AuditReport, Page } from "@/lib/types";
 
 type StoredCourse = Course & { pages: Page[] };
 type Status = { step: "idle" } | { step: "working"; message: string } | { step: "error"; message: string };
+type PieceDraft = { label: string; kind: "file"; file: File } | { label: string; kind: "text"; text: string };
 
 const STORE_KEY = "da-syllabus-auditor.courses.v1";
 
@@ -170,13 +172,63 @@ export default function AuditorHome({ disclosure }: { disclosure: string }) {
       if (!res.ok) throw new Error(data?.error?.message ?? "The audit failed.");
       const report: AuditReport = scanned ? { ...data.report, textSource: "ocr" } : data.report;
       const id = crypto.randomUUID();
-      update([...courses, { id, report, pages }]);
-      void saveAudit({ id, report, pages });
+      const createdAt = new Date().toISOString();
+      update([...courses, { id, report, pages, createdAt }]);
+      void saveAudit({ id, report, pages, createdAt });
       setOpenId(id);
       setStatus({ step: "idle" });
       void runPolicyCheck(id, pages);
     } catch (err) {
       console.error("[audit] failed:", err);
+      setStatus({ step: "error", message: err instanceof Error ? err.message : "Something went wrong." });
+    }
+  }
+
+  const [multiMode, setMultiMode] = useState(false);
+  const [pieces, setPieces] = useState<PieceDraft[]>([{ label: "", kind: "text", text: "" }]);
+
+  function updatePiece(i: number, next: Partial<PieceDraft>) {
+    setPieces((prev) => prev.map((p, idx) => (idx === i ? ({ ...p, ...next } as PieceDraft) : p)));
+  }
+
+  async function onPieces() {
+    const usable = pieces.filter((p) => p.label.trim() && (p.kind === "text" ? p.text.trim() : p.file));
+    if (usable.length === 0) {
+      setStatus({ step: "error", message: "Add at least one labeled piece with content." });
+      return;
+    }
+    try {
+      setStatus({ step: "working", message: "Reading each piece…" });
+      const parts = await Promise.all(usable.map(async (p) => {
+        if (p.kind === "text") return { label: p.label.trim(), pages: [{ pageNumber: 1, text: p.text.trim() }] };
+        const extracted = await extractPages(p.file);
+        if (extracted.pages.reduce((n, pg) => n + pg.text.length, 0) < 20) {
+          throw new Error(`"${p.label}" has no selectable text. Paste its text instead, or use the single-PDF upload above for a scanned file.`);
+        }
+        return { label: p.label.trim(), pages: extracted.pages };
+      }));
+      const merged = mergePieces(parts);
+      setStatus({ step: "working", message: `Auditing ${merged.pageCount} combined pages from ${parts.length} pieces. This can take a minute or two…` });
+      const fileName = `Combined syllabus (${parts.length} pieces)`;
+      const res = await fetch("/api/audit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ requestId: crypto.randomUUID(), fileName, pageCount: merged.pageCount, pages: merged.pages }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data?.error?.message ?? "The audit failed.");
+      const report: AuditReport = data.report;
+      const id = crypto.randomUUID();
+      const createdAt = new Date().toISOString();
+      update([...courses, { id, report, pages: merged.pages, createdAt }]);
+      void saveAudit({ id, report, pages: merged.pages, createdAt });
+      setOpenId(id);
+      setPieces([{ label: "", kind: "text", text: "" }]);
+      setMultiMode(false);
+      setStatus({ step: "idle" });
+      void runPolicyCheck(id, merged.pages);
+    } catch (err) {
+      console.error("[audit] combined pieces failed:", err);
       setStatus({ step: "error", message: err instanceof Error ? err.message : "Something went wrong." });
     }
   }
@@ -195,6 +247,37 @@ export default function AuditorHome({ disclosure }: { disclosure: string }) {
           </form>
         )}
         <input type="file" aria-label="Upload syllabus PDF" accept="application/pdf" onChange={(e) => { onFile(e.target.files?.[0]); e.target.value = ""; }} disabled={status.step === "working"} />
+        <p>
+          <button type="button" className="link" onClick={() => setMultiMode(!multiMode)} aria-expanded={multiMode}>
+            {multiMode ? "Hide" : "Syllabus scattered across several Canvas pages? Combine pieces instead"}
+          </button>
+        </p>
+        {multiMode && (
+          <div className="pieces">
+            <p className="muted">Add one piece per Canvas page or file. Each piece is labeled by what you call it, so the report can disclose how the syllabus was assembled.</p>
+            {pieces.map((p, i) => (
+              <div key={i} className="piece">
+                <label>Label (e.g. &ldquo;Grading policy page&rdquo;)<input type="text" value={p.label} onChange={(e) => updatePiece(i, { label: e.target.value })} disabled={status.step === "working"} /></label>
+                <label>
+                  <select value={p.kind} onChange={(e) => updatePiece(i, e.target.value === "file" ? { kind: "file", file: (p as { file?: File }).file ?? new File([], "") } : { kind: "text", text: (p as { text?: string }).text ?? "" })} disabled={status.step === "working"}>
+                    <option value="text">Paste text</option>
+                    <option value="file">Upload PDF</option>
+                  </select>
+                </label>
+                {p.kind === "text" ? (
+                  <textarea aria-label={`Text for piece ${i + 1}`} value={p.text} onChange={(e) => updatePiece(i, { text: e.target.value })} disabled={status.step === "working"} rows={4} />
+                ) : (
+                  <input type="file" aria-label={`PDF for piece ${i + 1}`} accept="application/pdf" onChange={(e) => { const f = e.target.files?.[0]; if (f) updatePiece(i, { file: f }); }} disabled={status.step === "working"} />
+                )}
+                {pieces.length > 1 && (
+                  <button type="button" className="link" onClick={() => setPieces((prev) => prev.filter((_, idx) => idx !== i))} disabled={status.step === "working"}>Remove piece</button>
+                )}
+              </div>
+            ))}
+            <button type="button" onClick={() => setPieces((prev) => [...prev, { label: "", kind: "text", text: "" }])} disabled={status.step === "working"}>Add another piece</button>{" "}
+            <button type="button" onClick={() => void onPieces()} disabled={status.step === "working"}>Audit combined syllabus</button>
+          </div>
+        )}
       </section>
       {status.step === "working" && <p role="status">{status.message}</p>}
       {status.step === "error" && <p role="alert" className="warn">{status.message}</p>}

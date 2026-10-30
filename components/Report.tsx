@@ -114,6 +114,12 @@ export default function Report({ report, pages, policy }: { report: AuditReport;
         <p className="muted">{report.pageCount} pages. This audit describes what the document says; it is not legal or academic advice.</p>
         {report.modelNote && <p className="warn">{report.modelNote}</p>}
         {report.textSource === "ocr" && <p className="warn">This file was a scan. Its text was read from page images by OCR, so quotes may contain reading errors.</p>}
+        {report.sources && (
+          <p className="muted">
+            Assembled from {report.sources.length} pieces: {report.sources.map((s) => `${s.label} (${s.pageCount} page${s.pageCount === 1 ? "" : "s"})`).join(", ")}.
+            {" "}A syllabus scattered across several separate pieces is itself worth noting.
+          </p>
+        )}
         {report.coverage.status === "partial" && (
           <p className="warn">Partial audit. Skipped: {report.coverage.skipped.join(", ")}.</p>
         )}
