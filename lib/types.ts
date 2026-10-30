@@ -11,6 +11,8 @@ export type FlagKind = "attendance" | "weight" | "late";
 export interface Page {
   pageNumber: number;
   text: string;
+  /** Set when this page came from one piece of a syllabus assembled from several Canvas pages/files. */
+  source?: string;
 }
 
 export interface Passage {
@@ -80,6 +82,8 @@ export interface AuditReport {
   textSource?: "ocr";
   /** Set when some model steps ran on the Baseten fallback because Meta did not answer. */
   modelNote?: string;
+  /** Set when this syllabus was assembled from more than one piece (e.g. scattered Canvas pages); the scattering itself is disclosed. */
+  sources?: { label: string; pageCount: number }[];
   policyCheck?: PolicyCheck;
   assessments: Assessment[];
   fileName: string;
