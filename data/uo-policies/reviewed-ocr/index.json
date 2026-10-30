@@ -42,6 +42,90 @@
       "reviewedAt": "2026-10-30T00:45:45.428663+00:00",
       "id": "ed97b81d9fa8d02512127c77cc6e365ecc9ed0e37537fb4be0f7f0fb913b9c9a",
       "selected": true
+    },
+    {
+      "version": 1,
+      "approved": true,
+      "topic": "mandatory_reporting",
+      "sourceUrl": "https://investigations.uoregon.edu/sites/default/files/2024-10/title-ix-reporting-faq-58.pdf",
+      "sourcePdfSha256": "413759b443e58683bc743b74817c8cd2205123486aea1a89139740dd1bb06914",
+      "artifactSha256": "ba5fa8196ee15735a4f5d20af97590ac146bc793a770f3afebcd5161c32110af",
+      "page": 1,
+      "region": [
+        200,
+        540,
+        1300,
+        104
+      ],
+      "quote": "Under the new regulations, all \r\nemployees (except for confidential employees) including faculty, advisors, and \r\nadministrators will be designated reporters.",
+      "imageSha256": "735767ad165c7cc7af87f5b429a5b52e61baa39df954a872b1b4f7ff3b038079",
+      "extractionMethod": "text",
+      "reviewedAt": "2026-10-30T01:03:40.832844+00:00",
+      "id": "d6faab83634fd9dd07e6b4877368b6c9442bb533b2431d0374d70b0194fed05c",
+      "selected": false
+    },
+    {
+      "version": 1,
+      "approved": true,
+      "topic": "general_misconduct",
+      "sourceUrl": "https://dos.uoregon.edu/files/substance-use-and-general-misconduct-procedures-2020.pdf",
+      "sourcePdfSha256": "6fa0e3441ad3f16e17a0ce105b423a9936eb1b15aa276fb456aac33d36d4e723",
+      "artifactSha256": "bcae979dbcb987c30c85d698327570ac9d1b2697973ca610ece395ff1d8634e1",
+      "page": 1,
+      "region": [
+        150,
+        1648,
+        1430,
+        68
+      ],
+      "quote": "The following procedures implement the Student Conduct Code (Code) as it relates to allegations of General \r\nMisconduct and Substance Use Misconduct when the Respondent is an individual student.",
+      "imageSha256": "adaad98e277a4062402130bf2fc42c6165d634459e06520591f5bda41256b4cc",
+      "extractionMethod": "text",
+      "reviewedAt": "2026-10-30T01:03:41.923956+00:00",
+      "id": "92bc41ddaaadfb496a26ce1d8adda8834d925379887db5097ebd7cbd2cc440b3",
+      "selected": false
+    },
+    {
+      "version": 1,
+      "approved": true,
+      "topic": "conduct_appeals",
+      "sourceUrl": "https://dos.uoregon.edu/files/2024-12/university-appeals-board-procedures-2024.pdf",
+      "sourcePdfSha256": "ae7dac89e554de29ab51fd68dcd5baaa0fb2c6479210f383d98cdf0d98f8b075",
+      "artifactSha256": "2d6b6c0a988d3268fbce3d871a2163b22468f0bcbef2b51ec26c70125b078ea2",
+      "page": 1,
+      "region": [
+        150,
+        1494,
+        1370,
+        50
+      ],
+      "quote": "The following procedures implement the Student Conduct Code (Code) as it relates to appeals in cases where \r\nthe University Appeals Board (UAB) has been designated as the University Appellate Body.",
+      "imageSha256": "446c7ee5b00f97a8384cf4281ea2d68bf077c6c5008c9e5bc8709dce746e6a35",
+      "extractionMethod": "text",
+      "reviewedAt": "2026-10-30T01:03:42.630314+00:00",
+      "id": "d24534203b8bef8ce5e9e30214d036de146530ed657f4a904d1e665c9b938ba3",
+      "selected": true
+    },
+    {
+      "version": 1,
+      "approved": true,
+      "topic": "general_misconduct",
+      "sourceUrl": "https://dos.uoregon.edu/files/residence-life-resolution-process-procedures-2020.pdf",
+      "sourcePdfSha256": "f06eb72a50542d35a49f0b4b9cbf1d4794388b6963b4e36a9d0a4163ead36608",
+      "artifactSha256": "bd8871bc24c9acf4ad334b560bae205d2eac721ade7ecf6bce951c1408b4a125",
+      "page": 3,
+      "region": [
+        150,
+        1102,
+        1370,
+        86
+      ],
+      "quote": "A preponderance of the evidence means the \r\nevidence shows that it is more likely than not that the alleged misconduct occurred.",
+      "imageSha256": "4550b24f7820b78c06e1694ea9794fae45a1b231707fb185091d7f6bee1a0a10",
+      "extractionMethod": "text",
+      "reviewedAt": "2026-10-30T01:03:43.999756+00:00",
+      "id": "4f68a75c0aed5394183b259f52a9fcfe69973dd3ebbd04e4026574ef6eb53364",
+      "selected": true
     }
   ]
 }
