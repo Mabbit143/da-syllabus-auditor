@@ -9,7 +9,17 @@ import sys
 from .cli import ROOT, OUTPUT, manifest_urls
 from .download import public_url
 
-TOPICS = {"accommodations", "late_work", "attendance", "academic_integrity", "incompletes", "final_exams", "dead_week", "religious_observance", "grievances", "mandatory_reporting"}
+def _load_topics():
+    registry = json.loads((ROOT / "data/evidence-topics.json").read_text(encoding="utf8"))
+    if registry.get("version") != 1 or not isinstance(registry.get("topics"), list):
+        raise ValueError("Invalid evidence-topic registry")
+    ids = {t["id"] for t in registry["topics"] if isinstance(t, dict) and isinstance(t.get("id"), str)}
+    if len(ids) < 1:
+        raise ValueError("Evidence-topic registry has no topics")
+    return ids
+
+
+TOPICS = _load_topics()
 ADMITTED = ROOT / "data/uo-policies/reviewed-ocr"
 
 
@@ -138,7 +148,9 @@ def main():
         elif args.command == "approve":
             if Path(args.quote_file).name != args.quote_file:
                 raise ValueError("Quote file must be inside the review bundle")
-            quote = (bundle / args.quote_file).read_text(encoding="utf8").strip()
+            # read_bytes+decode avoids text-mode universal-newline translation, which would
+            # silently collapse a PDF's literal \r\n line-wraps and break the exact-quote match.
+            quote = (bundle / args.quote_file).read_bytes().decode("utf8").strip()
             region = [int(value) for value in (args.region or "").split(",")]
             receipt = prepare_receipt(bundle, args.topic, args.page, quote, region, confirmed=args.confirm_reviewed)
             with (bundle / f"approval-{receipt['id']}.json").open("x", encoding="utf8") as file:
