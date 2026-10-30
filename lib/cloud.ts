@@ -76,14 +76,18 @@ export interface StoredAudit {
   id: string;
   report: AuditReport;
   pages: Page[];
+  /** ISO timestamp used to bucket this audit into a term (lib/term.ts). Missing on audits saved before this field existed. */
+  createdAt?: string;
 }
 
 export async function loadAudits(): Promise<StoredAudit[] | null> {
   try {
     if (!(await uid())) return null;
-    const { data, error } = await supabase()!.from("audits").select("id,report,pages").order("created_at");
+    const { data, error } = await supabase()!.from("audits").select("id,report,pages,created_at").order("created_at");
     if (error) throw error;
-    return (data ?? []) as StoredAudit[];
+    return (data ?? []).map((row: { id: string; report: unknown; pages: unknown; created_at: string }) => ({
+      id: row.id, report: row.report as AuditReport, pages: row.pages as Page[], createdAt: row.created_at,
+    }));
   } catch (err) {
     log("load audits", err);
     return null;

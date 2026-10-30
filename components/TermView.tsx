@@ -1,10 +1,13 @@
 "use client";
 
 import type { AuditReport } from "@/lib/types";
+import { previousTermId, termLabel, termOf } from "@/lib/term";
 
 export interface Course {
   id: string;
   report: AuditReport;
+  /** ISO timestamp; missing on audits saved before term tracking existed (treated as the current term). */
+  createdAt?: string;
 }
 
 const WEEKS = 16;
@@ -17,16 +20,55 @@ export function riskPoints(r: AuditReport): number {
   );
 }
 
+function termIdOf(course: Course): string {
+  return termOf(course.createdAt ? new Date(course.createdAt) : new Date()).id;
+}
+
+function average(courses: Course[]): number {
+  if (courses.length === 0) return 0;
+  return Math.round((courses.reduce((n, c) => n + riskPoints(c.report), 0) / courses.length) * 10) / 10;
+}
+
+function CourseTable({ courses, onOpen, onRemove }: { courses: Course[]; onOpen: (id: string) => void; onRemove: (id: string) => void }) {
+  const ranked = [...courses].sort((a, b) => riskPoints(b.report) - riskPoints(a.report));
+  return (
+    <table className="term">
+      <thead>
+        <tr><th>Course</th><th>Overall read</th><th>Risk points</th><th>Biggest risk</th><th /></tr>
+      </thead>
+      <tbody>
+        {ranked.map((c) => {
+          const risk = c.report.biggestRiskIndex === null ? null : c.report.flags[c.report.biggestRiskIndex];
+          return (
+            <tr key={c.id}>
+              <td><button type="button" className="link" onClick={() => onOpen(c.id)}>{c.report.fileName}</button></td>
+              <td>{c.report.overall.label ?? "unavailable"}</td>
+              <td>{riskPoints(c.report)}</td>
+              <td>{risk ? risk.explanation : "None supported"}</td>
+              <td><button type="button" className="link noprint" onClick={() => onRemove(c.id)}>Remove</button></td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
+  );
+}
+
 export default function TermView({ courses, onOpen, onRemove }: {
   courses: Course[];
   onOpen: (id: string) => void;
   onRemove: (id: string) => void;
 }) {
   if (courses.length === 0) return null;
-  const ranked = [...courses].sort((a, b) => riskPoints(b.report) - riskPoints(a.report));
 
+  const thisTerm = termOf(new Date()).id;
+  const lastTerm = previousTermId(thisTerm);
+  const current = courses.filter((c) => termIdOf(c) === thisTerm);
+  const previous = courses.filter((c) => termIdOf(c) === lastTerm);
+  const earlier = courses.filter((c) => termIdOf(c) !== thisTerm && termIdOf(c) !== lastTerm);
+  // Courses this term alone drive the crunch-week map; mixing terms' week numbers together would not be meaningful.
   const weeks = Array.from({ length: WEEKS }, (_, i) => {
-    const items = courses.flatMap((c) =>
+    const items = current.flatMap((c) =>
       c.report.assessments.filter((a) => a.week === i + 1).map((a) => ({ course: c.report.fileName, ...a })),
     );
     const weight = items.reduce((n, a) => n + (a.percent ?? 0), 0);
@@ -40,28 +82,41 @@ export default function TermView({ courses, onOpen, onRemove }: {
         Risk points: High flag = 2, Medium flag = 1, each Weak dimension = 1. Weeks assume every course shares the
         same term calendar. Everything stays in this browser.
       </p>
-      <table className="term">
-        <thead>
-          <tr><th>Course</th><th>Overall read</th><th>Risk points</th><th>Biggest risk</th><th /></tr>
-        </thead>
-        <tbody>
-          {ranked.map((c) => {
-            const risk = c.report.biggestRiskIndex === null ? null : c.report.flags[c.report.biggestRiskIndex];
-            return (
-              <tr key={c.id}>
-                <td><button type="button" className="link" onClick={() => onOpen(c.id)}>{c.report.fileName}</button></td>
-                <td>{c.report.overall.label ?? "unavailable"}</td>
-                <td>{riskPoints(c.report)}</td>
-                <td>{risk ? risk.explanation : "None supported"}</td>
-                <td><button type="button" className="link noprint" onClick={() => onRemove(c.id)}>Remove</button></td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-      <p><strong>Highest risk to consider dropping: </strong>{riskPoints(ranked[0].report) > 0 ? ranked[0].report.fileName : "none stands out in the assessed text"}</p>
 
-      <h4>Crunch-week map</h4>
+      {previous.length > 0 && (
+        <p className="muted">
+          {termLabel(thisTerm)} average risk points: {average(current)} ({current.length} {current.length === 1 ? "syllabus" : "syllabi"}).{" "}
+          {termLabel(lastTerm)} average: {average(previous)} ({previous.length} {previous.length === 1 ? "syllabus" : "syllabi"}).
+        </p>
+      )}
+
+      <h4>{termLabel(thisTerm)}{previous.length > 0 || earlier.length > 0 ? " (this term)" : ""}</h4>
+      {current.length === 0 ? <p className="muted">Nothing audited yet this term.</p> : <CourseTable courses={current} onOpen={onOpen} onRemove={onRemove} />}
+
+      {previous.length > 0 && (
+        <>
+          <h4>{termLabel(lastTerm)} (last term)</h4>
+          <CourseTable courses={previous} onOpen={onOpen} onRemove={onRemove} />
+        </>
+      )}
+
+      {earlier.length > 0 && (
+        <details>
+          <summary>Earlier terms ({earlier.length})</summary>
+          <CourseTable courses={earlier} onOpen={onOpen} onRemove={onRemove} />
+        </details>
+      )}
+
+      {current.length > 0 && (
+        <p><strong>Highest risk to consider dropping this term: </strong>
+          {(() => {
+            const ranked = [...current].sort((a, b) => riskPoints(b.report) - riskPoints(a.report));
+            return riskPoints(ranked[0].report) > 0 ? ranked[0].report.fileName : "none stands out in the assessed text";
+          })()}
+        </p>
+      )}
+
+      <h4>Crunch-week map (this term)</h4>
       <div className="weeks">
         {weeks.map((w) => (
           <div key={w.week} className={`week ${w.crunch ? "crunch" : ""}`} title={w.items.map((a) => `${a.course}: ${a.what}`).join("\n")}>
