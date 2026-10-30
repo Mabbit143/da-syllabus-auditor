@@ -7,6 +7,7 @@ const nextConfig: NextConfig = {
   outputFileTracingIncludes: {
     "/api/policy-check": ["./data/uo-policies/*.md", "./data/uo-policies/reviewed-ocr/**/*"],
     "/api/policy-pairs": ["./data/uo-policies/*.md"],
+    "/evidence": ["./data/evidence-topics.json", "./data/uo-policies/reviewed-ocr/**/*"],
   },
 };
 
