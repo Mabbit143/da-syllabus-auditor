@@ -164,6 +164,48 @@ test("a month word is only a date when it is written as one", () => {
   assert.deepEqual(datesIn("Due Sunday, Oct 4 (11:59 pm)"), ["10/4"]);
 });
 
+test("the deliverables printed under each week are read with their own spans", () => {
+  const ledger = buildLedger(pages(SCHEDULE));
+  assert.equal(ledger.deadlines.status, "found");
+  assert.deepEqual(
+    must(ledger.deadlines.value).map((d: { what: string; week: number }) => [d.what, d.week]),
+    [["Intro Module", 1], ["Week 1 Lab", 1], ["Quiz: Chapter 2", 2], ["Week 2 Lab", 2], ["Quiz: Chapter 3", 3]],
+  );
+  const [page] = pages(SCHEDULE);
+  for (const d of must(ledger.deadlines.value)) assert.equal(page.text.slice(d.citation.start, d.citation.end), d.citation.text);
+});
+
+test("a lecture topic, a column heading and a bare table word are not deliverables", () => {
+  const text = `Week   Activity   Date   Topic   Assignments   Due Date
+1   Lecture   9/29   Introductory Remarks   Intro Module   10/1
+Lab
+Module
+2   Lecture   10/6   Antiquarianism and the archive   10/8`;
+  const names = (buildLedger(pages(text)).deadlines.value ?? []).map((d: { what: string }) => d.what);
+  assert.deepEqual(names, ["Intro Module"]);
+  for (const junk of ["Lab", "Module", "Activity", "Assignments", "Introductory Remarks", "Antiquarianism and the archive"]) {
+    assert.equal(names.includes(junk), false, `${junk} was read as a deliverable`);
+  }
+});
+
+test("a one-word cell is a deliverable only when it stands on its own", () => {
+  const withMidterm = `1   Lecture   9/29   Intro
+2   Lecture   10/6   Midterm   10/8`;
+  assert.deepEqual((buildLedger(pages(withMidterm)).deadlines.value ?? []).map((d: { what: string; week: number }) => [d.what, d.week]), [["Midterm", 2]]);
+});
+
+test("the same deliverable printed in two summary tables is recorded once", () => {
+  const text = `WEEK   TASK TYPES   POINTS   DUE
+1   Hypothesis 1   6   points   Sunday, Oct 4
+2   Hypothesis 2   6   points   Sunday, Oct 11
+WEEK   TASK TYPES   POINTS   DUE
+1   Hypothesis 1   6   points   Sunday, Oct 4`;
+  assert.deepEqual(
+    (buildLedger(pages(text)).deadlines.value ?? []).map((d: { what: string; week: number }) => [d.what, d.week]),
+    [["Hypothesis 1", 1], ["Hypothesis 2", 2]],
+  );
+});
+
 test("a week claim is supported by its own date, its own week number, or its own schedule row", () => {
   const ledger = buildLedger(pages(SCHEDULE));
   assert.equal(weekSupport(ledger, 2, at("2   Lecture   10/6   Antiquarianism   Quiz: Chapter 2   10/8")), "supported");

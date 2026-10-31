@@ -165,28 +165,71 @@ test("a bare point count is not a stated grade weight, but a stated fraction is"
   assert.equal(present(fraction.dimensions.find((d: { dimension: string }) => d.dimension === "transparency"), "transparency").positive, 1);
 });
 
-test("an assessment placed in a week the schedule contradicts is dropped and disclosed", async () => {
+test("the week map is read from the printed schedule, not from the model's list", async () => {
+  const report = await run([SCHEDULE_PAGE], {});
+  assert.deepEqual(
+    report.assessments.map((a: { what: string; week: number }) => [a.what, a.week]),
+    [["Intro Module", 1], ["Quiz: Chapter 2", 2], ["Midterm exam in class", 3]],
+  );
+  for (const a of report.assessments) assert.match(passageOf(report, a.passageId), /Lecture/);
+  assert.equal(report.coverage.status, "full");
+});
+
+test("a lecture topic in the schedule is not treated as a deadline", async () => {
+  const report = await run([SCHEDULE_PAGE], {});
+  const names = report.assessments.map((a: { what: string }) => a.what);
+  for (const topic of ["Introductory Remarks", "Antiquarianism", "Excavation", "Lecture"]) {
+    assert.equal(names.includes(topic), false, `${topic} was listed as a deadline`);
+  }
+});
+
+test("an assessment the model places in a week the schedule contradicts is dropped and disclosed", async () => {
   const report = await run([SCHEDULE_PAGE], {
     assessments: [{ what: "Quiz: Chapter 2", week: 3, percent: null, page: 1, quote: "2   Lecture   10/6   Antiquarianism   Quiz: Chapter 2   10/8" }],
   });
-  assert.equal(report.assessments.length, 0);
+  // The printed schedule still places it correctly; the model's week-3 claim is not kept.
+  const quiz = report.assessments.filter((a: { what: string }) => a.what === "Quiz: Chapter 2");
+  assert.deepEqual(quiz.map((a: { week: number }) => a.week), [2]);
   assert.equal(report.coverage.status, "partial");
   assert.ok(report.coverage.skipped.some((s: string) => /left off the week map/i.test(s)));
 });
 
-test("an assessment whose quote prints its own week's date is kept", async () => {
+test("a model proposal the printed schedule already states is not listed twice", async () => {
   const report = await run([SCHEDULE_PAGE], {
-    assessments: [{ what: "Quiz: Chapter 2", week: 2, percent: null, page: 1, quote: "2   Lecture   10/6   Antiquarianism   Quiz: Chapter 2   10/8" }],
+    assessments: [
+      { what: "Quiz: Chapter 2", week: 2, percent: null, page: 1, quote: "2   Lecture   10/6   Antiquarianism   Quiz: Chapter 2   10/8" },
+      { what: "Midterm", week: 3, percent: null, page: 1, quote: "Midterm exam in class" },
+    ],
   });
-  assert.deepEqual(report.assessments.map((a: { what: string; week: number }) => [a.what, a.week]), [["Quiz: Chapter 2", 2]]);
+  assert.deepEqual(
+    report.assessments.map((a: { what: string; week: number }) => [a.what, a.week]),
+    [["Intro Module", 1], ["Quiz: Chapter 2", 2], ["Midterm exam in class", 3]],
+  );
   assert.equal(report.coverage.status, "full");
 });
 
-test("an assessment quoted from a single table cell keeps the week it sits under", async () => {
+test("a deadline the printed schedule does not state is still added when its passage supports the week", async () => {
   const report = await run([SCHEDULE_PAGE], {
-    assessments: [{ what: "Midterm", week: 3, percent: null, page: 1, quote: "Midterm exam in class" }],
+    assessments: [{ what: "Reading response", week: 2, percent: null, page: 1, quote: "2   Lecture   10/6   Antiquarianism   Quiz: Chapter 2   10/8" }],
   });
-  assert.deepEqual(report.assessments.map((a: { week: number }) => a.week), [3]);
+  const added = present(report.assessments.find((a: { what: string }) => a.what === "Reading response"), "added deadline");
+  assert.equal(added.week, 2);
+  assert.equal(report.assessments.length, 4); // the three printed deadlines plus this one
+});
+
+test("a percentage the passage does not state drops the proposal rather than carrying a figure", async () => {
+  const report = await run([SCHEDULE_PAGE], {
+    assessments: [{ what: "Reading response", week: 2, percent: 10, page: 1, quote: "2   Lecture   10/6   Antiquarianism   Quiz: Chapter 2   10/8" }],
+  });
+  assert.equal(report.assessments.some((a: { what: string }) => a.what === "Reading response"), false);
+});
+
+test("the week map is identical however many schedule rows the model lists", async () => {
+  const quote = "2   Lecture   10/6   Antiquarianism   Quiz: Chapter 2   10/8";
+  const none = await run([SCHEDULE_PAGE], {});
+  const some = await run([SCHEDULE_PAGE], { assessments: [{ what: "Quiz: Chapter 2", week: 2, percent: null, page: 1, quote }] });
+  const shape = (r: { assessments: { what: string; week: number }[] }) => r.assessments.map((a) => `w${a.week} ${a.what}`);
+  assert.deepEqual(shape(none), shape(some));
 });
 
 test("without a printed schedule, a verified assessment keeps its proposed week", async () => {

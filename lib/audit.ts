@@ -392,9 +392,22 @@ export async function runAudit(
     });
   }
 
-  // Week placement must be supported by the quote itself: the week named, or a date the printed
-  // schedule lists under that week. A date from another week is a contradiction, not a near miss.
+  // The week map is built from the deadlines the schedule itself prints, so it does not depend on
+  // which rows the model happened to list this run. Model proposals can only add what the printed
+  // schedule does not already state, and only where their own passage supports the week.
   const assessments: AuditReport["assessments"] = [];
+  const placed = new Map<number, string[]>();
+  const normalize = (what: string) => what.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+  /** The printed schedule already states this deadline if a name on that week matches or contains it. */
+  const alreadyPlaced = (week: number, what: string) => {
+    const name = normalize(what);
+    return (placed.get(week) ?? []).some((p) => p === name || p.includes(name) || name.includes(p));
+  };
+  const remember = (week: number, what: string) => placed.set(week, [...(placed.get(week) ?? []), normalize(what)]);
+  for (const d of ledger.deadlines.status === "found" ? (ledger.deadlines.value ?? []) : []) {
+    remember(d.week, d.what);
+    assessments.push({ what: d.what.slice(0, 80), week: d.week, percent: null, passageId: internCitation(d.citation) });
+  }
   let unplaced = 0;
   for (const a of candidates.assessments) {
     const week = Number(a?.week);
@@ -408,8 +421,11 @@ export async function runAudit(
       unplaced++;
       continue;
     }
+    if (alreadyPlaced(week, a.what)) continue;
+    remember(week, a.what);
     assessments.push({ what: a.what.slice(0, 80), week, percent, passageId: intern(m.page, m.start, m.end, m.text) });
   }
+  assessments.sort((x, y) => x.week - y.week || x.what.localeCompare(y.what));
   if (unplaced) {
     console.log(`[audit] dropped ${unplaced} assessment(s) whose quote did not support the proposed week`);
     skipped.push(`${unplaced} ${unplaced === 1 ? "deadline was" : "deadlines were"} left off the week map: the passage offered for ${unplaced === 1 ? "it" : "them"} does not state which week ${unplaced === 1 ? "it falls" : "they fall"} in.`);

@@ -174,6 +174,7 @@ What the ledger holds, read by code with no model call:
 - `gradeComponents`: each row of a grade table that prints a percent, with its name, points, percent and the exact source span. A row is only a row if its columns are really separated in the extracted text (two or more spaces, a tab, or dot leaders) and the line contains no sentence words; a summary row (any row at 100%, or one named total/overall/course grade) is excluded. Two different percents for one component name is recorded as `conflict`, with both spans kept, not resolved.
 - `attendance`: the subset of those rows that grade attendance. Lecture and lab stay separate rows. `attendanceFact()` returns the rows, their `total`, and the `largest` single printed share; it is null unless every row prints a percent and none conflict.
 - `schedule`: each numbered week mapped to the dates printed under it, numeric (`10/6`) or named (`Sunday, Oct 4`). Headers may be `Week 4 - Origins`, `WEEK 4`, or a bare table column; a number alone on a line (a page footer) and `Chapter 11:` are not headers. Dates are only collected on pages that carry a header, a line in capitals ends a week's rows, a date printed under two weeks is dropped from both, and only an unbroken run of weeks from 1 is kept.
+- `deadlines`: the deliverables the schedule prints under each week, each the table cell that names it, copied verbatim, with its row's span. A cell qualifies only if the document uses a deliverable word for it (lab, quiz, exam, paper, hypothesis, reflection, and so on); a lecture topic, a column heading, and a one-word artifact of a wrapped row ("Lab", "Module") do not qualify, though a standalone "Midterm" or "Final" does. The same deliverable printed in two summary tables is recorded once.
 
 How the audit uses it (`lib/audit.ts`):
 
@@ -182,6 +183,7 @@ How the audit uses it (`lib/audit.ts`):
 - A ledger conflict is shown to the student as a `T7` transparency finding citing both percentages, whether or not the consistency agent found it that run.
 - Signal `T1` ("grade weights or percentages stated") requires the quoted passage to state a percentage or a share ("one third"). A bare point count is not a share, and "Course grades will be based" no longer counts; the dimension gains a quote-neutral note instead.
 - An assessment's week must be supported by its own passage: the week named, a date the schedule lists under that week, or the week header the passage sits under (so a single table cell still places correctly). A date or header from another week drops it; list position is never evidence. Dropped deadlines are disclosed in `coverage.skipped` instead of vanishing.
+- The week map itself is built from `deadlines`, so it no longer depends on which schedule rows the model lists. A model proposal is added only where the printed schedule does not already state that deadline for that week (a name that matches or contains a printed one is the same item), and only where its own passage supports the week. A proposal whose stated percentage is absent from its passage is dropped rather than carried.
 
 Verified 2026-10-31, offline, no model credits spent: 126 Node tests (36 new), 21 mocked browser tests, `npx tsc --noEmit`, eslint clean on the changed files, and a local run against the owner's two real syllabi outside the repo. On ANTH 145 the ledger reads five components summing to exactly 100%, `Lab Attendance 100 15%` and `Attendance 180 15%` as separate rows (30% total, largest 15%), and weeks 1-10 with their printed dates; on ANTH 341 it reads weeks 1-10 from `WEEK n` headings with their worded due dates. Cell-level week checks returned supported/contradicted correctly on both.
 
@@ -203,7 +205,14 @@ Identical in all six runs:
 
 Still varying, and not fixed by this branch:
 
-- **Which schedule rows the model lists.** Runs returned 3, 4, 8, 9, 9 and 3 of the ten lab deadlines. The gate keeps only supported placements, so nothing is wrong on the map, but the map is thinner on some runs. The schedule is a printed table the ledger already reads, so the fix is to derive these deadlines in code (each with its own span) instead of asking the model to list them.
 - **Which signals the model finds.** Dimension counts moved run to run (for example punitive 1+/2- to 1+/6-, perspectives `not_found` to `strong`), so the overall score came out +0, +1, +1, +1, +2 and +0: label `mixed` five times and `inclusive leaning` once. The rubric is fixed, so this is recall variance in the evidence, not arithmetic. Reducing it needs a different extraction pass per dimension, not a cache.
 
 So the figures the syllabus prints are now stable and correctly cited; what the model chooses to notice is not, and the overall label can still move by one step.
+
+### Second live batch: the week map after `deadlines` (2026-10-31)
+
+The first batches showed the model listing 3 to 9 of the ten lab deadlines, so the crunch map was thinner on some runs. With the map built from the ledger's printed deadlines, three more live audits of the same text returned **9 deadlines every run, identical in week, name and citation**, alongside identical flags, attendance and coverage. Offline the same extraction reads 9 labs for ANTH 145 (week 9 is the Thanksgiving week and prints no lab, correctly empty) and all 10 deliverables for ANTH 341 (`Hypothesis 1-6`, `Group Exercise 1-2`, `Lecture Reflection 1-2`) from a table the model had never listed reliably.
+
+What remains unstable after this change is only the dimension signals: across the last three runs the score was +1, +1 and +2, so the label was `mixed` twice and `inclusive leaning` once. That is the one open piece of the repeat-run problem, and it needs a per-dimension extraction pass rather than a cache.
+
+Verification for this change: 135 Node tests (eight new on deliverable extraction and map stability, including that a lecture topic, a column heading and a wrapped-row "Lab" are never deadlines), 21 browser tests at `--workers=2`, tsc, eslint clean, plus the three live runs above.

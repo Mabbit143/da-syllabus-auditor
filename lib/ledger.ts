@@ -39,6 +39,14 @@ export interface ScheduleWeekFact {
   citation: LedgerCitation;
 }
 
+/** A deliverable the schedule itself prints under a numbered week. */
+export interface DeadlineFact {
+  /** The table cell naming it, copied from the page. */
+  what: string;
+  week: number;
+  citation: LedgerCitation;
+}
+
 export interface EvidenceLedger {
   /** Graded components with a stated percent, excluding total rows. */
   gradeComponents: LedgerEntry<GradeComponentFact[]>;
@@ -46,6 +54,8 @@ export interface EvidenceLedger {
   attendance: LedgerEntry<GradeComponentFact[]>;
   /** Numbered weeks mapped to their printed dates. */
   schedule: LedgerEntry<ScheduleWeekFact[]>;
+  /** Deliverables the schedule prints under a numbered week. */
+  deadlines: LedgerEntry<DeadlineFact[]>;
 }
 
 /** A page's lines with their offsets inside that page's text. */
@@ -130,6 +140,30 @@ const MONTHS = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "
 const WORDED_DATE = new RegExp(`\\b(${MONTHS.map((m) => `${m[0].toUpperCase()}${m.slice(1)}`).join("|")})[a-z]*\\.?\\s+(\\d{1,2})\\b`, "g");
 // A share of the grade ("worth 1/3 of the grade") is not a date.
 const SHARE_CONTEXT = /\b(worth|out of|fraction|share|of (the|your) (grade|final|total)|of all)\b/i;
+// Words a syllabus uses for something a student hands in or sits. A lecture topic is not one of
+// these, so a topic cell never becomes a deadline.
+const DELIVERABLE = /\b(lab|quiz(?:zes)?|exam|midterm|paper|essay|assignment|module|project|presentation|reflection|hypothesis|exercise|homework|portfolio|journal|problem set|final exam|final project|test|submission)\b/i;
+// A column heading is not a deliverable, and neither is a bare date, time or number.
+const HEADING_CELL = /^(week|activity|date|topic|readings?|assignments?|due( date)?|task( types?)?|points?|time|day|location|ta|grade|%)$/i;
+const BARE_VALUE = /^[\d\s/.:%-]+$/;
+// A one-word cell is usually a table artifact from a wrapped row ("Lab", "Module"). Only these
+// stand on their own as the name of something handed in or sat.
+const STANDALONE = /^(midterm|final|finals|exam|quiz|paper|essay|project|presentation|portfolio|thesis|dissertation)$/i;
+
+/** The table cell that names a deliverable on this schedule row, copied verbatim, or null. */
+function deliverableCell(line: string): string | null {
+  const cells = line.split(/\s{2,}|\t/).map((c) => c.trim()).filter(Boolean);
+  // A header row names several columns; it states no deadline.
+  if (cells.filter((c) => HEADING_CELL.test(c)).length >= 2) return null;
+  const named = cells.filter((c) => {
+    if (c.length < 3 || c.length > 60 || HEADING_CELL.test(c) || BARE_VALUE.test(c) || !DELIVERABLE.test(c)) return false;
+    const words = c.split(/\s+/).filter((w) => /[a-z0-9]/i.test(w));
+    return words.length > 1 || STANDALONE.test(c.replace(/[^a-z]/gi, ""));
+  });
+  if (!named.length) return null;
+  // The most specific cell: "Week 3 Lab" over "Lab".
+  return named.sort((a, b) => b.length - a.length)[0].replace(/\s+/g, " ");
+}
 
 function weekHeader(text: string): number | null {
   const m = WEEK_WORD_HEADER.exec(text) ?? BARE_WEEK_HEADER.exec(text);
@@ -155,8 +189,10 @@ export function datesIn(text: string): string[] {
   return found;
 }
 
-function scheduleWeeks(pages: Page[]): ScheduleWeekFact[] {
+function scheduleWeeks(pages: Page[]): { weeks: ScheduleWeekFact[]; deadlines: DeadlineFact[] } {
   const byWeek = new Map<number, ScheduleWeekFact>();
+  const deadlines: DeadlineFact[] = [];
+  const seen = new Set<string>();
   // A schedule's dates sit on the pages that carry its week headers. Dates elsewhere in the
   // document (drop deadlines, a final-exam notice) belong to no week.
   const schedulePages = new Set(pages.filter((p) => lines(p).some((l) => weekHeader(l.text) !== null)).map((p) => p.pageNumber));
@@ -173,6 +209,14 @@ function scheduleWeeks(pages: Page[]): ScheduleWeekFact[] {
       }
       if (!current) continue;
       for (const date of datesIn(line.text)) if (!current.dates.includes(date)) current.dates.push(date);
+      const what = deliverableCell(line.text);
+      if (what) {
+        const key = `${current.week}:${what.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim()}`;
+        if (!seen.has(key)) {
+          seen.add(key);
+          deadlines.push({ what, week: current.week, citation: cite(page, line) });
+        }
+      }
     }
   }
   // A date printed under two different weeks tells us nothing about either one.
@@ -183,14 +227,16 @@ function scheduleWeeks(pages: Page[]): ScheduleWeekFact[] {
   // stray number elsewhere in the document does not continue the sequence.
   const run: ScheduleWeekFact[] = [];
   for (const w of [...byWeek.values()].sort((a, b) => a.week - b.week)) if (w.week === run.length + 1) run.push(w);
-  return run.length >= 2 ? run : [];
+  if (run.length < 2) return { weeks: [], deadlines: [] };
+  const kept = new Set(run.map((w) => w.week));
+  return { weeks: run, deadlines: deadlines.filter((d) => kept.has(d.week)) };
 }
 
 /** Reads the facts a syllabus prints plainly. No model, no inference: same text in, same facts out. */
 export function buildLedger(pages: Page[]): EvidenceLedger {
   const components = gradeRows(pages).filter((r) => !r.isTotal);
   const attendanceRows = components.filter((r) => /attendance|absence/i.test(r.name));
-  const weeks = scheduleWeeks(pages);
+  const { weeks, deadlines } = scheduleWeeks(pages);
 
   const entry = (rows: GradeComponentFact[]): LedgerEntry<GradeComponentFact[]> => {
     if (!rows.length) return { value: null, status: "not_found", citations: [] };
@@ -211,6 +257,9 @@ export function buildLedger(pages: Page[]): EvidenceLedger {
     attendance: entry(attendanceRows),
     schedule: weeks.length
       ? { value: weeks, status: "found", citations: weeks.map((w) => w.citation) }
+      : { value: null, status: "not_found", citations: [] },
+    deadlines: deadlines.length
+      ? { value: deadlines, status: "found", citations: deadlines.map((d) => d.citation) }
       : { value: null, status: "not_found", citations: [] },
   };
 }
