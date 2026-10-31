@@ -183,7 +183,8 @@ How the audit uses it (`lib/audit.ts`):
 - A ledger conflict is shown to the student as a `T7` transparency finding citing both percentages, whether or not the consistency agent found it that run.
 - Signal `T1` ("grade weights or percentages stated") requires the quoted passage to state a percentage or a share ("one third"). A bare point count is not a share, and "Course grades will be based" no longer counts; the dimension gains a quote-neutral note instead.
 - An assessment's week must be supported by its own passage: the week named, a date the schedule lists under that week, or the week header the passage sits under (so a single table cell still places correctly). A date or header from another week drops it; list position is never evidence. Dropped deadlines are disclosed in `coverage.skipped` instead of vanishing.
-- The week map itself is built from `deadlines`, so it no longer depends on which schedule rows the model lists. A model proposal is added only where the printed schedule does not already state that deadline for that week (a name that matches or contains a printed one is the same item), and only where its own passage supports the week. A proposal whose stated percentage is absent from its passage is dropped rather than carried.
+- The week map itself is built from `deadlines` whenever the syllabus prints a schedule, so it does not depend on which rows the model lists. Where nothing is printed for the map to read, the model's proposals are used instead, each gated on its own passage supporting the week, deduplicated by name containment, and a proposal whose stated percentage is absent from its passage is dropped rather than carried.
+- Signals come from one pass per area rather than one shared answer, so an area is not crowded out of a single response (`dimensionInstructions`). Each pass offers only that area's codes, never `P6`/`P7`/`T7`, and asks for every matching passage. An area whose own pass fails is `not_assessed` with a reason in `coverage.skipped`, never `not_found`.
 
 Verified 2026-10-31, offline, no model credits spent: 126 Node tests (36 new), 21 mocked browser tests, `npx tsc --noEmit`, eslint clean on the changed files, and a local run against the owner's two real syllabi outside the repo. On ANTH 145 the ledger reads five components summing to exactly 100%, `Lab Attendance 100 15%` and `Attendance 180 15%` as separate rows (30% total, largest 15%), and weeks 1-10 with their printed dates; on ANTH 341 it reads weeks 1-10 from `WEEK n` headings with their worded due dates. Cell-level week checks returned supported/contradicted correctly on both.
 
@@ -209,10 +210,29 @@ Still varying, and not fixed by this branch:
 
 So the figures the syllabus prints are now stable and correctly cited; what the model chooses to notice is not, and the overall label can still move by one step.
 
-### Second live batch: the week map after `deadlines` (2026-10-31)
-
 The first batches showed the model listing 3 to 9 of the ten lab deadlines, so the crunch map was thinner on some runs. With the map built from the ledger's printed deadlines, three more live audits of the same text returned **9 deadlines every run, identical in week, name and citation**, alongside identical flags, attendance and coverage. Offline the same extraction reads 9 labs for ANTH 145 (week 9 is the Thanksgiving week and prints no lab, correctly empty) and all 10 deliverables for ANTH 341 (`Hypothesis 1-6`, `Group Exercise 1-2`, `Lecture Reflection 1-2`) from a table the model had never listed reliably.
 
 What remains unstable after this change is only the dimension signals: across the last three runs the score was +1, +1 and +2, so the label was `mixed` twice and `inclusive leaning` once. That is the one open piece of the repeat-run problem, and it needs a per-dimension extraction pass rather than a cache.
 
 Verification for this change: 135 Node tests (eight new on deliverable extraction and map stability, including that a lecture topic, a column heading and a wrapped-row "Lab" are never deadlines), 21 browser tests at `--workers=2`, tsc, eslint clean, plus the three live runs above.
+
+### Third live batch: one extraction pass per area (2026-10-31)
+
+The signals were the last model-driven input, so each area now gets its own call with only its own codes (`dimensionInstructions` in `lib/audit.ts`), asked for completeness ("report EVERY passage, up to 3 per code"), with the A1, T1 and T9 cautions attached to the codes they belong to. The shared pass no longer asks for signals at all; it carries assessments, flags and weights. `P6`, `P7` and `T7` are never offered, because code decides those. A failed area is `not_assessed` with a plain reason in `coverage.skipped`, not `not_found`, and one failed area no longer aborts the report (the shared pass's unread sections are now counted separately from area-level gaps, which had made a single area failure look like "every section failed").
+
+Cost and latency: calls per audit go from about 1 per chunk to about 6 per chunk, run in parallel; the observed live audits stayed in the 15-24 s range.
+
+Three live audits of the same real text after the change:
+
+| | before any of this work | after |
+| --- | --- | --- |
+| Overall label and score | `mixed` +1, `mixed` +1, `inclusive leaning` +2 | **`mixed` +1 in all three** |
+| Area statuses | moved (`not_found` to `strong`) | **identical in all three** |
+| Week map | 3 to 12 deadlines | **9 deadlines, identical** |
+| Flags, coverage, attendance citation | identical | identical |
+
+What still moves is only the supporting counts behind an identical status: transparency 11+/6-, 11+/7-, 11+/6-; accessibility 4+/5-, 5+/4-, 2+/5-. Recall also rose sharply (transparency 4+ to 11+, perspectives now `strong` every run), which is why the counts are larger than in earlier batches. Every verdict the report states is now the same on a reread; the numbers beside it can still differ by a passage or two.
+
+Closing that last gap means counting one passage per code instead of up to three, so a count becomes "how many kinds of evidence" rather than "how many passages". That changes an input to the approved rubric, so it needs the owner's decision before anyone implements it.
+
+Verification for this change: 144 Node tests (nine new on per-area prompts, cross-area leakage, and a failed area), 21 browser tests at `--workers=2`, tsc, eslint clean, plus the three live runs above.

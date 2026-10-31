@@ -183,15 +183,36 @@ test("a lecture topic in the schedule is not treated as a deadline", async () =>
   }
 });
 
+// A schedule that numbers its weeks but names no deliverable: the week gate still has to judge
+// the model's proposals, because there is nothing printed for the map to read.
+const TOPICS_ONLY_SCHEDULE = `COURSE SCHEDULE
+Week   Activity   Date   Topic
+1   Lecture   9/29   Introductory Remarks
+2   Lecture   10/6   Antiquarianism and the archive
+3   Lecture   10/13   Survey and excavation`;
+
 test("an assessment the model places in a week the schedule contradicts is dropped and disclosed", async () => {
-  const report = await run([SCHEDULE_PAGE], {
-    assessments: [{ what: "Quiz: Chapter 2", week: 3, percent: null, page: 1, quote: "2   Lecture   10/6   Antiquarianism   Quiz: Chapter 2   10/8" }],
+  const report = await run([TOPICS_ONLY_SCHEDULE], {
+    assessments: [{ what: "Chapter quiz", week: 3, percent: null, page: 1, quote: "2   Lecture   10/6   Antiquarianism and the archive" }],
   });
-  // The printed schedule still places it correctly; the model's week-3 claim is not kept.
-  const quiz = report.assessments.filter((a: { what: string }) => a.what === "Quiz: Chapter 2");
-  assert.deepEqual(quiz.map((a: { week: number }) => a.week), [2]);
+  assert.equal(report.assessments.length, 0);
   assert.equal(report.coverage.status, "partial");
   assert.ok(report.coverage.skipped.some((s: string) => /left off the week map/i.test(s)));
+});
+
+test("a proposal whose own passage supports the week is mapped when nothing is printed for it", async () => {
+  const report = await run([TOPICS_ONLY_SCHEDULE], {
+    assessments: [{ what: "Chapter quiz", week: 2, percent: null, page: 1, quote: "2   Lecture   10/6   Antiquarianism and the archive" }],
+  });
+  assert.deepEqual(report.assessments.map((a: { what: string; week: number }) => [a.what, a.week]), [["Chapter quiz", 2]]);
+  assert.equal(report.coverage.status, "full");
+});
+
+test("a percentage the passage does not state drops the proposal rather than carrying a figure", async () => {
+  const report = await run([TOPICS_ONLY_SCHEDULE], {
+    assessments: [{ what: "Chapter quiz", week: 2, percent: 10, page: 1, quote: "2   Lecture   10/6   Antiquarianism and the archive" }],
+  });
+  assert.equal(report.assessments.some((a: { what: string }) => a.what === "Chapter quiz"), false);
 });
 
 test("a model proposal the printed schedule already states is not listed twice", async () => {
@@ -208,28 +229,37 @@ test("a model proposal the printed schedule already states is not listed twice",
   assert.equal(report.coverage.status, "full");
 });
 
-test("a deadline the printed schedule does not state is still added when its passage supports the week", async () => {
-  const report = await run([SCHEDULE_PAGE], {
-    assessments: [{ what: "Reading response", week: 2, percent: null, page: 1, quote: "2   Lecture   10/6   Antiquarianism   Quiz: Chapter 2   10/8" }],
-  });
-  const added = present(report.assessments.find((a: { what: string }) => a.what === "Reading response"), "added deadline");
-  assert.equal(added.week, 2);
-  assert.equal(report.assessments.length, 4); // the three printed deadlines plus this one
-});
-
-test("a percentage the passage does not state drops the proposal rather than carrying a figure", async () => {
-  const report = await run([SCHEDULE_PAGE], {
-    assessments: [{ what: "Reading response", week: 2, percent: 10, page: 1, quote: "2   Lecture   10/6   Antiquarianism   Quiz: Chapter 2   10/8" }],
-  });
-  assert.equal(report.assessments.some((a: { what: string }) => a.what === "Reading response"), false);
-});
-
 test("the week map is identical however many schedule rows the model lists", async () => {
   const quote = "2   Lecture   10/6   Antiquarianism   Quiz: Chapter 2   10/8";
   const none = await run([SCHEDULE_PAGE], {});
   const some = await run([SCHEDULE_PAGE], { assessments: [{ what: "Quiz: Chapter 2", week: 2, percent: null, page: 1, quote }] });
   const shape = (r: { assessments: { what: string; week: number }[] }) => r.assessments.map((a) => `w${a.week} ${a.what}`);
   assert.deepEqual(shape(none), shape(some));
+});
+
+test("a model proposal is not added where the schedule prints its own deadlines", async () => {
+  const report = await run([SCHEDULE_PAGE], {
+    assessments: [
+      { what: "Quiz: Chapter 2", week: 2, percent: null, page: 1, quote: "2   Lecture   10/6   Antiquarianism   Quiz: Chapter 2   10/8" },
+      { what: "Reading response", week: 2, percent: null, page: 1, quote: "2   Lecture   10/6   Antiquarianism   Quiz: Chapter 2   10/8" },
+    ],
+  });
+  // The printed schedule is the map, so a run that notices extra rows cannot change it.
+  assert.deepEqual(
+    report.assessments.map((a: { what: string; week: number }) => [a.what, a.week]),
+    [["Intro Module", 1], ["Quiz: Chapter 2", 2], ["Midterm exam in class", 3]],
+  );
+});
+
+test("a syllabus with no printed schedule still maps the model's verified deadlines", async () => {
+  const page = "Assignments: the midterm exam is held in week 5, and the final paper is due in week 9.";
+  const report = await run([page], {
+    assessments: [
+      { what: "Midterm", week: 5, percent: null, page: 1, quote: "the midterm exam is held in week 5" },
+      { what: "Final paper", week: 9, percent: null, page: 1, quote: "the final paper is due in week 9" },
+    ],
+  });
+  assert.deepEqual(report.assessments.map((a: { what: string; week: number }) => [a.what, a.week]), [["Midterm", 5], ["Final paper", 9]]);
 });
 
 test("without a printed schedule, a verified assessment keeps its proposed week", async () => {
