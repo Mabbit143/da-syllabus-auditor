@@ -1,4 +1,5 @@
 import { DIMENSIONS, FLAG_BASES, SIGNALS, characterizeDimension, flagSeverity, gradeDimension, overallRead, weightSum } from "./rubric";
+import { attendanceFact, buildLedger, weekSupport, type EvidenceLedger, type GradeComponentFact, type LedgerCitation } from "./ledger";
 import type {
   AuditReport, AuditRequest, Candidates, DimensionResult, FlagKind, FlagResult, Page, Passage, Severity,
 } from "./types";
@@ -111,9 +112,13 @@ const ACCOMMODATION_ROUTE = new RegExp(
    "accommodation (letter|request|form|process|plan)", "letter of accommodation"].join("|"), "i");
 const ACCOMMODATION_MENTION = new RegExp(["accessible education", "\\bAEC\\b", "disabilit", "accommodat"].join("|"), "i");
 const EXTENSION_ROUTE = /extension|extend|grace|resubmi|\b\d+\s*(hours?|days?)\b|\b(email|contact|notify|ask|request)\b/i;
+// A claim that weights or percentages are stated must rest on a quote that actually prints a share
+// of the grade. A bare point count is not a share.
+const STATED_FIGURE = /\d+(\.\d+)?\s*(%|percent\b)|\b(one |two |three )?(third|quarter|half|fifth)s?\b/i;
 const NEEDS_ROUTE: Record<string, { route: RegExp; note: string }> = {
   A1: { route: ACCOMMODATION_ROUTE, note: "An accommodation statement is present but names no office, letter or process." },
   F1: { route: EXTENSION_ROUTE, note: "Late-work wording is present but names no extension or process." },
+  T1: { route: STATED_FIGURE, note: "A passage was offered as stating grade weights, but it states no percentage or share of the grade." },
 };
 
 const RANK: Record<Severity, number> = { high: 2, medium: 1 };
@@ -130,11 +135,42 @@ function explain(kind: FlagKind, basis: string, percent: number | null): string 
   return "Late work loses points.";
 }
 
+/**
+ * Plain words for the attendance shares the syllabus itself prints. Kept separate from the model's
+ * wording so the report can never say "no figure is stated" about a figure the ledger holds. Every
+ * row is named with its own printed share, and the sum is disclosed as a sum.
+ */
+function explainLedgerAttendance(rows: GradeComponentFact[], total: number): string {
+  const named = rows.map((r) => `${r.name} ${r.percent}%`).join(", ");
+  return rows.length > 1
+    ? `Attendance counts toward the grade: ${named} (${total}% in total).`
+    : `Attendance counts toward the grade (${total}%).`;
+}
+
+/**
+ * The rows of a single printed grade table: the page holding the most rows with a stated share.
+ * Rows scattered over several pages are not one table, and a set summing past 100% is not a grade
+ * breakdown, so neither is summed.
+ */
+function oneTable(ledger: EvidenceLedger): (GradeComponentFact & { percent: number })[] {
+  if (ledger.gradeComponents.status !== "found") return [];
+  const rows = (ledger.gradeComponents.value ?? []).filter(
+    (c): c is GradeComponentFact & { percent: number } => c.percent !== null,
+  );
+  const byPage = new Map<number, (GradeComponentFact & { percent: number })[]>();
+  for (const r of rows) byPage.set(r.citation.page, [...(byPage.get(r.citation.page) ?? []), r]);
+  const best = [...byPage.values()].sort((a, b) => b.length - a.length)[0] ?? [];
+  return best.reduce((sum, r) => sum + r.percent, 0) <= 101 ? best : [];
+}
+
 export async function runAudit(
   req: AuditRequest,
   callModel: (instructions: string, input: string) => Promise<string>,
   search?: (instructions: string, input: string) => Promise<{ text: string; results: SearchResult[] }>,
 ): Promise<AuditReport> {
+  // Facts the syllabus prints plainly, read by code before the model proposes anything. Every
+  // section below asks the ledger first, so one report cannot state two figures for one fact.
+  const ledger: EvidenceLedger = buildLedger(req.pages);
   const chunks = chunkPages(req.pages);
   const skipped: string[] = [];
 
@@ -215,6 +251,21 @@ export async function runAudit(
       hits.push({ code: s.code, label: def.label, polarity: def.polarity, passageId });
     }
     if (id === "transparency") {
+      // Two printed percentages for one component is a conflict the student should see, cited on
+      // both sides, whether or not the consistency agent happened to find it this run.
+      const pair = ledger.gradeComponents.conflictPair;
+      if (pair && ledger.gradeComponents.explanation) {
+        const passageId = intern(pair[0].page, pair[0].start, pair[0].end, pair[0].text);
+        const pairedPassageId = intern(pair[1].page, pair[1].start, pair[1].end, pair[1].text);
+        used.add(`${passageId}|${pairedPassageId}`);
+        hits.push({
+          code: "T7",
+          label: `${SIGNALS.T7.label}: ${ledger.gradeComponents.explanation}`,
+          polarity: -1,
+          passageId,
+          pairedPassageId,
+        });
+      }
       for (const c of conflicts.slice(0, 3)) {
         const passageId = intern(c.a.page, c.a.start, c.a.end, c.a.text);
         // A conflict is shown even if its first passage also backs another signal; only the same pair is not repeated.
@@ -254,6 +305,31 @@ export async function runAudit(
 
   const flags: FlagResult[] = [];
   const seenFlags = new Set<string>();
+  const internCitation = (c: LedgerCitation) => intern(c.page, c.start, c.end, c.text);
+  const attendance = attendanceFact(ledger);
+  const addFlag = (
+    kind: FlagKind, basis: string, percent: number | null, passageId: string,
+    extra?: { explanation?: string; passageIds?: string[] },
+  ) => {
+    const severity = flagSeverity(kind, basis, percent);
+    if (!severity) return;
+    if (seenFlags.has(`${kind}:${passageId}`)) return;
+    seenFlags.add(`${kind}:${passageId}`);
+    flags.push({
+      kind, severity, explanation: extra?.explanation ?? explain(kind, basis, percent), passageId,
+      ...(extra?.passageIds && extra.passageIds.length > 1 ? { passageIds: extra.passageIds } : {}),
+    });
+  };
+  /** The flag the printed table supports: every row named and cited, severity from the largest row. */
+  const addLedgerAttendance = () => {
+    if (!attendance) return;
+    const ids = attendance.rows.map((r) => internCitation(r.citation));
+    addFlag("attendance", "penalty_percent", attendance.largest, ids[0], {
+      explanation: explainLedgerAttendance(attendance.rows, attendance.total),
+      passageIds: ids,
+    });
+  };
+
   for (const f of candidates.flags) {
     const kind = f?.kind as FlagKind;
     if (!FLAG_BASES[kind]?.includes(f.basis)) continue;
@@ -261,26 +337,41 @@ export async function runAudit(
     const m = verifyQuote(req.pages, Number(f.page), f.quote);
     if (!m) continue;
     if (percent !== null && !new RegExp(`(^|[^\\d.])${percent}\\s*(%|percent)`, "i").test(m.text)) continue;
-    const severity = flagSeverity(kind, f.basis, percent);
-    if (!severity) continue;
-    const passageId = intern(m.page, m.start, m.end, m.text);
-    if (seenFlags.has(`${kind}:${passageId}`)) continue;
-    seenFlags.add(`${kind}:${passageId}`);
-    flags.push({ kind, severity, explanation: explain(kind, f.basis, percent), passageId });
-  }
-
-  // Grade weights: every proposed component must verify, or the sum is not judged (never guess from what is left).
-  const parts: { what: string; percent: number; passageId: string }[] = [];
-  let weightsUnassessable = !fullCoverage;
-  for (const w of candidates.weights ?? []) {
-    if (typeof w?.what !== "string" || /\btotal\b/i.test(w.what) || w.percent === 100) continue;
-    const percent = typeof w.percent === "number" && Number.isFinite(w.percent) && w.percent > 0 ? w.percent : null;
-    const m = verifyQuote(req.pages, Number(w.page), w.quote);
-    if (!m || percent === null || !new RegExp(`(^|[^\\d.])${percent}\\s*(%|percent)`, "i").test(m.text) || UNSCORED.test(m.text)) {
-      weightsUnassessable = true;
+    // The printed table is the better evidence, so it replaces a vaguer reading of the same rule:
+    // "counted, no figure stated", or a figure from prose when the table states the component's share.
+    if (kind === "attendance" && attendance && (f.basis === "counted_no_figure" || f.basis === "penalty_percent")) {
+      addLedgerAttendance();
       continue;
     }
-    parts.push({ what: w.what.slice(0, 80), percent, passageId: intern(m.page, m.start, m.end, m.text) });
+    addFlag(kind, f.basis, percent, intern(m.page, m.start, m.end, m.text));
+  }
+
+  // Graded attendance is reported from the ledger whether or not the model proposed it this run.
+  if (attendance && !flags.some((f) => f.kind === "attendance")) addLedgerAttendance();
+
+  // Grade weights: the printed table is the source. Only when the ledger finds no table does the
+  // report fall back to the model's proposals, where every component must verify or the sum is not judged.
+  const parts: { what: string; percent: number; passageId: string }[] = [];
+  let weightsUnassessable = !fullCoverage;
+  const ledgerWeights = oneTable(ledger);
+  if (ledger.gradeComponents.status === "conflict") {
+    weightsUnassessable = true; // two figures for one component: the sum cannot be judged
+  } else if (ledgerWeights.length >= 2) {
+    for (const c of ledgerWeights) {
+      if (UNSCORED.test(c.citation.text)) { weightsUnassessable = true; continue; }
+      parts.push({ what: c.name.slice(0, 80), percent: c.percent, passageId: internCitation(c.citation) });
+    }
+  } else {
+    for (const w of candidates.weights ?? []) {
+      if (typeof w?.what !== "string" || /\btotal\b/i.test(w.what) || w.percent === 100) continue;
+      const percent = typeof w.percent === "number" && Number.isFinite(w.percent) && w.percent > 0 ? w.percent : null;
+      const m = verifyQuote(req.pages, Number(w.page), w.quote);
+      if (!m || percent === null || !new RegExp(`(^|[^\\d.])${percent}\\s*(%|percent)`, "i").test(m.text) || UNSCORED.test(m.text)) {
+        weightsUnassessable = true;
+        continue;
+      }
+      parts.push({ what: w.what.slice(0, 80), percent, passageId: intern(m.page, m.start, m.end, m.text) });
+    }
   }
   const total = weightSum(parts, weightsUnassessable);
   if (total && !total.reaches100) {
@@ -294,7 +385,10 @@ export async function runAudit(
     });
   }
 
+  // Week placement must be supported by the quote itself: the week named, or a date the printed
+  // schedule lists under that week. A date from another week is a contradiction, not a near miss.
   const assessments: AuditReport["assessments"] = [];
+  let unplaced = 0;
   for (const a of candidates.assessments) {
     const week = Number(a?.week);
     if (!Number.isInteger(week) || week < 1 || week > 20 || typeof a.what !== "string") continue;
@@ -302,7 +396,16 @@ export async function runAudit(
     if (!m) continue;
     const percent = typeof a.percent === "number" && Number.isFinite(a.percent) ? a.percent : null;
     if (percent !== null && !new RegExp(`(^|[^\\d.])${percent}\\s*(%|percent)`, "i").test(m.text)) continue;
+    const support = weekSupport(ledger, week, m);
+    if (support === "contradicted" || support === "unsupported") {
+      unplaced++;
+      continue;
+    }
     assessments.push({ what: a.what.slice(0, 80), week, percent, passageId: intern(m.page, m.start, m.end, m.text) });
+  }
+  if (unplaced) {
+    console.log(`[audit] dropped ${unplaced} assessment(s) whose quote did not support the proposed week`);
+    skipped.push(`${unplaced} ${unplaced === 1 ? "deadline was" : "deadlines were"} left off the week map: the passage offered for ${unplaced === 1 ? "it" : "them"} does not state which week ${unplaced === 1 ? "it falls" : "they fall"} in.`);
   }
 
   const pageOf = (id: string) => passages.find((p) => p.id === id)?.page ?? 0;
@@ -318,7 +421,7 @@ export async function runAudit(
   return {
     fileName: req.fileName,
     pageCount: req.pageCount,
-    coverage: { status: fullCoverage ? "full" : "partial", skipped },
+    coverage: { status: fullCoverage && !unplaced ? "full" : "partial", skipped },
     dimensions,
     flags,
     assessments,

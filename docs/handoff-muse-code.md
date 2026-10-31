@@ -164,3 +164,27 @@ Findings so far from reading UO's own pages (all from public pages; quotes verif
 - [x] Meta billing spend limit set (owner confirmed 2026-10-27).
 - [x] GitHub Actions E2E workflow passes (green on `main`, run 40617882009, 2026-10-28).
 - [ ] UO policy wording used in the demo: re-fetch and re-quote it on the day, since pages change.
+
+## 15. The evidence ledger (`lib/ledger.ts`, 2026-10-31)
+
+Built on `feat/verified-evidence-ledger` to answer the owner's report that two audits of the same syllabus "never come out close to the same report". The model is no longer asked for facts the document prints plainly; code reads them first and every section of the audit uses that one record.
+
+What the ledger holds, read by code with no model call:
+
+- `gradeComponents`: each row of a grade table that prints a percent, with its name, points, percent and the exact source span. A row is only a row if its columns are really separated in the extracted text (two or more spaces, a tab, or dot leaders) and the line contains no sentence words; a summary row (any row at 100%, or one named total/overall/course grade) is excluded. Two different percents for one component name is recorded as `conflict`, with both spans kept, not resolved.
+- `attendance`: the subset of those rows that grade attendance. Lecture and lab stay separate rows. `attendanceFact()` returns the rows, their `total`, and the `largest` single printed share; it is null unless every row prints a percent and none conflict.
+- `schedule`: each numbered week mapped to the dates printed under it, numeric (`10/6`) or named (`Sunday, Oct 4`). Headers may be `Week 4 - Origins`, `WEEK 4`, or a bare table column; a number alone on a line (a page footer) and `Chapter 11:` are not headers. Dates are only collected on pages that carry a header, a line in capitals ends a week's rows, a date printed under two weeks is dropped from both, and only an unbroken run of weeks from 1 is kept.
+
+How the audit uses it (`lib/audit.ts`):
+
+- An attendance flag can no longer state a vaguer figure than the table does: both "no figure is stated" and a percentage read from prose are replaced by the printed rows, each row named and cited (`passageIds`), and the flag is reported even if the model proposes nothing that run. Severity follows the largest printed row; the sum is only ever disclosed as a sum.
+- Grade weights are summed from one printed table: the page holding the most rows, and only if those rows do not already exceed 100%. Otherwise the model's list is the fallback, and a ledger conflict makes the sum unassessable rather than guessed.
+- A ledger conflict is shown to the student as a `T7` transparency finding citing both percentages, whether or not the consistency agent found it that run.
+- Signal `T1` ("grade weights or percentages stated") requires the quoted passage to state a percentage or a share ("one third"). A bare point count is not a share, and "Course grades will be based" no longer counts; the dimension gains a quote-neutral note instead.
+- An assessment's week must be supported by its own passage: the week named, a date the schedule lists under that week, or the week header the passage sits under (so a single table cell still places correctly). A date or header from another week drops it; list position is never evidence. Dropped deadlines are disclosed in `coverage.skipped` instead of vanishing.
+
+Verified 2026-10-31, offline, no model credits spent: 126 Node tests (36 new), 21 mocked browser tests, `npx tsc --noEmit`, eslint clean on the changed files, and a local run against the owner's two real syllabi outside the repo. On ANTH 145 the ledger reads five components summing to exactly 100%, `Lab Attendance 100 15%` and `Attendance 180 15%` as separate rows (30% total, largest 15%), and weeks 1-10 with their printed dates; on ANTH 341 it reads weeks 1-10 from `WEEK n` headings with their worded due dates. Cell-level week checks returned supported/contradicted correctly on both.
+
+Five defects an independent review found, all fixed and covered by regressions: prose such as "Students with attendance below 75%" became a fabricated attendance figure at high severity; prose rows could override a correct model weight table and raise a false "adds up to 175%"; a 100% summary row not named "total" counted as a component; the schedule parser never reset between sections, so later dates (a final-exam notice, drop deadlines) leaked into the last week and then contradicted legitimate placements; and a ratio such as "worth 1/3 of the grade" was read as a date. Earlier, the real documents had already exposed `Chapter 11:` and page-number footers being read as week headers.
+
+Still open: a points-only grade table (ANTH 341: "6 points", no per-row percent) yields no weight facts, because converting points to a percent would be a derivation rather than a printed fact. `lib/fixes.ts` and `lib/policy/compare.ts` still read the document directly instead of the ledger, so a drafted question can still ask about a rule the ledger already holds, and the required-contents check can still accept a grade-weight row as evidence of grading criteria. Browser tests are flaky under the default worker count on this machine; `--workers=2` passed 21/21 twice.
