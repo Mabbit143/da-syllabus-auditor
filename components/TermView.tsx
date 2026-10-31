@@ -10,7 +10,8 @@ export interface Course {
   createdAt?: string;
 }
 
-const WEEKS = 16;
+// UO teaching weeks. Assessments outside this range stay visible below the map.
+const WEEKS = 10;
 
 // Deterministic risk points: High flag 2, Medium flag 1, each Weak dimension 1.
 export function riskPoints(r: AuditReport): number {
@@ -74,6 +75,10 @@ export default function TermView({ courses, onOpen, onRemove }: {
     const weight = items.reduce((n, a) => n + (a.percent ?? 0), 0);
     return { week: i + 1, items, weight, crunch: items.length >= 3 };
   });
+  const outsideWeeks = current.flatMap((c) =>
+    c.report.assessments.filter((a) => a.week < 1 || a.week > WEEKS)
+      .map((a) => ({ courseId: c.id, course: c.report.fileName, ...a })),
+  );
 
   return (
     <section>
@@ -126,7 +131,20 @@ export default function TermView({ courses, onOpen, onRemove }: {
           </div>
         ))}
       </div>
-      <p className="muted">Highlighted weeks have 3 or more assessments across your courses. Hover a week to list them.</p>
+      <p className="muted">The map covers UO&rsquo;s {WEEKS}-week term. Highlighted weeks have 3 or more assessments across your courses. Hover a week to list them.</p>
+      {outsideWeeks.length > 0 && (
+        <div role="region" aria-label="Assessments outside the term map">
+          <h5>Assessments outside the {WEEKS}-week map</h5>
+          <p className="muted">These assessments remain saved. Their extracted week numbers fall outside this map; check the source schedule. They have not been moved or renumbered.</p>
+          <ul>
+            {outsideWeeks.map((a, i) => (
+              <li key={`${a.courseId}:${a.passageId}:${i}`}>
+                <button type="button" className="link" onClick={() => onOpen(a.courseId)}>{a.course}</button>: {a.what} — week {a.week}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </section>
   );
 }

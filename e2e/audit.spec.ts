@@ -88,6 +88,8 @@ test("two syllabi show a term view with a crunch week, saved across reloads", as
   await page.getByRole("button", { name: "Back to term view" }).click();
 
   await expect(page.getByRole("heading", { name: /Term view \(2 syllabi\)/ })).toBeVisible();
+  await expect(page.locator(".week")).toHaveCount(10);
+  await expect(page.locator(".week strong")).toHaveText(["W1", "W2", "W3", "W4", "W5", "W6", "W7", "W8", "W9", "W10"]);
   await expect(page.locator(".week.crunch")).toHaveCount(1);
   await expect(page.locator(".week.crunch")).toContainText("W5");
 
@@ -96,6 +98,41 @@ test("two syllabi show a term view with a crunch week, saved across reloads", as
 
   await page.getByRole("button", { name: "Remove" }).first().click();
   await expect(page.getByRole("heading", { name: /Term view \(1 syllabus\)/ })).toBeVisible();
+});
+
+test("assessments in week 10 populate the last UO term box", async ({ page }) => {
+  await mockAudit(page, 10);
+  await page.goto("/");
+  await upload(page, "syllabus.pdf");
+  await page.getByRole("button", { name: "Back to term view" }).click();
+
+  await expect(page.locator(".week")).toHaveCount(10);
+  await expect(page.locator(".week").last()).toContainText("W10");
+  await expect(page.locator(".week").last()).toHaveClass(/crunch/);
+  await expect(page.locator(".week").last().locator("span")).toHaveText("3");
+  await expect(page.getByRole("region", { name: "Assessments outside the term map" })).toHaveCount(0);
+});
+
+test("assessments beyond week 10 remain visible and saved outside the map", async ({ page }) => {
+  await mockAudit(page, 11);
+  await page.goto("/");
+  await upload(page, "syllabus.pdf");
+  await page.getByRole("button", { name: "Back to term view" }).click();
+
+  const outside = page.getByRole("region", { name: "Assessments outside the term map" });
+  await expect(page.locator(".week")).toHaveCount(10);
+  await expect(outside).toBeVisible();
+  await expect(outside.getByRole("listitem")).toHaveCount(3);
+  for (const name of ["Midterm", "Quiz", "Paper"]) await expect(outside).toContainText(`${name} — week 11`);
+
+  await page.reload();
+  await expect(page.locator(".week")).toHaveCount(10);
+  await expect(outside.getByRole("listitem")).toHaveCount(3);
+  const assessments = await page.evaluate(() => JSON.parse(localStorage.getItem("da-syllabus-auditor.courses.v1")!)[0].report.assessments);
+  expect(assessments).toHaveLength(3);
+  expect(assessments.map((a: { week: number }) => a.week)).toEqual([11, 11, 11]);
+  await outside.getByRole("button", { name: "syllabus.pdf", exact: true }).first().click();
+  await expect(page.getByRole("heading", { name: "Overall read" })).toBeVisible();
 });
 
 test("a non-PDF is rejected with a plain message", async ({ page }) => {
