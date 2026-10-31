@@ -188,3 +188,22 @@ Verified 2026-10-31, offline, no model credits spent: 126 Node tests (36 new), 2
 Five defects an independent review found, all fixed and covered by regressions: prose such as "Students with attendance below 75%" became a fabricated attendance figure at high severity; prose rows could override a correct model weight table and raise a false "adds up to 175%"; a 100% summary row not named "total" counted as a component; the schedule parser never reset between sections, so later dates (a final-exam notice, drop deadlines) leaked into the last week and then contradicted legitimate placements; and a ratio such as "worth 1/3 of the grade" was read as a date. Earlier, the real documents had already exposed `Chapter 11:` and page-number footers being read as week headers.
 
 Still open: a points-only grade table (ANTH 341: "6 points", no per-row percent) yields no weight facts, because converting points to a percent would be a derivation rather than a printed fact. `lib/fixes.ts` and `lib/policy/compare.ts` still read the document directly instead of the ledger, so a drafted question can still ask about a rule the ledger already holds, and the required-contents check can still accept a grade-weight row as evidence of grading criteria. Browser tests are flaky under the default worker count on this machine; `--workers=2` passed 21/21 twice.
+
+### Live repeat-run evidence (2026-10-31, owner-approved, Meta, no fallback)
+
+Six live audits of the same real ANTH 145 text through `/api/audit` on this branch, in two batches of three, 13.4 s to 19.5 s each.
+
+Identical in all six runs:
+
+- the attendance finding, word for word: "Attendance counts toward the grade: Lab Attendance 15%, Attendance 15% (30% in total)", high severity, citing both printed rows. Never "no figure is stated".
+- no false grade-weight flag (the printed table sums to 100%).
+- every assessment week inside 1-10, every placement supported by its own passage.
+- coverage `full`.
+- after the duplicate-flag fix in this branch, the whole flag list is identical across a batch; the first batch had shown the same late-work line twice from two different passages, now merged into one finding citing both.
+
+Still varying, and not fixed by this branch:
+
+- **Which schedule rows the model lists.** Runs returned 3, 4, 8, 9, 9 and 3 of the ten lab deadlines. The gate keeps only supported placements, so nothing is wrong on the map, but the map is thinner on some runs. The schedule is a printed table the ledger already reads, so the fix is to derive these deadlines in code (each with its own span) instead of asking the model to list them.
+- **Which signals the model finds.** Dimension counts moved run to run (for example punitive 1+/2- to 1+/6-, perspectives `not_found` to `strong`), so the overall score came out +0, +1, +1, +1, +2 and +0: label `mixed` five times and `inclusive leaning` once. The rubric is fixed, so this is recall variance in the evidence, not arithmetic. Reducing it needs a different extraction pass per dimension, not a cache.
+
+So the figures the syllabus prints are now stable and correctly cited; what the model chooses to notice is not, and the overall label can still move by one step.

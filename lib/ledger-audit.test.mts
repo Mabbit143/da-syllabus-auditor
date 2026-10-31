@@ -197,6 +197,22 @@ test("without a printed schedule, a verified assessment keeps its proposed week"
   assert.equal(report.assessments[0].week, 5);
 });
 
+test("one rule stated twice is one finding citing both passages", async () => {
+  const page = `COURSE POLICIES
+Late work loses points at five points per day after the due date shown.
+Assignments handed in after the deadline lose points, with no exceptions made.`;
+  const report = await run([page], {
+    flags: [
+      { kind: "late", basis: "deduction", percent: null, page: 1, quote: "Late work loses points at five points per day" },
+      { kind: "late", basis: "deduction", percent: null, page: 1, quote: "Assignments handed in after the deadline lose points" },
+    ],
+  });
+  const late = report.flags.filter((f: { kind: string }) => f.kind === "late");
+  assert.equal(late.length, 1);
+  assert.equal(late[0].passageIds?.length, 2);
+  for (const id of late[0].passageIds ?? []) assert.match(passageOf(report, id), /lose|loses/);
+});
+
 test("the same text gives the same flags and assessments however the model orders its proposals", async () => {
   const flags = [
     { kind: "attendance", basis: "counted_no_figure", percent: null, page: 2, quote: "Attendance will be taken in this course." },

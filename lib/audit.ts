@@ -315,8 +315,15 @@ export async function runAudit(
     if (!severity) return;
     if (seenFlags.has(`${kind}:${passageId}`)) return;
     seenFlags.add(`${kind}:${passageId}`);
+    const explanation = extra?.explanation ?? explain(kind, basis, percent);
+    // One rule stated in several places is one finding: cite every passage, don't repeat the line.
+    const same = flags.find((f) => f.kind === kind && f.explanation === explanation);
+    if (same) {
+      same.passageIds = [...new Set([...(same.passageIds ?? [same.passageId]), passageId, ...(extra?.passageIds ?? [])])];
+      return;
+    }
     flags.push({
-      kind, severity, explanation: extra?.explanation ?? explain(kind, basis, percent), passageId,
+      kind, severity, explanation, passageId,
       ...(extra?.passageIds && extra.passageIds.length > 1 ? { passageIds: extra.passageIds } : {}),
     });
   };
