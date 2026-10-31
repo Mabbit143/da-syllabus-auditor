@@ -164,3 +164,75 @@ Findings so far from reading UO's own pages (all from public pages; quotes verif
 - [x] Meta billing spend limit set (owner confirmed 2026-10-27).
 - [x] GitHub Actions E2E workflow passes (green on `main`, run 40617882009, 2026-10-28).
 - [ ] UO policy wording used in the demo: re-fetch and re-quote it on the day, since pages change.
+
+## 15. The evidence ledger (`lib/ledger.ts`, 2026-10-31)
+
+Built on `feat/verified-evidence-ledger` to answer the owner's report that two audits of the same syllabus "never come out close to the same report". The model is no longer asked for facts the document prints plainly; code reads them first and every section of the audit uses that one record.
+
+What the ledger holds, read by code with no model call:
+
+- `gradeComponents`: each row of a grade table that prints a percent, with its name, points, percent and the exact source span. A row is only a row if its columns are really separated in the extracted text (two or more spaces, a tab, or dot leaders) and the line contains no sentence words; a summary row (any row at 100%, or one named total/overall/course grade) is excluded. Two different percents for one component name is recorded as `conflict`, with both spans kept, not resolved.
+- `attendance`: the subset of those rows that grade attendance. Lecture and lab stay separate rows. `attendanceFact()` returns the rows, their `total`, and the `largest` single printed share; it is null unless every row prints a percent and none conflict.
+- `schedule`: each numbered week mapped to the dates printed under it, numeric (`10/6`) or named (`Sunday, Oct 4`). Headers may be `Week 4 - Origins`, `WEEK 4`, or a bare table column; a number alone on a line (a page footer) and `Chapter 11:` are not headers. Dates are only collected on pages that carry a header, a line in capitals ends a week's rows, a date printed under two weeks is dropped from both, and only an unbroken run of weeks from 1 is kept.
+- `deadlines`: the deliverables the schedule prints under each week, each the table cell that names it, copied verbatim, with its row's span. A cell qualifies only if the document uses a deliverable word for it (lab, quiz, exam, paper, hypothesis, reflection, and so on); a lecture topic, a column heading, and a one-word artifact of a wrapped row ("Lab", "Module") do not qualify, though a standalone "Midterm" or "Final" does. The same deliverable printed in two summary tables is recorded once.
+
+How the audit uses it (`lib/audit.ts`):
+
+- An attendance flag can no longer state a vaguer figure than the table does: both "no figure is stated" and a percentage read from prose are replaced by the printed rows, each row named and cited (`passageIds`), and the flag is reported even if the model proposes nothing that run. Severity follows the largest printed row; the sum is only ever disclosed as a sum.
+- Grade weights are summed from one printed table: the page holding the most rows, and only if those rows do not already exceed 100%. Otherwise the model's list is the fallback, and a ledger conflict makes the sum unassessable rather than guessed.
+- A ledger conflict is shown to the student as a `T7` transparency finding citing both percentages, whether or not the consistency agent found it that run.
+- Signal `T1` ("grade weights or percentages stated") requires the quoted passage to state a percentage or a share ("one third"). A bare point count is not a share, and "Course grades will be based" no longer counts; the dimension gains a quote-neutral note instead.
+- An assessment's week must be supported by its own passage: the week named, a date the schedule lists under that week, or the week header the passage sits under (so a single table cell still places correctly). A date or header from another week drops it; list position is never evidence. Dropped deadlines are disclosed in `coverage.skipped` instead of vanishing.
+- The week map itself is built from `deadlines` whenever the syllabus prints a schedule, so it does not depend on which rows the model lists. Where nothing is printed for the map to read, the model's proposals are used instead, each gated on its own passage supporting the week, deduplicated by name containment, and a proposal whose stated percentage is absent from its passage is dropped rather than carried.
+- Signals come from one pass per area rather than one shared answer, so an area is not crowded out of a single response (`dimensionInstructions`). Each pass offers only that area's codes, never `P6`/`P7`/`T7`, and asks for every matching passage. An area whose own pass fails is `not_assessed` with a reason in `coverage.skipped`, never `not_found`.
+
+Verified 2026-10-31, offline, no model credits spent: 126 Node tests (36 new), 21 mocked browser tests, `npx tsc --noEmit`, eslint clean on the changed files, and a local run against the owner's two real syllabi outside the repo. On ANTH 145 the ledger reads five components summing to exactly 100%, `Lab Attendance 100 15%` and `Attendance 180 15%` as separate rows (30% total, largest 15%), and weeks 1-10 with their printed dates; on ANTH 341 it reads weeks 1-10 from `WEEK n` headings with their worded due dates. Cell-level week checks returned supported/contradicted correctly on both.
+
+Five defects an independent review found, all fixed and covered by regressions: prose such as "Students with attendance below 75%" became a fabricated attendance figure at high severity; prose rows could override a correct model weight table and raise a false "adds up to 175%"; a 100% summary row not named "total" counted as a component; the schedule parser never reset between sections, so later dates (a final-exam notice, drop deadlines) leaked into the last week and then contradicted legitimate placements; and a ratio such as "worth 1/3 of the grade" was read as a date. Earlier, the real documents had already exposed `Chapter 11:` and page-number footers being read as week headers.
+
+Still open: a points-only grade table (ANTH 341: "6 points", no per-row percent) yields no weight facts, because converting points to a percent would be a derivation rather than a printed fact. `lib/fixes.ts` and `lib/policy/compare.ts` still read the document directly instead of the ledger, so a drafted question can still ask about a rule the ledger already holds, and the required-contents check can still accept a grade-weight row as evidence of grading criteria. Browser tests are flaky under the default worker count on this machine; `--workers=2` passed 21/21 twice.
+
+### Live repeat-run evidence (2026-10-31, owner-approved, Meta, no fallback)
+
+Six live audits of the same real ANTH 145 text through `/api/audit` on this branch, in two batches of three, 13.4 s to 19.5 s each.
+
+Identical in all six runs:
+
+- the attendance finding, word for word: "Attendance counts toward the grade: Lab Attendance 15%, Attendance 15% (30% in total)", high severity, citing both printed rows. Never "no figure is stated".
+- no false grade-weight flag (the printed table sums to 100%).
+- every assessment week inside 1-10, every placement supported by its own passage.
+- coverage `full`.
+- after the duplicate-flag fix in this branch, the whole flag list is identical across a batch; the first batch had shown the same late-work line twice from two different passages, now merged into one finding citing both.
+
+Still varying, and not fixed by this branch:
+
+- **Which signals the model finds.** Dimension counts moved run to run (for example punitive 1+/2- to 1+/6-, perspectives `not_found` to `strong`), so the overall score came out +0, +1, +1, +1, +2 and +0: label `mixed` five times and `inclusive leaning` once. The rubric is fixed, so this is recall variance in the evidence, not arithmetic. Reducing it needs a different extraction pass per dimension, not a cache.
+
+So the figures the syllabus prints are now stable and correctly cited; what the model chooses to notice is not, and the overall label can still move by one step.
+
+The first batches showed the model listing 3 to 9 of the ten lab deadlines, so the crunch map was thinner on some runs. With the map built from the ledger's printed deadlines, three more live audits of the same text returned **9 deadlines every run, identical in week, name and citation**, alongside identical flags, attendance and coverage. Offline the same extraction reads 9 labs for ANTH 145 (week 9 is the Thanksgiving week and prints no lab, correctly empty) and all 10 deliverables for ANTH 341 (`Hypothesis 1-6`, `Group Exercise 1-2`, `Lecture Reflection 1-2`) from a table the model had never listed reliably.
+
+What remains unstable after this change is only the dimension signals: across the last three runs the score was +1, +1 and +2, so the label was `mixed` twice and `inclusive leaning` once. That is the one open piece of the repeat-run problem, and it needs a per-dimension extraction pass rather than a cache.
+
+Verification for this change: 135 Node tests (eight new on deliverable extraction and map stability, including that a lecture topic, a column heading and a wrapped-row "Lab" are never deadlines), 21 browser tests at `--workers=2`, tsc, eslint clean, plus the three live runs above.
+
+### Third live batch: one extraction pass per area (2026-10-31)
+
+The signals were the last model-driven input, so each area now gets its own call with only its own codes (`dimensionInstructions` in `lib/audit.ts`), asked for completeness ("report EVERY passage, up to 3 per code"), with the A1, T1 and T9 cautions attached to the codes they belong to. The shared pass no longer asks for signals at all; it carries assessments, flags and weights. `P6`, `P7` and `T7` are never offered, because code decides those. A failed area is `not_assessed` with a plain reason in `coverage.skipped`, not `not_found`, and one failed area no longer aborts the report (the shared pass's unread sections are now counted separately from area-level gaps, which had made a single area failure look like "every section failed").
+
+Cost and latency: calls per audit go from about 1 per chunk to about 6 per chunk, run in parallel; the observed live audits stayed in the 15-24 s range.
+
+Three live audits of the same real text after the change:
+
+| | before any of this work | after |
+| --- | --- | --- |
+| Overall label and score | `mixed` +1, `mixed` +1, `inclusive leaning` +2 | **`mixed` +1 in all three** |
+| Area statuses | moved (`not_found` to `strong`) | **identical in all three** |
+| Week map | 3 to 12 deadlines | **9 deadlines, identical** |
+| Flags, coverage, attendance citation | identical | identical |
+
+What still moves is only the supporting counts behind an identical status: transparency 11+/6-, 11+/7-, 11+/6-; accessibility 4+/5-, 5+/4-, 2+/5-. Recall also rose sharply (transparency 4+ to 11+, perspectives now `strong` every run), which is why the counts are larger than in earlier batches. Every verdict the report states is now the same on a reread; the numbers beside it can still differ by a passage or two.
+
+Closing that last gap means counting one passage per code instead of up to three, so a count becomes "how many kinds of evidence" rather than "how many passages". That changes an input to the approved rubric, so it needs the owner's decision before anyone implements it.
+
+Verification for this change: 144 Node tests (nine new on per-area prompts, cross-area leakage, and a failed area), 21 browser tests at `--workers=2`, tsc, eslint clean, plus the three live runs above.
