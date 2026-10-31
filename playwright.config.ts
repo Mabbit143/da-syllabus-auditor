@@ -15,6 +15,11 @@ export default defineConfig({
   },
   webServer: {
     command: `npm run build && npm run start -- -p ${PORT}`,
+    // Auth regressions use intercepted Supabase requests, never real accounts or CI secrets.
+    env: {
+      NEXT_PUBLIC_SUPABASE_URL: "https://supabase.example.test",
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: "test-anon-key",
+    },
     url: `http://localhost:${PORT}`,
     reuseExistingServer: !process.env.CI,
     timeout: 240_000,
