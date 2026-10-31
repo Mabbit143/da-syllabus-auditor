@@ -59,7 +59,7 @@ function AuthBox() {
     try {
       const db = supabase()!;
       if (mode === "up" && form.school.trim().length < 3) throw new Error("Enter your school to create an account.");
-      if (mode === "up" && !form.agreed) throw new Error("Please confirm the notice below to create an account.");
+      if (mode === "up" && !form.agreed) throw new Error("Please confirm the notice above to create an account.");
       const res = mode === "in"
         ? await db.auth.signInWithPassword({ email: form.email, password: form.password })
         : await db.auth.signUp({ email: form.email, password: form.password, options: { emailRedirectTo: window.location.origin, data: { school: form.school.trim().slice(0, 100) } } });
