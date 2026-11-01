@@ -1,6 +1,6 @@
 import { defineConfig } from "@playwright/test";
 
-const PORT = 3200;
+const PORT = Number(process.env.PLAYWRIGHT_PORT ?? 3200);
 
 // Headless by default (CI). Use `npm run test:e2e:headed` locally to watch.
 export default defineConfig({

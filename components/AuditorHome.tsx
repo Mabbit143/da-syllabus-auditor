@@ -4,12 +4,9 @@ import { useEffect, useRef, useState } from "react";
 import Report from "@/components/Report";
 import TermView, { type Course } from "@/components/TermView";
 import DepartmentView from "@/components/DepartmentView";
+import SyllabusInput, { type AuditInput } from "@/components/SyllabusInput";
 import { useSchool, useUserId } from "@/components/Nav";
 import { deleteAudit, loadAudits, loadSchoolPolicies, recordGaps, saveAudit, saveSchoolPolicies } from "@/lib/cloud";
-import { extractPages } from "@/lib/extract";
-import { mergePieces } from "@/lib/merge";
-import { normalizeCourseCode } from "@/lib/departments";
-import { ocrPages } from "@/lib/ocr";
 import type { PolicyCheck } from "@/lib/policy/types";
 import type { CourseContext } from "@/lib/policy/contents-types";
 import type { EvidenceRecord } from "@/lib/policy/evidence";
@@ -17,7 +14,6 @@ import type { AuditReport, Page } from "@/lib/types";
 
 type StoredCourse = Course & { pages: Page[] };
 type Status = { step: "idle" } | { step: "working"; message: string } | { step: "error"; message: string };
-type PieceDraft = { label: string; kind: "file"; file: File } | { label: string; kind: "text"; text: string };
 
 const STORE_KEY = "da-syllabus-auditor.courses.v1";
 
@@ -42,6 +38,7 @@ export default function AuditorHome({ disclosure, departmentEvidence }: { disclo
   const [courses, setCourses] = useState<StoredCourse[]>([]);
   const [openId, setOpenId] = useState<string | null>(null);
   const [status, setStatus] = useState<Status>({ step: "idle" });
+  const [saveStatus, setSaveStatus] = useState<{ id: string; state: "saving" | "saved" | "failed" }>({ id: "", state: "saved" });
 
   const userId = useUserId();
   const [school, saveSchool] = useSchool();
@@ -95,7 +92,15 @@ export default function AuditorHome({ disclosure, departmentEvidence }: { disclo
         save(next);
         return next;
       });
-      if (done) void saveAudit({ id, report: done.report, pages });
+      if (done) {
+        setSaveStatus({ id, state: "saving" });
+        try {
+          await saveAudit({ id, report: done.report, pages });
+          setSaveStatus({ id, state: "saved" });
+        } catch {
+          setSaveStatus({ id, state: "failed" });
+        }
+      }
       if (data.newPolicies) void saveSchoolPolicies(checkSchool, data.policies);
       void recordGaps(checkSchool, pages, data.items);
       setPolicy({ busy: false, error: "" });
@@ -125,7 +130,8 @@ export default function AuditorHome({ disclosure, departmentEvidence }: { disclo
           if (c.id !== id) return c;
           const previous = c.report.policyCheck;
           const updated = { ...c, report: { ...c.report, policyCheck: { school: checkSchool, checkedAt: previous?.checkedAt ?? new Date().toISOString(), items: previous?.items ?? [], comparisonStatus: previous?.comparisonStatus ?? (previous ? "complete" as const : "not_run" as const), requiredContents: data.requiredContents } } };
-          void saveAudit(updated);
+          setSaveStatus({ id, state: "saving" });
+          saveAudit(updated).then(() => setSaveStatus((s) => s.id === id ? { id, state: "saved" } : s)).catch(() => setSaveStatus((s) => s.id === id ? { id, state: "failed" } : s));
           return updated;
         });
         save(next);
@@ -139,107 +145,31 @@ export default function AuditorHome({ disclosure, departmentEvidence }: { disclo
     }
   }
 
-  async function onFile(file: File | undefined) {
-    if (!file) return;
-    if (file.type !== "application/pdf" && !file.name.toLowerCase().endsWith(".pdf")) {
-      setStatus({ step: "error", message: "Please choose a PDF file." });
-      return;
-    }
+  async function onAudit(input: AuditInput, signal: AbortSignal) {
     try {
-      setStatus({ step: "working", message: `Reading ${file.name}…` });
-      const extracted = await extractPages(file);
-      const pageCount = extracted.pageCount;
-      let pages = extracted.pages;
-      let scanned = false;
-      if (pages.reduce((n, p) => n + p.text.length, 0) < 200) {
-        // No selectable text: try OCR. If it is unavailable or finds nothing, fail plainly.
-        try {
-          setStatus({ step: "working", message: "This PDF has no selectable text. Reading its page images with OCR…" });
-          pages = await ocrPages(file, (done, total) => setStatus({ step: "working", message: `Reading scanned pages with OCR: ${done} of ${total}…` }));
-          scanned = true;
-        } catch (err) {
-          console.error("[ocr] failed:", err instanceof Error ? err.message : err);
-        }
-        if (!scanned || pages.reduce((n, p) => n + p.text.length, 0) < 200) {
-          setStatus({ step: "error", message: "Could not read text from this file." });
-          return;
-        }
-      }
-      setStatus({ step: "working", message: `Auditing ${pageCount} pages. This can take a minute or two…` });
       const res = await fetch("/api/audit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ requestId: crypto.randomUUID(), fileName: file.name, pageCount, pages }),
+        body: JSON.stringify({ requestId: crypto.randomUUID(), fileName: input.fileName, pageCount: input.pageCount, pages: input.pages }),
+        signal,
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data?.error?.message ?? "The audit failed.");
-      const report: AuditReport = scanned ? { ...data.report, textSource: "ocr" } : data.report;
+      const report: AuditReport = { ...data.report, ...(input.courseCode ? { courseCode: input.courseCode } : {}), ...(input.scanned ? { textSource: "ocr" } : {}) };
       const id = crypto.randomUUID();
       const createdAt = new Date().toISOString();
-      update([...courses, { id, report, pages, createdAt }]);
-      void saveAudit({ id, report, pages, createdAt });
+      update([...courses, { id, report, pages: input.pages, createdAt }]);
+      
+      setSaveStatus({ id, state: "saving" });
+      saveAudit({ id, report, pages: input.pages, createdAt })
+        .then(() => setSaveStatus((s) => s.id === id ? { id, state: "saved" } : s))
+        .catch(() => setSaveStatus((s) => s.id === id ? { id, state: "failed" } : s));
+
       setOpenId(id);
-      setStatus({ step: "idle" });
-      void runPolicyCheck(id, pages);
+      void runPolicyCheck(id, input.pages);
     } catch (err) {
-      console.error("[audit] failed:", err);
-      setStatus({ step: "error", message: err instanceof Error ? err.message : "Something went wrong." });
-    }
-  }
-
-  const [multiMode, setMultiMode] = useState(false);
-  const [courseCodeDraft, setCourseCodeDraft] = useState("");
-  const [pieces, setPieces] = useState<PieceDraft[]>([{ label: "", kind: "text", text: "" }]);
-
-  function updatePiece(i: number, next: Partial<PieceDraft>) {
-    setPieces((prev) => prev.map((p, idx) => (idx === i ? ({ ...p, ...next } as PieceDraft) : p)));
-  }
-
-  async function onPieces() {
-    const courseCode = normalizeCourseCode(courseCodeDraft);
-    if (courseCodeDraft.trim() && !courseCode) {
-      setStatus({ step: "error", message: "Enter a course code such as ANTH 341, or leave it blank." });
-      return;
-    }
-    const usable = pieces.filter((p) => p.label.trim() && (p.kind === "text" ? p.text.trim() : p.file));
-    if (usable.length === 0) {
-      setStatus({ step: "error", message: "Add at least one labeled piece with content." });
-      return;
-    }
-    try {
-      setStatus({ step: "working", message: "Reading each piece…" });
-      const parts = await Promise.all(usable.map(async (p) => {
-        if (p.kind === "text") return { label: p.label.trim(), pages: [{ pageNumber: 1, text: p.text.trim() }] };
-        const extracted = await extractPages(p.file);
-        if (extracted.pages.reduce((n, pg) => n + pg.text.length, 0) < 20) {
-          throw new Error(`"${p.label}" has no selectable text. Paste its text instead, or use the single-PDF upload above for a scanned file.`);
-        }
-        return { label: p.label.trim(), pages: extracted.pages };
-      }));
-      const merged = mergePieces(parts);
-      setStatus({ step: "working", message: `Auditing ${merged.pageCount} combined pages from ${parts.length} pieces. This can take a minute or two…` });
-      const fileName = `${courseCode ? `${courseCode} — ` : ""}Combined syllabus (${parts.length} pieces)`;
-      const res = await fetch("/api/audit", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ requestId: crypto.randomUUID(), fileName, pageCount: merged.pageCount, pages: merged.pages }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data?.error?.message ?? "The audit failed.");
-      const report: AuditReport = { ...data.report, ...(courseCode ? { courseCode } : {}) };
-      const id = crypto.randomUUID();
-      const createdAt = new Date().toISOString();
-      update([...courses, { id, report, pages: merged.pages, createdAt }]);
-      void saveAudit({ id, report, pages: merged.pages, createdAt });
-      setOpenId(id);
-      setPieces([{ label: "", kind: "text", text: "" }]);
-      setCourseCodeDraft("");
-      setMultiMode(false);
-      setStatus({ step: "idle" });
-      void runPolicyCheck(id, merged.pages);
-    } catch (err) {
-      console.error("[audit] combined pieces failed:", err);
-      setStatus({ step: "error", message: err instanceof Error ? err.message : "Something went wrong." });
+      if (err instanceof Error && err.name === "AbortError") return;
+      throw err;
     }
   }
 
@@ -248,66 +178,47 @@ export default function AuditorHome({ disclosure, departmentEvidence }: { disclo
   return (
     <main>
       <h1 className="noprint">DA Syllabus Auditor</h1>
-      <section className="noprint">
-        <p>Upload a syllabus PDF to see how it treats students, with quotes you can check yourself. The PDF stays in your browser; only its text is sent for analysis. If a PDF is a scan with no selectable text, its page images are sent to Modal to be read by OCR; they are not stored. {disclosure} Audits are saved in this browser, and in your account if you are signed in. Add several syllabi to compare your term. If you are signed in, quotes where a syllabus differs from your school&rsquo;s published policy, and the instructor&rsquo;s name, are also recorded in our system, not linked to your account.</p>
-        {userId && school === null && (
-          <form onSubmit={(e) => { e.preventDefault(); if (schoolDraft.trim().length >= 3) void saveSchool(schoolDraft); }}>
-            <label>Which school are you at? <input type="text" value={schoolDraft} onChange={(e) => setSchoolDraft(e.target.value)} placeholder="University of Oregon" required minLength={3} /></label>{" "}
-            <button type="submit">Save school</button>
-          </form>
-        )}
-        <input type="file" aria-label="Upload syllabus PDF" accept="application/pdf" onChange={(e) => { onFile(e.target.files?.[0]); e.target.value = ""; }} disabled={status.step === "working"} />
-        <p>
-          <button type="button" className="link" onClick={() => setMultiMode(!multiMode)} aria-expanded={multiMode}>
-            {multiMode ? "Hide" : "Syllabus scattered across several Canvas pages? Combine pieces instead"}
-          </button>
-        </p>
-        {multiMode && (
-          <div className="pieces">
-            <p className="muted">Add one piece per Canvas page or file. Each piece is labeled by what you call it, so the report can disclose how the syllabus was assembled.</p>
-            <label>Course code (optional)<input type="text" value={courseCodeDraft} onChange={(e) => setCourseCodeDraft(e.target.value)} placeholder="ANTH 341" disabled={status.step === "working"} /></label>
-            <p className="muted">Used to group this course by department. Leave blank if you do not know it.</p>
-            {pieces.map((p, i) => (
-              <div key={i} className="piece">
-                <label>Label (e.g. &ldquo;Grading policy page&rdquo;)<input type="text" value={p.label} onChange={(e) => updatePiece(i, { label: e.target.value })} disabled={status.step === "working"} /></label>
-                <label>
-                  <select value={p.kind} onChange={(e) => updatePiece(i, e.target.value === "file" ? { kind: "file", file: (p as { file?: File }).file ?? new File([], "") } : { kind: "text", text: (p as { text?: string }).text ?? "" })} disabled={status.step === "working"}>
-                    <option value="text">Paste text</option>
-                    <option value="file">Upload PDF</option>
-                  </select>
-                </label>
-                {p.kind === "text" ? (
-                  <textarea aria-label={`Text for piece ${i + 1}`} value={p.text} onChange={(e) => updatePiece(i, { text: e.target.value })} disabled={status.step === "working"} rows={4} />
-                ) : (
-                  <input type="file" aria-label={`PDF for piece ${i + 1}`} accept="application/pdf" onChange={(e) => { const f = e.target.files?.[0]; if (f) updatePiece(i, { file: f }); }} disabled={status.step === "working"} />
-                )}
-                {pieces.length > 1 && (
-                  <button type="button" className="link" onClick={() => setPieces((prev) => prev.filter((_, idx) => idx !== i))} disabled={status.step === "working"}>Remove piece</button>
-                )}
-              </div>
-            ))}
-            <button type="button" onClick={() => setPieces((prev) => [...prev, { label: "", kind: "text", text: "" }])} disabled={status.step === "working"}>Add another piece</button>{" "}
-            <button type="button" onClick={() => void onPieces()} disabled={status.step === "working"}>Audit combined syllabus</button>
-          </div>
-        )}
-      </section>
+      <SyllabusInput
+        disclosure={disclosure}
+        signedIn={!!userId}
+        onAudit={(input, signal) => onAudit(input, signal).catch((err) => { setStatus({ step: "error", message: err instanceof Error ? err.message : "The audit failed." }); })}
+      />
       {status.step === "working" && <p role="status">{status.message}</p>}
       {status.step === "error" && <p role="alert" className="warn">{status.message}</p>}
 
       {open ? (
         <>
           <button type="button" className="noprint" onClick={() => setOpenId(null)}>Back to term view</button>
+          {userId && school === null && (
+            <form className="noprint" onSubmit={(e) => { e.preventDefault(); if (schoolDraft.trim().length >= 3) void saveSchool(schoolDraft); }}>
+              <label>Which school are you at? <input type="text" value={schoolDraft} onChange={(e) => setSchoolDraft(e.target.value)} placeholder="University of Oregon" required minLength={3} /></label>{" "}
+              <button type="submit">Save school</button>
+            </form>
+          )}
           <Report key={open.id} report={open.report} pages={open.pages} policy={{ school: school ?? null, busy: policy.busy, error: policy.error, onRun: () => void runPolicyCheck(open.id, open.pages), contentsBusy: contentsState[open.id]?.busy, contentsError: contentsState[open.id]?.error, onRunContents: (context) => void runRequiredContents(open, context) }} />
+          {saveStatus.id === open.id && (
+            <p className="muted noprint">
+              {saveStatus.state === "saving" ? "Saving..." : saveStatus.state === "saved" ? "Saved to your account" : "Could not save to your account. Try signing in again."}
+            </p>
+          )}
         </>
       ) : (
-        <TermView
-          courses={courses}
-          onOpen={setOpenId}
-          onRemove={(id) => {
-            update(courses.filter((c) => c.id !== id));
-            void deleteAudit(id);
-          }}
-        />
+        <>
+          {userId && school === null && (
+            <form className="noprint" onSubmit={(e) => { e.preventDefault(); if (schoolDraft.trim().length >= 3) void saveSchool(schoolDraft); }}>
+              <label>Which school are you at? <input type="text" value={schoolDraft} onChange={(e) => setSchoolDraft(e.target.value)} placeholder="University of Oregon" required minLength={3} /></label>{" "}
+              <button type="submit">Save school</button>
+            </form>
+          )}
+          <TermView
+            courses={courses}
+            onOpen={setOpenId}
+            onRemove={(id) => {
+              update(courses.filter((c) => c.id !== id));
+              void deleteAudit(id);
+            }}
+          />
+        </>
       )}
       {!open && <DepartmentView courses={courses} evidence={departmentEvidence} school={school} />}
     </main>

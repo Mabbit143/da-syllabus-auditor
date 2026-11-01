@@ -17,7 +17,10 @@ test("a scanned PDF is read by OCR, audited, and labeled as OCR", async ({ page 
   await page.route("**/api/policy-check", (route) => route.abort());
   await page.goto("/");
   await page.getByLabel("Upload syllabus PDF").setInputFiles(blank);
-  await expect(page.getByText("read from page images by OCR")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Read scanned pages", exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "Read scanned pages", exact: true }).click();
+  await page.getByRole("button", { name: "Audit syllabus", exact: true }).click();
+  await expect(page.getByText("OCR text — check for reading errors")).toBeVisible();
   expect(audited.pages?.[0].text).toBe(text.trim());
 });
 
@@ -25,5 +28,7 @@ test("when OCR is unavailable a scan still fails plainly", async ({ page }) => {
   await page.route("**/api/ocr", (route) => route.fulfill({ status: 503, json: { error: { message: "Reading scanned files is not available right now." } } }));
   await page.goto("/");
   await page.getByLabel("Upload syllabus PDF").setInputFiles(blank);
-  await expect(page.locator("p[role=alert]")).toHaveText("Could not read text from this file.");
+  await expect(page.getByRole("button", { name: "Read scanned pages", exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "Read scanned pages", exact: true }).click();
+  await expect(page.locator("p[role=alert]")).toContainText("Could not read this PDF");
 });

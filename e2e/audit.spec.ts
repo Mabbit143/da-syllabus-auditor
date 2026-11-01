@@ -55,14 +55,13 @@ async function mockAudit(page: Page, week = 5) {
   });
 }
 
-async function upload(page: Page, file: string) {
-  await page.getByLabel("Upload syllabus PDF").setInputFiles(fixture(file));
-}
 
 test("a student uploads a syllabus and reads a verified audit", async ({ page }) => {
   await mockAudit(page);
   await page.goto("/");
-  await upload(page, "syllabus.pdf");
+  await page.getByLabel("Upload syllabus PDF").setInputFiles(fixture("syllabus.pdf"));
+  await expect(page.getByRole("button", { name: "Audit syllabus", exact: true })).toBeDisabled();
+  await page.getByRole("button", { name: "Audit syllabus", exact: true }).click();
 
   await expect(page.getByRole("heading", { name: "Overall read" })).toBeVisible();
   await expect(page.getByText("mixed", { exact: true }).first()).toBeVisible();
@@ -82,9 +81,15 @@ test("a student uploads a syllabus and reads a verified audit", async ({ page })
 test("two syllabi show a term view with a crunch week, saved across reloads", async ({ page }) => {
   await mockAudit(page, 5);
   await page.goto("/");
-  await upload(page, "syllabus.pdf");
+  await page.getByLabel("Upload syllabus PDF").setInputFiles(fixture("syllabus.pdf"));
+  await expect(page.getByRole("button", { name: "Audit syllabus", exact: true })).toBeDisabled();
+  await page.getByRole("button", { name: "Audit syllabus", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "Overall read" })).toBeVisible();
   await page.getByRole("button", { name: "Back to term view" }).click();
-  await upload(page, "syllabus.pdf");
+  await page.getByLabel("Upload syllabus PDF").setInputFiles(fixture("syllabus.pdf"));
+  await expect(page.getByRole("button", { name: "Audit syllabus", exact: true })).toBeDisabled();
+  await page.getByRole("button", { name: "Audit syllabus", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "Overall read" })).toBeVisible();
   await page.getByRole("button", { name: "Back to term view" }).click();
 
   await expect(page.getByRole("heading", { name: /Term view \(2 syllabi\)/ })).toBeVisible();
@@ -103,7 +108,10 @@ test("two syllabi show a term view with a crunch week, saved across reloads", as
 test("assessments in week 10 populate the last UO term box", async ({ page }) => {
   await mockAudit(page, 10);
   await page.goto("/");
-  await upload(page, "syllabus.pdf");
+  await page.getByLabel("Upload syllabus PDF").setInputFiles(fixture("syllabus.pdf"));
+  await expect(page.getByRole("button", { name: "Audit syllabus", exact: true })).toBeDisabled();
+  await page.getByRole("button", { name: "Audit syllabus", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "Overall read" })).toBeVisible();
   await page.getByRole("button", { name: "Back to term view" }).click();
 
   await expect(page.locator(".week")).toHaveCount(10);
@@ -116,7 +124,10 @@ test("assessments in week 10 populate the last UO term box", async ({ page }) =>
 test("assessments beyond week 10 remain visible and saved outside the map", async ({ page }) => {
   await mockAudit(page, 11);
   await page.goto("/");
-  await upload(page, "syllabus.pdf");
+  await page.getByLabel("Upload syllabus PDF").setInputFiles(fixture("syllabus.pdf"));
+  await expect(page.getByRole("button", { name: "Audit syllabus", exact: true })).toBeDisabled();
+  await page.getByRole("button", { name: "Audit syllabus", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "Overall read" })).toBeVisible();
   await page.getByRole("button", { name: "Back to term view" }).click();
 
   const outside = page.getByRole("region", { name: "Assessments outside the term map" });
@@ -137,7 +148,7 @@ test("assessments beyond week 10 remain visible and saved outside the map", asyn
 
 test("a non-PDF is rejected with a plain message", async ({ page }) => {
   await page.goto("/");
-  await upload(page, "notes.txt");
+  await page.getByLabel("Upload syllabus PDF").setInputFiles(fixture("notes.txt"));
   await expect(page.locator("p[role=alert]")).toHaveText("Please choose a PDF file.");
 });
 
@@ -149,17 +160,19 @@ test("a PDF with no readable text fails plainly and never calls the API", async 
     return route.abort();
   });
   await page.goto("/");
-  await upload(page, "blank.pdf");
-  await expect(page.locator("p[role=alert]")).toHaveText("Could not read text from this file.");
+  await page.getByLabel("Upload syllabus PDF").setInputFiles(fixture("blank.pdf"));
+  await expect(page.getByRole("button", { name: "Audit syllabus", exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "Audit syllabus", exact: true }).click();
+  await expect(page.locator("p[role=alert]")).toContainText("Could not read this PDF");
   expect(called).toBe(false);
 });
 
 test("an API failure shows a readable error and the student can retry", async ({ page }) => {
-  await page.route("**/api/audit", (route) =>
-    route.fulfill({ status: 500, json: { error: { code: "audit_failed", message: "The audit could not be completed. Please try again." } } }),
-  );
+  await page.route("**/api/audit", (route) => route.fulfill({ status: 500, json: { error: { code: "audit_failed", message: "The audit failed. Please retry." } } }));
   await page.goto("/");
-  await upload(page, "syllabus.pdf");
-  await expect(page.locator("p[role=alert]")).toHaveText("The audit could not be completed. Please try again.");
-  await expect(page.getByLabel("Upload syllabus PDF")).toBeEnabled();
+  await page.getByLabel("Upload syllabus PDF").setInputFiles(fixture("syllabus.pdf"));
+  await expect(page.getByRole("button", { name: "Audit syllabus", exact: true })).toBeDisabled();
+  await page.getByRole("button", { name: "Audit syllabus", exact: true }).click();
+  await expect(page.locator("p[role=alert]")).toContainText("The audit failed. Please retry.");
+  await expect(page.getByRole("button", { name: "Audit syllabus", exact: true })).toBeVisible();
 });
