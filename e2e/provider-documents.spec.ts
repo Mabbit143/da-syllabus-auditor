@@ -11,6 +11,7 @@ test("server-selected processor is disclosed and reviewed PDF provenance prints"
     } }]));
   });
   await page.goto("/");
+  await page.locator("details.privacy-details").locator("summary").click();
   await expect(page.getByText(/Extracted syllabus text is sent to (Meta|Baseten)/)).toBeVisible();
   await page.getByRole("button", { name: "ocr-provenance-test.pdf" }).click();
   await expect(page.getByText(/Reviewed document, PDF page 3; image region 10, 20, 100, 50/)).toBeVisible();

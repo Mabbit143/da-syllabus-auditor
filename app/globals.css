@@ -80,6 +80,9 @@ table.term th { font-family: var(--font-label), sans-serif; text-transform: uppe
 .evidence-details summary:focus-visible { outline: 3px solid var(--cyan); outline-offset: 2px; }
 .evidence-details__body { padding: 6px 0 8px; }
 .context-label { font-family: var(--font-meta), monospace; color: var(--muted); font-size: 0.8rem; margin: 6px 0 4px; }
+.privacy-details summary { cursor: pointer; font-family: var(--font-label), sans-serif; font-weight: 700; }
+.privacy-details summary:focus-visible { outline: 3px solid var(--cyan); outline-offset: 2px; }
+.privacy-details__body { padding: 8px 0; }
 .nav { max-width: 780px; margin: 0 auto; padding: 14px 16px 0; display: flex; gap: 20px; font-family: var(--font-label), sans-serif; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; }
 .form { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: 12px 0; }
 .form label, fieldset label.check { display: flex; flex-direction: column; gap: 4px; font-family: var(--font-label), sans-serif; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.04em; }

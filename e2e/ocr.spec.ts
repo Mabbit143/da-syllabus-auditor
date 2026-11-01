@@ -20,7 +20,7 @@ test("a scanned PDF is read by OCR, audited, and labeled as OCR", async ({ page 
   await expect(page.getByRole("button", { name: "Read scanned pages", exact: true })).toBeVisible();
   await page.getByRole("button", { name: "Read scanned pages", exact: true }).click();
   await page.getByRole("button", { name: "Audit syllabus", exact: true }).click();
-  await expect(page.getByText("OCR text — check for reading errors")).toBeVisible();
+  await expect(page.getByText("was a scan. Its text was read from page images by OCR")).toBeVisible();
   expect(audited.pages?.[0].text).toBe(text.trim());
 });
 

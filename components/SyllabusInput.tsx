@@ -5,6 +5,7 @@ import { extractPages, type Extracted } from "@/lib/extract";
 import { ocrPages } from "@/lib/ocr";
 import { mergePieces } from "@/lib/merge";
 import { normalizeCourseCode } from "@/lib/departments";
+import PrivacyDisclosure from "@/components/PrivacyDisclosure";
 import type { Page } from "@/lib/types";
 
 export interface AuditInput { fileName: string; pageCount: number; pages: Page[]; courseCode?: string; scanned?: boolean }
@@ -141,12 +142,7 @@ export default function SyllabusInput({ disclosure, signedIn, onAudit }: {
         <button className="link" type="button" disabled={busy} onClick={() => { selection.current++; setSource(undefined); setError(""); }}>Remove PDF</button>
       </> : <ol>{pieces.map((p, i) => <li key={p.id}>{p.label || `Piece ${i + 1} — label needed`} · {p.kind === "text" ? `Text · ${p.text.trim() ? "1 page" : "add text"}` : p.source ? `${p.source.file.name} · ${p.source.pageCount} pages${p.source.needsOcr ? " · no selectable text; paste text instead" : " · locally extracted"}` : "PDF not ready"}</li>)}</ol>}
     </section>}
-    <div className="disclosures" aria-label="Before you audit">
-      <div><h3>What is analyzed</h3><p>The text on the pages you provide. Review your sources before starting; no analysis runs on file selection.</p></div>
-      <div><h3>Where it goes</h3><p>{disclosure}</p><p>PDF text is extracted in your browser. For scans, page images are sent to Modal for OCR only when you choose Read scanned pages; they are not stored.</p></div>
-      <div><h3>Where results are saved</h3><p>{signedIn ? "Completed reports autosave to your private account. Saving status appears with the report." : "Reports are saved in this browser when storage is available. Sign in to autosave new reports to your private account."} Printing is your choice, not public sharing.</p></div>
-      <div><h3>Policy-gap recording</h3><p>If you are signed in, quotes where a syllabus differs from your school&rsquo;s published policy, the instructor&rsquo;s name and school are also recorded in the owner-only policy-gap list, not linked to your account. Student reports and this list are not public.</p></div>
-    </div>
+    <PrivacyDisclosure disclosure={disclosure} signedIn={signedIn} />
     <div className="actions">
       {!multi && source?.needsOcr ? <>
         <button type="button" disabled={busy || reading} onClick={() => void readScan()}>Read scanned pages</button>

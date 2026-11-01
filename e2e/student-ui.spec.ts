@@ -37,6 +37,7 @@ test("scanned selection discloses OCR without transmitting images until asked", 
   await page.getByLabel("Upload syllabus PDF").setInputFiles(fixture("blank.pdf"));
   await expect(page.getByRole("region", { name: "Source review" })).toContainText("OCR needed");
   expect(ocr).toBe(0);
+  await page.locator("details.privacy-details").locator("summary").click();
   await expect(page.getByText(/page images are sent to Modal/)).toBeVisible();
   await page.getByRole("button", { name: "Read scanned pages", exact: true }).click();
   await expect(page.locator("p[role=alert]")).toContainText("Could not read this PDF");

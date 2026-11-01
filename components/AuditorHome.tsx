@@ -178,11 +178,13 @@ export default function AuditorHome({ disclosure, departmentEvidence }: { disclo
   return (
     <main>
       <h1 className="noprint">DA Syllabus Auditor</h1>
-      <SyllabusInput
-        disclosure={disclosure}
-        signedIn={!!userId}
-        onAudit={(input, signal) => onAudit(input, signal).catch((err) => { setStatus({ step: "error", message: err instanceof Error ? err.message : "The audit failed." }); })}
-      />
+      {!open && (
+        <SyllabusInput
+          disclosure={disclosure}
+          signedIn={!!userId}
+          onAudit={(input, signal) => onAudit(input, signal).catch((err) => { setStatus({ step: "error", message: err instanceof Error ? err.message : "The audit failed." }); })}
+        />
+      )}
       {status.step === "working" && <p role="status">{status.message}</p>}
       {status.step === "error" && <p role="alert" className="warn">{status.message}</p>}
 
