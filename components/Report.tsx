@@ -1,12 +1,14 @@
 "use client";
 
-import { useState } from "react";
 import FixKit from "@/components/FixKit";
 import RequiredContents from "@/components/RequiredContents";
+import EvidenceDetails from "@/components/report/EvidenceDetails";
+import SourceQuote, { MissingPassage } from "@/components/report/SourceQuote";
 import type { CourseContext } from "@/lib/policy/contents-types";
 import { findingsFromReport } from "@/lib/fixes";
 import { pageLocator } from "@/lib/locator";
 import { DIMENSION_EXPLAINER } from "@/lib/rubric";
+import { AREA_LABELS, areaStatus } from "@/lib/report-presentation";
 import { POLICY_TOPICS, TOPIC_LABEL, TOPIC_PLAIN, type Relation } from "@/lib/policy/types";
 import type { AuditReport, Page, Passage } from "@/lib/types";
 
@@ -17,15 +19,6 @@ const STATUS_TEXT = {
   not_found: "Not found in this syllabus",
   not_assessed: "Not assessed",
 } as const;
-
-/** The rest of the sentence around a verified quote, so a cut-off fragment still reads. Display only. */
-function sentenceAround(text: string, start: number, end: number): [string, string] {
-  const before = text.slice(Math.max(0, start - 200), start);
-  const cut = Math.max(before.lastIndexOf(". "), before.lastIndexOf("? "), before.lastIndexOf("! "), before.lastIndexOf("\n"));
-  const after = text.slice(end, end + 200);
-  const stop = after.search(/[.!?](\s|$)/);
-  return [cut === -1 ? "" : before.slice(cut + 1).trimStart(), stop === -1 ? "" : after.slice(0, stop + 1)];
-}
 
 /** A short plain summary computed from the findings, so a new reader knows what to do first. */
 function StartHere({ report }: { report: AuditReport }) {
@@ -45,39 +38,6 @@ function StartHere({ report }: { report: AuditReport }) {
       {differs > 0 && <p>{differs} place{differs === 1 ? "" : "s"} where this syllabus differs from your school&rsquo;s written policy. See &ldquo;Against your school&rsquo;s own policies&rdquo; below.</p>}
       <p className="muted noprint">Questions to ask, messages you can send and suggested wording are in <a href="#fixes">What to do about it</a>, at the end.</p>
     </section>
-  );
-}
-
-function Quote({ passage, pages }: { passage: Passage; pages: Page[] }) {
-  const [open, setOpen] = useState(false);
-  const text = pages.find((p) => p.pageNumber === passage.page)?.text ?? "";
-  const [lead, trail] = sentenceAround(text, passage.start, passage.end);
-  const where = pageLocator(pages, passage.page, { capitalize: true });
-  return (
-    <blockquote className="quote">
-      <p>
-        &ldquo;{lead && <span className="muted">{lead} </span>}
-        {passage.text}
-        {trail && <span className="muted">{trail}</span>}&rdquo;
-      </p>
-      <span className="where">
-        <span className="stamp">Verified</span>
-        {where}{" "}
-        <button type="button" className="link noprint" onClick={() => setOpen(!open)}>
-          {open ? "Hide context" : "See in context"}
-        </button>
-      </span>
-      {open && (
-        <>
-          <p className="where">Context from {where}</p>
-          <pre className="context">
-            {text.slice(Math.max(0, passage.start - 300), passage.start)}
-            <mark>{text.slice(passage.start, passage.end)}</mark>
-            {text.slice(passage.end, passage.end + 300)}
-          </pre>
-        </>
-      )}
-    </blockquote>
   );
 }
 
@@ -164,8 +124,21 @@ export default function Report({ report, pages, policy }: { report: AuditReport;
               {hits.map((h) => (
                 <div key={h.passageId}>
                   <p className="signal">{h.polarity === 1 ? "+" : "−"} {h.label}</p>
-                  <Quote passage={byId.get(h.passageId)!} pages={pages} />
-                  {h.pairedPassageId && <Quote passage={byId.get(h.pairedPassageId)!} pages={pages} />}
+                  {byId.get(h.passageId) ? (
+                    <EvidenceDetails id={`evidence-${h.passageId}`} label="Read the syllabus wording">
+                      <SourceQuote passage={byId.get(h.passageId)!} pages={pages} evidenceId={`quote-${h.passageId}`} />
+                    </EvidenceDetails>
+                  ) : (
+                    <MissingPassage />
+                  )}
+                  {h.pairedPassageId &&
+                    (byId.get(h.pairedPassageId) ? (
+                      <EvidenceDetails id={`evidence-${h.pairedPassageId}`} label="Read the second syllabus wording">
+                        <SourceQuote passage={byId.get(h.pairedPassageId)!} pages={pages} evidenceId={`quote-${h.pairedPassageId}`} />
+                      </EvidenceDetails>
+                    ) : (
+                      <MissingPassage />
+                    ))}
                   {h.evidence && (
                     <p className="muted">
                       Author bio ({h.evidence.author}): &ldquo;{h.evidence.quote}&rdquo;{" "}
@@ -192,7 +165,15 @@ export default function Report({ report, pages, policy }: { report: AuditReport;
               <span className="grade">{f.severity}</span>
             </h4>
             <p>{f.explanation}</p>
-            {(f.passageIds ?? [f.passageId]).map((id) => <Quote key={id} passage={byId.get(id)!} pages={pages} />)}
+            {(f.passageIds ?? [f.passageId]).map((id) =>
+              byId.get(id) ? (
+                <EvidenceDetails key={id} id={`evidence-flag-${id}`} label="Read the syllabus wording">
+                  <SourceQuote passage={byId.get(id)!} pages={pages} evidenceId={`quote-flag-${id}`} />
+                </EvidenceDetails>
+              ) : (
+                <MissingPassage key={id} />
+              ),
+            )}
           </div>
         ))}
       </section>

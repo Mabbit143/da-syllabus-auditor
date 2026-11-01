@@ -62,6 +62,10 @@ table.term th { font-family: var(--font-label), sans-serif; text-transform: uppe
 @media print {
   .required-contents details::details-content { content-visibility: visible; display: block; }
   .required-contents .contents-evidence { display: block; }
+  .evidence-details::details-content { content-visibility: visible; display: block; }
+  .evidence-details__body { display: block !important; }
+  .evidence-details[open] .evidence-details__body { display: block !important; }
+  .evidence-details:not([open]) .evidence-details__body { display: block !important; }
   :root { --bg: #fff; --fg: var(--black); --muted: #444; --line: rgba(13, 11, 18, 0.35); --link: var(--cyan-dark); }
   .noprint { display: none !important; } main { padding: 0; } .card { break-inside: avoid; } h2, h3, h4 { break-after: avoid; }
   .big, mark, .stamp { border: 2px solid var(--black); } .stamp { color: var(--black); }
@@ -72,6 +76,10 @@ table.term th { font-family: var(--font-label), sans-serif; text-transform: uppe
 .required-contents fieldset label { display: flex; flex-direction: column; gap: 4px; }
 .required-contents summary { cursor: pointer; font-family: var(--font-label), sans-serif; font-weight: 700; }
 .required-contents select:focus-visible, .required-contents summary:focus-visible { outline: 3px solid var(--cyan); outline-offset: 2px; }
+.evidence-details summary { cursor: pointer; font-family: var(--font-label), sans-serif; font-weight: 700; font-size: 0.95rem; margin: 6px 0; }
+.evidence-details summary:focus-visible { outline: 3px solid var(--cyan); outline-offset: 2px; }
+.evidence-details__body { padding: 6px 0 8px; }
+.context-label { font-family: var(--font-meta), monospace; color: var(--muted); font-size: 0.8rem; margin: 6px 0 4px; }
 .nav { max-width: 780px; margin: 0 auto; padding: 14px 16px 0; display: flex; gap: 20px; font-family: var(--font-label), sans-serif; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; }
 .form { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: 12px 0; }
 .form label, fieldset label.check { display: flex; flex-direction: column; gap: 4px; font-family: var(--font-label), sans-serif; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.04em; }

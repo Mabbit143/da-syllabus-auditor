@@ -71,6 +71,7 @@ test("a student uploads a syllabus and reads a verified audit", async ({ page })
   }
   await expect(page.locator(".dim-explainer")).toHaveCount(5);
   await expect(page.getByText("Not found in this syllabus")).toBeVisible();
+  await page.locator("details.evidence-details").first().locator("summary").click();
   await expect(page.getByText("Verified").first()).toBeVisible();
 
   // The student can check the quote against the page it came from.

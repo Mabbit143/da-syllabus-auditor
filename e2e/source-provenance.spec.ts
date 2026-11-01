@@ -90,9 +90,12 @@ for (const legacy of [false, true]) {
     const conflict = article.locator(".card").filter({ has: page.getByRole("heading", { name: /^Transparency:/ }) });
     await expect(conflict.locator(".where").nth(0)).toContainText(first);
     await expect(conflict.locator(".where").nth(1)).toContainText(second);
-    await conflict.getByRole("button", { name: "See in context" }).nth(1).click();
-    await expect(conflict.locator("pre.context mark")).toHaveText("The final paper is due in week 5.");
-    await expect(conflict.getByText(`Context from ${second}`, { exact: true })).toBeVisible();
+    // Evidence is now behind a disclosure; open both before using the context toggle
+    await conflict.locator("details.evidence-details").nth(0).locator("summary").click();
+    await conflict.locator("details.evidence-details").nth(1).locator("summary").click();
+    await conflict.locator("details.evidence-details").nth(1).getByRole("button", { name: "See in context" }).click();
+    await expect(conflict.locator("details.evidence-details").nth(1).locator("pre.context mark")).toHaveText("The final paper is due in week 5.");
+    await expect(conflict.locator("details.evidence-details").nth(1).getByText(`Context from ${second}`, { exact: true })).toBeVisible();
     const comparison = article.locator("section").filter({ has: page.getByRole("heading", { name: "Against your school’s own policies", exact: true }) });
     await expect(comparison.locator("blockquote .where").first()).toHaveText(`This syllabus, ${first}`);
     const contents = page.getByRole("region", { name: "Required syllabus contents" });
