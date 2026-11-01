@@ -91,7 +91,7 @@ for (const legacy of [false, true]) {
     await expect(conflict.locator(".where").nth(0)).toContainText(first);
     await expect(conflict.locator(".where").nth(1)).toContainText(second);
     await conflict.getByRole("button", { name: "See in context" }).nth(1).click();
-    await expect(conflict.locator("pre.context mark").nth(1)).toHaveText("The final paper is due in week 5.");
+    await expect(conflict.locator("pre.context mark")).toHaveText("The final paper is due in week 5.");
     await expect(conflict.getByText(`Context from ${second}`, { exact: true })).toBeVisible();
     const comparison = article.locator("section").filter({ has: page.getByRole("heading", { name: "Against your school’s own policies", exact: true }) });
     await expect(comparison.locator("blockquote .where").first()).toHaveText(`This syllabus, ${first}`);
