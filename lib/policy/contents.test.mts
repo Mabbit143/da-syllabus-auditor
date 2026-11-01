@@ -104,6 +104,31 @@ test("required contents evidence, applicability and coverage", async (t) => {
     const criteria = await checkRequiredContents([{ pageNumber: 1, text: actual }], coverage, context, async () => JSON.stringify({ candidates: [{ id: "grade_criteria", page: 1, quote: actual, kind: "content" }] }));
     assert.equal(criteria.groups.find((g) => g.id === "grading")!.components.find((c) => c.id === "grade_criteria")!.status, "found");
   });
+  await t.test("grade weights do not establish assessment criteria", async () => {
+    // Synthetic counterexample: the quote exists, but supports a different component.
+    const quote = "Midterm   100   50%";
+    const r = await checkRequiredContents([{ pageNumber: 1, text: quote }], coverage, context, async () => JSON.stringify({ candidates: [
+      { id: "grade_criteria", page: 1, quote, kind: "content" },
+    ] }));
+    const grading = r.groups.find((g) => g.id === "grading")!;
+    const criteria = grading.components.find((c) => c.id === "grade_criteria")!;
+    assert.equal(criteria.status, "needs_review");
+    assert.equal(criteria.passages[0].text, quote);
+  });
+  await t.test("a criteria cue alone cannot certify points, an external rubric, or an empty heading", async (criteriaTest) => {
+    for (const quote of [
+      "Essays are graded on 100 points.",
+      "Essays are graded according to the rubric on Canvas.",
+      "The grading criteria are:",
+    ]) {
+      await criteriaTest.test(quote, async () => {
+        const r = await checkRequiredContents([{ pageNumber: 1, text: quote }], coverage, context, async () => JSON.stringify({ candidates: [{ id: "grade_criteria", page: 1, quote, kind: "content" }] }));
+        const c = r.groups.find((g) => g.id === "grading")!.components.find((c) => c.id === "grade_criteria")!;
+        assert.equal(c.status, "needs_review", quote);
+        assert.equal(c.passages[0].text, quote);
+      });
+    }
+  });
   await t.test("stops calls before the route budget and returns partial progress with page locators", async () => {
     let now = 0;
     let calls = 0;

@@ -15,8 +15,9 @@ export interface Merged {
 /**
  * Combines several syllabus pieces (e.g. separate Canvas pages or files) into one
  * sequentially-numbered document, labeling every page by the piece it came from.
- * Empty pieces are dropped. A piece's own page numbers are not kept; verifyQuote
- * matches by the renumbered sequence, so quotes still resolve correctly.
+ * Empty pieces are dropped. verifyQuote matches by the renumbered sequence (pageNumber);
+ * each page also keeps its own number within its piece (sourcePageNumber) so a citation
+ * can say where in that piece the quote sits.
  */
 export function mergePieces(pieces: Piece[]): Merged {
   const nonEmpty = pieces.filter((p) => p.pages.length > 0);
@@ -24,9 +25,10 @@ export function mergePieces(pieces: Piece[]): Merged {
 
   const pages: Page[] = [];
   for (const piece of nonEmpty) {
-    for (const page of piece.pages) {
-      pages.push({ pageNumber: pages.length + 1, text: page.text, source: piece.label });
-    }
+    piece.pages.forEach((page, i) => {
+      const own = Number.isInteger(page.pageNumber) && page.pageNumber > 0 ? page.pageNumber : i + 1;
+      pages.push({ pageNumber: pages.length + 1, text: page.text, source: piece.label, sourcePageNumber: own });
+    });
   }
 
   const sources = nonEmpty.length > 1

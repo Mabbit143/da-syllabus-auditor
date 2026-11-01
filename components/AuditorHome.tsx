@@ -8,6 +8,7 @@ import { useSchool, useUserId } from "@/components/Nav";
 import { deleteAudit, loadAudits, loadSchoolPolicies, recordGaps, saveAudit, saveSchoolPolicies } from "@/lib/cloud";
 import { extractPages } from "@/lib/extract";
 import { mergePieces } from "@/lib/merge";
+import { normalizeCourseCode } from "@/lib/departments";
 import { ocrPages } from "@/lib/ocr";
 import type { PolicyCheck } from "@/lib/policy/types";
 import type { CourseContext } from "@/lib/policy/contents-types";
@@ -187,6 +188,7 @@ export default function AuditorHome({ disclosure, departmentEvidence }: { disclo
   }
 
   const [multiMode, setMultiMode] = useState(false);
+  const [courseCodeDraft, setCourseCodeDraft] = useState("");
   const [pieces, setPieces] = useState<PieceDraft[]>([{ label: "", kind: "text", text: "" }]);
 
   function updatePiece(i: number, next: Partial<PieceDraft>) {
@@ -194,6 +196,11 @@ export default function AuditorHome({ disclosure, departmentEvidence }: { disclo
   }
 
   async function onPieces() {
+    const courseCode = normalizeCourseCode(courseCodeDraft);
+    if (courseCodeDraft.trim() && !courseCode) {
+      setStatus({ step: "error", message: "Enter a course code such as ANTH 341, or leave it blank." });
+      return;
+    }
     const usable = pieces.filter((p) => p.label.trim() && (p.kind === "text" ? p.text.trim() : p.file));
     if (usable.length === 0) {
       setStatus({ step: "error", message: "Add at least one labeled piece with content." });
@@ -211,7 +218,7 @@ export default function AuditorHome({ disclosure, departmentEvidence }: { disclo
       }));
       const merged = mergePieces(parts);
       setStatus({ step: "working", message: `Auditing ${merged.pageCount} combined pages from ${parts.length} pieces. This can take a minute or two…` });
-      const fileName = `Combined syllabus (${parts.length} pieces)`;
+      const fileName = `${courseCode ? `${courseCode} — ` : ""}Combined syllabus (${parts.length} pieces)`;
       const res = await fetch("/api/audit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -219,13 +226,14 @@ export default function AuditorHome({ disclosure, departmentEvidence }: { disclo
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data?.error?.message ?? "The audit failed.");
-      const report: AuditReport = data.report;
+      const report: AuditReport = { ...data.report, ...(courseCode ? { courseCode } : {}) };
       const id = crypto.randomUUID();
       const createdAt = new Date().toISOString();
       update([...courses, { id, report, pages: merged.pages, createdAt }]);
       void saveAudit({ id, report, pages: merged.pages, createdAt });
       setOpenId(id);
       setPieces([{ label: "", kind: "text", text: "" }]);
+      setCourseCodeDraft("");
       setMultiMode(false);
       setStatus({ step: "idle" });
       void runPolicyCheck(id, merged.pages);
@@ -257,6 +265,8 @@ export default function AuditorHome({ disclosure, departmentEvidence }: { disclo
         {multiMode && (
           <div className="pieces">
             <p className="muted">Add one piece per Canvas page or file. Each piece is labeled by what you call it, so the report can disclose how the syllabus was assembled.</p>
+            <label>Course code (optional)<input type="text" value={courseCodeDraft} onChange={(e) => setCourseCodeDraft(e.target.value)} placeholder="ANTH 341" disabled={status.step === "working"} /></label>
+            <p className="muted">Used to group this course by department. Leave blank if you do not know it.</p>
             {pieces.map((p, i) => (
               <div key={i} className="piece">
                 <label>Label (e.g. &ldquo;Grading policy page&rdquo;)<input type="text" value={p.label} onChange={(e) => updatePiece(i, { label: e.target.value })} disabled={status.step === "working"} /></label>
@@ -299,7 +309,7 @@ export default function AuditorHome({ disclosure, departmentEvidence }: { disclo
           }}
         />
       )}
-      {!open && <DepartmentView courses={courses} evidence={departmentEvidence} />}
+      {!open && <DepartmentView courses={courses} evidence={departmentEvidence} school={school} />}
     </main>
   );
 }

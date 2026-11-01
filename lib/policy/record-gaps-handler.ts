@@ -1,7 +1,8 @@
 import { createHash } from "node:crypto";
+import { squash } from "../sources";
 import type { Page } from "../types";
 import { verifyQuote } from "../verify";
-import { POLICY_TOPICS, type PolicyComparison } from "./types";
+import { POLICY_TOPICS, TOPIC_WORDS, type PolicyComparison, type PolicyTopic } from "./types";
 
 export interface GapRow {
   school: string;
@@ -31,6 +32,19 @@ const RECORDED_RELATIONS = new Set(["conflicts", "adds_requirement", "silent"]);
 function fingerprint(pages: Page[]): string {
   const text = pages.map((p) => p.text).join("\n").replace(/\s+/g, " ").trim().toLowerCase();
   return createHash("sha256").update(text).digest("hex");
+}
+
+/**
+ * The browser sends only a name, not the quote compare.ts verified it in, so the server checks the
+ * name itself sits in the submitted pages (case and line-wrap whitespace ignored). A name that is
+ * not there is stored as null and the finding is kept: the finding is verified on its own quotes,
+ * and an unsupported name must never be attached to it.
+ */
+function verifiedInstructor(name: unknown, allText: string): string | null {
+  if (typeof name !== "string") return null;
+  const clean = squash(name).slice(0, 200);
+  if (!clean) return null;
+  return squash(allText).toLowerCase().includes(clean.toLowerCase()) ? clean : null;
 }
 
 function isPage(p: unknown): p is Page {
@@ -72,17 +86,25 @@ export function createRecordGapsHandler(services: Services) {
       if (!Array.isArray(itemsInput) || itemsInput.length > MAX_ITEMS) return fail(400, "invalid_request", "A reasonable list of findings is required.");
 
       const hash = fingerprint(pages);
+      const allText = pages.map((p) => p.text).join("\n");
       const rows: GapRow[] = [];
       for (const raw of itemsInput as Partial<PolicyComparison>[]) {
         if (!raw || typeof raw !== "object") continue;
         if (!raw.relation || !RECORDED_RELATIONS.has(raw.relation)) continue; // only agreed differences are recorded, never "matches" or "disputed"
         if (typeof raw.topic !== "string" || !(POLICY_TOPICS as readonly string[]).includes(raw.topic)) continue;
+        // Same rule as compare.ts: silence is decided by code, never claimed when the pages mention the topic.
+        if (raw.relation === "silent" && TOPIC_WORDS[raw.topic as PolicyTopic].test(allText)) continue;
         if (typeof raw.schoolQuote !== "string" || typeof raw.schoolUrl !== "string" || !raw.schoolQuote || !raw.schoolUrl) continue;
 
-        if (raw.syllabusQuote !== undefined) {
+        // Same rules as compare.ts: a non-silent finding needs a syllabus quote that is really on the
+        // claimed page and is about this topic. Anything else is dropped (not turned into silence:
+        // the client already chose the relation). Silent findings carry no syllabus quote.
+        let verified: ReturnType<typeof verifyQuote> = null;
+        if (raw.relation !== "silent") {
           if (typeof raw.syllabusQuote !== "string" || !Number.isInteger(raw.syllabusPage)) continue;
-          const verified = verifyQuote(pages, raw.syllabusPage!, raw.syllabusQuote);
+          verified = verifyQuote(pages, raw.syllabusPage!, raw.syllabusQuote);
           if (!verified) continue; // the claimed syllabus quote is not actually an exact substring of that page — drop it, do not insert
+          if (!TOPIC_WORDS[raw.topic as PolicyTopic].test(verified.text)) continue; // a real passage, but about something else
         }
 
         const schoolQuoteStillLive = await services.verifySchoolQuote(raw.schoolUrl, raw.schoolQuote);
@@ -90,9 +112,9 @@ export function createRecordGapsHandler(services: Services) {
 
         rows.push({
           school, topic: raw.topic, kind: raw.relation as GapRow["kind"],
-          instructor: typeof raw.instructor === "string" ? raw.instructor.trim().slice(0, 200) || null : null,
-          syllabus_quote: typeof raw.syllabusQuote === "string" ? raw.syllabusQuote : null,
-          syllabus_page: Number.isInteger(raw.syllabusPage) ? (raw.syllabusPage as number) : null,
+          instructor: verifiedInstructor(raw.instructor, allText),
+          syllabus_quote: verified ? verified.text : null, // the page's own text, never the client's copy
+          syllabus_page: verified ? verified.page : null,
           school_quote: raw.schoolQuote, school_url: raw.schoolUrl, syllabus_hash: hash,
         });
       }

@@ -4,7 +4,11 @@ const text = "Professor Robin teaches this course. Office hours are Monday at no
 const groups = ["Instructor information", "Office hours", "Course objectives", "Grading", "Absences", "Materials and activities", "Classroom behavior", "University policies and accommodations"];
 
 async function seed(page: Page) {
-  await page.route("**/api/**", (route) => route.fulfill({ status: 500, json: { error: { message: "Unexpected API request" } } }));
+  await page.route("**/api/**", async (route) => {
+    const url = route.request().url();
+    if (url.includes("/api/policy-check")) return route.fallback();
+    return route.fulfill({ status: 500, json: { error: { message: "Unexpected API request" } } });
+  });
   await page.addInitScript(({ text }) => {
     if (localStorage.getItem("contents-test-seeded")) return;
     localStorage.setItem("contents-test-seeded", "true");
@@ -82,11 +86,27 @@ test("late response does not overwrite a newer course-context result", async ({ 
   const section = page.getByRole("region", { name: "Required syllabus contents" });
   let release: (() => void) | undefined;
   const held = new Promise<void>((resolve) => { release = resolve; });
-  await page.route("**/api/policy-check", async (route) => {
-    const body = route.request().postDataJSON();
-    if (body.requiredContentsContext.year === 2025) await held;
-    await route.fulfill({ json: response(body.requiredContentsContext) }).catch(() => {});
-  });
+    const response = async (route: any) => {
+      const url = route.request().url();
+      if (url.includes("/api/policy-check")) {
+        const body = route.request().postDataJSON();
+        if (body.requiredContentsContext && body.requiredContentsContext.year === 2025) await held;
+        return route.fulfill({ json: { policies: [], items: [], newPolicies: false, requiredContents: {
+          context: body.requiredContentsContext, snapshotDate: "2026-10-27", coverage: { status: "full", skipped: [] as string[] },
+          groups: groups.map((label, index) => ({ id: `g${index}`, label, components: [{
+            id: `c${index}`, label: index === 0 ? "Instructor name" : "Component evidence",
+            status: index === 0 ? "found" : index === 7 ? "not_applicable" : "not_assessed",
+            applicability: index === 7 ? "not_applicable" : "historical_unverified",
+            passages: index === 0 ? [{ id: "name", page: 1, start: 0, end: 35, text: "Professor Robin teaches this course." }] : [],
+            policyQuote: "INSTRUCTOR INFORMATION: instructor name and contact information.",
+            policyUrl: "https://provost.uoregon.edu/syllabus-requirement-undergraduate-and-graduate-policy",
+            question: "Where can I find the instructor contact information?",
+          }] })),
+        } } }).catch(() => {});
+      }
+      return route.fallback();
+    };
+    await page.route("**/api/**", response);
   await section.getByLabel("Course term", { exact: true }).selectOption("fall");
   await section.getByLabel("Course year").fill("2025");
   await section.getByRole("button", { name: /check required contents/i }).click();
@@ -103,10 +123,25 @@ test("late response does not overwrite a newer course-context result", async ({ 
 
 test("partial contents results disclose skipped text and preserve ordinary findings", async ({ page }) => {
   await seed(page);
-  await page.route("**/api/policy-check", async (route) => {
-    const body = response(route.request().postDataJSON().requiredContentsContext);
-    body.requiredContents.coverage = { status: "partial", skipped: ["Required contents batch 2 could not be assessed."] };
-    await route.fulfill({ json: body });
+  await page.route("**/api/**", async (route) => {
+    const url = route.request().url();
+    if (url.includes("/api/policy-check")) {
+      const body = route.request().postDataJSON().requiredContentsContext;
+      const resp = { policies: [], items: [], newPolicies: false, requiredContents: {
+        context: body, snapshotDate: "2026-10-27", coverage: { status: "partial", skipped: ["Required contents batch 2 could not be assessed."] as string[] },
+        groups: groups.map((label, index) => ({ id: `g${index}`, label, components: [{
+          id: `c${index}`, label: index === 0 ? "Instructor name" : "Component evidence",
+          status: index === 0 ? "found" : index === 7 ? "not_applicable" : "not_assessed",
+          applicability: index === 7 ? "not_applicable" : "historical_unverified",
+          passages: index === 0 ? [{ id: "name", page: 1, start: 0, end: 35, text: "Professor Robin teaches this course." }] : [],
+          policyQuote: "INSTRUCTOR INFORMATION: instructor name and contact information.",
+          policyUrl: "https://provost.uoregon.edu/syllabus-requirement-undergraduate-and-graduate-policy",
+          question: "Where can I find the instructor contact information?",
+        }] })),
+      } };
+      return route.fulfill({ json: resp });
+    }
+    return route.fallback();
   });
   const section = page.getByRole("region", { name: "Required syllabus contents" });
   await section.getByRole("button", { name: /check required contents/i }).click();
@@ -118,6 +153,7 @@ test("partial contents results disclose skipped text and preserve ordinary findi
 
 test("a contents-only saved report still offers the ordinary policy comparison", async ({ page }) => {
   await seed(page);
+  await page.route("**/api/**", (route) => route.fallback());
   await page.evaluate(() => {
     const key = "da-syllabus-auditor.courses.v1";
     const courses = JSON.parse(localStorage.getItem(key)!);

@@ -11,9 +11,9 @@ test("mergePieces renumbers pages sequentially and labels each by its source", a
   ]);
   assert.equal(result.pageCount, 3);
   assert.deepEqual(result.pages, [
-    { pageNumber: 1, text: "intro", source: "Syllabus page" },
-    { pageNumber: 2, text: "policies", source: "Syllabus page" },
-    { pageNumber: 3, text: "grading breakdown", source: "Grading policy page" },
+    { pageNumber: 1, text: "intro", source: "Syllabus page", sourcePageNumber: 1 },
+    { pageNumber: 2, text: "policies", source: "Syllabus page", sourcePageNumber: 2 },
+    { pageNumber: 3, text: "grading breakdown", source: "Grading policy page", sourcePageNumber: 1 },
   ]);
   assert.deepEqual(result.sources, [
     { label: "Syllabus page", pageCount: 2 },
@@ -26,7 +26,30 @@ test("mergePieces with a single piece reports no scattering (sources omitted)", 
   const { mergePieces } = await import("./merge.ts");
   const result = mergePieces([{ label: "Whole syllabus", pages: [{ pageNumber: 1, text: "everything" }] }]);
   assert.equal(result.sources, undefined);
-  assert.deepEqual(result.pages, [{ pageNumber: 1, text: "everything", source: "Whole syllabus" }]);
+  assert.deepEqual(result.pages, [{ pageNumber: 1, text: "everything", source: "Whole syllabus", sourcePageNumber: 1 }]);
+});
+
+test("mergePieces keeps each piece's own page number, including repeated labels and non-sequential input pages", async () => {
+  // @ts-expect-error Native Node TS entry point.
+  const { mergePieces } = await import("./merge.ts");
+  const result = mergePieces([
+    { label: "Syllabus", pages: [{ pageNumber: 4, text: "late work" }, { pageNumber: 5, text: "attendance" }] },
+    { label: "Syllabus", pages: [{ pageNumber: 1, text: "pasted grading text" }] },
+  ]);
+  assert.deepEqual(result.pages.map((p: { pageNumber: number; source?: string; sourcePageNumber?: number }) => [p.pageNumber, p.source, p.sourcePageNumber]), [
+    [1, "Syllabus", 4],
+    [2, "Syllabus", 5],
+    [3, "Syllabus", 1],
+  ]);
+});
+
+test("mergePieces falls back to the input ordinal when a piece page has no usable number", async () => {
+  // @ts-expect-error Native Node TS entry point.
+  const { mergePieces } = await import("./merge.ts");
+  const result = mergePieces([
+    { label: "Notes", pages: [{ pageNumber: 0, text: "first" }, { pageNumber: Number.NaN, text: "second" }] },
+  ]);
+  assert.deepEqual(result.pages.map((p: { sourcePageNumber?: number }) => p.sourcePageNumber), [1, 2]);
 });
 
 test("mergePieces drops empty pieces and rejects when nothing is left", async () => {

@@ -5,6 +5,7 @@ import FixKit from "@/components/FixKit";
 import RequiredContents from "@/components/RequiredContents";
 import type { CourseContext } from "@/lib/policy/contents-types";
 import { findingsFromReport } from "@/lib/fixes";
+import { pageLocator } from "@/lib/locator";
 import { DIMENSION_EXPLAINER } from "@/lib/rubric";
 import { POLICY_TOPICS, TOPIC_LABEL, TOPIC_PLAIN, type Relation } from "@/lib/policy/types";
 import type { AuditReport, Page, Passage } from "@/lib/types";
@@ -51,6 +52,7 @@ function Quote({ passage, pages }: { passage: Passage; pages: Page[] }) {
   const [open, setOpen] = useState(false);
   const text = pages.find((p) => p.pageNumber === passage.page)?.text ?? "";
   const [lead, trail] = sentenceAround(text, passage.start, passage.end);
+  const where = pageLocator(pages, passage.page, { capitalize: true });
   return (
     <blockquote className="quote">
       <p>
@@ -60,17 +62,20 @@ function Quote({ passage, pages }: { passage: Passage; pages: Page[] }) {
       </p>
       <span className="where">
         <span className="stamp">Verified</span>
-        Page {passage.page}{" "}
+        {where}{" "}
         <button type="button" className="link noprint" onClick={() => setOpen(!open)}>
           {open ? "Hide context" : "See in context"}
         </button>
       </span>
       {open && (
-        <pre className="context">
-          {text.slice(Math.max(0, passage.start - 300), passage.start)}
-          <mark>{text.slice(passage.start, passage.end)}</mark>
-          {text.slice(passage.end, passage.end + 300)}
-        </pre>
+        <>
+          <p className="where">Context from {where}</p>
+          <pre className="context">
+            {text.slice(Math.max(0, passage.start - 300), passage.start)}
+            <mark>{text.slice(passage.start, passage.end)}</mark>
+            {text.slice(passage.end, passage.end + 300)}
+          </pre>
+        </>
       )}
     </blockquote>
   );
@@ -106,6 +111,7 @@ export default function Report({ report, pages, policy }: { report: AuditReport;
   const policySchool = policy?.school ?? report.policyCheck?.school;
   const byId = new Map(report.passages.map((p) => [p.id, p]));
   const risk = report.biggestRiskIndex === null ? null : report.flags[report.biggestRiskIndex];
+  const riskPage = risk ? byId.get(risk.passageId)?.page : undefined;
 
   return (
     <article className="report">
@@ -134,7 +140,7 @@ export default function Report({ report, pages, policy }: { report: AuditReport;
         <p className="muted">{report.overall.reason}</p>
         <p>
           <strong>Biggest risk among attendance, grade weight and late work: </strong>
-          {risk ? `${risk.explanation} (page ${byId.get(risk.passageId)?.page})` : "No supported policy risk was identified in the assessed text."}
+          {risk ? `${risk.explanation} (${riskPage === undefined ? "page unknown" : pageLocator(pages, riskPage)})` : "No supported policy risk was identified in the assessed text."}
         </p>
       </section>
 
@@ -215,7 +221,7 @@ export default function Report({ report, pages, policy }: { report: AuditReport;
               <p className="muted">{TOPIC_PLAIN[it.topic]}</p>
               <p><strong>What this means:</strong> {RELATION_PLAIN[it.relation]}</p>
               {it.syllabusQuote ? (
-                <blockquote className="quote"><p>&ldquo;{it.syllabusQuote}&rdquo;</p><span className="where">This syllabus, page {it.syllabusPage}</span></blockquote>
+                <blockquote className="quote"><p>&ldquo;{it.syllabusQuote}&rdquo;</p><span className="where">This syllabus, {it.syllabusPage === undefined ? "page unknown" : pageLocator(pages, it.syllabusPage)}</span></blockquote>
               ) : (
                 <p className="muted">Not found in this syllabus.</p>
               )}
@@ -227,10 +233,10 @@ export default function Report({ report, pages, policy }: { report: AuditReport;
       )}
 
       {policy?.onRunContents && (policy.school ?? report.policyCheck?.school ?? "").trim().replace(/\s+/g, " ").toLowerCase() === "university of oregon" && (
-        <RequiredContents result={report.policyCheck?.requiredContents} busy={policy.contentsBusy ?? false} error={policy.contentsError ?? ""} onRun={policy.onRunContents} />
+        <RequiredContents result={report.policyCheck?.requiredContents} busy={policy.contentsBusy ?? false} error={policy.contentsError ?? ""} onRun={policy.onRunContents} pages={pages} />
       )}
 
-      <FixKit report={report} />
+      <FixKit report={report} pages={pages} />
 
       <button type="button" className="noprint" onClick={() => window.print()}>
         Print or save this report

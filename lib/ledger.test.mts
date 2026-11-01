@@ -7,6 +7,28 @@ const { buildLedger, attendanceFact, weekSupport, datesIn } = await import("./le
 
 const pages = (...texts: string[]) => texts.map((text, i) => ({ pageNumber: i + 1, text }));
 
+test("attendance component identity merges equal restatements without dropping their spans", () => {
+  const text = "Attendance   15%\nFinal project   85%\nAttendance counts for 15% of the final course grade.";
+  const ledger = buildLedger(pages(text));
+  assert.equal(ledger.attendance.value?.length, 1);
+  assert.equal(attendanceFact(ledger)?.total, 15);
+  assert.equal(ledger.attendance.citations.length, 2);
+  for (const c of ledger.attendance.citations) assert.equal(text.slice(c.start, c.end), c.text);
+  const conflict = buildLedger(pages(text.replace("counts for 15%", "counts for 10%")));
+  assert.equal(conflict.attendance.status, "conflict");
+  assert.equal(conflict.attendance.citations.length, 2);
+  assert.equal(attendanceFact(conflict), null);
+});
+
+test("a conditional attendance prose share retains the whole sentence but yields no unconditional fact", () => {
+  const text = "Attendance counts for 15% of the final course grade only if you opt into the attendance track.";
+  const ledger = buildLedger(pages(text));
+  assert.equal(attendanceFact(ledger), null);
+  assert.equal(ledger.attendance.status, "unresolved");
+  assert.equal(ledger.attendance.citations[0]?.text, text);
+  assert.equal(text.slice(ledger.attendance.citations[0].start, ledger.attendance.citations[0].end), text);
+});
+
 /** Asserts a ledger entry actually holds a value, then narrows it for the checks below. */
 function must<T>(value: T | null | undefined): T {
   assert.ok(value !== null && value !== undefined, "expected the ledger entry to hold a value");
@@ -145,6 +167,15 @@ test("dates in a later section belong to no week", () => {
   }
 });
 
+test("structural week support uses actual section bounds, not the nearest earlier header", () => {
+  const text = "Week 1\nRead the overview\nWeek 2\nRead chapter two\nIMPORTANT DATES\nThe final paper is due 12/8.";
+  const ledger = buildLedger(pages(text));
+  assert.notEqual(weekSupport(ledger, 2, at("The final paper is due 12/8.", text)), "supported");
+  assert.equal(weekSupport(ledger, 2, at("Read chapter two", text)), "supported");
+  assert.equal(weekSupport(ledger, 1, at("Read the overview", text)), "supported");
+  assert.equal(weekSupport(ledger, 1, at("Read chapter two", text)), "contradicted");
+});
+
 test("dates on a page that carries no week header belong to no week", () => {
   const ledger = buildLedger(pages(SCHEDULE, "WITHDRAWAL DEADLINES\nProcess a complete drop 9/27\nWithdraw 10/20"));
   for (const w of must(ledger.schedule.value)) {
@@ -224,6 +255,14 @@ test("a week claim about a passage outside the schedule is left unchecked, not c
 test("a fraction in a quote does not contradict a week", () => {
   const ledger = buildLedger(pages(SCHEDULE, "The final paper is worth 1/3 of the grade"));
   assert.notEqual(weekSupport(ledger, 2, { page: 2, start: 0, text: "The final paper is worth 1/3 of the grade" }), "contradicted");
+});
+
+test("recurring ordinal support is invariant to extraction whitespace", () => {
+  for (const separator of ["  ", "\n  ", "\t"]) {
+    const text = `A short reflection is due every${separator}second week of the term.`;
+    const ledger = buildLedger(pages(text));
+    assert.notEqual(weekSupport(ledger, 2, at(text, text)), "supported", JSON.stringify(separator));
+  }
 });
 
 test("without a printed schedule, week placement is reported as unknown rather than wrong", () => {

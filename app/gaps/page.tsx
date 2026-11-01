@@ -41,7 +41,7 @@ export default function Gaps() {
           <h4><span style={{ textTransform: "capitalize" }}>{r.school}</span>: {r.instructor ?? "Instructor not named"}</h4>
           <ul>
             {r.items.map((i) => (
-              <li key={`${i.topic}|${i.kind}`}>{TOPIC_LABEL[i.topic]}: {KIND_TEXT[i.kind]} · {i.syllabi} syllabus{i.syllabi === 1 ? "" : "es"}{i.flagged ? " · FLAGGED" : " · not yet flagged"}</li>
+              <li key={`${i.topic}|${i.kind}`}>{TOPIC_LABEL[i.topic]}: {KIND_TEXT[i.kind]} · {i.syllabi} syllabus{i.syllabi === 1 ? "" : "es"} from this instructor{i.schoolGroupFlagged ? " · school-wide group FLAGGED" : " · school-wide group not yet flagged"}</li>
             ))}
           </ul>
         </div>

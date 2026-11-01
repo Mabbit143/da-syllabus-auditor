@@ -165,6 +165,16 @@ Findings so far from reading UO's own pages (all from public pages; quotes verif
 - [x] GitHub Actions E2E workflow passes (green on `main`, run 40617882009, 2026-10-28).
 - [ ] UO policy wording used in the demo: re-fetch and re-quote it on the day, since pages change.
 
+## November 2 readiness checkpoint (October 31)
+
+Owner deadline is November 2, 2026. See `november-2-readiness.md` for the release gate, exact commands, current scope and remaining acceptance; this is not a claim that the deployed site has changed.
+
+Locally fixed and exercised: explicit attendance prose shares cannot coexist with a "no figure stated" flag, negated attendance grading cannot support that risk, genuine fail/drop clauses remain eligible, unsupported fallback week assignments are rejected with disclosure, a weight row does not certify grading criteria, school-wide flags are explicitly labeled in the instructor view, and combined-piece quotations retain their piece/local-page provenance across context, policy/contents, fixes, print and reload (legacy local-page numbers are never invented). Project-local Python tests are documented in `python-document-tests.md` and pass 20/20 after clearing inherited Python path overrides.
+
+Parent verification before the next department integration: 176 native Node tests, 24 mocked Playwright tests at `--workers=2`, TypeScript, explicit production build, full lint (zero errors/eight pre-existing warnings), and `git diff --check`. The new combined-input failure/retry browser test initially had an ambiguous alert selector; it was fixed to target the actual error paragraph, with no skipped tests or application change for that failure. No model credits used by this readiness session and no commit/push/deployment performed.
+
+Not done: independent adversarial review, department grouping/evidence recovery and its final combined verification, general model-only evidence recall stability, policy relation semantic checks, private version/diff contract, and production account/security/OCR/live-repeat acceptance. Browser automation still falls back to a fresh signed-out session when the running profile is locked; it has not proved that the owner's actual Edge sign-in is broken. Do not mark release-ready from the offline counts alone.
+
 ## 15. The evidence ledger (`lib/ledger.ts`, 2026-10-31)
 
 Built on `feat/verified-evidence-ledger` to answer the owner's report that two audits of the same syllabus "never come out close to the same report". The model is no longer asked for facts the document prints plainly; code reads them first and every section of the audit uses that one record.

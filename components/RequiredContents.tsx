@@ -1,16 +1,20 @@
 "use client";
 
 import { useState } from "react";
+import { pageLocator } from "@/lib/locator";
+import type { Page } from "@/lib/types";
 import { UNKNOWN_CONTEXT, type CourseContext, type RequiredContents as ContentsResult } from "@/lib/policy/contents-types";
 
 const STATUS = { found: "Found", needs_review: "Needs review", not_assessed: "Not confirmed", not_applicable: "Not applicable" };
 const APPLICABILITY = { current_snapshot: "Compared with the saved policy snapshot", historical_unverified: "Compared with UO's current wording. Your term's wording may have been different.", unknown: "Policy applicability unknown", not_applicable: "Not applicable to this course context" };
 
-export default function RequiredContents({ result, busy, error, onRun }: {
+export default function RequiredContents({ result, busy, error, onRun, pages }: {
   result?: ContentsResult;
   busy: boolean;
   error: string;
   onRun: (context: CourseContext) => void;
+  /** The audited pages, so each quote can name its piece and page within the piece. */
+  pages?: Page[];
 }) {
   const [context, setContext] = useState<CourseContext>(result?.context ?? { ...UNKNOWN_CONTEXT });
   return (
@@ -45,7 +49,7 @@ export default function RequiredContents({ result, busy, error, onRun }: {
             {group.components.map((component, index) => <div key={component.id} className="card">
               <h4>{component.label}: <span className="grade">{STATUS[component.status]}</span></h4>
               <p className="muted">{APPLICABILITY[component.applicability]}</p>
-              {component.passages.map((passage) => <blockquote key={passage.id} className="quote"><p>{passage.text}</p><span className="where">This syllabus, page {passage.page}</span></blockquote>)}
+              {component.passages.map((passage) => <blockquote key={passage.id} className="quote"><p>{passage.text}</p><span className="where">This syllabus, {pageLocator(pages, passage.page)}</span></blockquote>)}
               {component.passages.length === 0 && <p>{component.status === "not_applicable" ? "This requirement is not assessed for the selected course context." : "The audit could not confirm this in the syllabus. That does not mean it is missing: it may be written in a way the audit could not read."}</p>}
               {index > 0 && group.components[index - 1].policyQuote === component.policyQuote
                 ? <p className="muted">Same UO requirement as above.</p>

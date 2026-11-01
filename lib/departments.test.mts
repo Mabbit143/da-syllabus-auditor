@@ -4,7 +4,7 @@ import "../test-support/register-typescript.mjs";
 import type { Course } from "../components/TermView";
 
 // @ts-expect-error Native Node TS entry point.
-const { departmentCodeOf, rollupByDepartment } = await import("./departments.ts");
+const { departmentCodeOf, normalizeCourseCode, rollupByDepartment } = await import("./departments.ts");
 
 function course(fileName: string, dims: { dimension: string; status: string; characterization?: string }[]): Course {
   return {
@@ -39,6 +39,38 @@ test("rollupByDepartment groups courses and finds the dominant characterization 
   assert.equal(anth.dimensions.punitive.dominant, "Punitive");
   assert.equal(anth.dimensions.punitive.weak, 2);
   assert.equal(anth.dimensions.punitive.strong, 0);
+});
+
+test("normalizeCourseCode accepts course codes and rejects guesses", () => {
+  assert.equal(normalizeCourseCode(" anth341 "), "ANTH 341");
+  assert.equal(normalizeCourseCode("cs_101h"), "CS 101H");
+  assert.equal(normalizeCourseCode(""), null);
+  assert.equal(normalizeCourseCode("Anthropology"), null);
+  assert.equal(normalizeCourseCode("ANTH 341 extra"), null);
+});
+
+test("combined reports group by their explicit course code while legacy filenames still work", () => {
+  const combined = course("Combined syllabus (3 pieces)", []);
+  combined.report = { ...combined.report, courseCode: "ANTH 341" } as typeof combined.report;
+  const ordinary = course("ANTH145-Syllabus-Fall-2026.pdf", []);
+  const unknown = course("Combined syllabus (2 pieces)", []);
+  const unrelated = course("CS101-Syllabus.pdf", []);
+  const groups = rollupByDepartment([combined, ordinary, unknown, unrelated]);
+  assert.deepEqual(groups.map((g) => [g.code, g.courses.length]), [["ANTH", 2], ["CS", 1]]);
+  assert.equal(combined.report.fileName, "Combined syllabus (3 pieces)");
+});
+
+test("an explicit course code overrides a misleading filename and invalid metadata retains legacy fallback", () => {
+  const explicit = course("CS101-Syllabus.pdf", []);
+  explicit.report.courseCode = " anth_341 ";
+  const invalid = course("CS102-Syllabus.pdf", []);
+  invalid.report.courseCode = "Anthropology";
+  assert.deepEqual(rollupByDepartment([explicit, invalid]).map((g) => [g.code, g.courses[0].id]), [
+    ["ANTH", explicit.id], ["CS", invalid.id],
+  ]);
+  const reloaded = JSON.parse(JSON.stringify(explicit)) as Course;
+  assert.equal(reloaded.report.courseCode, " anth_341 ");
+  assert.equal(rollupByDepartment([reloaded])[0].code, "ANTH");
 });
 
 test("rollupByDepartment reports no dominant characterization on a tie", () => {

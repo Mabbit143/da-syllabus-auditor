@@ -7,7 +7,8 @@ export const agreedGaps = (items: PolicyComparison[]) => items.filter((i) => i.r
 export interface InstructorRow {
   school: string;
   instructor: string | null;
-  items: { topic: GapGroup["topic"]; kind: GapGroup["kind"]; syllabi: number; flagged: boolean }[];
+  /** `schoolGroupFlagged` is the school-wide group's flag (5+ syllabi across all instructors), not this instructor's own count. */
+  items: { topic: GapGroup["topic"]; kind: GapGroup["kind"]; syllabi: number; schoolGroupFlagged: boolean }[];
 }
 
 /** The same master list, regrouped by instructor. Each entry is one syllabus, so counts are distinct syllabi. */
@@ -19,7 +20,7 @@ export function byInstructor(groups: GapGroup[]): InstructorRow[] {
       const row = rows.get(key) ?? { school: g.school, instructor: e.instructor, items: [] };
       const item = row.items.find((i) => i.topic === g.topic && i.kind === g.kind);
       if (item) item.syllabi += 1;
-      else row.items.push({ topic: g.topic, kind: g.kind, syllabi: 1, flagged: g.flagged });
+      else row.items.push({ topic: g.topic, kind: g.kind, syllabi: 1, schoolGroupFlagged: g.flagged });
       rows.set(key, row);
     }
   }

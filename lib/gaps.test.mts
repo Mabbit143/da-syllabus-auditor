@@ -24,3 +24,14 @@ test("the instructor view counts distinct syllabi per topic and keeps unnamed in
   assert.deepEqual(rows[0].items.map((i: { topic: string; syllabi: number }) => [i.topic, i.syllabi]), [["attendance", 2], ["late_work", 1]]);
   assert.equal(rows[1].instructor, null);
 });
+
+test("an instructor with one syllabus is not labeled as flagged by the school-wide count", async () => {
+  // @ts-expect-error Native Node TS entry point.
+  const { byInstructor } = await import("./gaps.ts");
+  const school = [entry("A. Smith"), entry("B. Jones"), entry("B. Jones"), entry("C. Lee"), entry("D. Park")];
+  const rows = byInstructor([group("attendance", "conflicts", school, true)] as never);
+  const smith = rows.find((r: { instructor: string | null }) => r.instructor === "A. Smith")!;
+  assert.equal(smith.items[0].syllabi, 1);
+  assert.equal("flagged" in smith.items[0], false);
+  assert.equal(smith.items[0].schoolGroupFlagged, true);
+});

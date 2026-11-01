@@ -3,6 +3,7 @@
 import { useState } from "react";
 import type { Course } from "@/components/TermView";
 import { rollupByDepartment } from "@/lib/departments";
+import { evidenceForDepartment } from "@/lib/department-evidence";
 import { DIMENSIONS } from "@/lib/rubric";
 import type { EvidenceRecord } from "@/lib/policy/evidence";
 
@@ -14,7 +15,7 @@ interface Packet {
 
 type PacketState = { step: "idle" } | { step: "working" } | { step: "error"; message: string } | { step: "done"; packet: Packet };
 
-function PacketBox({ courses, evidence }: { courses: Course[]; evidence: EvidenceRecord | undefined }) {
+function PacketBox({ courses, evidence, school }: { courses: Course[]; evidence: EvidenceRecord | undefined; school?: string | null }) {
   const [state, setState] = useState<PacketState>({ step: "idle" });
 
   async function generate() {
@@ -23,7 +24,7 @@ function PacketBox({ courses, evidence }: { courses: Course[]; evidence: Evidenc
       const res = await fetch("/api/departments/packet", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ courses, evidence: evidence ? { quote: evidence.quote, sourceUrl: evidence.sourceUrl, page: evidence.page } : null }),
+        body: JSON.stringify({ courses, school, evidence: evidence ? { quote: evidence.quote, sourceUrl: evidence.sourceUrl, page: evidence.page } : null }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data?.error?.message ?? "Could not draft a letter.");
@@ -64,7 +65,7 @@ function PacketBox({ courses, evidence }: { courses: Course[]; evidence: Evidenc
   );
 }
 
-export default function DepartmentView({ courses, evidence }: { courses: Course[]; evidence: EvidenceRecord[] }) {
+export default function DepartmentView({ courses, evidence, school }: { courses: Course[]; evidence: EvidenceRecord[]; school?: string | null }) {
   const rollups = rollupByDepartment(courses);
   if (rollups.length === 0) return null;
   return (
@@ -74,7 +75,9 @@ export default function DepartmentView({ courses, evidence }: { courses: Course[
         Your own audited syllabi, grouped by department. This groups only your own account&rsquo;s syllabi
         — it never pools other students&rsquo; audits.
       </p>
-      {rollups.map((r) => (
+      {rollups.map((r) => {
+        const matchedEvidence = evidenceForDepartment(evidence, r, school);
+        return (
         <div key={r.code} className="card mixed">
           <h4>{r.code} ({r.courses.length} {r.courses.length === 1 ? "syllabus" : "syllabi"} so far)</h4>
           <ul>
@@ -87,10 +90,10 @@ export default function DepartmentView({ courses, evidence }: { courses: Course[
               );
             })}
           </ul>
-          {evidence.length > 0 && (
+          {matchedEvidence.length > 0 && (
             <>
               <h5>What {r.code} itself publishes</h5>
-              {evidence.map((e, i) => (
+              {matchedEvidence.map((e, i) => (
                 <blockquote key={i} className="quote">
                   <p>&ldquo;{e.quote}&rdquo;</p>
                   <span className="where"><a href={e.sourceUrl} target="_blank" rel="noopener noreferrer">Source, page {e.page}</a></span>
@@ -98,9 +101,10 @@ export default function DepartmentView({ courses, evidence }: { courses: Course[
               ))}
             </>
           )}
-          <PacketBox courses={r.courses} evidence={evidence[0]} />
+          <PacketBox key={JSON.stringify([r.courses.map((c) => c.id), school, matchedEvidence])} courses={r.courses} evidence={matchedEvidence[0]} school={school} />
         </div>
-      ))}
+        );
+      })}
     </section>
   );
 }

@@ -8,7 +8,7 @@ export interface LedgerCitation {
   text: string;
 }
 
-export type LedgerStatus = "found" | "conflict" | "not_found";
+export type LedgerStatus = "found" | "conflict" | "unresolved" | "not_found";
 
 export interface LedgerEntry<T> {
   value: T | null;
@@ -37,6 +37,8 @@ export interface ScheduleWeekFact {
   /** Dates as printed, normalized to "M/D". */
   dates: string[];
   citation: LedgerCitation;
+  /** Actual runs of schedule text, ending before a new week, section heading or page boundary. */
+  sections: { page: number; start: number; end: number }[];
 }
 
 /** A deliverable the schedule itself prints under a numbered week. */
@@ -113,6 +115,30 @@ function gradeRows(pages: Page[]): GradeComponentFact[] {
     }
   }
   return facts;
+}
+
+// Deliberately narrow affirmative prose shapes, not a general semantic parser. A percent must
+// name attendance as the subject and explicitly be its share of the grade, not a threshold.
+// Keep these separate from grade tables: prose is not evidence of a complete weight breakdown.
+function attendanceProse(pages: Page[]): { facts: GradeComponentFact[]; unresolved: LedgerCitation[] } {
+  const facts: GradeComponentFact[] = [];
+  const unresolved: LedgerCitation[] = [];
+  const share = /(?:^|(?<=[.!?;\n]))([ \t]{0,8}((?:(?:lecture|lab)[ \t]+)?attendance)[ \t]+(?:counts for|accounts for|is worth)[ \t]+(\d{1,3}(?:\.\d{1,2})?)[ \t]*(?:%|percent)[ \t]+of[ \t]+(?:the|your)[ \t]+(?:final[ \t]+)?(?:course[ \t]+)?grade([^.!?]{0,500}?)(?:[.!?]|$|(?=\n[ \t]{0,8}(?:(?:lecture|lab)[ \t]+)?attendance[ \t]+(?:counts for|accounts for|is worth))))/gi;
+  for (const page of pages) {
+    for (const m of page.text.matchAll(share)) {
+      const percent = Number(m[3]);
+      if (percent <= 0 || percent > 100) continue;
+      const start = (m.index ?? 0) + m[0].length - m[1].length + m[1].length - m[1].trimStart().length;
+      const end = (m.index ?? 0) + m[0].length;
+      const citation = { page: page.pageNumber, start, end, text: page.text.slice(start, end) };
+      // A suffix may qualify the share ("only if ..."). Never silently trim it into an
+      // unconditional figure. Unknown suffixes need review too, not a more permissive regex.
+      if (m[4].trim()) { unresolved.push(citation); continue; }
+      facts.push({ name: normalizeName(m[2]), points: null, percent, isTotal: false,
+        citation });
+    }
+  }
+  return { facts, unresolved };
 }
 
 /** Two rows with the same name but different percents cannot both be true. */
@@ -202,12 +228,19 @@ function scheduleWeeks(pages: Page[]): { weeks: ScheduleWeekFact[]; deadlines: D
     for (const line of lines(page)) {
       const week = weekHeader(line.text);
       if (week !== null) {
-        current = byWeek.get(week) ?? { week, dates: [], citation: cite(page, line) };
+        current = byWeek.get(week) ?? { week, dates: [], citation: cite(page, line), sections: [] };
+        current.sections.push({ page: page.pageNumber, start: line.start, end: line.end });
         byWeek.set(week, current);
       } else if (SECTION_HEADING.test(line.text)) {
         current = null; // a new section: later dates are not this week's
       }
       if (!current) continue;
+      let section = current.sections[current.sections.length - 1];
+      if (section.page !== page.pageNumber) {
+        section = { page: page.pageNumber, start: line.start, end: line.end };
+        current.sections.push(section);
+      }
+      section.end = line.end;
       for (const date of datesIn(line.text)) if (!current.dates.includes(date)) current.dates.push(date);
       const what = deliverableCell(line.text);
       if (what) {
@@ -235,14 +268,20 @@ function scheduleWeeks(pages: Page[]): { weeks: ScheduleWeekFact[]; deadlines: D
 /** Reads the facts a syllabus prints plainly. No model, no inference: same text in, same facts out. */
 export function buildLedger(pages: Page[]): EvidenceLedger {
   const components = gradeRows(pages).filter((r) => !r.isTotal);
-  const attendanceRows = components.filter((r) => /attendance|absence/i.test(r.name));
+  const prose = attendanceProse(pages);
+  const attendanceRows = [...components.filter((r) => /attendance|absence/i.test(r.name)), ...prose.facts];
   const { weeks, deadlines } = scheduleWeeks(pages);
 
-  const entry = (rows: GradeComponentFact[]): LedgerEntry<GradeComponentFact[]> => {
+  const entry = (rows: GradeComponentFact[], mergeRestatements = false): LedgerEntry<GradeComponentFact[]> => {
     if (!rows.length) return { value: null, status: "not_found", citations: [] };
     const citations = rows.map((r) => r.citation);
     const pair = conflictingPair(rows);
-    if (!pair) return { value: rows, status: "found", citations };
+    if (!pair) {
+      // Equal restatements are evidence for one component, not additional grade shares. Keep
+      // every span separately; exact normalized identity never merges lecture with lab.
+      const unique = new Map(rows.map((r) => [normalizeName(r.name).toLowerCase(), r]));
+      return { value: mergeRestatements ? [...unique.values()] : rows, status: "found", citations };
+    }
     return {
       value: rows,
       status: "conflict",
@@ -254,7 +293,11 @@ export function buildLedger(pages: Page[]): EvidenceLedger {
 
   return {
     gradeComponents: entry(components),
-    attendance: entry(attendanceRows),
+    attendance: prose.unresolved.length ? {
+      value: null, status: "unresolved",
+      citations: [...attendanceRows.map((r) => r.citation), ...prose.unresolved],
+      explanation: "An attendance share has conditional or otherwise qualified wording; its unconditional grade impact is unresolved.",
+    } : entry(attendanceRows, true),
     schedule: weeks.length
       ? { value: weeks, status: "found", citations: weeks.map((w) => w.citation) }
       : { value: null, status: "not_found", citations: [] },
@@ -284,32 +327,53 @@ export function attendanceFact(ledger: EvidenceLedger): AttendanceFact | null {
   };
 }
 
+const WEEK_WORDS = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve"];
+const WEEK_ORDINALS = ["first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "ninth", "tenth", "eleventh", "twelfth"];
+
+/** Explicit week language is read clause by clause after whitespace normalization only. A
+ * negated/recurring mention is not a positive anchor and cannot fall through to enclosure. */
+function explicitWeekSupport(text: string, week: number): WeekSupport | null {
+  const affirmative = new Set<number>();
+  let mentioned = false;
+  for (const clause of text.replace(/\s+/g, " ").split(/[.;!?]/)) {
+    for (let n = 1; n <= 20; n++) {
+      const word = WEEK_WORDS[n - 1], ordinal = WEEK_ORDINALS[n - 1];
+      const pattern = [`\\bweek\\s*0*${n}\\b`, ...(word ? [`\\bweek\\s+${word}\\b`] : []),
+        ...(ordinal ? [`\\b${ordinal}\\s+week\\b`] : [])].join("|");
+      if (!new RegExp(pattern, "i").test(clause)) continue;
+      mentioned = true;
+      if (/\b(?:not|no|never|every|each|other|alternate|alternating|if|unless)\b|n['’]t\b/i.test(clause)) continue;
+      affirmative.add(n);
+    }
+  }
+  if (!mentioned) return null;
+  if (affirmative.size !== 1) return "unsupported";
+  return affirmative.has(week) ? "supported" : "contradicted";
+}
+
 export type WeekSupport = "supported" | "contradicted" | "unsupported" | "no_schedule";
 
 /**
  * Whether a passage actually places an assessment in the claimed week. A passage may say so by
  * naming the week, by printing a date the schedule lists under that week, or by sitting under that
  * week's own header in the document. A date from another week, or another week's header,
- * contradicts the claim. Position in a list is never evidence of a week.
+ * contradicts the claim. Position in a list is never evidence of a week, and "no_schedule" means
+ * unknown: it is not support for any week.
  */
 export function weekSupport(ledger: EvidenceLedger, week: number, passage: { page: number; start: number; text: string }): WeekSupport {
   if (!Number.isInteger(week)) return "unsupported";
-  if (new RegExp(`\\bweek\\s*0*${week}\\b`, "i").test(passage.text)) return "supported";
+  const explicit = explicitWeekSupport(passage.text, week);
+  if (explicit !== null) return explicit;
   const weeks = ledger.schedule.status === "found" ? ledger.schedule.value : null;
   if (!weeks?.length) return "no_schedule";
   const dates = datesIn(passage.text);
   const claimed = weeks.find((w) => w.week === week);
   if (claimed && dates.some((d) => claimed.dates.includes(d))) return "supported";
   if (weeks.some((w) => w.week !== week && dates.some((d) => w.dates.includes(d)))) return "contradicted";
-  // The header this passage sits under: document structure, not list order. Only pages that carry
-  // the schedule's own headers are read this way, so prose later in the document is not "under" a week.
-  const schedulePages = new Set(weeks.map((w) => w.citation.page));
-  const before = schedulePages.has(passage.page)
-    ? weeks
-        .filter((w) => w.citation.page < passage.page || (w.citation.page === passage.page && w.citation.start <= passage.start))
-        .sort((a, b) => (a.citation.page - b.citation.page) || (a.citation.start - b.citation.start))
-    : [];
-  const enclosing = before[before.length - 1];
+  // Use the same section boundaries that extracted the dates/deadlines. A nearby header is
+  // not enclosure after IMPORTANT DATES (or any other recognized section reset).
+  const enclosing = weeks.find((w) => w.sections.some((s) => s.page === passage.page &&
+    s.start <= passage.start && passage.start + passage.text.length <= s.end));
   if (enclosing) return enclosing.week === week ? "supported" : "contradicted";
   // Nothing encloses this passage and it names no date this schedule knows.
   return dates.length ? "unsupported" : "no_schedule";

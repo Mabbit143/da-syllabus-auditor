@@ -4,21 +4,13 @@ import type { Finding } from "@/lib/fixes";
 import type { Course } from "@/components/TermView";
 import { callMeta } from "@/lib/meta";
 import { FALLBACK_NOTE } from "@/lib/providers";
+import { packetEvidenceForCourses } from "@/lib/department-evidence";
+import { loadAllEvidence } from "@/lib/policy/evidence";
 
 export const maxDuration = 300;
 
 function fail(status: number, code: string, message: string) {
   return NextResponse.json({ error: { code, message } }, { status });
-}
-
-type EvidenceQuote = { quote: string; sourceUrl: string; page: number };
-
-function readEvidence(body: unknown): EvidenceQuote | null {
-  const e = (body as { evidence?: unknown })?.evidence;
-  if (!e || typeof e !== "object") return null;
-  const { quote, sourceUrl, page } = e as Record<string, unknown>;
-  if (typeof quote !== "string" || typeof sourceUrl !== "string" || typeof page !== "number") return null;
-  return { quote: quote.slice(0, 800), sourceUrl, page };
 }
 
 export async function POST(request: Request) {
@@ -33,7 +25,11 @@ export async function POST(request: Request) {
     if (!Array.isArray(courses) || courses.length === 0 || courses.length > 20) {
       return fail(400, "invalid_request", "Between 1 and 20 courses are required.");
     }
-    const evidence = readEvidence(body);
+    const submitted = body as { evidence?: unknown; school?: unknown };
+    const evidence = packetEvidenceForCourses(
+      await loadAllEvidence(), courses as Course[], submitted.evidence,
+      typeof submitted.school === "string" ? submitted.school : null,
+    );
     const findings = representativeFindings(courses as Course[]);
     if (findings.length === 0) {
       return fail(400, "no_findings", "No verified findings to draft a letter from yet.");

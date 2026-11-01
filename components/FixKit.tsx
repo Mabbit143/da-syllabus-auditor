@@ -2,9 +2,10 @@
 
 import { useState } from "react";
 import { findingsFromReport, type FixKit as Kit } from "@/lib/fixes";
-import type { AuditReport } from "@/lib/types";
+import { pageLocator } from "@/lib/locator";
+import type { AuditReport, Page } from "@/lib/types";
 
-export default function FixKit({ report }: { report: AuditReport }) {
+export default function FixKit({ report, pages }: { report: AuditReport; pages?: Page[] }) {
   const findings = findingsFromReport(report);
   const [kits, setKits] = useState<Kit[] | null>(null);
   const [busy, setBusy] = useState(false);
@@ -55,8 +56,8 @@ export default function FixKit({ report }: { report: AuditReport }) {
         return (
           <div key={k.id} className="card mixed">
             <h4>{f.label}</h4>
-            {f.quote && <blockquote className="quote"><p>&ldquo;{f.quote}&rdquo;</p><span className="where">Page {f.page}</span></blockquote>}
-            {f.quote2 && <blockquote className="quote"><p>&ldquo;{f.quote2}&rdquo;</p><span className="where">Page {f.page2}</span></blockquote>}
+            {f.quote && <blockquote className="quote"><p>&ldquo;{f.quote}&rdquo;</p><span className="where">{pageLocator(pages, f.page, { capitalize: true })}</span></blockquote>}
+            {f.quote2 && <blockquote className="quote"><p>&ldquo;{f.quote2}&rdquo;</p><span className="where">{f.page2 === undefined ? "Page unknown" : pageLocator(pages, f.page2, { capitalize: true })}</span></blockquote>}
             {k.questions.length > 0 && (
               <>
                 <p className="signal">Questions to ask</p>

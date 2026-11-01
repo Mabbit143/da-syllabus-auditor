@@ -13,6 +13,12 @@ export interface Page {
   text: string;
   /** Set when this page came from one piece of a syllabus assembled from several Canvas pages/files. */
   source?: string;
+  /**
+   * This page's own number inside its piece (the piece's input page number, or its position when
+   * the input page had no usable number). Set by mergePieces. Absent on reports saved before
+   * 2026-10-31; for those the page within the piece is unknown and is never guessed.
+   */
+  sourcePageNumber?: number;
 }
 
 export interface Passage {
@@ -91,6 +97,8 @@ export interface AuditReport {
   policyCheck?: PolicyCheck;
   assessments: Assessment[];
   fileName: string;
+  /** Optional student-supplied course identifier; older reports use their filename for department grouping. */
+  courseCode?: string;
   pageCount: number;
   coverage: Coverage;
   dimensions: DimensionResult[];

@@ -148,6 +148,54 @@ const NEEDS_ROUTE: Record<string, { route: RegExp; note: string }> = {
 
 const RANK: Record<Severity, number> = { high: 2, medium: 1 };
 
+// Narrow, bounded clause checks for attendance proposals. These reject proposals their own quote
+// contradicts; they do not prove a reading in general, and nothing is inferred from consequences
+// for learning. Each pattern is bounded to one clause (no sentence punctuation crossed).
+const ATTENDANCE_NOT_GRADED = new RegExp([
+  "\\battendance\\b[^.;:!?]{0,40}?\\b(?:is|are|will be)\\s+not\\s+(?:formally\\s+|directly\\s+)?(?:graded|counted|part of (?:the|your) (?:course |final )?grade)\\b",
+  // "is not given a (formal|separate) grade" negates grading itself, not a different predicate.
+  "\\battendance\\b[^.;:!?]{0,40}?\\b(?:is|are|will be)\\s+not\\s+(?:given|assigned|awarded)\\s+(?:an?\\s+)?(?:formal\\s+|separate\\s+)?(?:grade|points|credit)\\b",
+  "\\battendance\\b[^.;:!?]{0,40}?\\b(?:does|do|will)\\s+not\\s+(?:count|factor)\\b",
+  "\\battendance\\b[^.;:!?]{0,20}?\\b(?:isn['’]t\\s+(?:formally\\s+|directly\\s+)?(?:graded|counted|part of (?:the|your) (?:course |final )?grade)|is ungraded)\\b",
+  "\\bno (?:points|credit|grade) (?:is |are |will be )?(?:given|awarded|assigned) for attendance\\b",
+].join("|"), "i");
+// Positive support is a narrow absence-subject -> course-outcome construction. Merely
+// mentioning attendance elsewhere in a quote cannot turn plagiarism into an absence penalty.
+function absenceConsequenceStated(quote: string): boolean {
+  const absenceSubject = "\\b(?:absences?|miss(?:es|ing|ed)?\\s+(?:more than\\s+|over\\s+)?(?:\\d+(?:\\.\\d+)?%?|one|two|three|four|five|six|seven|eight|nine|ten)\\s+(?:of\\s+)?(?:the\\s+)?(?:class sessions|classes|sessions|lectures|labs))\\s+";
+  const outcome = "(?:will|shall|may|can)\\s+(?:automatically\\s+)?(?:fail\\b|receive an? (?:F\\b|failing grade)|be (?:administratively\\s+)?(?:dropped|withdrawn|removed) from\\b)";
+  const linked = new RegExp(`${absenceSubject}(?:${outcome}|(?:result(?:s)? in|lead(?:s)? to)\\s+(?:an?\\s+)?automatic (?:F|failing grade|failure)\\b)`, "i");
+  return quote.replace(/\s+/g, " ").split(/[;!?]|\.(?!\d)/).some((clause) =>
+    !/\b(?:not|no|never|without)\b|n['’]t\b/i.test(clause) && linked.test(clause));
+}
+// "15% of class sessions" measures absences against a threshold, not a share of the grade.
+const SESSION_THRESHOLD = /\d+(?:\.\d+)?\s*(?:%|percent)\s+of\s+(?:the\s+|all\s+)?(?:scheduled\s+)?(?:class(?:es)?|class sessions|sessions|meetings|lectures|labs)\b/i;
+const STATES_PERCENT = /\d+(?:\.\d+)?\s*(?:%|percent\b)/i;
+
+/** Recognized positive constructions bind this figure to attendance, never just to the quote. */
+function attendancePercentStated(quote: string, percent: number | null): boolean {
+  if (percent === null || percent <= 0 || percent > 100) return false;
+  const pct = `${String(percent).replace(".", "\\.")}\\s*(?:%|percent\\b)`;
+  const grade = "(?:the|your)\\s+(?:(?:final|course)\\s+){0,2}grade";
+  const linked = new RegExp([
+    `\\b(?:(?:lecture|lab)\\s+)?attendance\\s+(?:counts for|accounts for|is worth|is)\\s+${pct}\\s+of\\s+${grade}\\b`,
+    `\\b(?:each\\s+)?(?:unexcused\\s+)?absence\\s+(?:reduces|lowers)\\s+${grade}\\s+by\\s+${pct}`,
+    `\\b(?:you|students)\\s+(?:lose|will lose)\\s+${pct}\\s+of\\s+${grade}\\s+for\\s+(?:each|every)\\s+(?:unexcused\\s+)?absence\\b`,
+  ].join("|"), "i");
+  return quote.replace(/\s+/g, " ").split(/[;!?]|\.(?!\d)/).some((clause) =>
+    !/\b(?:not|no|never|if|unless|except|only|up to)\b|n['’]t\b/i.test(clause) && linked.test(clause));
+}
+
+/** Why an attendance proposal's own verified quote rules it out, or null if it does not. */
+function attendanceRejection(basis: string, quote: string, percent: number | null): string | null {
+  if (basis === "fail_or_drop") return absenceConsequenceStated(quote) ? null : "fail_or_drop";
+  if (ATTENDANCE_NOT_GRADED.test(quote)) return "not_graded";
+  if (SESSION_THRESHOLD.test(quote)) return "threshold";
+  if (basis === "penalty_percent" && !attendancePercentStated(quote, percent)) return "unbound_percent";
+  if (basis === "counted_no_figure" && STATES_PERCENT.test(quote)) return "states_figure";
+  return null;
+}
+
 function explain(kind: FlagKind, basis: string, percent: number | null): string {
   const pct = percent !== null ? ` (${percent}%)` : "";
   if (kind === "attendance") {
@@ -292,10 +340,19 @@ export async function runAudit(
     return id;
   };
 
+  if (ledger.attendance.status === "unresolved") {
+    skipped.push(ledger.attendance.explanation ?? "The attendance grade share is unresolved.");
+    for (const c of ledger.attendance.citations) intern(c.page, c.start, c.end, c.text);
+  }
+
   const dimensions: DimensionResult[] = DIMENSIONS.map(({ id, title }) => {
     const used = new Set<string>();
     const notes: string[] = [];
+    if (id === "transparency" && ledger.attendance.status === "unresolved") {
+      notes.push(`${ledger.attendance.explanation} ${ledger.attendance.citations.map((c) => `Page ${c.page}: “${c.text}”`).join(" ")}`);
+    }
     const hits: DimensionResult["hits"] = [];
+    const routeless = new Set<string>();
     for (const s of signalsOf.get(id) ?? []) {
       const def = SIGNALS[s?.code];
       if (!def || def.dimension !== id || s.code === "P6" || s.code === "P7" || s.code === "T7") continue;
@@ -303,7 +360,7 @@ export async function runAudit(
       if (!m) continue;
       const gate = NEEDS_ROUTE[s.code];
       if (gate && !gate.route.test(m.text)) { // stated, but it names no route: say so instead of "not found"
-        if (!notes.includes(gate.note)) notes.push(gate.note);
+        routeless.add(s.code);
         continue;
       }
       const passageId = intern(m.page, m.start, m.end, m.text);
@@ -311,17 +368,26 @@ export async function runAudit(
       used.add(passageId);
       hits.push({ code: s.code, label: def.label, polarity: def.polarity, passageId });
     }
+    // The no-route note is only true when no accepted passage for that code names a route; otherwise
+    // the report would say "names no office" beside the statement that names it.
+    for (const code of routeless) {
+      const note = NEEDS_ROUTE[code].note;
+      if (!hits.some((h) => h.code === code) && !notes.includes(note)) notes.push(note);
+    }
     if (id === "transparency") {
       // Two printed percentages for one component is a conflict the student should see, cited on
-      // both sides, whether or not the consistency agent happened to find it this run.
-      const pair = ledger.gradeComponents.conflictPair;
-      if (pair && ledger.gradeComponents.explanation) {
+      // both sides, whether or not the consistency agent happened to find it this run. Attendance
+      // prose shares are not grade-table rows, so their conflict is checked separately.
+      for (const entry of [ledger.gradeComponents, ledger.attendance]) {
+        const pair = entry.status === "conflict" ? entry.conflictPair : undefined;
+        if (!pair || !entry.explanation) continue;
         const passageId = intern(pair[0].page, pair[0].start, pair[0].end, pair[0].text);
         const pairedPassageId = intern(pair[1].page, pair[1].start, pair[1].end, pair[1].text);
+        if (used.has(`${passageId}|${pairedPassageId}`)) continue;
         used.add(`${passageId}|${pairedPassageId}`);
         hits.push({
           code: "T7",
-          label: `${SIGNALS.T7.label}: ${ledger.gradeComponents.explanation}`,
+          label: `${SIGNALS.T7.label}: ${entry.explanation}`,
           polarity: -1,
           passageId,
           pairedPassageId,
@@ -392,13 +458,14 @@ export async function runAudit(
   /** The flag the printed table supports: every row named and cited, severity from the largest row. */
   const addLedgerAttendance = () => {
     if (!attendance) return;
-    const ids = attendance.rows.map((r) => internCitation(r.citation));
+    const ids = ledger.attendance.citations.map(internCitation);
     addFlag("attendance", "penalty_percent", attendance.largest, ids[0], {
       explanation: explainLedgerAttendance(attendance.rows, attendance.total),
       passageIds: ids,
     });
   };
 
+  let attendanceRejected = 0;
   for (const f of candidates.flags) {
     const kind = f?.kind as FlagKind;
     if (!FLAG_BASES[kind]?.includes(f.basis)) continue;
@@ -406,17 +473,33 @@ export async function runAudit(
     const m = verifyQuote(req.pages, Number(f.page), f.quote);
     if (!m) continue;
     if (percent !== null && !new RegExp(`(^|[^\\d.])${percent}\\s*(%|percent)`, "i").test(m.text)) continue;
+    // The proposal's own quote is read before any table can replace it: a quote that says
+    // attendance is not graded, or measures absences against a threshold, cannot carry a graded
+    // attendance risk, and a "no figure" claim cannot rest on a quote that prints a figure.
+    const rejected = kind === "attendance" ? attendanceRejection(f.basis, m.text, percent) : null;
+    // A table's structural support is already verified by the ledger; it need not read like prose.
+    // Require this very quote to enclose the attendance row carrying this very percentage.
+    const printedSupport = rejected === "unbound_percent" && attendance && ledger.gradeComponents.value?.some((r) =>
+      /attendance|absence/i.test(r.name) && r.percent === percent && r.citation.page === m.page &&
+      m.start <= r.citation.start && m.end >= r.citation.end);
+    if (rejected && !printedSupport && !(rejected === "states_figure" && attendance)) { attendanceRejected++; continue; }
     // The printed table is the better evidence, so it replaces a vaguer reading of the same rule:
     // "counted, no figure stated", or a figure from prose when the table states the component's share.
     if (kind === "attendance" && attendance && (f.basis === "counted_no_figure" || f.basis === "penalty_percent")) {
       addLedgerAttendance();
       continue;
     }
+    // Conflicting printed attendance shares are a cited T7 conflict. Neither a single figure nor
+    // "no figure is stated" is supported while that conflict is unresolved.
+    if (kind === "attendance" && (ledger.attendance.status === "conflict" || ledger.attendance.status === "unresolved") && (f.basis === "counted_no_figure" || f.basis === "penalty_percent")) continue;
     addFlag(kind, f.basis, percent, intern(m.page, m.start, m.end, m.text));
   }
 
   // Graded attendance is reported from the ledger whether or not the model proposed it this run.
   if (attendance && !flags.some((f) => f.kind === "attendance")) addLedgerAttendance();
+  if (attendanceRejected) {
+    skipped.push(`${attendanceRejected} attendance ${attendanceRejected === 1 ? "finding was" : "findings were"} left out: the passage offered says attendance is not graded, measures absences against a threshold, or does not state the figure or consequence proposed.`);
+  }
 
   // Grade weights: the printed table is the source. Only when the ledger finds no table does the
   // report fall back to the model's proposals, where every component must verify or the sum is not judged.
@@ -474,7 +557,8 @@ export async function runAudit(
       const percent = typeof a.percent === "number" && Number.isFinite(a.percent) ? a.percent : null;
       if (percent !== null && !new RegExp(`(^|[^\\d.])${percent}\\s*(%|percent)`, "i").test(m.text)) continue;
       const support = weekSupport(ledger, week, m);
-      if (support === "contradicted" || support === "unsupported") {
+      // Only positive support places an item. "no_schedule" is unknown, not evidence of a week.
+      if (support !== "supported") {
         unplaced++;
         continue;
       }

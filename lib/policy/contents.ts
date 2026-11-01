@@ -55,6 +55,21 @@ function fullStatement(pages: Page[], statement: string): Passage[] {
   });
 }
 
+/** A cue alone is not criteria: points, a heading and an external rubric still need review. */
+function hasCriteriaDescription(text: string): boolean {
+  const cues = /\b(?:graded|assessed|evaluated)\s+(?:on|for|according to)\b|\bcriteria\s+(?:are|include)\b/gi;
+  for (const cue of text.matchAll(cues)) {
+    // Ordinary verified quotes are bounded to 500 characters. Inspect the following clause,
+    // not a later URL or unrelated sentence, and never alter the stored quotation itself.
+    const description = text.slice((cue.index ?? 0) + cue[0].length, (cue.index ?? 0) + 500).split(/[.;\n]/, 1)[0].trim();
+    if (/^(?:(?:the|a|an|our|course|posted|published|attached|linked)\s+)*(?:rubric|criteria|standards)\b/i.test(description)
+      || /^(?:see|refer|listed|available|provided|posted|linked|described)\b/i.test(description)) continue;
+    const words = description.replace(/\b(?:points?|percent|of|the|final|course|grade|grades|total|out|maximum|possible|worth|a|an|scale)\b/gi, "").replace(/[^a-z]/gi, "");
+    if (words) return true;
+  }
+  return false;
+}
+
 export async function checkRequiredContents(pages: Page[], coverage: Pick<Coverage, "status"> & { skipped: readonly string[] }, context: CourseContext, ask: Ask, timing: { now?: () => number; deadline?: number; callBudgetMs?: number } = {}): Promise<RequiredContents> {
   const now = timing.now ?? Date.now;
   const deadline = timing.deadline ?? now() + 240_000;
@@ -109,11 +124,14 @@ export async function checkRequiredContents(pages: Page[], coverage: Pick<Covera
         const match = verifyQuote(pages, Number(v.page), v.quote);
         if (!match) continue;
         if (!c.passages.some((p) => p.page === match.page && p.start === match.start && p.end === match.end)) c.passages.push({ ...match, id: `${c.id}-${match.page}-${match.start}` });
-        const substantiveCriteria = /\b(graded|assessed|evaluated)\s+(on|for|according to)\b|\bcriteria\s+(are|include)\b/i.test(match.text)
+        const substantiveCriteria = hasCriteriaDescription(match.text)
           || (c.id !== "grade_criteria" && /\d+\s*(%|percent\b|points?\b)/i.test(match.text));
         const pointer = /https?:\/\/|\bwww\.|\b(see|refer to|linked|link to|available (on|at|in))\b|\b(rubric|criteria|standards)\b.*\b(Canvas|Blackboard|Moodle|LMS|online|website|separate|attached|course site)\b/i.test(match.text);
         const reference = v.kind === "reference" || (pointer && !substantiveCriteria);
-        const status = c.id === "university_statement" || reference || v.kind === "partial" ? "needs_review" : "found";
+        // A grade-weight row is evidence about weights, not assessment criteria.
+        // Keep its verified passage visible for review rather than certify it.
+        const criteriaUnclear = c.id === "grade_criteria" && !substantiveCriteria;
+        const status = c.id === "university_statement" || reference || criteriaUnclear || v.kind === "partial" ? "needs_review" : "found";
         if (c.status !== "found") c.status = status;
       }
     } catch {

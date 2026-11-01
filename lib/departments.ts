@@ -2,6 +2,12 @@ import { DIMENSIONS } from "./rubric";
 import type { Dimension, DimensionStatus } from "./types";
 import type { Course } from "../components/TermView";
 
+/** An explicitly supplied identifier, not a guess from a title or piece label. */
+export function normalizeCourseCode(value: string): string | null {
+  const match = /^([A-Za-z]{2,5})[\s_-]?(\d{2,4}[A-Za-z]?)$/.exec(value.trim());
+  return match ? `${match[1].toUpperCase()} ${match[2].toUpperCase()}` : null;
+}
+
 /** Leading letters immediately followed by a course number, e.g. "ANTH145..." -> "ANTH". Null if no match. */
 export function departmentCodeOf(fileName: string): string | null {
   const m = /^([A-Za-z]{2,5})[\s_-]?\d{2,4}/.exec(fileName.trim());
@@ -47,7 +53,8 @@ function tally(courses: Course[], dimension: Dimension): DimensionTally {
 export function rollupByDepartment(courses: Course[]): DepartmentRollup[] {
   const groups = new Map<string, Course[]>();
   for (const c of courses) {
-    const code = departmentCodeOf(c.report.fileName);
+    const explicit = c.report.courseCode ? normalizeCourseCode(c.report.courseCode) : null;
+    const code = departmentCodeOf(explicit ?? c.report.fileName);
     if (!code) continue;
     groups.set(code, [...(groups.get(code) ?? []), c]);
   }
