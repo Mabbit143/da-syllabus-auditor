@@ -25,7 +25,7 @@ export interface BioCheck {
   page: number;
   quote: string;
   evidence: AuthorEvidence;
-  relation: "insider_stated";
+  relation: "insider_stated" | "outsider_stated";
 }
 
 export function isPublicHttp(url: string): boolean {
@@ -98,8 +98,10 @@ export async function checkAuthors(
         if (a === -1 || b <= a) return null;
         const o = JSON.parse(text.slice(a, b + 1));
         console.log(`[sources] ${r.author}: found=${o.found} relation=${o.relation} url=${o.url}`);
-        // Only an author's own stated insider background is reported; "outside" would be an inference about identity.
-        if (!o.found || o.relation !== "insider_stated") return null;
+        // Owner decision 2026-11-02: keep both relations. A bio that states a background outside
+        // the covered community is judged only from the author's own stated bio, never the name —
+        // it becomes the P7 negative for "Whose perspectives are in the room".
+        if (!o.found || (o.relation !== "insider_stated" && o.relation !== "outsider_stated")) return null;
         if (!(await verifyBio(results, o.url, o.quote))) {
           console.log(`[sources] ${r.author}: bio quote failed verification (${results.length} results)`);
           return null;

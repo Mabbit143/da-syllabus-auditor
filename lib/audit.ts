@@ -435,7 +435,10 @@ export async function runAudit(
         const passageId = intern(m.page, m.start, m.end, m.text);
         if (used.has(passageId)) continue;
         used.add(passageId);
-        const code = "P6";
+        // Each author's own verified bio is one hit: insider stated -> P6 (+1),
+        // outsider stated -> P7 (-1). Relation was decided and confirmed from the
+        // author's own public bio in lib/sources.ts; nothing is inferred here.
+        const code = b.relation === "outsider_stated" ? "P7" : "P6";
         hits.push({ code, label: SIGNALS[code].label, polarity: SIGNALS[code].polarity, passageId, evidence: b.evidence });
       }
     }
