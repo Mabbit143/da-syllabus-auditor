@@ -36,7 +36,7 @@ function fixtureReport(sourcePages: SourcePage[]): AuditReport {
     overall: { label: null, reason: "Insufficient dimensions in this synthetic fixture.", included: 1, score: 0 },
     policyCheck: {
       school: "University of Oregon", checkedAt: "2026-10-31T12:00:00Z", comparisonStatus: "complete",
-      items: [{ topic: "late_work", relation: "matches", instructor: null, syllabusQuote: passages[0].text, syllabusPage: 1,
+      items: [{ topic: "late_work", relation: "conflicts", instructor: null, syllabusQuote: passages[0].text, syllabusPage: 1,
         schoolQuote: "Synthetic school reference: state the late work policy.", schoolUrl: "https://provost.uoregon.edu/example-fixture" }],
       requiredContents: {
         context: { term: "fall", year: 2026, level: "undergraduate", coreEducation: "no" },

@@ -86,6 +86,7 @@ test("late response does not overwrite a newer course-context result", async ({ 
   const section = page.getByRole("region", { name: "Required syllabus contents" });
   let release: (() => void) | undefined;
   const held = new Promise<void>((resolve) => { release = resolve; });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const response = async (route: any) => {
       const url = route.request().url();
       if (url.includes("/api/policy-check")) {

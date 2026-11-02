@@ -197,7 +197,7 @@ test("an assessment the model places in a week the schedule contradicts is dropp
   });
   assert.equal(report.assessments.length, 0);
   assert.equal(report.coverage.status, "partial");
-  assert.ok(report.coverage.skipped.some((s: string) => /left off the week map/i.test(s)));
+  assert.ok(report.coverage.skipped.some((s: string) => /not placed on the calendar/i.test(s)));
 });
 
 test("a proposal whose own passage supports the week is mapped when nothing is printed for it", async () => {

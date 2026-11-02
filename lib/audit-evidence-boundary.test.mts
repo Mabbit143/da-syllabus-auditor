@@ -45,7 +45,7 @@ test("an attendance quote saying it is not given a formal grade cannot become a 
   const report = await audit([negated], { flags: [attendanceProposal(negated)] });
   assert.equal(report.flags.some((f) => f.kind === "attendance"), false);
   assert.equal(report.biggestRiskIndex, null);
-  assert.ok(report.coverage.skipped.some((s) => /attendance.*not graded/i.test(s)));
+  assert.ok(report.coverage.skipped.some((s) => /attendance note.*skipped/i.test(s)));
   // Near miss: the same predicate without the negation still supports the risk.
   const affirmed = "Class attendance is given a formal grade each week.";
   const kept = await audit([affirmed], { flags: [attendanceProposal(affirmed)] });
@@ -150,7 +150,7 @@ test("a negated attendance-grading quote cannot become a graded-attendance risk"
   const report = await audit([negated], { flags: [attendanceProposal(negated)] });
   assert.equal(report.flags.some((f) => f.kind === "attendance"), false);
   assert.equal(report.biggestRiskIndex, null);
-  assert.ok(report.coverage.skipped.some((s) => /attendance.*not graded/i.test(s)), "the rejected proposal is disclosed");
+  assert.ok(report.coverage.skipped.some((s) => /attendance note.*skipped/i.test(s)), "the rejected proposal is disclosed");
 
   // Near miss: the same shape without the negation still counts, with no stated figure.
   const affirmed = "Attendance is formally graded, and regular participation helps your learning.";
@@ -169,7 +169,7 @@ test("isn't optional is not a negated grading predicate", async () => {
   for (const text of ["Attendance isn't graded each week.", "Attendance isn’t formally graded.", "Attendance is ungraded."]) {
     const rejected = await audit([text], { flags: [attendanceProposal(text)] });
     assert.equal(rejected.flags.length, 0, text);
-    assert.ok(rejected.coverage.skipped.some((s) => /attendance finding was left out/.test(s)), text);
+    assert.ok(rejected.coverage.skipped.some((s) => /attendance note.*skipped/i.test(s)), text);
   }
 });
 
@@ -191,7 +191,7 @@ test("fail-or-drop requires an affirmative absence-linked consequence, not anoth
   ]) {
     const report = await audit([text], { flags: [attendanceProposal(text, "fail_or_drop")] });
     assert.equal(report.flags.some((f) => f.kind === "attendance"), false, text);
-    assert.ok(report.coverage.skipped.some((s) => /attendance finding was left out/.test(s)), text);
+    assert.ok(report.coverage.skipped.some((s) => /attendance note.*skipped/i.test(s)), text);
   }
   for (const text of [
     "Students with four absences will fail the course.",
@@ -219,7 +219,7 @@ test("an attendance percent must belong to an attendance grade or absence penalt
   ]) {
     const report = await audit([text], { flags: [attendanceProposal(text, "penalty_percent", 15)] });
     assert.equal(report.flags.some((f) => f.kind === "attendance"), false, text);
-    assert.ok(report.coverage.skipped.some((s) => /attendance finding was left out/.test(s)), text);
+    assert.ok(report.coverage.skipped.some((s) => /attendance note.*skipped/i.test(s)), text);
   }
   for (const text of [
     "Attendance counts for 15% of the final course grade.",
@@ -291,7 +291,7 @@ test("without a recognized schedule, an arbitrary week on an undated quote is le
   const report = await audit([text], { assessments: [assessment("Final paper", 1, text)] });
   assert.deepEqual(weekMap(report), []);
   assert.equal(report.coverage.status, "partial");
-  assert.ok(report.coverage.skipped.some((s) => /left off the week map/.test(s)));
+  assert.ok(report.coverage.skipped.some((s) => /not placed on the calendar/i.test(s)));
 });
 
 test("without a schedule, explicit numeric and ordinal week wording still places an assessment", async () => {
@@ -311,7 +311,7 @@ test("without a schedule, a quote naming a different week or only a date does no
     assessment("Lab report", 4, "The lab report is due 10/15"),
   ] });
   assert.deepEqual(weekMap(report), []);
-  assert.ok(report.coverage.skipped.some((s) => /2 deadlines were left off the week map/.test(s)));
+  assert.ok(report.coverage.skipped.some((s) => /not placed on the calendar/i.test(s)));
 });
 
 test("a recurring week phrase is not a week placement", async () => {
@@ -328,7 +328,7 @@ test("negated and whitespace-varied recurring ordinal weeks cannot place a deadl
   ]) {
     const report = await audit([text], { assessments: [assessment("Reflection", 2, text)] });
     assert.deepEqual(weekMap(report), [], text);
-    assert.ok(report.coverage.skipped.some((s) => /left off the week map/.test(s)), text);
+    assert.ok(report.coverage.skipped.some((s) => /not placed on the calendar/i.test(s)), text);
   }
   const corrected = "A short reflection is not due in the second week; it is due in week 8.";
   assert.deepEqual(weekMap(await audit([corrected], { assessments: [assessment("Reflection", 8, corrected)] })), [["Reflection", 8]]);
@@ -341,12 +341,12 @@ test("a later section on a schedule page is not enclosed by the nearest previous
   const text = `Week 1\nRead the overview\nWeek 2\nRead chapter two\nIMPORTANT DATES\n${final}`;
   const report = await audit([text], { assessments: [assessment("Final paper", 2, final)] });
   assert.deepEqual(weekMap(report), []);
-  assert.ok(report.coverage.skipped.some((s) => /left off the week map/.test(s)));
+  assert.ok(report.coverage.skipped.some((s) => /not placed on the calendar/i.test(s)));
 });
 
 test("a no-figure proposal whose own quote prints an unrecognized percentage fails closed", async () => {
   const text = "Attendance is roughly 15% of what I weigh when assigning participation marks.";
   const report = await audit([text], { flags: [attendanceProposal(text)] });
   assert.equal(report.flags.some((f) => f.kind === "attendance"), false, "neither 'no figure' nor an unproven 15% share");
-  assert.ok(report.coverage.skipped.some((s) => /attendance finding was left out/.test(s)));
+  assert.ok(report.coverage.skipped.some((s) => /attendance note.*skipped/i.test(s)));
 });

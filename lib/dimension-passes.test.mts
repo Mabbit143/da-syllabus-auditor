@@ -105,7 +105,7 @@ test("an area whose pass fails is not assessed rather than reported as not found
   );
   assert.equal(dimension(report, "perspectives").status, "not_assessed");
   assert.equal(report.coverage.status, "partial");
-  assert.ok(report.coverage.skipped.some((s: string) => /Whose perspectives are in the room could not be fully assessed/.test(s)));
+  assert.ok(report.coverage.skipped.some((s: string) => /couldn’t fully check this area/i.test(s)));
   // An area that answered is still graded normally.
   assert.equal(dimension(report, "hidden").status, "mixed");
 });

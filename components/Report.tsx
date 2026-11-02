@@ -10,12 +10,12 @@ import { pageLocator } from "@/lib/locator";
 import { DIMENSION_EXPLAINER } from "@/lib/rubric";
 import { AREA_LABELS, areaStatus } from "@/lib/report-presentation";
 import { POLICY_TOPICS, TOPIC_LABEL, TOPIC_PLAIN, type Relation } from "@/lib/policy/types";
-import type { AuditReport, Page, Passage } from "@/lib/types";
+import type { AuditReport, Page } from "@/lib/types";
 
 const STATUS_TEXT = {
   strong: "Strong",
   weak: "Weak",
-  mixed: "Mixed / unclear",
+  mixed: "Mixed",
   not_found: "Not found in this syllabus",
   not_assessed: "Not assessed",
 } as const;
@@ -109,21 +109,25 @@ export default function Report({ report, pages, policy }: { report: AuditReport;
 
       <section>
         <h3>Five dimensions</h3>
+        <p className="muted">Every status is decided by code from verified quotes. Open a finding to see the exact wording and where it came from.</p>
         {report.dimensions.map((d) => {
-          const hits = [...d.hits.filter((h) => h.polarity === 1).slice(0, 2), ...d.hits.filter((h) => h.polarity === -1).slice(0, 2)].slice(0, 3);
+          const isVague = d.dimension === "perspectives" || d.dimension === "hidden";
+          // Present up to 3 hits, but for vague dimensions cap at 2 to reduce noise while keeping verification.
+          const rawHits = [...d.hits.filter((h) => h.polarity === 1).slice(0, 2), ...d.hits.filter((h) => h.polarity === -1).slice(0, 2)].slice(0, 3);
+          const hits = isVague ? rawHits.slice(0, 2) : rawHits;
+          // Plain status label: "Mixed" not "Mixed / unclear"; limited evidence stays distinct but now has a plain explainer alongside via areaStatus.
+          const statusLabel = d.status === "not_found" && d.notes?.length ? "No supported signal" : d.status === "mixed" && (d.positive === 0 || d.negative === 0) ? "Limited evidence" : STATUS_TEXT[d.status];
+          const plainSummary = areaStatus(d);
           return (
             <div key={d.dimension} className={`card ${d.status}`}>
               <h4>
-                {d.title}: <span className="grade">{d.status === "not_found" && d.notes?.length ? "No supported signal" : d.status === "mixed" && (d.positive === 0 || d.negative === 0) ? "Limited evidence" : STATUS_TEXT[d.status]}</span>
+                {d.title}: <span className="grade">{statusLabel}</span>
                 {d.characterization && <span className="grade characterization"> — {d.characterization}</span>}
               </h4>
+              <p className="muted">{AREA_LABELS[d.dimension]}</p>
               <p className="muted dim-explainer">{DIMENSION_EXPLAINER[d.dimension]}</p>
+              <p className="muted">{plainSummary}</p>
               {d.notes?.map((n) => <p key={n} className="muted">{n}</p>)}
-              {d.hits.length > 0 && (
-                <p className="muted">
-                  {d.positive} supportive and {d.negative} burdensome signal{d.positive + d.negative === 1 ? "" : "s"} found.
-                </p>
-              )}
               {hits.map((h) => (
                 <div key={h.passageId}>
                   <p className="signal">{h.polarity === 1 ? "+" : "−"} {h.label}</p>
@@ -150,9 +154,6 @@ export default function Report({ report, pages, policy }: { report: AuditReport;
                   )}
                 </div>
               ))}
-              {d.status === "mixed" && d.positive > 0 && d.negative > 0 && (
-                <p className="muted">Mixed signals are shown as found; the audit does not decide which one governs.</p>
-              )}
             </div>
           );
         })}
@@ -199,7 +200,7 @@ export default function Report({ report, pages, policy }: { report: AuditReport;
           {report.policyCheck && report.policyCheck.comparisonStatus !== "not_run" && report.policyCheck.items.length > 0 && report.policyCheck.items.length < POLICY_TOPICS.length && (
             <p className="muted">Not compared this time (no verified quote): {POLICY_TOPICS.filter((t) => !report.policyCheck!.items.some((i) => i.topic === t)).map((t) => TOPIC_LABEL[t]).join(", ")}.</p>
           )}
-          {report.policyCheck?.items.map((it) => (
+          {report.policyCheck?.items.filter((it) => it.relation !== "matches").map((it) => (
             <div key={it.topic} className={`card ${it.relation === "matches" ? "strong" : (it.relation === "silent" || it.relation === "disputed") ? "mixed" : "sev-medium"}`}>
               <h4>{TOPIC_LABEL[it.topic]}: <span className="grade">{RELATION_TEXT[it.relation]}</span></h4>
               <p className="muted">{TOPIC_PLAIN[it.topic]}</p>
