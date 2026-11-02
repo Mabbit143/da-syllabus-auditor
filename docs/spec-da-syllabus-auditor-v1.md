@@ -203,7 +203,7 @@ The user directed that a syllabus may be judged by who wrote its sources. For ea
 - Two new Perspectives signals: P6 (positive) the bio states the author belongs to or comes from the community or tradition the reading covers; P7 (negative) the bio states a background outside it. Counted by the same rule as other signals.
 - The report shows the author, the bio link and the verbatim bio quote next to the reading so students can disagree. It says what the bio states, not what the professor intended.
 - **Updated 2026-10-30 (owner decision — supersedes the "says what the bio states, not what the professor intended" framing above for the syllabus's own content, not the author-bio check):** identity is still never inferred — the bio-only rule above for *authors* is unchanged. But the syllabus text itself, and other institutional documents, are judged directly: when the policy language itself supports it, name the framing plainly (punitive, colonial, progressive, exclusionary) instead of only reporting neutral signal counts. This extends to department-level rollups across public curriculum documents (see the open evidence corpus, `lib/policy/evidence.ts`), not only individual syllabi.
-- Limits: at most 12 distinct authors per audit; bios are public web text and may be wrong or incomplete.
+- Limits: at most 12 distinct authors per audit (owner decision 2026-11-02, "12 authors should get the picture"); when more qualifying authors exist, they are sampled at random rather than taken in reading-list order (owner decision 2026-11-02), so no author is systematically skipped; bios are public web text and may be wrong or incomplete.
 
 ### Risk flags and severity
 

@@ -4,6 +4,16 @@ import type { AuthorEvidence, Candidates } from "./types";
 // The spec's limit (docs/spec-da-syllabus-auditor-v1.md, source authorship check): 12 distinct
 // authors per audit. Owner confirmed 2026-11-02 that 12 resolves the 12-vs-16 discrepancy in code's favor of the spec.
 export const MAX_AUTHORS = 12;
+
+/** Fisher-Yates shuffle, returning a new array; used to sample qualifying authors fairly. */
+function sample<T>(items: T[], count: number): T[] {
+  const pool = items.slice();
+  for (let i = pool.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [pool[i], pool[j]] = [pool[j], pool[i]];
+  }
+  return pool.slice(0, count);
+}
 const MIN_QUOTE = 12;
 const MAX_QUOTE = 400;
 
@@ -78,14 +88,17 @@ export async function checkAuthors(
   ask: (instructions: string, input: string) => Promise<string>,
 ): Promise<BioCheck[]> {
   const seen = new Set<string>();
-  const picked = readings.filter((r) => {
+  const verified = readings.filter((r) => {
     const author = String(r?.author ?? "").trim();
     if (!author || seen.has(author.toLowerCase()) || !verifyReading(Number(r.page), r.quote)) return false;
     seen.add(author.toLowerCase());
-    return seen.size <= MAX_AUTHORS;
+    return true;
   });
-
-  console.log(`[sources] ${readings.length} readings proposed, ${picked.length} verified distinct authors`);
+  // Owner decision 2026-11-02: when a syllabus names more qualifying authors than the spec's cap,
+  // sample them at random instead of taking the reading list's first twelve, so no author is
+  // systematically skipped just because of where their reading sits in the list.
+  const picked = verified.length <= MAX_AUTHORS ? verified : sample(verified, MAX_AUTHORS);
+  console.log(`[sources] ${readings.length} readings proposed, ${verified.length} verified distinct authors, ${picked.length} looked up${verified.length > MAX_AUTHORS ? " (random sample)" : ""}`);
   const out: BioCheck[] = [];
   for (let i = 0; i < picked.length; i += 8) {
     const batch = picked.slice(i, i + 8);

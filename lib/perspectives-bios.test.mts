@@ -37,8 +37,9 @@ const bio = (author: string, relation: MockBio["relation"], supported = true): M
 });
 
 /** Drives one audit with mocked model and web search so author bios can be steered offline. */
-async function run(readings: unknown[], bios: MockBio[]) {
+async function run(readings: unknown[], bios: MockBio[], pagesOverride = pages) {
   const prompts: string[] = [];
+  const queried: string[] = [];
   const model = async (instructions: string, input: string) => {
     prompts.push(instructions);
     if (instructions === READINGS_INSTRUCTIONS) return JSON.stringify({ readings });
@@ -52,7 +53,8 @@ async function run(readings: unknown[], bios: MockBio[]) {
   };
   const search = async (instructions: string, input: string) => {
     assert.equal(instructions, BIO_INSTRUCTIONS, "search is only used for author bios");
-    const author = /Author: (.*)/m.exec(input)?.[1]?.trim();
+    const author = /Author: (.*)/m.exec(input)?.[1]?.trim() ?? "";
+    queried.push(author);
     const b = bios.find((x) => x.author === author);
     if (!b || !b.found) return { text: JSON.stringify({ found: false }), results: [] };
     return {
@@ -61,8 +63,8 @@ async function run(readings: unknown[], bios: MockBio[]) {
       results: [{ url: b.url, snippet: `Author profile. ${b.quote} Further details.` }],
     };
   };
-  const report = await runAudit({ requestId: "t", fileName: "t.pdf", pageCount: 1, pages }, model, search);
-  return { report, prompts };
+  const report = await runAudit({ requestId: "t", fileName: "t.pdf", pageCount: pagesOverride.length, pages: pagesOverride }, model, search);
+  return { report, prompts, queried };
 }
 
 const perspectives = (report: { dimensions: { dimension: string; status: string; positive: number; negative: number; hits: unknown[] }[] }) => {
@@ -133,4 +135,26 @@ test("an unconfirmed claim or an unclear relation never becomes a hit", async ()
   assert.equal(d.hits.length, 0);
   assert.equal(d.status, "not_found");
   assert.equal(d.negative, 0);
+});
+
+test("more verified authors than the cap are sampled at random, not by reading order", async () => {
+  const authors = Array.from({ length: 20 }, (_, i) => `Author${i}`);
+  const lines = authors.map((a, i) => `${a}, Outside Views (${2000 + i}).`);
+  const readings = authors.map((a, i) => reading(a, lines[i]));
+  const bigPage = [{ pageNumber: 1, text: lines.map((l) => `- ${l}`).join("\n") }];
+  const { queried } = await run(readings, [], bigPage);
+  // Exactly the spec's cap of 12 author lookups, each a distinct qualifying author.
+  assert.equal(queried.length, 12);
+  assert.equal(new Set(queried).size, 12);
+  assert.ok(queried.every((a) => authors.includes(a)), "sampled authors must come from the syllabus's own list");
+});
+
+test("a list within the cap looks up every verified author", async () => {
+  const { queried } = await run(
+    [citation("Smith", "J., Village Life (2001)"), citation("Hall", "K., The Outsider Gaze (2002)")],
+    [bio("Smith", "insider_stated"), bio("Hall", "outsider_stated")],
+  );
+  assert.equal(queried.length, 2);
+  assert.equal(new Set(queried).size, 2);
+  assert.deepEqual(queried.slice().sort(), ["Hall", "Smith"]);
 });
