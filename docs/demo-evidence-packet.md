@@ -30,7 +30,7 @@ All 11 topics return a verified quote on a `*.uoregon.edu` page via `lib/policy/
 
 **How the app proves a comparison:** `lib/policy/compare.ts` verifies the syllabus quote (`verifyQuote`) **and** the instructor name inside a verified quote, and code (not the model) detects silence via `TOPIC_WORDS`. Saved policies are re-fetched and re-verified on every use (`lib/policy/lookup.ts` restricts UO to `*.uoregon.edu`). Verified in `lib/policy/compare.test.mts`, `corpus.test.mts`, and E2E `provider-documents.spec.ts` (discloses reviewed-OCR provenance `#page=` and region).
 
-**Remaining gap:** live refresh of each URL on demo day; model-proposed `relation` values (`matches`/`conflicts`/`adds_requirement`/`silent`/`disputed`) are not pre-verified — they depend on the demo syllabus text and must be checked against the paired quotes on camera.
+**Remaining gap:** ~~live refresh of each URL on demo day~~ — closed: run `npm run verify:quotes` (`scripts/reverify-demo-quotes.mts`) on recording morning; it re-fetches every topic's live page and re-checks the exact quote, and for reviewed-OCR topics compares the downloaded PDF's sha256 against the admitted source hash. Model-proposed `relation` values (`matches`/`conflicts`/`adds_requirement`/`silent`/`disputed`) are not pre-verified — they depend on the demo syllabus text and must be checked against the paired quotes on camera.
 
 ---
 
