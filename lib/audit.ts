@@ -352,6 +352,7 @@ export async function runAudit(
   const dimensions: DimensionResult[] = DIMENSIONS.map(({ id, title }) => {
     const used = new Set<string>();
     const seenNormalized = new Set<string>();
+    const codeSeen = new Set<string>();
     const notes: string[] = [];
     if (id === "transparency" && ledger.attendance.status === "unresolved") {
       notes.push(`${ledger.attendance.explanation} ${ledger.attendance.citations.map((c) => `Page ${c.page}: “${c.text}”`).join(" ")}`);
@@ -377,6 +378,11 @@ export async function runAudit(
       const dedupeKey = `${def.label}:${normalized}`;
       // Also catch simple normalized equality across labels for the same phrase (e.g., same quote with T5 vs T6)
       if (seenNormalized.has(normalized) || seenNormalized.has(dedupeKey)) continue;
+      // Owner decision 2026-11-02 ("alright fix them" on the risk list): a dimension counts kinds of
+      // evidence — one passage per code. Three quotes for one rule can no longer outweigh two distinct
+      // findings, so recall variance stops inflating the counts behind an unchanged verdict.
+      if (codeSeen.has(s.code)) continue;
+      codeSeen.add(s.code);
       used.add(passageId);
       seenNormalized.add(normalized);
       seenNormalized.add(dedupeKey);

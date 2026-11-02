@@ -117,3 +117,20 @@ test("one failed area does not stop the report", async () => {
   assert.equal(report.overall.label, null);
   assert.match(report.overall.reason, /enough verified evidence/);
 });
+
+test("a dimension counts one passage per code, not one per quote", async () => {
+  // Owner decision 2026-11-02: a count is how many kinds of evidence, so two passages for the same
+  // signal can no longer push a dimension from mixed to weak on their own.
+  const report = await run((instructions) =>
+    areaOf(instructions) === "Punitive vs. flexible"
+      ? { signals: [
+          { code: "F5", page: 1, quote: "Late work is not accepted under any circumstances" },
+          { code: "F5", page: 1, quote: "Late work is not accepted" },
+        ] }
+      : {},
+  );
+  const punitive = dimension(report, "punitive");
+  assert.equal(punitive.negative, 1);
+  assert.equal(punitive.hits.length, 1);
+  assert.equal(punitive.status, "mixed");
+});
