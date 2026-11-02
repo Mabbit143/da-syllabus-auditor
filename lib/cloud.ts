@@ -77,6 +77,8 @@ export interface StoredAudit {
   pages: Page[];
   /** ISO timestamp used to bucket this audit into a term (lib/term.ts). Missing on audits saved before this field existed. */
   createdAt?: string;
+  /** Syllabus term inferred from the document (e.g. 2026-spring). When present, TermView buckets by this. */
+  termId?: string | null;
 }
 
 export async function loadAudits(): Promise<StoredAudit[] | null> {
@@ -84,8 +86,8 @@ export async function loadAudits(): Promise<StoredAudit[] | null> {
     if (!(await uid())) return null;
     const { data, error } = await supabase()!.from("audits").select("id,report,pages,created_at").order("created_at");
     if (error) throw error;
-    return (data ?? []).map((row: { id: string; report: unknown; pages: unknown; created_at: string }) => ({
-      id: row.id, report: row.report as AuditReport, pages: row.pages as Page[], createdAt: row.created_at,
+    return (data ?? []).map((row: { id: string; report: unknown; pages: unknown; created_at: string; term_id?: string }) => ({
+      id: row.id, report: row.report as AuditReport, pages: row.pages as Page[], createdAt: row.created_at, termId: (row as { term_id?: string }).term_id ?? null,
     }));
   } catch (err) {
     log("load audits", err);
@@ -97,7 +99,7 @@ export async function saveAudit(a: StoredAudit): Promise<void> {
   try {
     const id = await uid();
     if (!id) return;
-    const { error } = await supabase()!.from("audits").upsert({ id: a.id, user_id: id, file_name: a.report.fileName, report: a.report, pages: a.pages });
+    const { error } = await supabase()!.from("audits").upsert({ id: a.id, user_id: id, file_name: a.report.fileName, report: a.report, pages: a.pages, ...(a.termId ? { term_id: a.termId } : {}) });
     if (error) throw error;
   } catch (err) {
     log("save audit", err);

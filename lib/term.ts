@@ -41,6 +41,39 @@ export function previousTermId(id: string): string {
   return `${year}-${SEASON_ORDER[index - 1]}`;
 }
 
+
+export function inferTermId(input: { fileName?: string; text?: string }): string | null {
+  const hay = `${input.fileName ?? ""} ${input.text ?? ""}`;
+  // 1) Long form: Spring 2025, Fall 2026, etc.
+  const long = hay.match(/\b(winter|spring|summer|fall)\s+20(\d{2})\b/i);
+  if (long) {
+    const season = long[1].toLowerCase() as TermSeason;
+    const year = 2000 + Number(long[2]);
+    if (SEASON_ORDER.includes(season)) return `${year}-${season}`;
+  }
+  // 2) Filename shorthands like W26, S26, F25, Sp26 etc. (e.g. ANTH 270 W26)
+  const file = input.fileName ?? "";
+  // Normalize: first letter determines season, 2-digit year
+  const m = file.match(/\b([WSF])\s*0*([0-9]{2})\b/i);
+  if (m) {
+    const letter = m[1].toLowerCase();
+    const yy = Number(m[2]);
+    const year = yy < 50 ? 2000 + yy : 1900 + yy;
+    const map: Record<string, TermSeason> = { w: "winter", s: "spring", f: "fall" };
+    // Summer rarely uses single letter; treat S as spring to match user's files (Spring/Winter/Fall only observed)
+    const season = map[letter];
+    if (season) return `${year}-${season}`;
+  }
+  // 3) Check for 'Spring 25' style with 2-digit year
+  const spring2 = hay.match(/\b(winter|spring|summer|fall)\s+'?(\d{2})\b/i);
+  if (spring2) {
+    const season = spring2[1].toLowerCase() as TermSeason;
+    const year = 2000 + Number(spring2[2]);
+    if (SEASON_ORDER.includes(season)) return `${year}-${season}`;
+  }
+  return null;
+}
+
 export function termLabel(id: string): string {
   const { year, season } = parseTermId(id);
   return `${SEASON_LABEL[season]} ${year}`;

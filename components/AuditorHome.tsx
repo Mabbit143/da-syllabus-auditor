@@ -9,6 +9,7 @@ import { useSchool, useUserId } from "@/components/Nav";
 import { deleteAudit, loadAudits, loadSchoolPolicies, recordGaps, saveAudit, saveSchoolPolicies } from "@/lib/cloud";
 import type { PolicyCheck } from "@/lib/policy/types";
 import type { CourseContext } from "@/lib/policy/contents-types";
+import { inferTermId } from "@/lib/term";
 import type { EvidenceRecord } from "@/lib/policy/evidence";
 import type { AuditReport, Page } from "@/lib/types";
 
@@ -20,7 +21,19 @@ const STORE_KEY = "da-syllabus-auditor.courses.v1";
 function load(): StoredCourse[] {
   try {
     const raw = window.localStorage.getItem(STORE_KEY);
-    return raw ? (JSON.parse(raw) as StoredCourse[]) : [];
+    const courses = raw ? (JSON.parse(raw) as StoredCourse[]) : [];
+    let changed = false;
+    for (const c of courses) {
+      if (!c.termId) {
+        const text = c.pages?.map((p) => p.text).join(" ") ?? "";
+        const inferred = inferTermId({ fileName: c.report.fileName, text });
+        if (inferred) { c.termId = inferred; changed = true; }
+      }
+    }
+    if (changed) {
+      try { window.localStorage.setItem(STORE_KEY, JSON.stringify(courses)); } catch {}
+    }
+    return courses;
   } catch {
     return [];
   }
@@ -58,6 +71,14 @@ export default function AuditorHome({ disclosure, departmentEvidence }: { disclo
       const remote = await loadAudits();
       if (remote === null) return;
       if (remote.length > 0) {
+        // Backfill termId for remote audits that were saved before term inference existed
+        for (const c of remote as StoredCourse[]) {
+          if (!c.termId) {
+            const text = c.pages?.map((p) => p.text).join(" ") ?? "";
+            const inferred = inferTermId({ fileName: c.report.fileName, text });
+            if (inferred) c.termId = inferred;
+          }
+        }
         setCourses(remote);
         save(remote);
       } else {
@@ -158,10 +179,11 @@ export default function AuditorHome({ disclosure, departmentEvidence }: { disclo
       const report: AuditReport = { ...data.report, ...(input.courseCode ? { courseCode: input.courseCode } : {}), ...(input.scanned ? { textSource: "ocr" } : {}) };
       const id = crypto.randomUUID();
       const createdAt = new Date().toISOString();
-      update([...courses, { id, report, pages: input.pages, createdAt }]);
+      const termId = inferTermId({ fileName: input.fileName, text: input.pages.map((p) => p.text).join(" ") });
+      update([...courses, { id, report, pages: input.pages, createdAt, termId }]);
       
       setSaveStatus({ id, state: "saving" });
-      saveAudit({ id, report, pages: input.pages, createdAt })
+      saveAudit({ id, report, pages: input.pages, createdAt, termId })
         .then(() => setSaveStatus((s) => s.id === id ? { id, state: "saved" } : s))
         .catch(() => setSaveStatus((s) => s.id === id ? { id, state: "failed" } : s));
 

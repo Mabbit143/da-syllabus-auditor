@@ -8,6 +8,8 @@ export interface Course {
   report: AuditReport;
   /** ISO timestamp; missing on audits saved before term tracking existed (treated as the current term). */
   createdAt?: string;
+  /** Syllabus term inferred from the document (e.g. 2026-spring). When present, TermView buckets by this, not by when it was saved. */
+  termId?: string | null;
 }
 
 // UO teaching weeks. Assessments outside this range stay visible below the map.
@@ -22,6 +24,7 @@ export function riskPoints(r: AuditReport): number {
 }
 
 function termIdOf(course: Course): string {
+  if (course.termId) return course.termId;
   return termOf(course.createdAt ? new Date(course.createdAt) : new Date()).id;
 }
 
