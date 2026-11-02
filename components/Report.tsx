@@ -87,7 +87,10 @@ export default function Report({ report, pages, policy }: { report: AuditReport;
           </p>
         )}
         {report.coverage.status === "partial" && (
-          <p className="warn">Partial audit. Skipped: {report.coverage.skipped.join(", ")}.</p>
+          <div className="warn" role="status">
+            <p><strong>Partial audit — some notes were skipped:</strong></p>
+            <ul>{report.coverage.skipped.map((s, i) => <li key={i}>{s}</li>)}</ul>
+          </div>
         )}
       </header>
 

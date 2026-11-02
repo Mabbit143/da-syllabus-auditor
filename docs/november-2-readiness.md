@@ -4,6 +4,8 @@ Owner deadline: **November 2, 2026**. This is the owner's app-readiness deadline
 
 Status: **not yet release-accepted**. Work in progress on October 31. A passing mocked suite is not proof of repeat-run agreement or deployed account isolation.
 
+**Update 2026-11-01 — evidence packet for demo (t_4e488b29):** `docs/demo-evidence-packet.md` created and verified offline without private-demo access or model credits. It anchors the demo script with verified UO policy quotes (11 topics, `data/uo-policies/*.md` + 5 selected reviewed-OCR records, `corpus/evidence` tests), 8-group required-contents locators, dimension/risk rubric (`lib/rubric.ts`/`lib/audit.ts` code grading), and intercepted-route Playwright evidence. Verified: `npx tsc --noEmit` ✓, `npm run build` ✓, `node --test` 211/211 ✓, `npm run test:e2e -- --workers=2` 36/36 ✓. Handoff §11 item 11 marked done for evidence selection; script/video recording and live 9-page audit re-fetch remain open (see packet §6–8).
+
 ## Work coordinated in the desktop readiness session
 
 Baseline inspected: local `main` at `5b26d3441607a52fc520fa16c9b05bfa55e51eb4`, initially clean. The required-contents, evidence-ledger and UO crunch-map feature branches have no unique commits relative to that local main. Existing Kanban workers retain ownership of their active tasks; this session must not duplicate or overwrite them.

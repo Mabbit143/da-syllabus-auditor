@@ -301,7 +301,7 @@ export async function runAudit(
     signalsOf.set(id, found);
     if (failures) {
       areaFailed.add(id);
-      skipped.push(`${title} could not be fully assessed: ${failures} of ${chunks.length} ${chunks.length === 1 ? "section" : "sections"} of the text failed analysis.`);
+      skipped.push(`${title} — we couldn’t fully check this area because ${failures} of ${chunks.length} ${chunks.length === 1 ? "section" : "sections"} didn’t finish analyzing.`);
     }
   });
 
@@ -498,7 +498,7 @@ export async function runAudit(
   // Graded attendance is reported from the ledger whether or not the model proposed it this run.
   if (attendance && !flags.some((f) => f.kind === "attendance")) addLedgerAttendance();
   if (attendanceRejected) {
-    skipped.push(`${attendanceRejected} attendance ${attendanceRejected === 1 ? "finding was" : "findings were"} left out: the passage offered says attendance is not graded, measures absences against a threshold, or does not state the figure or consequence proposed.`);
+    skipped.push(`${attendanceRejected} attendance note${attendanceRejected === 1 ? "" : "s"} skipped — the quoted text doesn’t clearly state how attendance affects the grade, so that specific claim couldn’t be verified.`);
   }
 
   // Grade weights: the printed table is the source. Only when the ledger finds no table does the
@@ -571,7 +571,7 @@ export async function runAudit(
   assessments.sort((x, y) => x.week - y.week || x.what.localeCompare(y.what));
   if (unplaced) {
     console.log(`[audit] dropped ${unplaced} assessment(s) whose quote did not support the proposed week`);
-    skipped.push(`${unplaced} ${unplaced === 1 ? "deadline was" : "deadlines were"} left off the week map: the passage offered for ${unplaced === 1 ? "it" : "them"} does not state which week ${unplaced === 1 ? "it falls" : "they fall"} in.`);
+    skipped.push(`${unplaced} deadline${unplaced === 1 ? "" : "s"} not placed on the calendar — the quote doesn’t say which week ${unplaced === 1 ? "it’s" : "they’re"} due.`);
   }
 
   const pageOf = (id: string) => passages.find((p) => p.id === id)?.page ?? 0;
