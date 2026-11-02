@@ -6,9 +6,10 @@ import { ocrPages } from "@/lib/ocr";
 import { mergePieces } from "@/lib/merge";
 import { normalizeCourseCode } from "@/lib/departments";
 import PrivacyDisclosure from "@/components/PrivacyDisclosure";
+import { inferTermId } from "@/lib/term";
 import type { Page } from "@/lib/types";
 
-export interface AuditInput { fileName: string; pageCount: number; pages: Page[]; courseCode?: string; scanned?: boolean }
+export interface AuditInput { fileName: string; pageCount: number; pages: Page[]; courseCode?: string; scanned?: boolean; termId?: string | null }
 type Source = Extracted & { file: File; scanned?: boolean; needsOcr?: boolean };
 type Piece = { id: number; label: string; kind: "text" | "file"; text: string; source?: Source; reading?: boolean; error?: string };
 const blankPiece = (id: number): Piece => ({ id, label: "", kind: "text", text: "" });
@@ -21,6 +22,10 @@ export default function SyllabusInput({ disclosure, signedIn, onAudit }: {
   const [source, setSource] = useState<Source>();
   const [pieces, setPieces] = useState<Piece[]>([blankPiece(0)]);
   const [courseCode, setCourseCode] = useState("");
+  const currentYear = new Date().getFullYear();
+  const [termSeason, setTermSeason] = useState<"winter"|"spring"|"summer"|"fall"|"unknown">("unknown");
+  const [termYear, setTermYear] = useState<number>(currentYear);
+  const years = [currentYear - 1, currentYear, currentYear + 1];
   const [reading, setReading] = useState(false);
   const [busy, setBusy] = useState(false);
   const [stage, setStage] = useState("");
@@ -43,8 +48,17 @@ export default function SyllabusInput({ disclosure, signedIn, onAudit }: {
       const extracted = await extractPages(file);
       if (!current()) return;
       const next = { ...extracted, file, needsOcr: !hasText(extracted.pages, pieceId === undefined ? 200 : 20) };
-      if (pieceId === undefined) setSource(next);
-      else setPieces((prev) => prev.map((p) => p.id === pieceId ? { ...p, source: next } : p));
+      if (pieceId === undefined) {
+        setSource(next);
+        if (termSeason === "unknown") {
+          const inferred = inferTermId({ fileName: file.name, text: next.pages.map((pg) => pg.text).join(" ") });
+          if (inferred) {
+            const [y, s] = inferred.split("-");
+            setTermYear(Number(y));
+            setTermSeason(s as "winter"|"spring"|"summer"|"fall");
+          }
+        }
+      } else setPieces((prev) => prev.map((p) => p.id === pieceId ? { ...p, source: next } : p));
     } catch (err) {
       if (!current()) return;
       console.error("[input] PDF extraction failed:", err);
@@ -78,6 +92,7 @@ export default function SyllabusInput({ disclosure, signedIn, onAudit }: {
 
   async function audit() {
     if (busy || request.current) return;
+    if (termSeason === "unknown") { setError("Please choose the term for this syllabus (e.g. Spring 2025) so due dates land on the right semester."); return; }
     setError("");
     let input: AuditInput;
     if (multi) {
@@ -87,11 +102,13 @@ export default function SyllabusInput({ disclosure, signedIn, onAudit }: {
         setError("Add content and a label to every piece, or remove unused pieces. Scanned pieces need pasted text; use Single PDF for OCR."); return;
       }
       const merged = mergePieces(pieces.map((p) => ({ label: p.label.trim(), pages: p.kind === "text" ? [{ pageNumber: 1, text: p.text.trim() }] : p.source!.pages })));
-      input = { ...merged, fileName: `${normalized ? `${normalized} — ` : ""}Combined syllabus (${pieces.length} pieces)`, ...(normalized ? { courseCode: normalized } : {}) };
+      const termIdM = `${termYear}-${termSeason}`;
+      input = { ...merged, fileName: `${normalized ? `${normalized} — ` : ""}Combined syllabus (${pieces.length} pieces)`, ...(normalized ? { courseCode: normalized } : {}), termId: termIdM };
     } else {
       if (!source) return;
       if (source.needsOcr) { setError("Could not read this PDF. Choose another file or paste its text in Combine pieces."); return; }
-      input = { fileName: source.file.name, pages: source.pages, pageCount: source.pageCount, scanned: source.scanned };
+      const termId = `${termYear}-${termSeason}`;
+      input = { fileName: source.file.name, pages: source.pages, pageCount: source.pageCount, scanned: source.scanned, termId };
     }
     const controller = new AbortController();
     request.current = controller;
@@ -142,6 +159,24 @@ export default function SyllabusInput({ disclosure, signedIn, onAudit }: {
         <button className="link" type="button" disabled={busy} onClick={() => { selection.current++; setSource(undefined); setError(""); }}>Remove PDF</button>
       </> : <ol>{pieces.map((p, i) => <li key={p.id}>{p.label || `Piece ${i + 1} — label needed`} · {p.kind === "text" ? `Text · ${p.text.trim() ? "1 page" : "add text"}` : p.source ? `${p.source.file.name} · ${p.source.pageCount} pages${p.source.needsOcr ? " · no selectable text; paste text instead" : " · locally extracted"}` : "PDF not ready"}</li>)}</ol>}
     </section>}
+    <fieldset className="term-picker" aria-label="Term for this syllabus" style={{ margin: "1rem 0", border: "1px solid var(--border)", padding: "0.75rem" }}>
+      <legend>Which term is this syllabus for?</legend>
+      <p className="muted" style={{ marginTop: 0 }}>We need the term to place due dates on your calendar correctly. Choose the term that matches the syllabus — not today&apos;s date.</p>
+      <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap", alignItems: "center" }}>
+        <label>Term <select value={termSeason} onChange={(e) => setTermSeason(e.target.value as never)} disabled={busy}>
+          <option value="unknown">— Select term —</option>
+          <option value="winter">Winter</option>
+          <option value="spring">Spring</option>
+          <option value="summer">Summer</option>
+          <option value="fall">Fall</option>
+        </select></label>
+        <label>Year <select value={termYear} onChange={(e) => setTermYear(Number(e.target.value))} disabled={busy || termSeason === "unknown"}>
+          {years.map((y) => <option key={y} value={y}>{y}</option>)}
+        </select></label>
+        {termSeason !== "unknown" && <span className="muted">→ {termYear}-{termSeason}</span>}
+      </div>
+      {termSeason === "unknown" && <p className="warn" style={{ marginTop: "0.5rem" }}>Pick a term before auditing — dates will be estimated from week numbers in that term.</p>}
+    </fieldset>
     <PrivacyDisclosure disclosure={disclosure} signedIn={signedIn} />
     <div className="actions">
       {!multi && source?.needsOcr ? <>

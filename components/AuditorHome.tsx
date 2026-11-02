@@ -179,7 +179,7 @@ export default function AuditorHome({ disclosure, departmentEvidence }: { disclo
       const report: AuditReport = { ...data.report, ...(input.courseCode ? { courseCode: input.courseCode } : {}), ...(input.scanned ? { textSource: "ocr" } : {}) };
       const id = crypto.randomUUID();
       const createdAt = new Date().toISOString();
-      const termId = inferTermId({ fileName: input.fileName, text: input.pages.map((p) => p.text).join(" ") });
+      const termId = (input as { termId?: string | null }).termId ?? inferTermId({ fileName: input.fileName, text: input.pages.map((p) => p.text).join(" ") });
       update([...courses, { id, report, pages: input.pages, createdAt, termId }]);
       
       setSaveStatus({ id, state: "saving" });
