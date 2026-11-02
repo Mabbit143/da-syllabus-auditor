@@ -11,6 +11,7 @@ import { DIMENSION_EXPLAINER } from "@/lib/rubric";
 import { AREA_LABELS, areaStatus } from "@/lib/report-presentation";
 import { POLICY_TOPICS, TOPIC_LABEL, TOPIC_PLAIN, type Relation } from "@/lib/policy/types";
 import type { AuditReport, Page } from "@/lib/types";
+import { buildIcs, downloadIcs } from "@/lib/ics";
 
 const STATUS_TEXT = {
   strong: "Strong",
@@ -106,6 +107,25 @@ export default function Report({ report, pages, policy }: { report: AuditReport;
           {risk ? `${risk.explanation} (${riskPage === undefined ? "page unknown" : pageLocator(pages, riskPage)})` : "No supported policy risk was identified in the assessed text."}
         </p>
       </section>
+
+      {report.assessments.length > 0 && (
+        <section>
+          <h3>Calendar</h3>
+          <p className="muted">
+            {report.assessments.length} dated {report.assessments.length === 1 ? "item" : "items"} found (week numbers from the syllabus). Add them to your calendar and verify the dates — week numbers are estimates.
+          </p>
+          <button
+            type="button"
+            onClick={() => {
+              const ics = buildIcs({ fileName: report.fileName, assessments: report.assessments });
+              const base = report.fileName.replace(/\.pdf$/i, "");
+              downloadIcs(`${base}-due-dates.ics`, ics);
+            }}
+          >
+            Download due dates (.ics)
+          </button>
+        </section>
+      )}
 
       <section>
         <h3>Five dimensions</h3>

@@ -2,6 +2,7 @@
 
 import type { AuditReport } from "@/lib/types";
 import { previousTermId, termLabel, termOf } from "@/lib/term";
+import { buildIcs, downloadIcs } from "@/lib/ics";
 
 export interface Course {
   id: string;
@@ -135,6 +136,27 @@ export default function TermView({ courses, onOpen, onRemove }: {
         ))}
       </div>
       <p className="muted">The map covers UO&rsquo;s {WEEKS}-week term. Highlighted weeks have 3 or more assessments across your courses. Hover a week to list them.</p>
+      {current.length > 0 && current.flatMap((c) => c.report.assessments).length > 0 && (
+        <p>
+          <button
+            type="button"
+            onClick={() => {
+              const all = current.flatMap((c) => c.report.assessments.map((a) => ({ ...a, course: c.report.fileName })));
+              // build combined ICS — keep each course's dates separate but in one file
+              const termId = current[0]?.termId ?? null;
+              const ics = buildIcs({
+                fileName: `term-${termLabel(thisTerm)}`,
+                termId,
+                assessments: current.flatMap((c) => c.report.assessments),
+                courseLabel: `${termLabel(thisTerm)} — all courses`,
+              });
+              downloadIcs(`${termId ?? termLabel(thisTerm).replace(/\s+/g, "-").toLowerCase()}-all-due-dates.ics`, ics);
+            }}
+          >
+            Download all due dates for {termLabel(thisTerm)} (.ics)
+          </button>
+        </p>
+      )}
       {outsideWeeks.length > 0 && (
         <div role="region" aria-label="Assessments outside the term map">
           <h5>Assessments outside the {WEEKS}-week map</h5>
