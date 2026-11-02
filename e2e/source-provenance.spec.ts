@@ -137,6 +137,8 @@ test("combining labeled pasted pieces retains input provenance through a failed 
   });
   await page.goto("/");
   await page.getByRole("button", { name: "Combine pieces instead" }).click();
+  // Term is required before Audit (commit 0f43c24); pasted pieces carry no inferable term.
+  await page.locator("fieldset.term-picker select").first().selectOption("fall");
   await page.getByLabel("Label (e.g. “Grading policy page”)").fill(LABELS[0]);
   await page.getByLabel("Text for piece 1", { exact: true }).fill(TEXTS[0]);
   await page.getByRole("button", { name: "Add another piece", exact: true }).click();

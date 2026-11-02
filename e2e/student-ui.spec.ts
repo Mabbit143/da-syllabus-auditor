@@ -16,6 +16,9 @@ test("PDF selection reviews local pages before deliberate analysis and preserves
   });
   await page.goto("/");
   await page.getByLabel("Upload syllabus PDF").setInputFiles(fixture("syllabus.pdf"));
+  // Term is required before Audit (commit 0f43c24); this fixture's name and text carry no
+  // inferable term, so the student picks one like the term picker asks them to.
+  await page.locator("fieldset.term-picker select").first().selectOption("fall");
   const review = page.getByRole("region", { name: "Source review" });
   await expect(review).toContainText("syllabus.pdf");
   await expect(review).toContainText("1 page");

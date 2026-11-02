@@ -60,6 +60,8 @@ test("a student uploads a syllabus and reads a verified audit", async ({ page })
   await mockAudit(page);
   await page.goto("/");
   await page.getByLabel("Upload syllabus PDF").setInputFiles(fixture("syllabus.pdf"));
+  // Fixtures carry no inferable term, and Term is required before Audit (commit 0f43c24).
+  await page.locator("fieldset.term-picker select").first().selectOption("fall");
   await expect(page.getByRole("button", { name: "Audit syllabus", exact: true })).toBeDisabled();
   await page.getByRole("button", { name: "Audit syllabus", exact: true }).click();
 
@@ -83,11 +85,13 @@ test("two syllabi show a term view with a crunch week, saved across reloads", as
   await mockAudit(page, 5);
   await page.goto("/");
   await page.getByLabel("Upload syllabus PDF").setInputFiles(fixture("syllabus.pdf"));
+  await page.locator("fieldset.term-picker select").first().selectOption("fall");
   await expect(page.getByRole("button", { name: "Audit syllabus", exact: true })).toBeDisabled();
   await page.getByRole("button", { name: "Audit syllabus", exact: true }).click();
   await expect(page.getByRole("heading", { name: "Overall read" })).toBeVisible();
   await page.getByRole("button", { name: "Back to term view" }).click();
   await page.getByLabel("Upload syllabus PDF").setInputFiles(fixture("syllabus.pdf"));
+  await page.locator("fieldset.term-picker select").first().selectOption("fall");
   await expect(page.getByRole("button", { name: "Audit syllabus", exact: true })).toBeDisabled();
   await page.getByRole("button", { name: "Audit syllabus", exact: true }).click();
   await expect(page.getByRole("heading", { name: "Overall read" })).toBeVisible();
@@ -110,6 +114,7 @@ test("assessments in week 10 populate the last UO term box", async ({ page }) =>
   await mockAudit(page, 10);
   await page.goto("/");
   await page.getByLabel("Upload syllabus PDF").setInputFiles(fixture("syllabus.pdf"));
+  await page.locator("fieldset.term-picker select").first().selectOption("fall");
   await expect(page.getByRole("button", { name: "Audit syllabus", exact: true })).toBeDisabled();
   await page.getByRole("button", { name: "Audit syllabus", exact: true }).click();
   await expect(page.getByRole("heading", { name: "Overall read" })).toBeVisible();
@@ -126,6 +131,7 @@ test("assessments beyond week 10 remain visible and saved outside the map", asyn
   await mockAudit(page, 11);
   await page.goto("/");
   await page.getByLabel("Upload syllabus PDF").setInputFiles(fixture("syllabus.pdf"));
+  await page.locator("fieldset.term-picker select").first().selectOption("fall");
   await expect(page.getByRole("button", { name: "Audit syllabus", exact: true })).toBeDisabled();
   await page.getByRole("button", { name: "Audit syllabus", exact: true }).click();
   await expect(page.getByRole("heading", { name: "Overall read" })).toBeVisible();
@@ -162,6 +168,8 @@ test("a PDF with no readable text fails plainly and never calls the API", async 
   });
   await page.goto("/");
   await page.getByLabel("Upload syllabus PDF").setInputFiles(fixture("blank.pdf"));
+  // Term is checked before the unreadable-PDF message, so pick it to reach the OCR error.
+  await page.locator("fieldset.term-picker select").first().selectOption("fall");
   await expect(page.getByRole("button", { name: "Audit syllabus", exact: true })).toBeVisible();
   await page.getByRole("button", { name: "Audit syllabus", exact: true }).click();
   await expect(page.locator("p[role=alert]")).toContainText("Could not read this PDF");
@@ -172,6 +180,7 @@ test("an API failure shows a readable error and the student can retry", async ({
   await page.route("**/api/audit", (route) => route.fulfill({ status: 500, json: { error: { code: "audit_failed", message: "The audit failed. Please retry." } } }));
   await page.goto("/");
   await page.getByLabel("Upload syllabus PDF").setInputFiles(fixture("syllabus.pdf"));
+  await page.locator("fieldset.term-picker select").first().selectOption("fall");
   await expect(page.getByRole("button", { name: "Audit syllabus", exact: true })).toBeDisabled();
   await page.getByRole("button", { name: "Audit syllabus", exact: true }).click();
   await expect(page.locator("p[role=alert]")).toContainText("The audit failed. Please retry.");

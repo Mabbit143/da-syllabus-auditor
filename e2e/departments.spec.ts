@@ -33,6 +33,9 @@ test("combined inputs keep a course identifier across term view, reload and reop
   });
   await page.goto("/");
   await page.getByRole("button", { name: "Combine pieces instead" }).click();
+  // The term picker is required before Audit (owner commit 0f43c24); combined pieces carry no
+  // inferable term, so the specs pick one explicitly like a real student would.
+  await page.locator("fieldset.term-picker select").first().selectOption("fall");
   await page.getByLabel("Course code (optional)").fill("anth341");
   await page.getByLabel(/Label \(e.g./).fill("Course overview");
   await page.getByLabel("Text for piece 1").fill("Late work is not accepted. ".repeat(12));
@@ -107,6 +110,8 @@ test("invalid course identifiers block analysis and a failed audit preserves a v
   await page.getByLabel("Course code (optional)").fill("Anthropology");
   await page.getByLabel(/Label \(e.g./).fill("Overview");
   await page.getByLabel("Text for piece 1").fill("Late work is not accepted. ".repeat(12));
+  // A term must be picked before the invalid-identifier check owns the alert.
+  await page.locator("fieldset.term-picker select").first().selectOption("fall");
   await expect(page.getByRole("button", { name: "Audit combined syllabus" })).toBeEnabled();
   await page.getByRole("button", { name: "Audit combined syllabus" }).click();
   await expect(page.locator("main p[role=alert]")).toContainText("Enter a course code");
