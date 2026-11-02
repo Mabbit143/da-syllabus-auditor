@@ -41,8 +41,7 @@ export default function FixKit({ report, pages }: { report: AuditReport; pages?:
       {!kits && (
         <>
           <p className="muted">
-            {findings.length} problem{findings.length === 1 ? "" : "s"} found. Get questions to ask, a message you can send, and
-            clearer wording to suggest for each. It is based only on the quotes above and is not legal or academic advice.
+            {findings.length} problem{findings.length === 1 ? "" : "s"} found. Get questions to ask and a message you can send for each. It is based only on the quotes above and is not legal or academic advice.
           </p>
           <button type="button" className="noprint" onClick={generate} disabled={busy}>{busy ? "Writing…" : "Get fixes"}</button>
         </>
@@ -68,14 +67,6 @@ export default function FixKit({ report, pages }: { report: AuditReport; pages?:
               <>
                 <p className="signal">A message you could send</p>
                 <p className="draft">{k.request}</p>
-              </>
-            )}
-            {k.rewrite && (
-              <>
-                <p className="signal">Wording to suggest to the instructor</p>
-                {k.rewrite.original && <p className="muted">Now: &ldquo;{k.rewrite.original}&rdquo;</p>}
-                <p className="draft">{k.rewrite.suggested}</p>
-                {k.rewrite.why && <p className="muted">{k.rewrite.why}</p>}
               </>
             )}
           </div>
