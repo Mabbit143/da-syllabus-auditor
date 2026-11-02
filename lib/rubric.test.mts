@@ -9,8 +9,8 @@ const { characterizeDimension, overallRead } = await import("./rubric.ts");
 test("characterizeDimension names weak/strong plainly, per dimension", () => {
   assert.equal(characterizeDimension("punitive", "weak"), "Punitive");
   assert.equal(characterizeDimension("punitive", "strong"), "Flexible");
-  assert.equal(characterizeDimension("perspectives", "weak"), "Single-tradition");
-  assert.equal(characterizeDimension("perspectives", "strong"), "Pluralistic");
+  assert.equal(characterizeDimension("perspectives", "weak"), "One voice");
+  assert.equal(characterizeDimension("perspectives", "strong"), "Many voices");
   assert.equal(characterizeDimension("transparency", "weak"), "Opaque");
   assert.equal(characterizeDimension("accessibility", "weak"), "Exclusionary");
   assert.equal(characterizeDimension("hidden", "weak"), "Discretionary");

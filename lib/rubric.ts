@@ -68,7 +68,7 @@ const CHARACTERIZATION: Record<Dimension, { weak: string; strong: string }> = {
   transparency: { weak: "Opaque", strong: "Transparent" },
   punitive: { weak: "Punitive", strong: "Flexible" },
   accessibility: { weak: "Exclusionary", strong: "Accessible" },
-  perspectives: { weak: "Single-tradition", strong: "Pluralistic" },
+  perspectives: { weak: "One voice", strong: "Many voices" },
   hidden: { weak: "Discretionary", strong: "Explicit" },
 };
 

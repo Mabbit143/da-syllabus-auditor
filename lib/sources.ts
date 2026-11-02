@@ -1,7 +1,9 @@
 import type { SearchResult } from "./meta";
 import type { AuthorEvidence, Candidates } from "./types";
 
-export const MAX_AUTHORS = 16;
+// The spec's limit (docs/spec-da-syllabus-auditor-v1.md, source authorship check): 12 distinct
+// authors per audit. Owner confirmed 2026-11-02 that 12 resolves the 12-vs-16 discrepancy in code's favor of the spec.
+export const MAX_AUTHORS = 12;
 const MIN_QUOTE = 12;
 const MAX_QUOTE = 400;
 
