@@ -1,16 +1,46 @@
 # Demo script (3:00)
 
-Record on `https://da-syllabus-auditor-hkrr.vercel.app`, signed in, with the demo syllabus (`GamesSyllabus2025_clean.pdf`). The audit takes about 47 seconds: record it once, then cut the wait to a few seconds. Re-fetch the UO quotes on the day; the pages can change.
+Recording plan updated November 3, 2026. The owner confirmed the signed-in
+submission form specifies a three-minute demo and repository link only.
+See [requirements](hackathon-requirements-verified.md).
+
+Use a synthetic syllabus whose expected passages you have checked, or a syllabus
+the owner chooses directly in the browser. Do not copy private demo documents or
+answer-key notes into the repository. Prepare the report before recording and
+show the real result; if the wait is edited, label the cut. Current feature-branch
+behavior must be demonstrated from the local app unless a later deployment is
+separately verified. The private Blindspot screen runs on this computer at
+`http://127.0.0.1:3000/blindspot` and requires the owner's account.
 
 | Time | Screen | Say |
 | --- | --- | --- |
-| 0:00 to 0:20 | Home page, upload box | "Nobody reads a syllabus against their school's own rules, and most students don't know who to ask. This app does both, and every claim is a quote you can check." |
-| 0:20 to 1:00 | Upload the PDF. Cut the wait. Show "Start here" | "I upload a real syllabus. Meta's Muse Spark reads it, but code decides every grade: a finding with no exact, verified quote is dropped. This box is what to ask the instructor first: the grading section says 400 points, the scale says 100." |
-| 1:00 to 1:25 | Click "See in context" on a quote, then "Get fixes" | "Each finding links to the exact page. Fixes give a question, a message to send, and suggested wording." |
-| 1:25 to 2:00 | "Against your school's own policies" | "Now the syllabus against UO's own written policies: eleven topics. Meta and Baseten's Muse Spark Open each read it, and a verdict shows only where they agree. Where they don't, it says disputed instead of guessing." |
-| 2:00 to 2:20 | "Who do I go to?" page, pick one situation | "When something is wrong, the app names the office from UO's own page, quotes it, and drafts the message. It never states facts about the student." |
-| 2:20 to 2:40 | Upload a scanned PDF | "Scanned syllabi go to OCR on Modal. The images aren't stored." |
-| 2:40 to 2:55 | Schools page | "Signed in, my results feed a private list by school, topic and instructor. It is owner-only. N syllabi so far; a group is flagged at five." (Say the real count.) |
-| 2:55 to 3:00 | Title card | "DA Syllabus Auditor. Meta, Baseten, Modal. Quotes you can check." |
+| 0:00–0:15 | Auditor upload | “A syllabus shapes a student's choices before class even starts. This app explains the rules, checks inclusivity, and helps the student decide what to ask next.” |
+| 0:15–0:45 | Prepared audit; open one supporting passage | “Meta proposes evidence. Code checks the exact quoted words and computes the five dimensions. Here is the passage behind this result, on its source page.” |
+| 0:45–1:10 | Separate required-content and policy results | “The auditor also checks required syllabus contents and compares the document with UO's own policies. Missing information, uncertain coverage, and historical applicability stay visible.” |
+| 1:10–1:25 | One verified fix or next-step result | “The result should help the student act: a question to ask or wording to discuss, grounded in what the syllabus actually says.” |
+| 1:25–1:45 | Owner-only Blindspot source coverage | “The second half is Blindspot: a private engine gathering public UO policies, administrative documents, institutional statements, and reporting. It runs on a schedule and preserves source versions.” |
+| 1:45–2:10 | Open a collected official record and a reporting source | “A URL or search snippet is not evidence. The engine fetches the document, records its origin, and keeps exact passages. Incomplete pages and scans awaiting review are identified.” |
+| 2:10–2:40 | Saved synthesis; open an evidence passage and uncertainty | “An Investigator proposes leads and a Skeptic challenges them. This saved pass retained two incident proposals and proposed zero recurring patterns. These are private research leads; we have not established a discrimination finding.” |
+| 2:40–2:55 | Source lineage review and worker status | “Reports can repeat the same originating claim. The owner can review shared origins and conflicting evidence. The scheduled worker has a daily model limit, and pending analysis waits when that allowance is spent.” |
+| 2:55–3:00 | Closing screen | “Useful answers for students. A traceable record for institutional accountability.” |
 
-Before recording: confirm `app_owners` has your account (Schools page), the newest deployment is Ready, and the five "Who do I go to?" answers match UO's pages.
+## Recording checks
+
+- Sign in through the real owner account and confirm the dashboard opens. Actual
+  owner browser access and saved reviews remain unverified; do not substitute a
+  mocked browser test or claim-context database probe for this check.
+- Review the chosen audit's grades, quotations, policy applicability, and next
+  steps before recording. Use only results actually present on screen.
+- Read current source counts and task state at recording time. Counts are intake
+  coverage, not proof of complete administrative coverage or independent support.
+- Confirm the saved synthesis still shows two incident proposals and zero
+  patterns before using that line. A later result requires updated narration.
+- Keep account identifiers, student text, tokens, and unrelated private research
+  out of the recording. Owner-only access does not itself approve publication of
+  a private lead; use a synthetic view if a real lead is not chosen for sharing.
+- Automatic OCR, live reviewed-scan analysis, a verified recurring finding, and
+  deployment of this feature branch have not been demonstrated. Do not narrate
+  them as working live features. The scan workflow currently requires owner
+  image-backed passage review.
+- Rehearse the full recording within three minutes. Recording, publication,
+  remote push, and submission have not been performed by this script update.

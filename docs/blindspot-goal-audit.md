@@ -30,11 +30,11 @@ authorize publication, push, merge or deployment.
 | Resumable limits and recovery | Leased jobs, stale completion rejection, persistent errors, daily collection retry ceiling, host pacing and model cache | Failed/blocked jobs remain visible; a partial run is not a full corpus review |
 | Budget | Actual task arguments retain 12/day; recorded usage is 14 after the owner's consumed one-time two-step exception | No further exception is authorized; additional live inference waits for the normal UTC reset |
 | Regression verification | Latest engine code passed 145 tests; combined app passed 238 Node and 40 mocked browser tests; typecheck/build/lint passed for UI changes | Offline/mocked checks cannot establish live model quality, real account behavior or deployment state |
-| Hackathon delivery | Official Meta page confirms November 4, 9 PM ET deadline and Meta/open-weight tooling; organizer lists Baseten as an inference partner | Full participant rules, current submission form/video requirements and actual submission remain unverified |
+| Hackathon delivery | Official deadline/model route and public rules verified; judging weights and submission portal confirmed | Owner confirmed three-minute demo and repository link only; account-specific acceptance and actual submission remain unverified |
 
 The main remaining gates are live verification: owner sign-in,
 owner source approval where scans are used, representative live analysis after
-the normal budget reset, and participant-specific submission checks. Keep the
+the normal budget reset, and remaining participant-specific submission checks. Keep the
 goal active; do not relabel these as completed because collection continues.
 
 Official event references checked during this audit:
@@ -43,6 +43,11 @@ Official event references checked during this audit:
 The public waiver route fetched successfully but exposed only a loading shell to
 the text reader; it did not establish the full rules. No terms were accepted,
 account changed or submission made.
+
+A later fresh-browser GET check resolved that loading shell and read the public
+rules. The submission form itself redirects to login. See
+[verified requirements](hackathon-requirements-verified.md) for the distinction
+between public rules and the owner-confirmed protected form requirements.
 
 Department scope follow-up: schema-3 quoted labels, legacy-safe projection and
 unit/Not recorded filtering passed 133 engine tests and three private browser
@@ -71,3 +76,11 @@ read-only job/run watcher. It saved previously absent story 497 (5,763 character
 during that run and reused parent 420 unchanged. Its analysis remains pending;
 model usage stayed fourteen and real owner origin reviews remain zero. No
 foreground collection worker or schedule restart was used for this observation.
+
+Recording-plan follow-up: the owner confirmed the protected submission form asks
+for a three-minute demo and repository link only. The demo script now includes
+both app halves and removes unsupported claims of automatic OCR and deployment
+of the current feature branch. Recording and actual owner-session review remain
+open. A current database probe found zero archive-latest records shadowing an
+existing live version; no source-history change was justified. The Windows task
+was directly rechecked as Running outside the restricted task-query sandbox.
