@@ -1,7 +1,7 @@
 import { DIMENSIONS, DIMENSION_EXPLAINER, FLAG_BASES, SIGNALS, characterizeDimension, flagSeverity, gradeDimension, overallRead, weightSum } from "./rubric";
 import { attendanceFact, buildLedger, weekSupport, type EvidenceLedger, type GradeComponentFact, type LedgerCitation } from "./ledger";
 import type {
-  AuditReport, AuditRequest, Candidates, Dimension, DimensionResult, FlagKind, FlagResult, Page, Passage, Severity,
+  AuditReport, AuditRequest, Candidates, Dimension, DimensionResult, FlagKind, FlagResult, Page, Passage, Severity, SourceAuthors,
 } from "./types";
 import { findConflicts } from "./agent";
 import { withScaleCheck } from "./gradecheck";
@@ -268,15 +268,16 @@ export async function runAudit(
   );
 
   // Reading list -> author bio lookups, independent of the main extraction.
+  type AuthorLookupResult = Awaited<ReturnType<typeof checkAuthors>>;
   const authorLookups = (async () => {
-    if (!search) return { readings: [] as Candidates["readings"], bios: [] as Awaited<ReturnType<typeof checkAuthors>> };
+    if (!search) return { readings: [] as Candidates["readings"], bios: [] as AuthorLookupResult["hits"], sourceAuthors: undefined as SourceAuthors | undefined };
     const lists = await Promise.allSettled(chunks.map((chunk) => callJson(callModel, READINGS_INSTRUCTIONS, chunk.map(pageBlock).join("\n\n"))));
     const readings = lists.flatMap((l) => (l.status === "fulfilled" && Array.isArray(l.value.readings) ? (l.value.readings as Candidates["readings"]) : []));
-    const bios = await checkAuthors(readings, search, (page, quote) => verifyQuote(req.pages, page, quote) !== null, callModel);
-    return { readings, bios };
+    const { hits, sourceAuthors } = await checkAuthors(readings, search, (page, quote) => verifyQuote(req.pages, page, quote) !== null, callModel);
+    return { readings, bios: hits, sourceAuthors: sourceAuthors as SourceAuthors | undefined };
   })().catch((err) => {
     console.error("[sources] failed:", err instanceof Error ? err.message : err);
-    return { readings: [] as Candidates["readings"], bios: [] as Awaited<ReturnType<typeof checkAuthors>> };
+    return { readings: [] as Candidates["readings"], bios: [] as AuthorLookupResult["hits"], sourceAuthors: undefined as SourceAuthors | undefined };
   });
 
   const consistency = findConflicts(req.pages).catch((err) => {
@@ -284,7 +285,7 @@ export async function runAudit(
     return [];
   });
 
-  const [results, dimensionResults, { bios }, modelConflicts] = await Promise.all([extraction, dimensionPasses, authorLookups, consistency]);
+  const [results, dimensionResults, { bios, sourceAuthors }, modelConflicts] = await Promise.all([extraction, dimensionPasses, authorLookups, consistency]);
   const conflicts = withScaleCheck(modelConflicts, req.pages);
 
   // Each area's own proposals, and whether every pass for it answered.
@@ -634,5 +635,6 @@ export async function runAudit(
     overall: overallRead(dimensions),
     passages,
     ...(sourcesOf(req.pages) ? { sources: sourcesOf(req.pages) } : {}),
+    ...(sourceAuthors ? { sourceAuthors } : {}),
   };
 }

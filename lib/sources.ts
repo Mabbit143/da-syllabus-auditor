@@ -1,5 +1,5 @@
 import type { SearchResult } from "./meta";
-import type { AuthorEvidence, Candidates } from "./types";
+import type { AuthorEvidence, Candidates, SourceAuthors } from "./types";
 
 // The spec's limit (docs/spec-da-syllabus-auditor-v1.md, source authorship check): 12 distinct
 // authors per audit. Owner confirmed 2026-11-02 that 12 resolves the 12-vs-16 discrepancy in code's favor of the spec.
@@ -86,7 +86,7 @@ export async function checkAuthors(
   search: (instructions: string, input: string) => Promise<{ text: string; results: SearchResult[] }>,
   verifyReading: (page: number, quote: string) => boolean,
   ask: (instructions: string, input: string) => Promise<string>,
-): Promise<BioCheck[]> {
+): Promise<{ hits: BioCheck[]; sourceAuthors: SourceAuthors }> {
   const seen = new Set<string>();
   const verified = readings.filter((r) => {
     const author = String(r?.author ?? "").trim();
@@ -100,6 +100,12 @@ export async function checkAuthors(
   const picked = verified.length <= MAX_AUTHORS ? verified : sample(verified, MAX_AUTHORS);
   console.log(`[sources] ${readings.length} readings proposed, ${verified.length} verified distinct authors, ${picked.length} looked up${verified.length > MAX_AUTHORS ? " (random sample)" : ""}`);
   const out: BioCheck[] = [];
+  // Every sampled author is recorded with its outcome, whatever it was: the report's Perspectives
+  // section must show what the check actually did even when no bio counts, so the grade is auditable.
+  const checks: NonNullable<SourceAuthors["authors"]> = [];
+  const note = (author: string, title: string, outcome: SourceAuthors["authors"][number]["outcome"], url?: string) => {
+    checks.push({ author, title, outcome, ...(url ? { url } : {}) });
+  };
   for (let i = 0; i < picked.length; i += 8) {
     const batch = picked.slice(i, i + 8);
     const settled = await Promise.allSettled(
@@ -110,15 +116,20 @@ export async function checkAuthors(
         );
         const a = text.indexOf("{");
         const b = text.lastIndexOf("}");
-        if (a === -1 || b <= a) return null;
+        if (a === -1 || b <= a) { note(r.author, r.title, "check_failed"); return null; }
         const o = JSON.parse(text.slice(a, b + 1));
         console.log(`[sources] ${r.author}: found=${o.found} relation=${o.relation} url=${o.url}`);
         // Owner decision 2026-11-02: keep both relations. A bio that states a background outside
         // the covered community is judged only from the author's own stated bio, never the name —
         // it becomes the P7 negative for "Whose perspectives are in the room".
-        if (!o.found || (o.relation !== "insider_stated" && o.relation !== "outsider_stated")) return null;
+        if (!o.found) { note(r.author, r.title, "not_found"); return null; }
+        if (o.relation !== "insider_stated" && o.relation !== "outsider_stated") {
+          note(r.author, r.title, "no_stated_relation", isPublicHttp(String(o.url ?? "")) ? String(o.url) : undefined);
+          return null;
+        }
         if (!(await verifyBio(results, o.url, o.quote))) {
           console.log(`[sources] ${r.author}: bio quote failed verification (${results.length} results)`);
+          note(r.author, r.title, "bio_unverified");
           return null;
         }
         const verdict = await ask(
@@ -131,18 +142,23 @@ Claimed: ${o.relation}`,
         const vb = verdict.lastIndexOf("}");
         if (va === -1 || vb <= va || JSON.parse(verdict.slice(va, vb + 1)).supported !== true) {
           console.log(`[sources] ${r.author}: ${o.relation} not supported by the bio quote, dropped`);
+          note(r.author, r.title, "no_stated_relation", String(o.url));
           return null;
         }
+        note(r.author, r.title, o.relation, String(o.url));
         return {
           author: r.author, title: r.title, page: Number(r.page), quote: r.quote,
           evidence: { author: r.author, url: o.url, quote: squash(o.quote) }, relation: o.relation,
         } as BioCheck;
       }),
     );
-    for (const s of settled) {
-      if (s.status === "fulfilled" && s.value) out.push(s.value);
-      else if (s.status === "rejected") console.error("[sources] author lookup failed:", s.reason instanceof Error ? s.reason.message : s.reason);
+    for (let j = 0; j < settled.length; j++) {
+      const s = settled[j];
+      if (s.status === "rejected") {
+        console.error("[sources] author lookup failed:", s.reason instanceof Error ? s.reason.message : s.reason);
+        note(batch[j].author, batch[j].title, "check_failed");
+      } else if (s.value) out.push(s.value);
     }
   }
-  return out;
+  return { hits: out, sourceAuthors: { verified: verified.length, sampled: picked.length, authors: checks } };
 }

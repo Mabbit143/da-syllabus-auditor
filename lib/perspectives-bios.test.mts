@@ -137,6 +137,23 @@ test("an unconfirmed claim or an unclear relation never becomes a hit", async ()
   assert.equal(d.negative, 0);
 });
 
+test("every sampled author is recorded, including those whose bio counted for nothing", async () => {
+  // No bios mocked at all: each lookup still gets a recorded outcome ("not found"), so the
+  // report can show what the check did instead of silently omitting the reading list.
+  const { report } = await run(
+    [citation("Smith", "J., Village Life (2001)"), citation("Hall", "K., The Outsider Gaze (2002)")],
+    [],
+  );
+  const d = perspectives(report);
+  assert.equal(d.hits.length, 0);
+  const sa = report.sourceAuthors;
+  assert.ok(sa, "the report must disclose the author check");
+  assert.equal(sa.verified, 2);
+  assert.equal(sa.sampled, 2);
+  assert.deepEqual(sa.authors.map((a) => a.author).sort(), ["Hall", "Smith"]);
+  assert.ok(sa.authors.every((a) => a.outcome === "not_found"));
+});
+
 test("more verified authors than the cap are sampled at random, not by reading order", async () => {
   const authors = Array.from({ length: 20 }, (_, i) => `Author${i}`);
   const lines = authors.map((a, i) => `${a}, Outside Views (${2000 + i}).`);

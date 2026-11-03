@@ -3,20 +3,30 @@
 import { useState } from "react";
 import { pageLocator } from "@/lib/locator";
 import type { Page } from "@/lib/types";
+import { contextFromTermId } from "@/lib/term";
 import { UNKNOWN_CONTEXT, type CourseContext, type RequiredContents as ContentsResult } from "@/lib/policy/contents-types";
 
 const STATUS = { found: "Found", needs_review: "Needs review", not_assessed: "Not confirmed", not_applicable: "Not applicable" };
 const APPLICABILITY = { current_snapshot: "Compared with the saved policy snapshot", historical_unverified: "Compared with UO's current wording. Your term's wording may have been different.", unknown: "Policy applicability unknown", not_applicable: "Not applicable to this course context" };
 
-export default function RequiredContents({ result, busy, error, onRun, pages }: {
+export default function RequiredContents({ result, busy, error, onRun, pages, courseTermId }: {
   result?: ContentsResult;
   busy: boolean;
   error: string;
   onRun: (context: CourseContext) => void;
   /** The audited pages, so each quote can name its piece and page within the piece. */
   pages?: Page[];
+  /** The term picked on the upload screen, so the form does not re-ask for it. */
+  courseTermId?: string | null;
 }) {
-  const [context, setContext] = useState<CourseContext>(result?.context ?? { ...UNKNOWN_CONTEXT });
+  const [context, setContext] = useState<CourseContext>(() => {
+    if (result?.context) return result.context;
+    // The student already chose a term when uploading: carry it over rather than asking twice.
+    const fromTerm = contextFromTermId(courseTermId);
+    return fromTerm ? { ...UNKNOWN_CONTEXT, term: fromTerm.term, year: fromTerm.year } : { ...UNKNOWN_CONTEXT };
+  });
+  const stale = result && !!(result.context.term !== context.term || result.context.year !== (context.year ?? null) ||
+    result.context.level !== context.level || result.context.coreEducation !== context.coreEducation);
   return (
     <section aria-label="Required syllabus contents" className="required-contents">
       <h3>Required syllabus contents</h3>
@@ -41,6 +51,7 @@ export default function RequiredContents({ result, busy, error, onRun, pages }: 
       {(error || result?.error) && <p role="alert" className="warn">{error || result?.error}</p>}
       {result && <>
         <p><strong>Results for: {result.context.term} {result.context.year ?? "year unknown"}, {result.context.level}; Core Education: {result.context.coreEducation}.</strong></p>
+        {stale && <p className="muted">Your current selections differ from these results. Run the check again to apply them.</p>}
         <p className="muted">UO source snapshot: {result.snapshotDate}. Live wording may have changed. The standard statement is dated Fall 2026 in <a href="https://teaching.uoregon.edu/syllabus" target="_blank" rel="noopener noreferrer">UO&rsquo;s Syllabus Essentials</a>. Historical applicability requires an applicable policy version.</p>
         {result.coverage.status === "partial" && <p className="warn">Partial assessment. {result.coverage.skipped.join(" ")}</p>}
         {result.groups.map((group) => <details key={group.id} className="card">

@@ -74,6 +74,13 @@ export function inferTermId(input: { fileName?: string; text?: string }): string
   return null;
 }
 
+/** The upload page's term picker (`"2025-fall"`) → term + year, matching the required-contents form's prefill. */
+export function contextFromTermId(id: string | null | undefined): { term: TermSeason; year: number } | null {
+  if (!id) return null;
+  const { year, season } = parseTermId(id);
+  return { term: season, year };
+}
+
 export function termLabel(id: string): string {
   const { year, season } = parseTermId(id);
   return `${SEASON_LABEL[season]} ${year}`;

@@ -248,7 +248,7 @@ export default function AuditorHome({ disclosure, departmentEvidence }: { disclo
               <button type="submit">Save school</button>
             </form>
           )}
-          <Report key={open.id} report={open.report} pages={open.pages} policy={{ school: school ?? null, busy: policy.busy, error: policy.error, onRun: () => void runPolicyCheck(open.id, open.pages), contentsBusy: contentsState[open.id]?.busy, contentsError: contentsState[open.id]?.error, onRunContents: (context) => void runRequiredContents(open, context) }} />
+          <Report key={open.id} report={open.report} pages={open.pages} policy={{ school: school ?? null, busy: policy.busy, error: policy.error, onRun: () => void runPolicyCheck(open.id, open.pages), contentsBusy: contentsState[open.id]?.busy, contentsError: contentsState[open.id]?.error, onRunContents: (context) => void runRequiredContents(open, context), courseTerm: open.termId ?? null }} />
           {saveStatus.id === open.id && (
             <p className="muted noprint">
               {saveStatus.state === "saving" ? "Saving..." : saveStatus.state === "saved" ? "Saved to your account" : "Could not save to your account. Try signing in again."}

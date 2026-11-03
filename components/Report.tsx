@@ -10,7 +10,7 @@ import { pageLocator } from "@/lib/locator";
 import { DIMENSION_EXPLAINER } from "@/lib/rubric";
 import { AREA_LABELS, areaStatus } from "@/lib/report-presentation";
 import { POLICY_TOPICS, TOPIC_LABEL, TOPIC_PLAIN, type Relation } from "@/lib/policy/types";
-import type { AuditReport, Page } from "@/lib/types";
+import type { AuditReport, AuthorBioCheck, AuthorBioOutcome, Page } from "@/lib/types";
 import { buildIcs, downloadIcs } from "@/lib/ics";
 
 const STATUS_TEXT = {
@@ -58,6 +58,15 @@ const RELATION_TEXT: Record<Relation, string> = {
   disputed: "Two checks read this differently, so no verdict is shown",
 };
 
+const BIO_OUTCOME_TEXT: Record<AuthorBioOutcome, string> = {
+  insider_stated: "Public bio states a background in the community the reading covers — counts for this dimension.",
+  outsider_stated: "Public bio states a background outside it — counts against this dimension.",
+  no_stated_relation: "Bio found, but it does not state the author's own background — not counted.",
+  not_found: "No public bio found for this author.",
+  bio_unverified: "Bio found, but its text could not be verified on the page — not counted.",
+  check_failed: "The lookup failed this run.",
+};
+
 export interface PolicyProps {
   school: string | null;
   busy: boolean;
@@ -66,6 +75,8 @@ export interface PolicyProps {
   contentsBusy?: boolean;
   contentsError?: string;
   onRunContents?: (context: CourseContext) => void;
+  /** The term the student picked when uploading, so the required-contents form is prefilled. */
+  courseTerm?: string | null;
 }
 
 export default function Report({ report, pages, policy }: { report: AuditReport; pages: Page[]; policy?: PolicyProps }) {
@@ -148,6 +159,26 @@ export default function Report({ report, pages, policy }: { report: AuditReport;
               <p className="muted dim-explainer">{DIMENSION_EXPLAINER[d.dimension]}</p>
               <p className="muted">{plainSummary}</p>
               {d.notes?.map((n) => <p key={n} className="muted">{n}</p>)}
+              {/* The reading-list author check is shown in full whether or not any bio counted, so the grade is auditable. */}
+              {d.dimension === "perspectives" && report.sourceAuthors && report.sourceAuthors.authors.length > 0 && (
+                <details className="bio-audit noprint">
+                  <summary>
+                    Reading-list author check: {report.sourceAuthors.sampled} of {report.sourceAuthors.verified} author{report.sourceAuthors.verified === 1 ? "" : "s"} checked
+                    {report.sourceAuthors.sampled < report.sourceAuthors.verified ? " (random sample)" : ""}
+                  </summary>
+                  <p className="muted">
+                    The syllabus&rsquo;s own reading list was used: the public bio of each sampled author was searched, and only a bio whose own text states the author&rsquo;s background counts here. Each hit appears with its quote above.
+                  </p>
+                  <ul>
+                    {report.sourceAuthors.authors.map((a: AuthorBioCheck, i: number) => (
+                      <li key={`${a.author}-${i}`}>
+                        <strong>{a.author}</strong> — {BIO_OUTCOME_TEXT[a.outcome]}
+                        {a.url && <> <a href={a.url} target="_blank" rel="noopener noreferrer">bio source</a></>}
+                      </li>
+                    ))}
+                  </ul>
+                </details>
+              )}
               {hits.map((h) => (
                 <div key={h.passageId}>
                   <p className="signal">{h.polarity === 1 ? "+" : "−"} {h.label}</p>
@@ -238,7 +269,7 @@ export default function Report({ report, pages, policy }: { report: AuditReport;
       )}
 
       {policy?.onRunContents && (policy.school ?? report.policyCheck?.school ?? "").trim().replace(/\s+/g, " ").toLowerCase() === "university of oregon" && (
-        <RequiredContents result={report.policyCheck?.requiredContents} busy={policy.contentsBusy ?? false} error={policy.contentsError ?? ""} onRun={policy.onRunContents} pages={pages} />
+        <RequiredContents result={report.policyCheck?.requiredContents} busy={policy.contentsBusy ?? false} error={policy.contentsError ?? ""} onRun={policy.onRunContents} pages={pages} courseTermId={policy.courseTerm} />
       )}
 
       <FixKit report={report} pages={pages} />

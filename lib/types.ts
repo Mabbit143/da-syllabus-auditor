@@ -87,6 +87,23 @@ export interface Assessment {
   passageId: string;
 }
 
+/** What a sampled reading-list author's public-bio check ended at. Hits also appear as P6/P7 evidence. */
+export type AuthorBioOutcome = "insider_stated" | "outsider_stated" | "no_stated_relation" | "not_found" | "bio_unverified" | "check_failed";
+export interface AuthorBioCheck {
+  author: string;
+  title: string;
+  outcome: AuthorBioOutcome;
+  /** Where the bio was found, when one was. */
+  url?: string;
+}
+export interface SourceAuthors {
+  /** Verified distinct reading-list authors, before any cap. */
+  verified: number;
+  /** How many were looked up: all of them, or a random sample of the cap (12). */
+  sampled: number;
+  authors: AuthorBioCheck[];
+}
+
 export interface AuditReport {
   /** Set when the page text came from OCR of page images, so it may contain reading errors. */
   textSource?: "ocr";
@@ -106,6 +123,8 @@ export interface AuditReport {
   biggestRiskIndex: number | null;
   overall: Overall;
   passages: Passage[];
+  /** The reading-list author check's full outcome, so a grade is auditable even when no bio counted. */
+  sourceAuthors?: SourceAuthors;
 }
 
 export interface AuditRequest {
