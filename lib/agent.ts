@@ -77,7 +77,7 @@ export async function findConflicts(pages: Page[]): Promise<Conflict[]> {
     }
     return "Unknown tool.";
   };
-  const { turns } = await runAgent(AGENT_INSTRUCTIONS, "Audit this syllabus for internal contradictions.", TOOLS, run, 8);
+  const { turns } = await runAgent(AGENT_INSTRUCTIONS, "Audit this syllabus for internal contradictions.", TOOLS, run, 5);
   console.log(`[agent] consistency auditor finished in ${turns} turns, ${found.length} conflicts verified`);
   return found;
 }

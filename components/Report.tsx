@@ -167,7 +167,7 @@ export default function Report({ report, pages, policy }: { report: AuditReport;
                     {report.sourceAuthors.sampled < report.sourceAuthors.verified ? " (random sample)" : ""}
                   </summary>
                   <p className="muted">
-                    The syllabus&rsquo;s own reading list was used: up to 3 public bios per sampled author were searched (Wikipedia included when found), each quote verified word-for-word against its source page. Only a bio whose own text states the author&rsquo;s background counts toward the grade — a named based-at / educated-in place counts, a bare employer name does not, and a name alone never counts. Each hit appears with its quote above.
+                    The syllabus&rsquo;s own reading list was used: up to 2 public bios per sampled author were searched (Wikipedia included when found), each quote verified word-for-word against its source page. Only a bio whose own text states the author&rsquo;s background counts toward the grade — a named based-at / educated-in place counts, a bare employer name does not, and a name alone never counts. Each hit appears with its quote above.
                   </p>
                   <ul>
                     {report.sourceAuthors.authors.map((a: AuthorBioCheck, i: number) => (

@@ -79,7 +79,7 @@ async function callJson(
       return JSON.parse(raw.slice(a, b + 1));
     } catch (err) {
       console.error(`[audit] model JSON attempt ${attempt} failed:`, err instanceof Error ? err.message : err);
-      if (attempt >= 3) throw err;
+      if (attempt >= 2) throw err;
     }
   }
 }

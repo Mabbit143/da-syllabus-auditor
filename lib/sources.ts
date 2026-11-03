@@ -1,9 +1,9 @@
 import type { SearchResult } from "./meta";
 import type { AuthorEvidence, Candidates, SourceAuthors } from "./types";
 
-// The spec's limit (docs/spec-da-syllabus-auditor-v1.md, source authorship check): 12 distinct
-// authors per audit. Owner confirmed 2026-11-02 that 12 resolves the 12-vs-16 discrepancy in code's favor of the spec.
-export const MAX_AUTHORS = 12;
+// The spec's cap (docs/spec-da-syllabus-auditor-v1.md, source authorship check): 8 distinct
+// authors per audit for demo speed (was 12). Owner approved 2026-11-03 cut for hackathon.
+export const MAX_AUTHORS = 8;
 
 /** Fisher-Yates shuffle, returning a new array; used to sample qualifying authors fairly. */
 function sample<T>(items: T[], count: number): T[] {
@@ -19,7 +19,7 @@ const MAX_QUOTE = 400;
 
 export const BIO_INSTRUCTIONS = `You look up one author's public biography. Use web search. Acceptable sources: the author's own page, a publisher or university profile page, Britannica, or Wikipedia. Prefer distinct sources and include the Wikipedia page when web search returns one for this author.
 Return ONLY one JSON object: {"bios":[{"url":"https://...","quote":"exact bio text","relation":"insider_stated"}]}
-- Up to 3 entries, each from a different URL. Return fewer when fewer distinct bios exist. Never invent a URL or quote.
+- Up to 2 entries, each from a different URL. Return fewer when fewer distinct bios exist. Never invent a URL or quote.
 - Each entry must be about this exact person, not a namesake who shares the surname: match the full name (first name or initial as given). A same-surname different person gets no entry.
 - Each "quote" must be copied exactly from the bio on the page at its "url", 12 to 300 characters.
 - Each "relation": "insider_stated" if that bio itself states the author belongs to or comes from the community or tradition the reading covers; "outsider_stated" if that bio itself states a background outside it (a stated nationality, ethnicity, community membership, or a born-in / based-at / educated-in place outside it counts); otherwise "unclear".
@@ -173,7 +173,7 @@ export async function checkAuthors(
   const out: BioCheck[] = [];
   // Every sampled author is recorded with its outcome, whatever it was: the report's Perspectives
   // section must show what the check actually did even when no bio counts, so the grade is auditable.
-  // Owner decision 2026-11-03: consult up to 3 verified bio pieces per author (distinct URLs,
+  // Owner decision 2026-11-03: consult up to 2 verified bio pieces per author (distinct URLs,
   // Wikipedia included when search returns it) and show how they lay out. One search call per
   // author proposes the set; code verifies and confirms each piece. Grading stays one hit per
   // author with explicit-insider precedence: any supported insider beats affiliation-only outsiders.
@@ -197,7 +197,7 @@ export async function checkAuthors(
           const o = JSON.parse(text.slice(a, b + 1));
           // New shape: {"bios":[{url,quote,relation}, ...]}. Accept the legacy single-bio
           // shape {"found":bool,"url","quote","relation"} so an older cached answer still parses.
-          if (Array.isArray(o.bios)) proposals = o.bios.slice(0, 3);
+          if (Array.isArray(o.bios)) proposals = o.bios.slice(0, 2);
           else if (o && typeof o === "object" && ("found" in o || "url" in o)) {
             proposals = o.found ? [{ url: o.url, quote: o.quote, relation: o.relation }] : [];
           }
@@ -230,7 +230,7 @@ export async function checkAuthors(
         // lookup time once bios went from 1 to 3 per author.
         const seenUrls = new Set<string>();
         const uniq: { url: string; quote: string; relation: "insider_stated" | "outsider_stated" | "unclear" }[] = [];
-        for (const p of proposals.slice(0, 3)) {
+        for (const p of proposals.slice(0, 2)) {
           const url = String(p?.url ?? "");
           if (!url || seenUrls.has(url)) continue;
           seenUrls.add(url);

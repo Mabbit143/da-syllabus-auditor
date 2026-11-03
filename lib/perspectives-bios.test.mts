@@ -161,9 +161,9 @@ test("more verified authors than the cap are sampled at random, not by reading o
   const readings = authors.map((a, i) => reading(a, lines[i]));
   const bigPage = [{ pageNumber: 1, text: lines.map((l) => `- ${l}`).join("\n") }];
   const { queried } = await run(readings, [], bigPage);
-  // Exactly the spec's cap of 12 author lookups, each a distinct qualifying author.
-  assert.equal(queried.length, 12);
-  assert.equal(new Set(queried).size, 12);
+  // Exactly the spec's cap of 8 author lookups, each a distinct qualifying author.
+  assert.equal(queried.length, 8);
+  assert.equal(new Set(queried).size, 8);
   assert.ok(queried.every((a) => authors.includes(a)), "sampled authors must come from the syllabus's own list");
 });
 
@@ -177,7 +177,7 @@ test("a list within the cap looks up every verified author", async () => {
   assert.deepEqual(queried.slice().sort(), ["Hall", "Smith"]);
 });
 
-test("three verified pieces are all recorded with insider precedence over affiliation", async () => {
+test("two verified pieces are all recorded with insider precedence over affiliation", async () => {
   // Nigerian explicit insider + Ohio affiliation outsider on the same author: insider wins,
   // all pieces stay visible in sourceAuthors for the lay-out.
   const readings = [reading("Ada", "Yoruba Ritual (2019)")];
@@ -185,7 +185,6 @@ test("three verified pieces are all recorded with insider precedence over affili
   const pieces = [
     { url: "https://en.wikipedia.org/wiki/Ada", quote: "Ada is a Nigerian scholar of Yoruba ritual.", relation: "insider_stated", supported: true },
     { url: "https://profiles.example.edu/ada", quote: "Ada is based at Ohio State University in the United States.", relation: "outsider_stated", supported: true },
-    { url: "https://publisher.example.edu/ada", quote: "Ada writes on Yoruba ritual, background unclear in this profile.", relation: "unclear", supported: true },
   ];
   const prompts: string[] = [];
   const model = async (instructions: string, input: string) => {
@@ -214,7 +213,7 @@ test("three verified pieces are all recorded with insider precedence over affili
   const sa = report.sourceAuthors;
   assert.ok(sa);
   assert.equal(sa.authors[0].outcome, "insider_stated");
-  assert.equal(sa.authors[0].pieces?.length, 3);
+  assert.equal(sa.authors[0].pieces?.length, 2);
 });
 
 test("a named based-at place outside the covered community counts as outsider", async () => {

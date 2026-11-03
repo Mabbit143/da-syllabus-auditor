@@ -97,13 +97,13 @@ export interface AuthorBioCheck {
   outcome: AuthorBioOutcome;
   /** Where the bio was found, when one was. */
   url?: string;
-  /** Up to 3 verified bio pieces consulted for this author (owner decision 2026-11-03). */
+  /** Up to 2 verified bio pieces consulted for this author (owner decision 2026-11-03, cut to 2 for demo speed). */
   pieces?: { quote: string; url: string; relation: "insider_stated" | "outsider_stated" | "unclear" }[];
 }
 export interface SourceAuthors {
   /** Verified distinct reading-list authors, before any cap. */
   verified: number;
-  /** How many were looked up: all of them, or a random sample of the cap (12). */
+  /** How many were looked up: all of them, or a random sample of the cap (8). */
   sampled: number;
   authors: AuthorBioCheck[];
 }
