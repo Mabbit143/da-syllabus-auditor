@@ -13,11 +13,12 @@ from .analyze import run_analysis
 from .provider import NodeModel
 from .budget import CachedBudgetModel
 from .monitor import cycle, watch
+from .search import discover_web, replay_discovery
 
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description="Private Blindspot research collection")
-    parser.add_argument("command", choices=["collect", "status", "import-corpus", "analyze", "cycle", "watch"])
+    parser.add_argument("command", choices=["collect", "status", "import-corpus", "analyze", "cycle", "watch", "discover", "replay-discovery"])
     parser.add_argument("--db", default=".blindspot/research.sqlite")
     parser.add_argument("--sources", default=str(Path(__file__).with_name("sources.json")))
     parser.add_argument("--max-jobs", type=int, default=3)
@@ -29,6 +30,14 @@ def main(argv=None):
     logging.basicConfig(level=logging.INFO, format="[blindspot] %(message)s")
     try:
         store = Store(args.db)
+        if args.command == "replay-discovery":
+            print(json.dumps(replay_discovery(store), indent=2))
+            return 0
+        if args.command == "discover":
+            model = CachedBudgetModel(store, NodeModel(credits_verified=args.credits_verified, max_calls=1, mode="search"), daily_limit=args.daily_model_calls)
+            result = discover_web(store, model)
+            print(json.dumps(result, indent=2))
+            return 1 if result["state"] in ("failed", "unconfirmed") else 0
         if args.command == "analyze":
             if not 1 <= args.max_jobs <= 10:
                 raise ValueError("Analysis pass must process 1–10 jobs")
@@ -49,7 +58,8 @@ def main(argv=None):
                 result = run_once(store, args.max_jobs)
             else:
                 factory = (lambda: CachedBudgetModel(store, NodeModel(credits_verified=True, max_calls=2), daily_limit=args.daily_model_calls)) if args.credits_verified else None
-                options = {"interval": args.interval, "max_jobs": args.max_jobs, "ask_factory": factory}
+                search_factory = (lambda: CachedBudgetModel(store, NodeModel(credits_verified=True, max_calls=1, mode="search"), daily_limit=args.daily_model_calls)) if args.credits_verified else None
+                options = {"interval": args.interval, "max_jobs": args.max_jobs, "ask_factory": factory, "search_factory": search_factory}
                 if args.command == "watch":
                     result = watch(store, sources, max_cycles=args.max_cycles, runner="verification" if args.max_cycles is not None else "scheduled", **options)
                 else:

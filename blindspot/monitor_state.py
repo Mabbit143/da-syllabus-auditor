@@ -60,7 +60,7 @@ class MonitorState:
     def end_run(self, run_id, token, now, collection, analysis, error=None):
         from .store import timestamp
         timestamp(now)
-        state_name = "failed" if error else "partial" if collection.get("failed", 0) or analysis.get("failed", 0) else "completed"
+        state_name = "failed" if error else "partial" if collection.get("failed", 0) or collection.get("discovery_failed", 0) or analysis.get("failed", 0) else "completed"
         with self._db() as db:
             state = db.execute("SELECT * FROM monitor_state WHERE name='main' AND token=? AND lease_until>?", (token, now)).fetchone()
             if state is None:

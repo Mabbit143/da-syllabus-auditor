@@ -1,5 +1,5 @@
 param(
-    [ValidateSet('Preview', 'Install', 'Status', 'Remove')][string]$Mode = 'Preview',
+    [ValidateSet('Preview', 'Install', 'Status', 'Restart', 'Remove')][string]$Mode = 'Preview',
     [ValidateRange(1, 1440)][int]$IntervalMinutes = 10,
     [ValidateRange(1, 100)][int]$DailyModelCalls = 12,
     [switch]$CreditsVerified
@@ -38,6 +38,38 @@ if ($Mode -eq 'Remove') {
         Unregister-ScheduledTask -TaskName $workerTaskName -Confirm:$false
     }
     Write-Output 'Owned worker task removed. Research data remains in .blindspot.'
+    return
+}
+if ($Mode -eq 'Restart') {
+    if (-not $workerExisting) { throw 'The owned worker task is not installed.' }
+    $workerGuard = @'
+import time
+from blindspot.store import Store
+store = Store('.blindspot/research.sqlite')
+with store._db() as db:
+    state = db.execute("SELECT token FROM monitor_state WHERE name='main'").fetchone()
+    if state and state['token']:
+        print('busy')
+    else:
+        db.execute("INSERT INTO monitor_state(name,token,lease_until,next_due,interval,runner) VALUES ('main',NULL,NULL,?,600,'scheduled') ON CONFLICT(name) DO UPDATE SET next_due=excluded.next_due", (time.time() + 60,))
+        print('idle')
+'@
+    Push-Location -LiteralPath $workerRoot
+    try {
+        $workerIdle = & $workerPython -c $workerGuard
+        if ($LASTEXITCODE -ne 0 -or "$workerIdle".Trim() -ne 'idle') { throw 'A worker cycle is active or its state is unavailable. Wait for completion before restarting.' }
+        if ($workerExisting.State -eq 'Running') {
+            Stop-ScheduledTask -TaskName $workerTaskName
+            $workerStopDeadline = [DateTime]::UtcNow.AddSeconds(10)
+            do {
+                $workerStopped = (Get-ScheduledTask -TaskName $workerTaskName).State -ne 'Running'
+                if (-not $workerStopped) { Start-Sleep -Milliseconds 200 }
+            } while (-not $workerStopped -and [DateTime]::UtcNow -lt $workerStopDeadline)
+            if (-not $workerStopped) { throw 'The prior worker has not confirmed stopping; no duplicate was started.' }
+        }
+        Start-ScheduledTask -TaskName $workerTaskName
+        Get-ScheduledTask -TaskName $workerTaskName | Select-Object TaskName, State
+    } finally { Pop-Location }
     return
 }
 $workerAction = New-ScheduledTaskAction -Execute $workerPythonw -Argument $workerArguments -WorkingDirectory $workerRoot

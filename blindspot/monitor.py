@@ -4,11 +4,12 @@ import time
 
 from .analyze import run_analysis
 from .worker import run_once, seed
+from .search import discover_web, registered_sources
 
 logger = logging.getLogger("blindspot")
 
 
-def cycle(store, sources, *, interval=600, max_jobs=3, ask_factory=None, runner="manual", clock=time.time, collect_pass=run_once, analyze_pass=run_analysis):
+def cycle(store, sources, *, interval=600, max_jobs=3, ask_factory=None, search_factory=None, runner="manual", clock=time.time, collect_pass=run_once, analyze_pass=run_analysis):
     if type(max_jobs) is not int or not 1 <= max_jobs <= 12:
         raise ValueError("A monitor cycle must collect 1–12 jobs")
     run = store.begin_run(clock(), interval, runner)
@@ -17,10 +18,14 @@ def cycle(store, sources, *, interval=600, max_jobs=3, ask_factory=None, runner=
     collection, analysis = {}, {"completed": 0, "failed": 0, "enabled": False}
     error = None
     try:
-        seed(store, sources, clock())
+        seed(store, [*sources, *registered_sources(store)], clock())
         collection = collect_pass(store, max_jobs, clock=clock)
         if ask_factory:
             analysis = dict(analyze_pass(store, ask_factory(), max_jobs=1, clock=clock), enabled=True)
+        if search_factory:
+            discovery = discover_web(store, search_factory(), clock=clock)
+            collection["discovery"] = discovery
+            collection["discovery_failed"] = int(discovery["state"] in ("failed", "unconfirmed"))
     except Exception as exc:
         logger.error("Monitor run %s failed (%s)", run["id"], type(exc).__name__)
         error = "Collection or analysis pass failed; inspect worker logs and queued jobs"

@@ -1,6 +1,6 @@
 # Blindspot research worker
 
-This is the local collection and analysis backend, separate from the built syllabus auditor. It has a private investigation screen at `/blindspot`. The owner selected this computer for recurring execution; a quiet Windows scheduled worker is installed and its first background cycle has completed. Broader web discovery and recurring-pattern aggregation are still unfinished.
+This is the local collection and analysis backend, separate from the built syllabus auditor. It has a private investigation screen at `/blindspot`. The owner selected this computer for recurring execution; a quiet Windows scheduled worker is installed. Bounded recurring internet discovery is connected; deeper incident/lineage/pattern aggregation remains unfinished.
 
 From the repository root:
 
@@ -17,7 +17,22 @@ State is stored in `.blindspot/research.sqlite`, ignored by Git. Keep that direc
 
 The collector follows validated HTTPS redirects, rejects private network destinations, pins validated DNS addresses for TLS, and limits response bytes/time. Publisher robots rules are checked, including redirected document URLs; missing robots files allow collection, access denial blocks it, and server failures cause retries. Durable per-host intervals defer work without consuming retry attempts. It extracts HTML or native PDF text, retaining physical PDF page numbers. Native administrative packets support up to 500 pages and two million characters in an isolated, time-bounded process. Pages needing OCR or blank-page confirmation fail explicitly. The existing reviewed OCR workflow is not yet connected to research imports. HTML extraction records its limits: dynamic content is not rendered.
 
-Link discovery follows UO-hosted documents within the university domain boundary; external reporting follows relevant URLs on the same publisher. It rejects query-driven crawling, login/donation paths and common non-document media. Each source can extend two levels, each document contributes at most ten link candidates, and a pass discovers at most thirty candidates. Job keys deduplicate URLs per collection period. Discovery does not yet include general internet search or spreadsheets/Word documents; unsupported files remain visible as collection failures.
+Link discovery follows UO-hosted documents within the university domain boundary; external reporting follows relevant URLs on the same publisher. It rejects query-driven crawling, login/donation paths and common non-document media. Each source can extend two levels, each document contributes at most ten link candidates, and a pass discovers at most thirty candidates. Job keys deduplicate URLs per collection period. A separate rotating-query loop supplies broader internet candidates. Spreadsheets/Word documents remain unsupported and visible as collection failures.
+
+## Internet discovery
+
+```powershell
+python -m blindspot.cli discover --credits-verified
+python -m blindspot.cli replay-discovery
+```
+
+The recurring worker attempts at most two rotating queries per UTC day, across twelve topics: interviews/statements, trustees, aid/access, accessibility, budgets/audits, admissions, employment, complaints/responses, governance/public records, housing/support, press updates and institutional outcomes. Searches use the existing Meta web-search adapter even when Baseten performs analysis. Search and analysis share the same daily logical-call cap. Search failure or budget exhaustion does not stop ordinary collection.
+
+Only URLs from actual tool results can enter the catalog; narrative URLs and search snippets are not finding evidence. Empty tool proof is recorded as unconfirmed rather than as a successful search with no relevant sources. Query attempts, states and result links are retained in the private screen. Cataloged sources are seeded for daily refresh and their initial collection jobs receive priority over ordinary link-crawl backlog.
+
+Some real independent-reporting tool results contain an empty snippet. Those URLs are retained with unverified relevance rather than being silently excluded. The publisher page still needs to be fetched and its institutional connection verified. For each external document cited by a finding, code requires an exact source passage naming University of Oregon or uoregon.edu; a search query or publisher label cannot supply that connection. A short bounded institution-context passage is included alongside selected excerpts, and reviewed text spans are merged without inflating coverage counts.
+
+`replay-discovery` reprocesses up to one hundred saved completed searches without a new provider request. It preserves the original search provenance and queues newly recognized candidates idempotently. It does not reclassify snippets as source evidence.
 
 `import-corpus` imports top-level saved web snapshots from `data/uo-policies`, preserving original fetch dates and marking them historical. It never overwrites already observed URLs and never imports the legacy PDF/OCR subdirectory. Two HTTP-only records in the existing corpus are rejected rather than silently relabeled HTTPS. The live collection path remains HTTPS only.
 
@@ -43,10 +58,11 @@ The owner explicitly selected local execution. The installed task starts the qui
 .\scripts\blindspot-task.ps1 -Mode Status
 .\scripts\blindspot-task.ps1 -Mode Preview -CreditsVerified
 .\scripts\blindspot-task.ps1 -Mode Install -CreditsVerified -DailyModelCalls 12
+.\scripts\blindspot-task.ps1 -Mode Restart
 .\scripts\blindspot-task.ps1 -Mode Remove
 ```
 
-The task name is derived from this checkout's absolute path, and the management script checks ownership/configuration before changing it. Remove stops only this owned task and preserves research data. The installed service writes rotating logs to `.blindspot/monitor.log`. Run history, due times, failures and model usage persist in the private SQLite database and appear in the private screen. The task uses the current user's limited privileges. It is not a machine-wide service and does not run while signed out.
+The task name is derived from this checkout's absolute path, and the management script checks ownership/configuration before changing it. Remove stops only this owned task and preserves research data. Restart refuses an active run, reserves a brief idle window, confirms the old task stopped, then starts the same task with its existing limits. The installed service writes rotating logs to `.blindspot/monitor.log`. Run history, due times, failures and model usage persist in the private SQLite database and appear in the private screen. The task uses the current user's limited privileges. It is not a machine-wide service and does not run while signed out.
 
 For a finite timed verification rather than installing a task:
 
@@ -70,10 +86,12 @@ The restricted shell initially failed DNS resolution. A network-enabled invocati
 
 ## Remaining implementation
 
-General web/news search and broader source registry; spreadsheets/Word and reviewed scanned PDF ingestion; deeper corpus retrieval and lineage/incident/pattern grouping; real owner access verification against the deployed database; and remaining manual/live auditor review checks. Hosted worker/storage is an optional later target; the owner selected the local computer for the current recurring worker. No deployment, merge or push has been performed by this worker work.
+Wider query coverage and collection quality; spreadsheets/Word and reviewed scanned PDF ingestion; deeper corpus retrieval and lineage/incident/pattern grouping; real owner access verification against the deployed database; and remaining manual/live auditor review checks. Hosted worker/storage is an optional later target; the owner selected the local computer for the current recurring worker. No deployment, merge or push has been performed by this worker work.
 
 Additional live evidence: a discovery-enabled pass collected seven more sources and identified thirty link candidates with one request deferred and no failures. Subsequent bounded passes collected native 60-page and 24-page trustee packets and a two-page budget report. The archived web import added 398 snapshots and rejected two HTTP-only source records. These results still do not prove continuous monitoring or institutional pattern findings.
 
 One live analysis completed two Baseten calls, rejected two unverifiable proposals and saved one supported policy observation. The current read projection correctly shows zero investigation leads and one source observation from that report. Direct Node-to-Python storage access was verified against the real 415-document worker database. Browser tests use mocked auth/research responses, so their success does not establish that the owner's live database membership has been configured.
 
 Subsequent runtime verification: two timed cycles completed with three new logical model calls. They retained one allegation-only lead from OPB's March 2025 civil-rights investigation reporting, including UO's response and the lack of a determination in supplied text. This is not an established discrimination finding or recurring pattern. After the owner chose local activation, the scheduled task was installed, independently observed Running, and its first scheduled cycle completed with one collection, one analysis, and no job failures. The database then held 418 documents and four reports. A one-time usage migration included the two original live calls, bringing recorded model usage for that UTC day to six at the checkpoint.
+
+Live discovery checkpoint: Meta returned nineteen actual tool results for an administration/interviews/statements query. Initially nine institutional candidates were registered. Inspection showed the independent reporting entries had empty snippets; the corrected catalog replay recovered nine more candidates without another model call, including Daily Emerald, Lookout and other publisher URLs. The catalog held eighteen candidates. After a controlled idle restart, the scheduled worker's new run recorded discovery budget deferral while continuing collection. At that checkpoint it held 427 documents and five analysis reports, with twelve model steps used that UTC day. Provider errors now retain sanitized HTTP/timeout/invalid-response codes for retry diagnostics; credentials, response bodies and document text remain excluded from logs.

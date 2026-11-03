@@ -50,6 +50,32 @@ class AnalysisTests(unittest.TestCase):
         self.assertEqual(result["rejected_count"], 1)
         self.assertEqual(len(calls), 1)
 
+    def test_external_source_needs_verified_institutional_connection(self):
+        external = self.store.snapshot("https://reporter.example/access", "University of Oregon\nApplicants must pay a nonrefundable fee before requesting financial support.", {}, 12)
+        for include_scope in (False, True):
+            def ask(instructions, context):
+                result = self.ask(instructions, context)
+                if "SKEPTIC" not in instructions:
+                    evidence = result["findings"][0]["evidence"]
+                    evidence[1]["version_id"] = external
+                    if include_scope:
+                        evidence.append({"version_id": external, "quote": "University of Oregon", "role": "context"})
+                return result
+            report = analyze_version(self.store, external, ask)
+            self.assertEqual(len(report["findings"]), 1 if include_scope else 0)
+
+    def test_long_external_context_includes_a_bounded_institution_passage(self):
+        words = ["administrative" + chr(97 + i // 676) + chr(97 + (i // 26) % 26) + chr(97 + i % 26) for i in range(2000)]
+        text = "University of Oregon\n" + "commonword " * 600 + " ".join(words)
+        external = self.store.snapshot("https://reporter.example/long", text, {}, 12)
+        captured = []
+        def ask(instructions, context):
+            captured.append(json.loads(context))
+            return {"findings": []}
+        analyze_version(self.store, external, ask)
+        document = next(item for item in captured[0]["documents"] if item["version_id"] == external)
+        self.assertTrue(any("University of Oregon" in part["text"] for part in document["segments"]))
+
     def test_policy_only_summary_is_an_observation_not_an_institutional_gap(self):
         def ask(instructions, context):
             result = self.ask(instructions, context)

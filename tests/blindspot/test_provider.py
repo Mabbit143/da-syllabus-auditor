@@ -31,6 +31,13 @@ class ProviderTests(unittest.TestCase):
                 NodeModel(credits_verified=True)("instructions", "input")
         self.assertNotIn("SECRET", str(context.exception))
 
+    def test_sanitized_provider_status_is_preserved_for_retry_diagnostics(self):
+        error = subprocess.CalledProcessError(1, ["node"], stderr='{"error":{"code":"provider_http_429"}}')
+        with patch("blindspot.provider.subprocess.run", side_effect=error):
+            with self.assertRaises(ValueError) as context:
+                NodeModel(credits_verified=True)("instructions", "input")
+        self.assertEqual(context.exception.code, "provider_http_429")
+
 
 if __name__ == "__main__":
     unittest.main()

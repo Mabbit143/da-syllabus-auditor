@@ -38,6 +38,7 @@ test("non-owner sees access refusal rather than research", async ({ page }) => {
 test("owner reads evidence, records review and clears data on sign-out", async ({ page }) => {
   const reviews: object[] = [];
   const evidence = { version_id: 12, url: "https://policies.uoregon.edu/example", content_hash: "test-hash", quote: "Access is available to all applicants.", start: 0, end: 38, page: null, role: "policy" };
+  const discovery = { registered_sources: 18, queries: [{ id: 1, day: "2026-11-03", query: "University of Oregon administration interviews", state: "completed", error: null, result_count: 19, result_urls: ["https://news.example/report"] }] };
   await page.route("**/api/**", (route) => route.abort());
   await page.route("**/api/research**", async (route) => {
     if (route.request().method() === "POST") {
@@ -48,7 +49,7 @@ test("owner reads evidence, records review and clears data on sign-out", async (
     }
     if (new URL(route.request().url()).searchParams.has("version")) return route.fulfill({ json: { id: 12, url: evidence.url, content_hash: "test-hash", metadata: { title: "Example source" }, text: evidence.quote, start: 0, total_characters: 38, physical_pages: [], history: [{ id: 12, first_seen: 10, last_seen: 10, content_hash: "test-hash" }] } });
     return route.fulfill({ json: {
-      status: { documents: 415, versions: 415, analysis_reports: 1, latest_analysis_at: 10, jobs: [{ kind: "analyze", state: "pending", count: 414 }], failures: [], monitor: { schedule: { runner: "verification", interval: 10, next_due: 30, lease_until: null }, runs: [{ id: 2, runner: "verification", state: "completed", started_at: 10, finished_at: 20, error: null, collection: { collected: 1 }, analysis: { completed: 1, daily_limit: 4 } }], model_usage: [{ day: "2026-11-03", calls: 3 }] } },
+      status: { discovery, documents: 415, versions: 415, analysis_reports: 1, latest_analysis_at: 10, jobs: [{ kind: "analyze", state: "pending", count: 414 }], failures: [], monitor: { schedule: { runner: "verification", interval: 10, next_due: 30, lease_until: null }, runs: [{ id: 2, runner: "verification", state: "completed", started_at: 10, finished_at: 20, error: null, collection: { collected: 1 }, analysis: { completed: 1, daily_limit: 4 } }], model_usage: [{ day: "2026-11-03", calls: 3 }] } },
       documents: [{ id: 12, title: "Example source", url: evidence.url, category: "policy", method: "html", archived_snapshot: true, original_fetched_date: "2026-10-27", first_seen: 10, last_seen: 10 }],
       page: 1, total_documents: 1, reviews, storage: "local-worker", history_limits: { reports: 100, reviews: 500 },
       reports: [{ id: 1, completed_at: 10, report: { findings: [], observations: [{ id: "f1", claim: "A policy commitment to equal access.", topic: "Access", mechanism: "Stated commitment", evidence: [evidence], questions: ["What happens in practice?"], temporal_scope: "Applicability date unknown", temporal_status: "historical_or_undated", status: "source_observation", publisher_groups: 1, distinct_documents: 1, skeptic: { decision: "retain", reason: "The passage supports the observation.", counterevidence_search: "Checked supplied portions only.", alternative_explanations: [], temporal_scope: "Unknown", counterevidence: [] } }], rejected_count: 2, coverage: [{ version_id: 12, reviewed_characters: 38, total_characters: 200 }] } }],
@@ -59,6 +60,8 @@ test("owner reads evidence, records review and clears data on sign-out", async (
   await expect(page.getByText(/Timed worker verification recorded/)).toBeVisible();
   await page.getByText("Worker run history and model usage", { exact: true }).click();
   await expect(page.getByText(/Run 2: completed/)).toBeVisible();
+  await page.getByText("Internet discovery (18 candidate URLs)", { exact: true }).click();
+  await expect(page.getByText(/University of Oregon administration interviews/)).toBeVisible();
   await page.getByRole("button", { name: "Source observations (1)" }).click();
   await expect(page.getByRole("heading", { name: "A policy commitment to equal access." })).toBeVisible();
   await page.getByRole("button", { name: "Read saved passage" }).click();

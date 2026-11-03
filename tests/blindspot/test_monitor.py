@@ -57,6 +57,31 @@ class MonitorTests(unittest.TestCase):
         self.assertEqual(self.store.run_history()[0]["state"], "failed")
         self.assertEqual(self.store.run_history()[0]["error"], "Collection or analysis pass failed; inspect worker logs and queued jobs")
 
+    def test_search_failure_does_not_prevent_collection_or_analysis(self):
+        def fail(*args):
+            raise ValueError("Search unavailable")
+        result = cycle(self.store, [], interval=10, clock=lambda: 10,
+            collect_pass=lambda *args, **kwargs: {"collected": 1, "failed": 0},
+            analyze_pass=lambda *args, **kwargs: {"completed": 1, "failed": 0},
+            ask_factory=lambda: object(), search_factory=lambda: fail)
+        self.assertEqual(result["state"], "partial")
+        self.assertEqual(result["collection"]["collected"], 1)
+        self.assertEqual(result["analysis"]["completed"], 1)
+        self.assertEqual(result["collection"]["discovery"]["state"], "failed")
+
+    def test_searched_sources_are_available_to_the_following_cycle(self):
+        seen = []
+        def collect(store, maximum, **kwargs):
+            job = store.claim(20, 30, kind="collect")
+            if job:
+                seen.append(job["payload"]["url"])
+                store.finish(job["id"], job["token"], 21)
+            return {"collected": int(job is not None), "failed": 0}
+        search = lambda *args: {"search_confirmed": True, "results": [{"url": "https://reporter.example/uo", "snippet": "University of Oregon"}]}
+        cycle(self.store, [], interval=10, clock=lambda: 10, collect_pass=lambda *args, **kwargs: {"collected": 0, "failed": 0}, search_factory=lambda: search)
+        cycle(self.store, [], interval=10, clock=lambda: 20, collect_pass=collect)
+        self.assertEqual(seen, ["https://reporter.example/uo"])
+
 
 class BudgetTests(unittest.TestCase):
     def test_earlier_recorded_live_calls_are_counted_once_when_budget_is_upgraded(self):

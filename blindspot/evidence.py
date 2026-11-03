@@ -4,6 +4,8 @@ from urllib.parse import urlsplit
 
 from .discovery import is_uo
 
+INSTITUTION = re.compile(r"\buniversity\s+of\s+oregon\b|\buoregon\.edu\b", re.I)
+
 
 def report_view(report):
     """Project legacy policy summaries as observations; keep stored history intact."""
@@ -15,6 +17,31 @@ def report_view(report):
         else:
             observations.append(dict(item, status="source_observation"))
     return dict(report, recorded_schema_version=report.get("schema_version", 1), findings=findings, observations=observations)
+
+
+def external_scope_verified(evidence, versions):
+    """A search query or publisher name is not proof an external action concerns UO."""
+    for version in versions:
+        passages = [item["quote"] for item in evidence if item["version_id"] == version["id"]]
+        if passages and not is_uo(urlsplit(version["url"]).hostname):
+            if not any(INSTITUTION.search(quote) for quote in passages):
+                return False
+    return True
+
+
+def include_scope_context(version, ranges):
+    spans = list(ranges)
+    if not is_uo(urlsplit(version["url"]).hostname):
+        match = INSTITUTION.search(version["text"])
+        if match:
+            spans.append((max(0, match.start() - 120), min(len(version["text"]), match.end() + 120)))
+    merged = []
+    for start, end in sorted(spans):
+        if merged and start <= merged[-1][1]:
+            merged[-1] = (merged[-1][0], max(end, merged[-1][1]))
+        else:
+            merged.append((start, end))
+    return merged
 
 
 def _normalize(text):

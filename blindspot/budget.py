@@ -37,8 +37,9 @@ class CachedBudgetModel:
         start = len(getattr(self.ask, "calls", []))
         raw = self.ask(instructions, context)
         result = json.loads(raw) if isinstance(raw, str) else raw
-        field = "reviews" if "SKEPTIC" in instructions else "findings"
-        if not isinstance(result, dict) or not isinstance(result.get(field), list) or len(result[field]) > 3:
+        field = "results" if instructions.startswith("DISCOVERY") else "reviews" if "SKEPTIC" in instructions else "findings"
+        maximum = 20 if field == "results" else 3
+        if not isinstance(result, dict) or not isinstance(result.get(field), list) or len(result[field]) > maximum:
             raise ValueError("Research model returned an invalid step response")
         provenance = getattr(self.ask, "calls", [])[start:]
         metadata = provenance[-1] if provenance else {"provider": "injected", "fallback": False}

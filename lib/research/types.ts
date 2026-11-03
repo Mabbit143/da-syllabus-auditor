@@ -15,7 +15,7 @@ export interface ResearchReport {
 export interface ResearchReview { id: number; report_id: number; finding_id: string; status: string; note: string; actor: string; created_at: number }
 export interface ResearchDocument { id: number; url: string; title: string; category: string; method: string; archived_snapshot: boolean; original_fetched_date?: string; published_at?: string; first_seen: number; last_seen: number }
 export interface ResearchOverview {
-  status: { documents: number; versions: number; analysis_reports: number; latest_analysis_at: number | null; jobs: { kind: string; state: string; count: number }[]; failures: { id: number; kind: string; last_error: string; attempts: number }[]; monitor?: ResearchMonitor };
+  status: { documents: number; versions: number; analysis_reports: number; latest_analysis_at: number | null; jobs: { kind: string; state: string; count: number }[]; failures: { id: number; kind: string; last_error: string; attempts: number }[]; monitor?: ResearchMonitor; discovery?: { registered_sources: number; queries: { id: number; day: string; query: string; state: string; error: string | null; result_count: number; result_urls: string[] }[] } };
   documents: ResearchDocument[]; page: number; total_documents: number;
   reports: ResearchReport[]; reviews: ResearchReview[]; storage: string;
   history_limits: { reports: number; reviews: number };

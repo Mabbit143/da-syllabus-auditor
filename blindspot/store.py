@@ -11,6 +11,7 @@ from pathlib import Path
 import sqlite3
 import uuid
 from .monitor_state import MonitorState, SCHEMA as MONITOR_SCHEMA, migrate_recorded_calls
+from .search import SCHEMA as SEARCH_SCHEMA, search_status
 
 
 SCHEMA = """
@@ -69,7 +70,7 @@ def timestamp(value):
     return value
 
 
-SCHEMA += MONITOR_SCHEMA
+SCHEMA += MONITOR_SCHEMA + SEARCH_SCHEMA
 
 
 class Store(MonitorState):
@@ -201,7 +202,7 @@ class Store(MonitorState):
             documents = db.execute("SELECT count(DISTINCT url) FROM versions").fetchone()[0]
             versions = db.execute("SELECT count(*) FROM versions").fetchone()[0]
             analysis = db.execute("SELECT count(*) AS count,max(completed_at) AS latest FROM analyses").fetchone()
-        return {"documents": documents, "versions": versions, "jobs": counts, "failures": failures, "analysis_reports": analysis["count"], "latest_analysis_at": analysis["latest"], "monitor": self.monitor_status()}
+        return {"documents": documents, "versions": versions, "jobs": counts, "failures": failures, "analysis_reports": analysis["count"], "latest_analysis_at": analysis["latest"], "monitor": self.monitor_status(), "discovery": search_status(self)}
 
     def reserve_host(self, host, now, delay):
         timestamp(now)

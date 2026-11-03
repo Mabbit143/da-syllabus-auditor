@@ -19,7 +19,7 @@ def seed(store, sources, now, interval=86400):
     period = int(now // interval)
     for source in sources:
         url = canonical_url(source["url"])
-        store.enqueue("collect", f"{url}:{interval}:{period}", dict(source, url=url), now)
+        store.enqueue("collect", f"{url}:{interval}:{period}", dict(source, url=url), now, priority=source.get("collection_priority", 0))
 
 
 def run_once(store, max_jobs=10, *, clock=time.time, collector=collect):
