@@ -129,3 +129,24 @@ the refresh registry to 30 unique canonical URLs. One request was normally
 deferred for publisher pacing before succeeding. All three body snapshots were
 saved with provenance and queued for future analysis. Model usage remains 14;
 the scheduled cap remains 12 per UTC day.
+
+## OregonNews embed recovery
+
+A fresh browser diagnostic, restricted to same-origin requests, identified the
+previously missing article as an explicitly referenced external Shorthand embed.
+The native fetch of the public linked story returned actual article HTML; cached
+search text was not used. No browser runtime was added to the worker.
+
+The extractor now recognizes only OregonNews's exact Shorthand publisher host and
+`/embed.js` convention, caps declared embeds at five, and follows their public
+story URLs through existing fetch and discovery safeguards. The original parent
+remains headline-only; a new full-body record retains the parent relationship.
+The live Fulbright article was saved as version 496 with 11,118 characters.
+Parent 421 and story 496 produce one conservative publisher group, not two
+independent confirmations. The relationship is preserved in future synthesis
+context. Live model interpretation remains pending at the unchanged budget cap.
+
+The complete Node suite passed 238 tests and the combined student/private browser
+suite passed all 40 tests before this Python-only extraction correction. The
+correction has dedicated extraction, host/scope, worker propagation, publisher
+grouping and bounded-script tests. Private-demo content was never accessed.

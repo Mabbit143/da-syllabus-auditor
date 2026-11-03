@@ -373,3 +373,26 @@ budget increase, worker restart, push or deployment was needed for this incremen
   Synthesis 1's input remains current and model usage remains fourteen from the
   consumed one-time exception. Actual owner review and live model consumption
   remain unverified. No model request, push, deployment or Supabase change.
+
+## Combined review and OregonNews embed recovery (2026-11-03)
+
+- Combined app regression passed 238 Node tests and all forty mocked browser
+  checks, including auditor flows, scope filtering and owner origin review.
+- A bounded public browser diagnostic exposed an explicit Shorthand embed behind
+  an OregonNews headline-only snapshot. Native HTML fetching of its public story
+  URL yielded the actual article body; no cached search text was admitted.
+- The extractor recognizes only explicit body-script embeds for the exact
+  OregonNews parent and UO Shorthand publisher hosts, at most five per page.
+  Discovered story URLs retain parent provenance and pass ordinary robots,
+  public destination, TLS, redirect, byte, depth and count checks. The worker
+  executes no source JavaScript. Unrelated child links do not inherit embedding
+  provenance. Known parent/story pairs remain one conservative publisher group.
+- Story version 496 saved 11,118 characters from a fresh public fetch and queued
+  future analysis. The original headline snapshot remains incomplete. Synthesis
+  context retains embedding provenance only when present, preserving old input
+  hashes otherwise. Existing synthesis input remains current; usage remains 14.
+- Final engine suite passed 145 tests, covering allowed/denied hosts, explicit
+  embed proof, URL/count bounds, scope/depth propagation and publisher grouping.
+  The guarded worker reload reported Running with the unchanged 12/day cap.
+  Owner JWT review, live new-context analysis and remaining release gates stay
+  open. No model calls, publication, push or deployment occurred.

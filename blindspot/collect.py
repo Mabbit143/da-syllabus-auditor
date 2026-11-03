@@ -4,6 +4,7 @@ from urllib.parse import urljoin, urlsplit
 
 from .fetch import canonical_url, fetch_public
 from .quality import assess_text
+from .embeds import story_from_script
 
 
 class DocumentHTML(HTMLParser):
@@ -15,12 +16,17 @@ class DocumentHTML(HTMLParser):
         self.main = []
         self.title = []
         self.links = []
+        self.embedded_documents = []
         self.published = None
         self.article_parts, self.article_depths = [], []
         self.headings, self.date_parts, self.date_depths = [], [], []
 
     def handle_starttag(self, tag, attrs):
         attrs = dict(attrs)
+        if tag == "script" and attrs.get("src") and not self._ignored() and "head" not in self.stack and len(self.embedded_documents) < 5:
+            story = story_from_script(self.url, urljoin(self.url, attrs["src"]))
+            if story and story not in self.embedded_documents:
+                self.embedded_documents.append(story)
         if tag == "meta" and attrs.get("property", attrs.get("name")) in ("article:published_time", "datePublished"):
             self.published = attrs.get("content")
         if tag not in {"meta", "link", "img", "br", "hr", "input", "source", "area", "base", "embed", "wbr", "param", "track", "col"}:
@@ -78,7 +84,7 @@ def extract_html(body, url):
     title = " ".join(parser.title)
     quality = assess_text(text, {"method": "html", "title": title})
     coverage = "selected article-body HTML text; surrounding page areas omitted; dynamic content not rendered" if parser.article_parts else "extracted HTML text; dynamic content not rendered"
-    return {"text": text, "title": title, "published_at": parser.published or " ".join(parser.date_parts) or None, "links": parser.links, "method": "html", "coverage": coverage + ("; headline-only snapshot, article body unavailable" if not quality["analysis_ready"] else ""), "extraction_selector": "article_body" if parser.article_parts else "semantic_main" if parser.main else "body_fallback", "analysis_ready": quality["analysis_ready"], "quality_state": quality["state"]}
+    return {"text": text, "title": title, "published_at": parser.published or " ".join(parser.date_parts) or None, "links": parser.embedded_documents + parser.links, "embedded_documents": parser.embedded_documents, "method": "html", "coverage": coverage + ("; headline-only snapshot, article body unavailable" if not quality["analysis_ready"] else ""), "extraction_selector": "article_body" if parser.article_parts else "semantic_main" if parser.main else "body_fallback", "analysis_ready": quality["analysis_ready"], "quality_state": quality["state"]}
 
 
 def fetch_document(url, *, before_fetch=None):
@@ -123,4 +129,4 @@ def collect(store, source, now, *, fetch=fetch_document):
     metadata.update({key: value for key, value in document.items() if key not in ("text", "links")})
     metadata.update(requested_url=requested, content_type=mime)
     version = store.snapshot(url, document["text"], metadata, now)
-    return {"version_id": version, "url": url, "links": document["links"], **({"analysis_ready": False} if document.get("analysis_ready") is False else {})}
+    return {"version_id": version, "url": url, "links": document["links"], "embedded_documents": document.get("embedded_documents", []), **({"analysis_ready": False} if document.get("analysis_ready") is False else {})}

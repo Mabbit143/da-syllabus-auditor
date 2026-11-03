@@ -55,7 +55,7 @@ def run_once(store, max_jobs=10, *, clock=time.time, collector=collect):
                 store.enqueue("analyze", str(document["version_id"]), {"version_id": document["version_id"], "url": document["url"]}, clock(), priority=job["payload"].get("analysis_priority", 10))
                 if "analysis_priority" in job["payload"]:
                     store.prioritize_analysis(document["url"], job["payload"]["analysis_priority"])
-            children = discover(dict(job["payload"], url=document["url"]), document["links"], max_links=min(10, 30 - result["discovered"]), history=store.collection_history())
+            children = discover(dict(job["payload"], url=document["url"], embedded_documents=document.get("embedded_documents", [])), document["links"], max_links=min(10, 30 - result["discovered"]), history=store.collection_history())
             seed(store, children, clock())
             result["discovered"] += len(children)
             store.finish(job["id"], job["token"], clock())

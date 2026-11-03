@@ -40,7 +40,7 @@ def build_input(store):
                     if "admitted_ranges" in version["metadata"] and not any(a <= start and end <= b for a, b in version["metadata"]["admitted_ranges"]):
                         raise ValueError("Saved evidence spans an unreviewed fragment gap")
                     key = "e" + digest([version_id, item["content_hash"], start, end, item["role"]])[:20]
-                    supplied[key] = {"id": key, **item, "context": version["text"][max(0, start - 200):min(len(version["text"]), end + 200)], "metadata": {k: version["metadata"].get(k) for k in ("title", "published_at", "archived_snapshot", "original_fetched_date", "category", "method", "coverage", "missing_formula_values")}}
+                    supplied[key] = {"id": key, **item, "context": version["text"][max(0, start - 200):min(len(version["text"]), end + 200)], "metadata": {**{k: version["metadata"].get(k) for k in ("title", "published_at", "archived_snapshot", "original_fetched_date", "category", "method", "coverage", "missing_formula_values")}, **({"embedded_from": version["metadata"]["embedded_from"]} if version["metadata"].get("embedded_from") else {})}}
                 except (KeyError, TypeError, ValueError):
                     bad = True
                     break

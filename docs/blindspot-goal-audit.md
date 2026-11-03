@@ -12,7 +12,7 @@ authorize publication, push, merge or deployment.
 | --- | --- | --- |
 | Preserve useful syllabus auditing and separate review checks | Existing rubric, exact citations, required contents, account separation and source provenance; 237 Node and 40 mocked browser checks passed at the review checkpoint | Actual owner-session saving and representative live audit-quality review remain unverified |
 | Public policies and administrative paperwork | Latest-URL checkpoint: 484 records, including 396 policy and 71 administration intake labels; native PDF packets, Word and budget workbooks collected | Counts are not exhaustive coverage, full-document review or verified document types |
-| Institutional releases and comments | Official presidential budget message, proposal overview and provost guidelines saved as versions 488–490; other institutional statements preserved | Four latest snapshots are headline-only, including three OregonNews records; cached search text was not substituted |
+| Institutional releases and comments | Official budget records 488–490 plus full embedded OregonNews story 496 saved; known publisher embed discovery is connected | Parent snapshots can remain headline-only while their separate story bodies are fetched; cached search text was not substituted |
 | Independent journalism, interviews and attributed comments | Six news intake records; OPB and clean Daily Emerald article bodies; institutional context required inside external evidence | Publisher count and URLs do not prove independent originating lineages or distinct events |
 | Ongoing internet discovery | Curated 30-URL registry, bounded linked discovery, observed Meta search/tool results and persisted query history | Two daily query attempts share the model cap; publisher restrictions and depth/count limits leave gaps |
 | Incremental discovery | Durable new-first/oldest-next rotation, active-URL exclusion and retries; live HR selection reached ten previously unscheduled URLs | Some eligible pages and long/extensionless downloads remain uncollected |
@@ -29,7 +29,7 @@ authorize publication, push, merge or deployment.
 | Local storage capacity | Worker volume measured 22.0 GiB free of 236.8 GiB at this checkpoint | A point-in-time capacity check is not a reserved quota or backup |
 | Resumable limits and recovery | Leased jobs, stale completion rejection, persistent errors, daily collection retry ceiling, host pacing and model cache | Failed/blocked jobs remain visible; a partial run is not a full corpus review |
 | Budget | Actual task arguments retain 12/day; recorded usage is 14 after the owner's consumed one-time two-step exception | No further exception is authorized; additional live inference waits for the normal UTC reset |
-| Regression verification | Latest engine code passed 129 tests; targeted private screen checks, typecheck/build/lint passed for its UI changes | Offline/mocked checks cannot establish live model quality, real account behavior or deployment state |
+| Regression verification | Latest engine code passed 145 tests; combined app passed 238 Node and 40 mocked browser tests; typecheck/build/lint passed for UI changes | Offline/mocked checks cannot establish live model quality, real account behavior or deployment state |
 | Hackathon delivery | Official Meta page confirms November 4, 9 PM ET deadline and Meta/open-weight tooling; organizer lists Baseten as an inference partner | Full participant rules, current submission form/video requirements and actual submission remain unverified |
 
 The main remaining gates are live verification: owner sign-in,
@@ -57,3 +57,11 @@ implemented with shared-origin conflict checks and context-budget omissions.
 build and typecheck passed. No origin review was fabricated for real data, no
 independence count was certified, and no model request occurred. Actual owner
 review and live model use of these assessments remain open.
+
+Integrated review and OregonNews follow-up: the combined app passed 238 Node tests
+and 40 mocked browser tests. A subsequent Python-only correction recovered
+explicit OregonNews Shorthand story embeds through normal public fetching, with
+parent provenance and conservative publisher grouping. Real story 496 has 11,118
+characters; the parent headline remains a separate incomplete snapshot. No model
+request or independent-confirmation claim resulted. Embedded links remain bounded
+by the existing source/depth/robots/network limits and a five-embed declaration cap.

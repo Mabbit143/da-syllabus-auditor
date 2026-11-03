@@ -3,6 +3,7 @@ from urllib.parse import urlsplit, unquote
 from urllib.robotparser import RobotFileParser
 
 from .fetch import canonical_url, fetch_public, SourceHTTPError
+from .embeds import trusted_story
 
 USER_AGENT = "BlindspotEngine"
 
@@ -36,8 +37,9 @@ def discover(source, links, *, max_links=10, max_depth=2, history=None):
                 continue
             if any(part in {"login", "logout", "user", "search", "subscribe", "donate"} for part in path.split("/")):
                 continue
+            embedded = url in source.get("embedded_documents", []) and trusted_story(parent, url)
             if is_uo(parent_host):
-                if not is_uo(parsed.hostname):
+                if not is_uo(parsed.hostname) and not embedded:
                     continue
             elif parsed.hostname != parent_host or not any(term.lower() in path for term in terms):
                 continue
@@ -46,9 +48,13 @@ def discover(source, links, *, max_links=10, max_depth=2, history=None):
             child = dict(source, url=url, discovered_from=parent, depth=depth + 1)
             # A curated source's analysis order does not endorse every link.
             child.pop("analysis_priority", None)
+            child.pop("embedded_documents", None)
+            child.pop("embedded_from", None)
             if parsed.hostname != parent_host:
                 child["publisher"] = "University of Oregon"
-                child["category"] = "policy" if parsed.hostname == "policies.uoregon.edu" else "administration"
+                child["category"] = source.get("category", "press_release") if embedded else "policy" if parsed.hostname == "policies.uoregon.edu" else "administration"
+                if embedded:
+                    child["embedded_from"] = parent
             found.append(child)
         except (ValueError, TypeError):
             continue

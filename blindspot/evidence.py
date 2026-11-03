@@ -5,6 +5,7 @@ from urllib.parse import urlsplit
 from .discovery import is_uo
 from .locations import source_locations
 from .departments import checked_departments
+from .embeds import trusted_story
 
 INSTITUTION = re.compile(r"\buniversity\s+of\s+oregon\b|\buoregon\.edu\b", re.I)
 
@@ -121,7 +122,8 @@ def source_groups(versions):
         return i
     def publisher(version):
         host = urlsplit(version["url"]).hostname
-        return "uoregon.edu" if is_uo(host) else host.removeprefix("www.")
+        embedded = version.get("metadata", {}).get("embedded_from")
+        return "uoregon.edu" if is_uo(host) or trusted_story(embedded, version["url"]) else host.removeprefix("www.")
     for i, version in enumerate(versions):
         for j in range(i):
             if version["content_hash"] == versions[j]["content_hash"] or publisher(version) == publisher(versions[j]):

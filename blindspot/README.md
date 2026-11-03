@@ -353,3 +353,18 @@ The new local `origin_reviews` table is created on opening worker storage;
 existing research records remain intact. No Supabase schema or permission change
 is required. Real owner lineage assessments and live consumption by the model
 remain unverified; no such assessment has been invented for the real corpus.
+
+## OregonNews embedded story bodies
+
+Some OregonNews pages contain a headline and a Shorthand embed rather than the
+article body. The extractor recognizes up to five explicit body-script references
+to `university-of-oregon-news.shorthandstories.com/.../embed.js` on the exact
+`news.uoregon.edu` host. It derives the public story URL and queues it through
+ordinary scope, depth, count, robots, DNS/TLS, redirect and byte checks. Scripts
+are never executed by the worker. Other external scripts and hosts are excluded.
+
+The headline snapshot remains incomplete; the separately fetched full story
+retains `embedded_from` provenance. Publisher grouping collapses the known story
+and parent into the UO group, and synthesis context preserves that relationship.
+It is not independent corroboration. A live Fulbright story yielded 11,118
+characters using this path, without cached search text or a model request.
