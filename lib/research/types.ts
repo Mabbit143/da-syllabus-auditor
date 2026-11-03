@@ -15,14 +15,36 @@ export interface ResearchReport {
 export interface ResearchReview { id: number; report_id: number; finding_id: string; status: string; note: string; actor: string; created_at: number }
 export interface ResearchDocument { id: number; url: string; title: string; category: string; method: string; archived_snapshot: boolean; original_fetched_date?: string; published_at?: string; first_seen: number; last_seen: number }
 export interface ResearchOverview {
+  synthesis?: ResearchSynthesis | null;
+  patterns?: {
+    evidence_groups: { id: string; status: string; members: { report_id: number; finding_id: string; claim: string; topic: string; mechanism: string; status: string; owner_status: string | null; actions: ResearchEvidence[] }[] }[];
+    mechanism_candidates: { id: string; mechanism: string; group_ids: string[]; status: string }[];
+    limitations: string;
+  };
   status: { documents: number; versions: number; analysis_reports: number; latest_analysis_at: number | null; jobs: { kind: string; state: string; count: number }[]; failures: { id: number; kind: string; last_error: string; attempts: number }[]; monitor?: ResearchMonitor; discovery?: { registered_sources: number; queries: { id: number; day: string; query: string; state: string; error: string | null; result_count: number; result_urls: string[] }[] } };
   documents: ResearchDocument[]; page: number; total_documents: number;
   reports: ResearchReport[]; reviews: ResearchReview[]; storage: string;
   history_limits: { reports: number; reviews: number };
 }
+interface SynthesisReview {
+  decision: string; reason: string; distinctness: string; temporal_scope: string;
+  alternative_explanations: string[]; counterevidence_ids: string[];
+}
+export interface ResearchSynthesis {
+  id: number; completed_at: number; input_current: boolean;
+  report: {
+    incidents: { id: string; summary: string; basis: string; status: string; mechanism_code: string; lead_ids: string[]; evidence_ids: string[]; temporal_scope: string; distinctness: string; skeptic: SynthesisReview }[];
+    patterns: { id: string; claim: string; basis: string; kind: string; mechanism_code: string; status: string; incident_ids: string[]; policy_evidence_ids: string[]; temporal_scope: string; questions: string[]; origin_status: string; publication_eligible: boolean; skeptic: SynthesisReview }[];
+    evidence: (ResearchEvidence & { id: string })[];
+    leads: { id: string; report_id: number; finding_id: string; claim: string }[];
+    coverage: { recent_reports: number; omitted_leads: number; invalid_evidence_leads: number; note: string };
+    rejected_count: number; limitations: string;
+    model_calls?: { provider: string; fallback: boolean; cached?: boolean }[];
+  };
+}
 export interface ResearchMonitor {
   schedule: { next_due: number; interval: number; runner: string; lease_until: number | null } | null;
-  runs: { id: number; started_at: number; finished_at: number | null; runner: string; state: string; error: string | null; collection: { collected?: number; failed?: number } | null; analysis: { completed?: number; failed?: number; budget_deferred?: number; daily_limit?: number } | null }[];
+  runs: { id: number; started_at: number; finished_at: number | null; runner: string; state: string; error: string | null; collection: { collected?: number; failed?: number } | null; analysis: { completed?: number; pattern_completed?: number; failed?: number; budget_deferred?: number; daily_limit?: number } | null }[];
   model_usage: { day: string; calls: number }[];
 }
 export interface ResearchSource {

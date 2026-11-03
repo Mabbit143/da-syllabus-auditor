@@ -25,6 +25,7 @@ class AppTests(unittest.TestCase):
         self.assertEqual(result["documents"][0]["title"], "Example policy")
         self.assertNotIn("text", result["documents"][0])
         self.assertEqual(result["reports"][0]["id"], self.report_id)
+        self.assertEqual(result["patterns"]["evidence_groups"], [])
 
     def test_document_browser_preserves_version_and_text_offsets(self):
         self.store.snapshot("https://policies.uoregon.edu/a", "Changed public policy.", {}, 12)

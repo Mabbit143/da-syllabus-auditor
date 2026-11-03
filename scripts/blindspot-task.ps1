@@ -56,7 +56,7 @@ with store._db() as db:
 '@
     Push-Location -LiteralPath $workerRoot
     try {
-        $workerIdle = & $workerPython -c $workerGuard
+        $workerIdle = $workerGuard | & $workerPython -
         if ($LASTEXITCODE -ne 0 -or "$workerIdle".Trim() -ne 'idle') { throw 'A worker cycle is active or its state is unavailable. Wait for completion before restarting.' }
         if ($workerExisting.State -eq 'Running') {
             Stop-ScheduledTask -TaskName $workerTaskName

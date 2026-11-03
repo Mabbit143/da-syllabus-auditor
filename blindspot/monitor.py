@@ -5,6 +5,7 @@ import time
 from .analyze import run_analysis
 from .worker import run_once, seed
 from .search import discover_web, registered_sources
+from .synthesis import enqueue_synthesis, run_synthesis, synthesis_due
 
 logger = logging.getLogger("blindspot")
 
@@ -21,7 +22,13 @@ def cycle(store, sources, *, interval=600, max_jobs=3, ask_factory=None, search_
         seed(store, [*sources, *registered_sources(store)], clock())
         collection = collect_pass(store, max_jobs, clock=clock)
         if ask_factory:
-            analysis = dict(analyze_pass(store, ask_factory(), max_jobs=1, clock=clock), enabled=True)
+            enqueue_synthesis(store, clock())
+            if synthesis_due(store, clock()):
+                patterns = run_synthesis(store, ask_factory(), clock=clock)
+                analysis = dict(patterns, completed=0, pattern_completed=patterns["completed"], enabled=True)
+            else:
+                analysis = dict(analyze_pass(store, ask_factory(), max_jobs=1, clock=clock), enabled=True)
+                enqueue_synthesis(store, clock())
         if search_factory:
             discovery = discover_web(store, search_factory(), clock=clock)
             collection["discovery"] = discovery

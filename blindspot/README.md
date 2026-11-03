@@ -95,3 +95,51 @@ One live analysis completed two Baseten calls, rejected two unverifiable proposa
 Subsequent runtime verification: two timed cycles completed with three new logical model calls. They retained one allegation-only lead from OPB's March 2025 civil-rights investigation reporting, including UO's response and the lack of a determination in supplied text. This is not an established discrimination finding or recurring pattern. After the owner chose local activation, the scheduled task was installed, independently observed Running, and its first scheduled cycle completed with one collection, one analysis, and no job failures. The database then held 418 documents and four reports. A one-time usage migration included the two original live calls, bringing recorded model usage for that UTC day to six at the checkpoint.
 
 Live discovery checkpoint: Meta returned nineteen actual tool results for an administration/interviews/statements query. Initially nine institutional candidates were registered. Inspection showed the independent reporting entries had empty snippets; the corrected catalog replay recovered nine more candidates without another model call, including Daily Emerald, Lookout and other publisher URLs. The catalog held eighteen candidates. After a controlled idle restart, the scheduled worker's new run recorded discovery budget deferral while continuing collection. At that checkpoint it held 427 documents and five analysis reports, with twelve model steps used that UTC day. Provider errors now retain sanitized HTTP/timeout/invalid-response codes for retry diagnostics; credentials, response bodies and document text remain excluded from logs.
+# Evidence grouping (2026-11-03)
+
+The private overview derives read-only evidence groups from its latest 100 reports.
+Exact shared action quotations (whitespace normalized) collapse copied coverage and
+repeated analyses into one connected group. Policy-only observations are excluded;
+latest owner dismissals in the loaded 500-review history are excluded. Group members
+retain report/finding references, original action quotations and source locators.
+Matching mechanism labels across groups appear as comparison candidates only.
+Different quotations can concern the same event: group counts are **not** incident
+counts, originating-lineage counts, confirmed recurrence or proof of discrimination.
+Semantic incident resolution, verified origins and reviewed pattern conclusions
+remain unfinished. This projection makes no provider calls and changes no saved report.
+
+## Cross-report incident and pattern analysis (2026-11-03)
+
+The recurring worker now alternates due cross-report work with source analysis in
+its existing research slot. When at least two active source leads exist, it saves
+a bounded input snapshot (up to 100 recent reports, 24 leads, 64 exact citations,
+60,000 encoded characters). Source hashes and text offsets are revalidated;
+nearby source context, prior objections and the latest owner review are included.
+Whole omitted leads and coverage limits are disclosed. Policy observations and
+owner-dismissed leads are excluded. No student uploads are consumed.
+
+An Investigator proposes underlying incidents and recurring mechanisms using
+only supplied evidence IDs. A separate Skeptic challenges incident identity,
+duplicate coverage, allegations versus outcomes, policy applicability, chronology
+and alternative explanations. Code rejects invented references, shared action
+passages split into multiple incidents, unsupported policy-gap references and
+patterns whose incidents were rejected. Unresolved source leads and incidents
+propagate uncertainty to the pattern. These are private investigation leads;
+originating-lineage independence and publication eligibility are never inferred.
+
+Inputs, reports and model provenance are retained atomically behind fenced job
+leases. Both model steps share the existing 12-step UTC daily cap and cache.
+A budget-deferred Skeptic resumes against the same input without repeating its
+Investigator call. Failed responses remain retryable. A changed source-lead or
+owner-review selection marks an older synthesis as a historical snapshot.
+The private screen exposes claims, incident membership, exact citations, source
+context, chronology, objections and omitted-input counts.
+
+Manual bounded command: `python -m blindspot.cli synthesize --credits-verified`.
+It does not raise the daily budget. The first real job was queued from two saved
+leads with 13 revalidated passages and deferred at the existing 12-step cap;
+no additional model request occurred. A guarded idle reload activated the new
+worker code. Its PowerShell guard now passes Python via stdin to preserve quotes
+under Windows PowerShell. Live completion of this new model contract remains
+unverified until budget becomes available. Office/scanned coverage, origin
+verification, deeper retrieval and manual/live auditor review remain open.

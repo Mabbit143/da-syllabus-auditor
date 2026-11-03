@@ -37,10 +37,12 @@ class CachedBudgetModel:
         start = len(getattr(self.ask, "calls", []))
         raw = self.ask(instructions, context)
         result = json.loads(raw) if isinstance(raw, str) else raw
-        field = "results" if instructions.startswith("DISCOVERY") else "reviews" if "SKEPTIC" in instructions else "findings"
-        maximum = 20 if field == "results" else 3
+        field = "results" if instructions.startswith("DISCOVERY") else "reviews" if "SKEPTIC" in instructions else "incidents" if instructions.startswith("PATTERN_INVESTIGATOR") else "findings"
+        maximum = 20 if field == "results" else 15 if instructions.startswith("PATTERN_SKEPTIC") else 12 if field == "incidents" else 3
         if not isinstance(result, dict) or not isinstance(result.get(field), list) or len(result[field]) > maximum:
             raise ValueError("Research model returned an invalid step response")
+        if field == "incidents" and (not isinstance(result.get("patterns"), list) or len(result["patterns"]) > 3):
+            raise ValueError("Pattern model returned an invalid patterns list")
         provenance = getattr(self.ask, "calls", [])[start:]
         metadata = provenance[-1] if provenance else {"provider": "injected", "fallback": False}
         with self.store._db() as db:

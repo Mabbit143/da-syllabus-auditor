@@ -52,11 +52,28 @@ test("owner reads evidence, records review and clears data on sign-out", async (
       status: { discovery, documents: 415, versions: 415, analysis_reports: 1, latest_analysis_at: 10, jobs: [{ kind: "analyze", state: "pending", count: 414 }], failures: [], monitor: { schedule: { runner: "verification", interval: 10, next_due: 30, lease_until: null }, runs: [{ id: 2, runner: "verification", state: "completed", started_at: 10, finished_at: 20, error: null, collection: { collected: 1 }, analysis: { completed: 1, daily_limit: 4 } }], model_usage: [{ day: "2026-11-03", calls: 3 }] } },
       documents: [{ id: 12, title: "Example source", url: evidence.url, category: "policy", method: "html", archived_snapshot: true, original_fetched_date: "2026-10-27", first_seen: 10, last_seen: 10 }],
       page: 1, total_documents: 1, reviews, storage: "local-worker", history_limits: { reports: 100, reviews: 500 },
+      synthesis: { id: 1, completed_at: 20, input_current: false, report: {
+        incidents: [{ id: "i1", summary: "A reported access restriction needs investigation.", basis: "allegation", status: "unresolved", mechanism_code: "eligibility_barrier", lead_ids: ["r2:f2"], evidence_ids: ["e1"], temporal_scope: "Historical source; current applicability unknown.", distinctness: "Underlying event identity remains uncertain.", skeptic: { decision: "unresolved", reason: "An allegation does not establish an outcome.", distinctness: "Cannot establish distinct events from this source alone.", temporal_scope: "Historical only", alternative_explanations: ["Repeated coverage could describe one event."], counterevidence_ids: [] } }],
+        patterns: [], evidence: [{ ...evidence, id: "e1", role: "action" }], leads: [{ id: "r2:f2", report_id: 2, finding_id: "f2", claim: "A reported restriction" }], coverage: { recent_reports: 2, omitted_leads: 0, invalid_evidence_leads: 0, note: "Supplied passages only." }, rejected_count: 1, limitations: "Private review leads; originating lineages remain unverified."
+      } },
+      patterns: { evidence_groups: [{ id: "group1", status: "incident_identity_unverified", members: [{ report_id: 2, finding_id: "f2", claim: "An attributed allegation requiring review.", topic: "Access", mechanism: "Restrictive eligibility", status: "unresolved", owner_status: null, actions: [{ ...evidence, role: "action" }] }] }], mechanism_candidates: [], limitations: "Different passages may describe the same incident." },
       reports: [{ id: 1, completed_at: 10, report: { findings: [], observations: [{ id: "f1", claim: "A policy commitment to equal access.", topic: "Access", mechanism: "Stated commitment", evidence: [evidence], questions: ["What happens in practice?"], temporal_scope: "Applicability date unknown", temporal_status: "historical_or_undated", status: "source_observation", publisher_groups: 1, distinct_documents: 1, skeptic: { decision: "retain", reason: "The passage supports the observation.", counterevidence_search: "Checked supplied portions only.", alternative_explanations: [], temporal_scope: "Unknown", counterevidence: [] } }], rejected_count: 2, coverage: [{ version_id: 12, reviewed_characters: 38, total_characters: 200 }] } }],
     } });
   });
   await account(page);
   await expect(page.getByText("415 documents", { exact: true })).toBeVisible();
+  await expect(page.getByRole("region", { name: "Cross-report investigation" })).toContainText("Historical snapshot");
+  await page.getByText("Underlying incident proposals (1)", { exact: true }).click();
+  await expect(page.getByText(/Attributed allegation; no outcome established/)).toBeVisible();
+  await page.getByRole("button", { name: "Inspect synthesis citation", exact: true }).click();
+  await expect(page.getByRole("region", { name: "Saved document" })).toContainText(evidence.quote);
+  await page.getByText("Underlying incident proposals (1)", { exact: true }).click();
+  await page.getByText("Evidence groups and possible recurring mechanisms", { exact: true }).click();
+  await expect(page.getByText("Different passages may describe the same incident.", { exact: true })).toBeVisible();
+  await page.getByText("Evidence group 1: 1 related lead(s)", { exact: true }).click();
+  await page.getByRole("button", { name: "Read saved context", exact: true }).click();
+  await expect(page.getByRole("region", { name: "Saved document" })).toContainText(evidence.quote);
+  await page.getByText("Evidence groups and possible recurring mechanisms", { exact: true }).click();
   await expect(page.getByText(/Timed worker verification recorded/)).toBeVisible();
   await page.getByText("Worker run history and model usage", { exact: true }).click();
   await expect(page.getByText(/Run 2: completed/)).toBeVisible();

@@ -12,6 +12,7 @@ import sqlite3
 import uuid
 from .monitor_state import MonitorState, SCHEMA as MONITOR_SCHEMA, migrate_recorded_calls
 from .search import SCHEMA as SEARCH_SCHEMA, search_status
+from .synthesis_state import SCHEMA as SYNTHESIS_SCHEMA
 
 
 SCHEMA = """
@@ -70,7 +71,7 @@ def timestamp(value):
     return value
 
 
-SCHEMA += MONITOR_SCHEMA + SEARCH_SCHEMA
+SCHEMA += MONITOR_SCHEMA + SEARCH_SCHEMA + SYNTHESIS_SCHEMA
 
 
 class Store(MonitorState):

@@ -84,3 +84,45 @@ Files: owner research server routes, research page and components, targeted E2E 
 - Source-scope checks: external finding evidence must quote the University of Oregon connection from the document itself. Context retrieval includes a short institution passage and merges reviewed spans to keep coverage accurate. Safe diagnostic codes now distinguish provider HTTP/timeouts from malformed research responses without logging raw bodies or keys.
 - Recurring integration: search failures do not stop collection/analysis; new catalog entries feed following cycles. The owned task was deliberately reloaded during a verified idle window to activate discovery. Actual run 8 recorded search/analysis budget deferral while collecting two more documents, reaching 427 documents/five reports. The 12-step daily cap was honored, not raised. Further provider work awaits the normal UTC reset. Restart management preserves the existing task arguments and refuses active-cycle interruption.
 - Discovery verification: all 70 engine Python tests and all 241 Node tests passed. The three private-research browser tests passed with the query-history view and a successful production build. Typecheck and changed-file lint passed. The new tests cover empty-snippet reporting, no-call replay, daily query limits, collection/analysis continuing after search failure, external institutional scope, bounded scope context, and sanitized provider diagnostics. Office/scanned formats and incident/pattern grouping remain unfinished.
+# Evidence-group triage increment (2026-11-03)
+
+Added read-only grouping of exact shared action quotations across recent reports,
+with transitive deduplication, dismissal handling and stable content-derived IDs.
+The private view exposes saved context and repeated mechanism-label candidates.
+This is a triage layer, not completed incident identity or pattern verification:
+different passages may concern the same event, and allegations remain allegations.
+The current local database projection returned 435 documents, five reports, two
+evidence groups and zero repeated mechanism candidates without provider requests.
+Original reports and owner review history are preserved. Independent origins,
+semantic incident resolution and reviewed pattern conclusions remain open.
+Verification: 74 engine Python tests and three private-research browser tests
+passed, including opening saved context from the new grouping view. Production
+build, TypeScript and changed-file lint passed. The restricted browser build first
+failed with a filesystem EPERM; its authorized rerun passed. No provider call,
+budget increase, worker restart, push or deployment was needed for this increment.
+
+## Cross-report research increment (2026-11-03)
+
+- Added durable incident/pattern Investigator and separate Skeptic passes, bounded
+  and revalidated inputs, evidence-reference checks, duplicate-action rejection,
+  policy-gap evidence requirements, uncertainty propagation, immutable results,
+  cached budget resumption and stale-input detection after owner reviews.
+- Recurring cycles give a due pattern job the research slot before another source
+  analysis. Collection and Meta discovery retain their existing paths and limits.
+  Source reports and pattern reports are counted separately in private run history.
+- The owner screen shows incident summaries/basis, pattern proposals, exact saved
+  citations, alternative explanations, chronology, source-lead references and
+  coverage omissions. No automatic publication or independent-origin certification.
+- Verification: 86 engine Python tests, 13 targeted Node tests and three private
+  browser tests passed; the browser run built production successfully. Typecheck
+  and changed-file lint passed. Fixtures verify semantics, fencing, stale reviews,
+  bounded Unicode contexts, bad references, duplicate splits, Skeptic rejection,
+  policy-gap requirements and next-day cached resumption.
+- Real state: two active source leads, 13 revalidated passages; one synthesis job
+  queued and budget-deferred with usage still 12. Live model output for this new
+  contract is not yet verified. The owned task was successfully reloaded through
+  its idle guard and observed Running; a legacy PowerShell -c quoting failure was
+  fixed by piping the guard through stdin. No push/deploy/budget increase occurred.
+- Remaining: live synthesis completion, reviewed originating lineages and incident
+  identity, broader Office/scanned coverage, deeper corpus retrieval, actual owner
+  database access and the remaining manual/live auditor checks.

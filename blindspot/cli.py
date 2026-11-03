@@ -14,11 +14,12 @@ from .provider import NodeModel
 from .budget import CachedBudgetModel
 from .monitor import cycle, watch
 from .search import discover_web, replay_discovery
+from .synthesis import enqueue_synthesis, run_synthesis
 
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description="Private Blindspot research collection")
-    parser.add_argument("command", choices=["collect", "status", "import-corpus", "analyze", "cycle", "watch", "discover", "replay-discovery"])
+    parser.add_argument("command", choices=["collect", "status", "import-corpus", "analyze", "synthesize", "cycle", "watch", "discover", "replay-discovery"])
     parser.add_argument("--db", default=".blindspot/research.sqlite")
     parser.add_argument("--sources", default=str(Path(__file__).with_name("sources.json")))
     parser.add_argument("--max-jobs", type=int, default=3)
@@ -30,6 +31,12 @@ def main(argv=None):
     logging.basicConfig(level=logging.INFO, format="[blindspot] %(message)s")
     try:
         store = Store(args.db)
+        if args.command == "synthesize":
+            model = CachedBudgetModel(store, NodeModel(credits_verified=args.credits_verified, max_calls=2), daily_limit=args.daily_model_calls)
+            enqueue_synthesis(store, time.time())
+            result = run_synthesis(store, model)
+            print(json.dumps(result, indent=2))
+            return 1 if result["failed"] else 0
         if args.command == "replay-discovery":
             print(json.dumps(replay_discovery(store), indent=2))
             return 0

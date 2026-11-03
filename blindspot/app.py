@@ -5,6 +5,8 @@ import sys
 import time
 
 from .store import Store, timestamp
+from .patterns import summarize
+from .synthesis_state import latest_synthesis
 
 
 def _positive(value, maximum, *, zero=False):
@@ -30,7 +32,8 @@ def query(store, request, *, now=None):
         for row in rows:
             meta = json.loads(row["metadata"])
             documents.append({"id": row["id"], "url": row["url"], "title": meta.get("title") or row["url"], "category": meta.get("category", "unknown"), "method": meta.get("method", "unknown"), "archived_snapshot": bool(meta.get("archived_snapshot")), "original_fetched_date": meta.get("original_fetched_date"), "published_at": meta.get("published_at"), "first_seen": row["first_seen"], "last_seen": row["last_seen"]})
-        return {"status": store.status(), "documents": documents, "page": page, "total_documents": total, "reports": store.analyses(100), "reviews": reviews, "storage": "local-worker", "history_limits": {"reports": 100, "reviews": 500}}
+        reports = store.analyses(100)
+        return {"status": store.status(), "documents": documents, "page": page, "total_documents": total, "reports": reports, "patterns": summarize(reports, reviews), "synthesis": latest_synthesis(store), "reviews": reviews, "storage": "local-worker", "history_limits": {"reports": 100, "reviews": 500}}
     if action == "document":
         version = store.get_version(_positive(request.get("version_id"), 1000000000))
         start = _positive(request.get("start", 0), 2000000, zero=True)
