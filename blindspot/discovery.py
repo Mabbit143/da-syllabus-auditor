@@ -44,6 +44,8 @@ def discover(source, links, *, max_links=10, max_depth=2, history=None):
             if history.get(url, {}).get("active"):
                 continue
             child = dict(source, url=url, discovered_from=parent, depth=depth + 1)
+            # A curated source's analysis order does not endorse every link.
+            child.pop("analysis_priority", None)
             if parsed.hostname != parent_host:
                 child["publisher"] = "University of Oregon"
                 child["category"] = "policy" if parsed.hostname == "policies.uoregon.edu" else "administration"

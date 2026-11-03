@@ -10,12 +10,13 @@ from blindspot.worker import run_once, seed
 
 class DiscoveryTests(unittest.TestCase):
     def test_uo_discovery_has_scope_depth_and_count_limits(self):
-        source = {"url": "https://trustees.uoregon.edu/meetings", "category": "administration"}
+        source = {"url": "https://trustees.uoregon.edu/meetings", "category": "administration", "analysis_priority": 30}
         links = ["https://trustees.uoregon.edu/materials.pdf", "https://policies.uoregon.edu/policy", "https://evil-uoregon.edu/a", "https://uoregon.edu.evil/a", "https://trustees.uoregon.edu/events.ics", "https://trustees.uoregon.edu/login", "https://trustees.uoregon.edu/a?calendar=1"]
         found = discover(source, links, max_links=2)
         self.assertEqual([row["url"] for row in found], links[:2])
         self.assertTrue(all(row["discovered_from"] == source["url"] for row in found))
         self.assertTrue(all(row["depth"] == 1 for row in found))
+        self.assertTrue(all("analysis_priority" not in row for row in found))
         self.assertEqual(discover(dict(source, depth=2), links), [])
 
     def test_news_only_follows_relevant_same_publisher_links(self):

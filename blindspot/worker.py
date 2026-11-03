@@ -18,6 +18,8 @@ def seed(store, sources, now, interval=86400):
     period = int(now // interval)
     for source in sources:
         url = canonical_url(source["url"])
+        if "analysis_priority" in source:
+            store.prioritize_analysis(url, source["analysis_priority"])
         store.enqueue("collect", f"{url}:{interval}:{period}", dict(source, url=url), now, priority=source.get("collection_priority", 0))
 
 
@@ -50,7 +52,9 @@ def run_once(store, max_jobs=10, *, clock=time.time, collector=collect):
             if document.get("analysis_ready") is False:
                 result["incomplete"] += 1
             else:
-                store.enqueue("analyze", str(document["version_id"]), {"version_id": document["version_id"], "url": document["url"]}, clock(), priority=10)
+                store.enqueue("analyze", str(document["version_id"]), {"version_id": document["version_id"], "url": document["url"]}, clock(), priority=job["payload"].get("analysis_priority", 10))
+                if "analysis_priority" in job["payload"]:
+                    store.prioritize_analysis(document["url"], job["payload"]["analysis_priority"])
             children = discover(dict(job["payload"], url=document["url"]), document["links"], max_links=min(10, 30 - result["discovered"]), history=store.collection_history())
             seed(store, children, clock())
             result["discovered"] += len(children)

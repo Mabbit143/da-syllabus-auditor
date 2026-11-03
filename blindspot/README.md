@@ -306,3 +306,12 @@ URLs can therefore still hit that smaller limit. Extensions are download hints,
 not format verification: bytes, native extraction limits, redirect/DNS checks and
 robots restrictions still apply. A real 9,608,355-byte Spanish injury notice was
 downloaded and staged for image-backed review, not admitted as analyzed text.
+
+Curated sources can specify an `analysis_priority` integer from 0 to 100. Seeding
+raises pending analysis for that URL's latest saved version without changing its
+budget due time, attempts or active leases. Fresh collection uses the same
+priority; discovered child links do not inherit it. Other sources retain the
+default priority and remain queued. The registry now includes three direct
+sources prioritized for their administrative substance: budget-cut reporting,
+donation reporting and the workplace-accommodation process. Priority does not
+label wrongdoing, establish policy applicability or grant extra model steps.

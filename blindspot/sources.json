@@ -141,5 +141,26 @@
     "category": "news",
     "publisher": "OPB",
     "discovered_from": "web search: University of Oregon civil rights investigation"
+  },
+  {
+    "url": "https://dailyemerald.com/193717/administration/preliminary-academic-budget-cut-proposals-presented-to-uo-senate-2/",
+    "category": "news",
+    "publisher": "Daily Emerald",
+    "discovered_from": "verified public article body; local source version 459",
+    "analysis_priority": 35
+  },
+  {
+    "url": "https://dailyemerald.com/193639/administration/a-1-billion-donation-now-what/",
+    "category": "news",
+    "publisher": "Daily Emerald",
+    "discovered_from": "verified public article body; local source version 461",
+    "analysis_priority": 30
+  },
+  {
+    "url": "https://investigations.uoregon.edu/interactive-disability-accommodation-process",
+    "category": "administration",
+    "publisher": "University of Oregon Office of Equal Opportunity and Access",
+    "discovered_from": "https://investigations.uoregon.edu/workplace-accommodations",
+    "analysis_priority": 25
   }
 ]

@@ -177,6 +177,17 @@ class Store(MonitorState):
             db.execute("INSERT OR IGNORE INTO jobs(kind,key,payload,due,priority) VALUES (?,?,?,?,?)", (kind, key, encoded, due, priority))
             return db.execute("SELECT id FROM jobs WHERE kind=? AND key=?", (kind, key)).fetchone()["id"]
 
+    def prioritize_analysis(self, url, priority):
+        """Raise only pending work for the latest exact URL; preserve leases/due."""
+        if not isinstance(url, str) or not url or type(priority) is not int or not 0 <= priority <= 100:
+            raise ValueError("Analysis priority needs a URL and integer 0–100")
+        with self._db() as db:
+            result = db.execute("""UPDATE jobs SET priority=?
+                WHERE kind='analyze' AND state='pending' AND priority<?
+                AND CAST(json_extract(payload,'$.version_id') AS INTEGER)=
+                    (SELECT max(id) FROM versions WHERE url=?)""", (priority, priority, url))
+        return result.rowcount
+
     def collection_history(self):
         """Discovery rotation metadata; do not load document bodies or secrets."""
         with self._db() as db:

@@ -305,3 +305,23 @@ budget increase, worker restart, push or deployment was needed for this incremen
   retry retains its own lifecycle and will complete through its normal lease.
 - Extensionless large downloads, real owner image approval and reviewed-source
   analysis remain open. The scheduled 12-step cap is unchanged.
+
+## Bounded analysis ordering (2026-11-03)
+
+- Live queue inspection showed generic office entry pages sharing priority ten
+  with detailed reporting while model steps were deferred. Added explicit
+  registry `analysis_priority` for curated sources rather than inferring a
+  discrimination score or automatically treating a news category as wrongdoing.
+- Seed reconciliation raises only pending analysis of the exact URL's latest
+  version. Active claims, due times, attempt counts and stronger existing
+  priorities remain intact. Fresh collection uses the configured priority;
+  discovered links do not inherit it. No backlog is deleted or marked analyzed.
+- Registry now has 25 sources, including direct budget-cut and donation reporting
+  and the workplace-accommodation procedure. The real pending queue verified
+  versions 459/461/484 at priorities 35/30/25 respectively, ahead of generic
+  priority-ten pages. Only three existing pending jobs changed priority.
+- Verification: 129 engine tests passed, including new-job order, backlog
+  preservation, latest-version reconciliation, deferred timing and active lease
+  preservation. Worker was guardedly reloaded and observed Running. Usage stayed
+  at fourteen from the already-consumed exception; no model request or daily cap
+  change occurred. Live analysis of the changed contexts remains pending.
