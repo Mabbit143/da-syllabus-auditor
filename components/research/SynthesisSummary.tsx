@@ -9,7 +9,7 @@ export default function SynthesisSummary({ synthesis, open }: {
     const evidence = report.evidence.find((item) => item.id === id);
     return evidence && <blockquote key={id}>
       <p>{evidence.quote}</p>
-      <p>{evidence.role}{evidence.page ? ` · PDF page ${evidence.page}` : " · saved text passage"}{" · "}
+      <p>{evidence.role}{evidence.page ? ` · PDF page ${evidence.page}` : ` · ${evidence.source_locations?.map((location) => location.label).join("; ") || "saved text passage"}`}{" · "}
         <a href={evidence.url} target="_blank" rel="noopener noreferrer">Source</a>{" · "}
         <button onClick={() => open(evidence.version_id, Math.max(0, evidence.start - 300))}>Inspect synthesis citation</button>
       </p>

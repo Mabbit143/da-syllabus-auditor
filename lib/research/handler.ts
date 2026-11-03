@@ -9,7 +9,7 @@ const integer = (text: string | null, fallback: number, zero = false) => {
   if (text === null) return fallback;
   if (!/^\d+$/.test(text)) return null;
   const value = Number(text);
-  return Number.isSafeInteger(value) && value >= (zero ? 0 : 1) && value <= (zero ? 2_000_000 : 1_000_000_000) ? value : null;
+  return Number.isSafeInteger(value) && value >= (zero ? 0 : 1) && value <= (zero ? 4_000_000 : 1_000_000_000) ? value : null;
 };
 
 async function boundedBody(request: Request): Promise<Record<string, unknown>> {

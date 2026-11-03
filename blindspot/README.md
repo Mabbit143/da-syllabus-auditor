@@ -143,3 +143,44 @@ worker code. Its PowerShell guard now passes Python via stdin to preserve quotes
 under Windows PowerShell. Live completion of this new model contract remains
 unverified until budget becomes available. Office/scanned coverage, origin
 verification, deeper retrieval and manual/live auditor review remain open.
+
+## Native Office documents (2026-11-03)
+
+Collection now reads public DOCX and XLSX packages in an isolated, 30-second
+subprocess using Python's standard library. No Office application, formula engine,
+macro or embedded file is executed, and external relationships are never fetched.
+Archive limits: 20 MB source and expanded content, 2,000 members, 16 MB per XML
+part, 200:1 member expansion; no encryption, unsafe paths, duplicate parts, DTDs,
+entity declarations or VBA packages. Text is limited to four million characters,
+50,000 locations, 100 sheets and 250,000 cells. Inputs outside these limits fail
+explicitly. Older binary DOC/XLS formats are unsupported.
+
+Word preserves body paragraphs, table rows, referenced headers/footers and notes.
+Deleted/hidden runs, comments, images, layout and field instructions are excluded;
+stored field-result text is not recalculated. XLSX stores raw values with sheet,
+row and cell references. Cached formula values may be stale; missing cached values
+are counted, never invented. Number/date/percent formats and merged-cell layout
+are not rendered. Hidden sheets/rows are flagged; hidden columns, charts, comments,
+external workbook data and formula dependencies are not reconstructed. These
+limits accompany source context and research prompts, so stored values do not
+silently become interpreted amounts, percentages or current outcomes.
+
+Office locators propagate through quote verification and the private source view;
+they are never labeled as physical PDF pages. Only locations intersecting displayed
+or model-supplied text are projected, with a 6,000-character metadata allowance and
+visible omission counts. Source browsing supports offsets through four million
+characters while each response still returns at most 10,000 text characters.
+
+Live verification collected the UO faculty onboarding checklist DOCX (2,785
+characters, 20 locations), FY27 PD03 operating-budget XLSX (1,535,104 characters,
+8,662 row locations), and FY26 PD12 XLSX (2,420,818 characters, 13,044 locations).
+The two budget files first exposed the smaller initial extraction limits; their
+actual sizes informed the bounded allowances above, then normal robot-checked
+collection succeeded. Originals were linked by the UO HR and Budget Reports pages.
+The registry now refreshes all three. Node-to-Python access opened the final 10,000
+characters of the FY26 snapshot; model contexts measured about 56,000 characters.
+The private database held 438 documents, with model usage unchanged at 12. No
+Office-derived institutional conclusion has been verified. The owned worker was
+reloaded through its idle guard and observed Running. Reviewed scanned-document
+admission, live synthesis completion, origin verification and remaining auditor
+review checks are still open.

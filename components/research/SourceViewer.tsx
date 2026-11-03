@@ -11,6 +11,14 @@ export default function SourceViewer({ source, open }: { source: ResearchSource;
       {source.history.map((version) => <option key={version.id} value={version.id}>Version {version.id} · observed {new Date(version.first_seen * 1000).toLocaleDateString()}</option>)}
     </select></label>
     {source.physical_pages.length > 0 && <p>Physical PDF pages in this passage: {source.physical_pages.map((page) => page.page).join(", ")}</p>}
+    {source.source_locations && source.source_locations.items.length > 0 && <details>
+      <summary>Word and spreadsheet source locations</summary>
+      <p>{source.source_locations.note} {source.source_locations.omitted_locations} additional location(s) omitted.</p>
+      <ul>{source.source_locations.items.map((location, index) => <li key={index}>
+        {location.label}{location.hidden ? " · hidden sheet or row in the source" : ""}
+        {location.cells && <p>Cells: {location.cells.map((cell) => `${cell.cell}${cell.cached ? " (cached formula result; not recalculated)" : ""}`).join(", ")}{location.omitted_cells ? ` · ${location.omitted_cells} cell locator(s) omitted` : ""}</p>}
+      </li>)}</ul>
+    </details>}
     <pre className="context" style={{ whiteSpace: "pre-wrap", overflowWrap: "anywhere" }}>{source.text}</pre>
     <p className="muted">Showing characters {source.start + 1}–{Math.min(source.start + source.text.length, source.total_characters)} of {source.total_characters}.</p>
     <button disabled={source.start === 0} onClick={() => open(source.id, Math.max(0, source.start - 10000))}>Earlier passage</button>{" "}

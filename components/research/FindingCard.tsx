@@ -20,7 +20,7 @@ export default function FindingCard({ finding, reportId, reviews, open, saved }:
   }
   const evidence = (item: ResearchEvidence, index: number) => <blockquote className="quote" key={`${item.version_id}:${item.start}:${index}`}>
     <p>{item.quote}</p>
-    <p><a href={item.url} target="_blank" rel="noopener noreferrer">{item.role}{item.page ? ` · page ${item.page}` : " · web passage"}</a>{" · "}<button className="link" onClick={() => open(item.version_id, Math.max(0, item.start - 150))}>Read saved passage</button></p>
+    <p><a href={item.url} target="_blank" rel="noopener noreferrer">{item.role}{item.page ? ` · page ${item.page}` : ` · ${item.source_locations?.map((location) => location.label).join("; ") || "saved text passage"}`}</a>{" · "}<button className="link" onClick={() => open(item.version_id, Math.max(0, item.start - 150))}>Read saved passage</button></p>
   </blockquote>;
   return <article className="card mixed">
     <h3>{finding.claim}</h3>

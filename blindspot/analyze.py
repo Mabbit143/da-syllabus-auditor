@@ -7,6 +7,7 @@ import time
 from .evidence import source_groups, verify_evidence, external_scope_verified, include_scope_context
 from .budget import ModelBudgetExhausted
 from .provider import ResearchProviderError
+from .locations import source_locations
 
 logger = logging.getLogger("blindspot")
 
@@ -18,6 +19,10 @@ SKEPTIC = """SKEPTIC: Independently challenge the proposed institutional researc
 Return one JSON object: {"reviews":[{"id":"f1","decision":"retain|unresolved|reject","reason":"why","counterevidence_search":"what passages were checked and limits","alternative_explanations":["alternative"],"temporal_scope":"chronology and policy applicability","counterevidence":[{"version_id":1,"page":null,"quote":"exact passage","role":"context"}]}]}. Review every proposal. Exact counterevidence quotes must occur in supplied segments; use an empty array when no counterevidence was found. Do not invent reassuring evidence. A fetch date proves retrieval, never an effective date or present applicability. Absence of repeal in excerpts does not establish that a policy remains operative. Keep that uncertainty unresolved unless supplied evidence establishes applicability."""
 
 STOP = {"about", "after", "before", "their", "there", "these", "those", "which", "would", "should", "could", "university", "oregon", "policy", "students", "student", "shall", "must", "with", "from", "that", "this", "have", "will", "they", "when", "also", "each"}
+
+OFFICE_LIMITS = " Office locations are native text parts or sheet/row/cell references, never PDF pages. Spreadsheet values are raw stored values: do not infer currency, percent, dates, units or formula freshness from them. Cached formula results may be stale; stored Word field results are not recalculated. Respect extraction coverage omissions and hidden-content flags."
+INVESTIGATOR += OFFICE_LIMITS
+SKEPTIC += OFFICE_LIMITS
 
 
 def _words(text):
@@ -53,7 +58,7 @@ def _context(store, version_id):
         pieces.sort(key=lambda span: len(_words(text[span[0]:span[1]]) & terms), reverse=True)
         ranges = include_scope_context(version, pieces[:2 if version["id"] == version_id else 1])
         versions.append(dict(version, visible_ranges=ranges))
-        metadata = {key: value for key, value in version["metadata"].items() if key != "pages"}
+        metadata = {key: value for key, value in version["metadata"].items() if key not in ("pages", "locations")}
         segments = [{"start": a, "end": b, "text": text[a:b]} for a, b in ranges]
         page_ranges = []
         cursor = 0
@@ -62,7 +67,7 @@ def _context(store, version_id):
             if any(a < end and cursor < b for a, b in ranges):
                 page_ranges.append({"page": page["page"], "start": cursor, "end": end})
             cursor = end + 2
-        documents.append({"version_id": version["id"], "url": version["url"], "metadata": metadata, "segments": segments, "physical_pages": page_ranges})
+        documents.append({"version_id": version["id"], "url": version["url"], "metadata": metadata, "segments": segments, "physical_pages": page_ranges, "source_locations": source_locations(version["metadata"], ranges)})
         coverage.append({"version_id": version["id"], "reviewed_characters": sum(b - a for a, b in ranges), "total_characters": len(text), "ranges": ranges})
     return versions, {"anchor_version_id": version_id, "documents": documents}, coverage
 

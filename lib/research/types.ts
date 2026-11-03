@@ -1,6 +1,12 @@
 export interface ResearchEvidence {
   version_id: number; url: string; content_hash: string; quote: string;
   start: number; end: number; page: number | null; role: "policy" | "action" | "context";
+  source_locations?: ResearchLocation[];
+}
+export interface ResearchLocation {
+  label: string; start: number; end: number; hidden?: boolean;
+  cells?: { cell: string; cached: boolean; formula: string | null; formula_truncated?: boolean }[];
+  omitted_cells?: number;
 }
 export interface ResearchFinding {
   id: string; claim: string; topic: string; mechanism: string; status: string;
@@ -51,5 +57,6 @@ export interface ResearchSource {
   id: number; url: string; content_hash: string; metadata: { title?: string; original_fetched_date?: string; published_at?: string; coverage?: string };
   text: string; start: number; total_characters: number;
   physical_pages: { page: number; start: number; end: number }[];
+  source_locations?: { items: ResearchLocation[]; omitted_locations: number; note: string };
   history: { id: number; content_hash: string; first_seen: number; last_seen: number }[];
 }

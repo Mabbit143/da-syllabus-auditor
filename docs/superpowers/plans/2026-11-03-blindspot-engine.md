@@ -126,3 +126,35 @@ budget increase, worker restart, push or deployment was needed for this incremen
 - Remaining: live synthesis completion, reviewed originating lineages and incident
   identity, broader Office/scanned coverage, deeper corpus retrieval, actual owner
   database access and the remaining manual/live auditor checks.
+
+## Native Office coverage increment (2026-11-03)
+
+- Added isolated, bounded DOCX/XLSX native extraction without dependencies. Word
+  paragraphs/table rows and referenced notes/headers retain locations; deleted and
+  hidden runs are excluded. Spreadsheet stored values retain sheet/row/cell IDs,
+  hidden sheet/row flags, formula provenance and missing-cache counts. No formulas
+  or macros run; unsupported layout and formatting are disclosed.
+- Quote verification, analysis contexts and owner source/citation views preserve
+  native locators. Context-only projections cap metadata, disclose omissions and
+  avoid exposing whole-workbook metadata. Browsing now accepts offsets through
+  four million characters, still returning only a 10,000-character window.
+- Real collection: UO onboarding DOCX 2,785 characters/20 locations; FY27 PD03 XLSX
+  1,535,104/8,662; FY26 PD12 XLSX 2,420,818/13,044. Public landing-page links were
+  verified before robots-checked collection. Initial workbook failures identified
+  the actual XML/text/cell sizes; bounded limits were adjusted and both jobs then
+  completed. The files' expanded packages remain below the unchanged 20 MB cap.
+- Real late-window reads and lexical research contexts succeeded; Office contexts
+  were under 56,000 characters. The Node bridge opened version 438 past 2.4 million
+  characters within its existing timeout/output bounds. Model usage stayed at 12,
+  no inference was requested, and all three sources entered the refresh registry.
+- Verification includes native fixture extraction, exact locators, shared strings,
+  sparse cells, cached/missing formula values, referenced exception notes/headers,
+  external-part refusal, malformed/oversized/macro/entity packages, bounded metadata
+  and large-window API behavior. Three private browser tests passed with formula
+  warnings; production build, typecheck and changed-file lint passed. Fourteen
+  targeted Node tests passed. The owned worker was guardedly reloaded and Running.
+- The final full engine suite passed all 95 tests after the header/footnote and
+  UTF-16 entity/macro rejection cases were added.
+- Still open: reviewed scanned-document admission, live new synthesis contract,
+  originating lineages, deeper retrieval, real owner database access and remaining
+  manual/live auditor checks. No merge, push or deployment occurred.

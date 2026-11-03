@@ -47,7 +47,7 @@ test("owner reads evidence, records review and clears data on sign-out", async (
       reviews.push({ ...body, id: reviews.length + 1, actor: user.id, created_at: 20 });
       return route.fulfill({ json: { saved: true } });
     }
-    if (new URL(route.request().url()).searchParams.has("version")) return route.fulfill({ json: { id: 12, url: evidence.url, content_hash: "test-hash", metadata: { title: "Example source" }, text: evidence.quote, start: 0, total_characters: 38, physical_pages: [], history: [{ id: 12, first_seen: 10, last_seen: 10, content_hash: "test-hash" }] } });
+    if (new URL(route.request().url()).searchParams.has("version")) return route.fulfill({ json: { id: 12, url: evidence.url, content_hash: "test-hash", metadata: { title: "Example source", coverage: "Stored workbook values; formulas not recalculated." }, text: evidence.quote, start: 0, total_characters: 38, physical_pages: [], source_locations: { items: [{ label: "Sheet Allocation, row 1", start: 0, end: 38, cells: [{ cell: "A1", cached: false, formula: null }, { cell: "B1", cached: true, formula: "SUM(C1:D1)" }] }], omitted_locations: 0, note: "Locations intersect supplied text only." }, history: [{ id: 12, first_seen: 10, last_seen: 10, content_hash: "test-hash" }] } });
     return route.fulfill({ json: {
       status: { discovery, documents: 415, versions: 415, analysis_reports: 1, latest_analysis_at: 10, jobs: [{ kind: "analyze", state: "pending", count: 414 }], failures: [], monitor: { schedule: { runner: "verification", interval: 10, next_due: 30, lease_until: null }, runs: [{ id: 2, runner: "verification", state: "completed", started_at: 10, finished_at: 20, error: null, collection: { collected: 1 }, analysis: { completed: 1, daily_limit: 4 } }], model_usage: [{ day: "2026-11-03", calls: 3 }] } },
       documents: [{ id: 12, title: "Example source", url: evidence.url, category: "policy", method: "html", archived_snapshot: true, original_fetched_date: "2026-10-27", first_seen: 10, last_seen: 10 }],
@@ -67,6 +67,8 @@ test("owner reads evidence, records review and clears data on sign-out", async (
   await expect(page.getByText(/Attributed allegation; no outcome established/)).toBeVisible();
   await page.getByRole("button", { name: "Inspect synthesis citation", exact: true }).click();
   await expect(page.getByRole("region", { name: "Saved document" })).toContainText(evidence.quote);
+  await page.getByText("Word and spreadsheet source locations", { exact: true }).click();
+  await expect(page.getByText(/B1 \(cached formula result; not recalculated\)/)).toBeVisible();
   await page.getByText("Underlying incident proposals (1)", { exact: true }).click();
   await page.getByText("Evidence groups and possible recurring mechanisms", { exact: true }).click();
   await expect(page.getByText("Different passages may describe the same incident.", { exact: true })).toBeVisible();

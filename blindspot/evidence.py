@@ -3,6 +3,7 @@ import re
 from urllib.parse import urlsplit
 
 from .discovery import is_uo
+from .locations import source_locations
 
 INSTITUTION = re.compile(r"\buniversity\s+of\s+oregon\b|\buoregon\.edu\b", re.I)
 
@@ -99,7 +100,8 @@ def verify_evidence(proposal, versions):
             cursor += len(page["text"]) + 2
         if page_number is None:
             return None  # One evidence span must not straddle physical pages.
-    return {"version_id": version_id, "url": version["url"], "content_hash": version["content_hash"], "quote": text[start:end], "start": absolute_start, "end": absolute_end, "page": page_number, "role": proposal["role"]}
+    locations = source_locations(version["metadata"], [(absolute_start, absolute_end)])["items"]
+    return {"version_id": version_id, "url": version["url"], "content_hash": version["content_hash"], "quote": text[start:end], "start": absolute_start, "end": absolute_end, "page": page_number, "role": proposal["role"], **({"source_locations": locations} if locations else {})}
 
 
 def source_groups(versions):

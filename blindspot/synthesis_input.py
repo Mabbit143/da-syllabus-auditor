@@ -34,7 +34,7 @@ def build_input(store):
                     if type(start) is not int or type(end) is not int or not 0 <= start < end <= len(version["text"]) or not 12 <= len(" ".join(item["quote"].split())) <= 500 or version["text"][start:end] != item["quote"] or version["content_hash"] != item["content_hash"] or version["url"] != item["url"] or item["role"] not in ("policy", "action", "context"):
                         raise ValueError("Saved source locator did not verify")
                     key = "e" + digest([version_id, item["content_hash"], start, end, item["role"]])[:20]
-                    supplied[key] = {"id": key, **item, "context": version["text"][max(0, start - 200):min(len(version["text"]), end + 200)], "metadata": {k: version["metadata"].get(k) for k in ("title", "published_at", "archived_snapshot", "original_fetched_date", "category")}}
+                    supplied[key] = {"id": key, **item, "context": version["text"][max(0, start - 200):min(len(version["text"]), end + 200)], "metadata": {k: version["metadata"].get(k) for k in ("title", "published_at", "archived_snapshot", "original_fetched_date", "category", "method", "coverage", "missing_formula_values")}}
                 except (KeyError, TypeError, ValueError):
                     bad = True
                     break

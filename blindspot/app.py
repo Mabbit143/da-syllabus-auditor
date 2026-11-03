@@ -7,6 +7,7 @@ import time
 from .store import Store, timestamp
 from .patterns import summarize
 from .synthesis_state import latest_synthesis
+from .locations import source_locations
 
 
 def _positive(value, maximum, *, zero=False):
@@ -36,7 +37,7 @@ def query(store, request, *, now=None):
         return {"status": store.status(), "documents": documents, "page": page, "total_documents": total, "reports": reports, "patterns": summarize(reports, reviews), "synthesis": latest_synthesis(store), "reviews": reviews, "storage": "local-worker", "history_limits": {"reports": 100, "reviews": 500}}
     if action == "document":
         version = store.get_version(_positive(request.get("version_id"), 1000000000))
-        start = _positive(request.get("start", 0), 2000000, zero=True)
+        start = _positive(request.get("start", 0), 4000000, zero=True)
         if start > len(version["text"]):
             raise ValueError("Requested text position is outside this document")
         with store._db() as db:
@@ -47,7 +48,7 @@ def query(store, request, *, now=None):
             if start < end and offset < start + 10000:
                 physical_pages.append({"page": page["page"], "start": offset, "end": end})
             offset = end + 2
-        return {"id": version["id"], "url": version["url"], "content_hash": version["content_hash"], "metadata": {k: v for k, v in version["metadata"].items() if k != "pages"}, "text": version["text"][start:start + 10000], "start": start, "total_characters": len(version["text"]), "physical_pages": physical_pages, "history": history}
+        return {"id": version["id"], "url": version["url"], "content_hash": version["content_hash"], "metadata": {k: v for k, v in version["metadata"].items() if k not in ("pages", "locations")}, "text": version["text"][start:start + 10000], "start": start, "total_characters": len(version["text"]), "physical_pages": physical_pages, "source_locations": source_locations(version["metadata"], [(start, start + 10000)]), "history": history}
     if action == "review":
         report_id = _positive(request.get("report_id"), 1000000000)
         finding_id, actor, note, status = (request.get(key) for key in ("finding_id", "actor", "note", "status"))

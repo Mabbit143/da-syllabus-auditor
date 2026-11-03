@@ -78,12 +78,15 @@ def collect(store, source, now, *, fetch=fetch_public):
         if any(page.get("method") == "ocr" for page in pages):
             raise ValueError("Scanned PDF requires reviewed OCR before research ingestion")
         document = {"text": "\n\n".join(page["text"] for page in pages), "pages": [{"page": page["page"], "text": page["text"]} for page in pages], "title": "", "published_at": None, "links": [], "method": "pdf-text", "coverage": "all extracted pages"}
+    elif body.startswith(b"PK\x03\x04"):
+        from .office import extract_office
+        document = extract_office(body)
     elif mime in ("text/html", "application/xhtml+xml"):
         document = extract_html(body, url)
     elif mime == "text/plain":
         document = {"text": body.decode("utf8"), "title": "", "published_at": None, "links": [], "method": "text", "coverage": "plain text"}
     else:
-        raise ValueError("Source is not a supported HTML, text, or PDF document")
+        raise ValueError("Source is not a supported HTML, text, PDF, DOCX or XLSX document")
     metadata = {key: value for key, value in source.items() if key != "url"}
     metadata.update({key: value for key, value in document.items() if key not in ("text", "links")})
     metadata.update(requested_url=requested, content_type=mime)

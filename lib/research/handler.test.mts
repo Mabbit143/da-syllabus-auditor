@@ -43,6 +43,16 @@ test("review actor comes from verified owner, never request body", async () => {
   assert.equal(h.calls[0].actor, "owner-id");
 });
 
+test("large workbook windows remain accessible with a bounded offset", async () => {
+  const h = setup();
+  const headers = { authorization: "Bearer valid" };
+  const valid = await h.GET(new Request("https://example.test/api/research?version=12&start=2100000", { headers }));
+  assert.equal(valid.status, 200);
+  const invalid = await h.GET(new Request("https://example.test/api/research?version=12&start=4000001", { headers }));
+  assert.equal(invalid.status, 400);
+  assert.equal(h.calls.length, 1);
+});
+
 test("invalid reviews and broken storage return readable errors", async () => {
   const h = setup();
   const response = await h.POST(new Request("https://example.test/api/research", {

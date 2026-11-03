@@ -54,6 +54,27 @@
     "discovered_from": "web search: University of Oregon institutional documents"
   },
   {
+    "url": "https://pages.uoregon.edu/baoforms/files/brp/Report_Analysis/FY27_External_Budget_Report_PD03.xlsx",
+    "category": "administration",
+    "publisher": "University of Oregon Budget and Resource Planning",
+    "discovered_from": "https://brp.uoregon.edu/content/Budget-Reports",
+    "collection_priority": 2
+  },
+  {
+    "url": "https://pages.uoregon.edu/baoforms/files/brp/Report_Analysis/FY26_External_Budget_Report_PD12.xlsx",
+    "category": "administration",
+    "publisher": "University of Oregon Budget and Resource Planning",
+    "discovered_from": "https://brp.uoregon.edu/content/Budget-Reports",
+    "collection_priority": 2
+  },
+  {
+    "url": "https://hr.uoregon.edu/sites/default/files/onboarding_checklist_for_faculty_final_10-15-18_1.docx",
+    "category": "administration",
+    "publisher": "University of Oregon Human Resources",
+    "discovered_from": "https://hr.uoregon.edu/onboarding-checklist-faculty",
+    "collection_priority": 2
+  },
+  {
     "url": "https://www.opb.org/article/2025/03/14/us-education-department-uo-civil-rights-investigation/",
     "category": "news",
     "publisher": "OPB",
