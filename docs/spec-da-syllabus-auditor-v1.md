@@ -23,6 +23,8 @@ Target: single PDF -> page-preserving extraction -> Meta Model API analysis -> d
 
 ## Scope and non-goals
 
+Owner scope expansion (2026-11-03): the separate Blindspot Engine backend is active again, collecting public UO administrative paperwork, press releases and independent reporting, and investigating discrimination, inequality, gatekeeping and institutional departures from stated policies. An owner-only investigation view is now in scope. Its contract is `docs/blindspot-engine-design.md`; current verified behavior and unfinished release requirements are in `blindspot/README.md`. This expansion supersedes the institutional-dashboard exclusion below for the private engine only. The built student auditor and its existing consent boundaries remain intact. Verified quotes establish source text; retained interpretations and recurring-pattern claims require additional evidence and review.
+
 In scope: single PDF upload; file name/page count; extraction; five dimension assessments; attendance, grade-weight and late-policy flags; transparent overall read; source context; missing-evidence notices; printable report.
 
 Out of scope: LMS/Canvas or calendar integration, grade simulation, professor/advisor email drafting, institutional dashboards, paid services, identity/demographic/intent inference, and automated claims of discrimination. OCR is not required for v1: unreadable scans fail explicitly. Accounts and a free hosted database are allowed for the opportunity dashboard (see "Opportunity dashboard"). Syllabus audits stay browser-only unless the student saves a summary.

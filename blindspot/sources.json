@@ -1,0 +1,62 @@
+[
+  {
+    "url": "https://policies.uoregon.edu/prohibited-discrimination-and-retaliation",
+    "category": "policy",
+    "publisher": "University of Oregon",
+    "discovered_from": "https://policies.uoregon.edu/"
+  },
+  {
+    "url": "https://trustees.uoregon.edu/upcoming-meetings",
+    "category": "administration",
+    "publisher": "University of Oregon Board of Trustees",
+    "discovered_from": "https://trustees.uoregon.edu/"
+  },
+  {
+    "url": "https://news.uoregon.edu/",
+    "category": "press_release",
+    "publisher": "University of Oregon",
+    "discovered_from": "web search: University of Oregon newsroom"
+  },
+  {
+    "url": "https://trustees.uoregon.edu/past-meetings",
+    "category": "administration",
+    "publisher": "University of Oregon Board of Trustees",
+    "discovered_from": "https://trustees.uoregon.edu/"
+  },
+  {
+    "url": "https://trustees.uoregon.edu/adopted-motions-and-resolutions",
+    "category": "administration",
+    "publisher": "University of Oregon Board of Trustees",
+    "discovered_from": "https://trustees.uoregon.edu/"
+  },
+  {
+    "url": "https://brp.uoregon.edu/content/Budget-Reports",
+    "category": "finance",
+    "publisher": "University of Oregon",
+    "discovered_from": "web search: University of Oregon budget reports"
+  },
+  {
+    "url": "https://senate.uoregon.edu/committees/senate-budget-committee",
+    "category": "administration",
+    "publisher": "University of Oregon Senate",
+    "discovered_from": "web search: University of Oregon senate budget committee"
+  },
+  {
+    "url": "https://president.uoregon.edu/",
+    "category": "administration",
+    "publisher": "University of Oregon Office of the President",
+    "discovered_from": "web search: University of Oregon president"
+  },
+  {
+    "url": "https://research.uoregon.edu/manage/awards/institutional-information-documents",
+    "category": "administration",
+    "publisher": "University of Oregon Research and Innovation",
+    "discovered_from": "web search: University of Oregon institutional documents"
+  },
+  {
+    "url": "https://www.opb.org/article/2025/03/14/us-education-department-uo-civil-rights-investigation/",
+    "category": "news",
+    "publisher": "OPB",
+    "discovered_from": "web search: University of Oregon civil rights investigation"
+  }
+]
