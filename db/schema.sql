@@ -22,6 +22,7 @@ create table if not exists public.audits (
   file_name text not null,
   report jsonb not null,
   pages jsonb not null,
+  term_id text,
   created_at timestamptz not null default now()
 );
 

@@ -84,7 +84,7 @@ export interface StoredAudit {
 export async function loadAudits(): Promise<StoredAudit[] | null> {
   try {
     if (!(await uid())) return null;
-    const { data, error } = await supabase()!.from("audits").select("id,report,pages,created_at").order("created_at");
+    const { data, error } = await supabase()!.from("audits").select("id,report,pages,created_at,term_id").order("created_at");
     if (error) throw error;
     return (data ?? []).map((row: { id: string; report: unknown; pages: unknown; created_at: string; term_id?: string }) => ({
       id: row.id, report: row.report as AuditReport, pages: row.pages as Page[], createdAt: row.created_at, termId: (row as { term_id?: string }).term_id ?? null,
