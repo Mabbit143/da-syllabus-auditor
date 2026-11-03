@@ -178,8 +178,8 @@ export async function checkAuthors(
   // author proposes the set; code verifies and confirms each piece. Grading stays one hit per
   // author with explicit-insider precedence: any supported insider beats affiliation-only outsiders.
   const checks: NonNullable<SourceAuthors["authors"]> = [];
-  const note = (author: string, title: string, outcome: SourceAuthors["authors"][number]["outcome"], url?: string, pieces?: SourceAuthors["authors"][number]["pieces"]) => {
-    checks.push({ author, title, outcome, ...(url ? { url } : {}), ...(pieces?.length ? { pieces } : {}) });
+  const note = (author: string, title: string, outcome: SourceAuthors["authors"][number]["outcome"], url?: string, pieces?: SourceAuthors["authors"][number]["pieces"], topic?: string) => {
+    checks.push({ author, title, ...(topic ? { topic } : {}), outcome, ...(url ? { url } : {}), ...(pieces?.length ? { pieces } : {}) });
   };
   for (let i = 0; i < picked.length; i += 8) {
     const batch = picked.slice(i, i + 8);
@@ -191,7 +191,7 @@ export async function checkAuthors(
         );
         const a = text.indexOf("{");
         const b = text.lastIndexOf("}");
-        if (a === -1 || b <= a) { note(r.author, r.title, "check_failed"); return null; }
+        if (a === -1 || b <= a) { note(r.author, r.title, "check_failed", undefined, undefined, r.topic); return null; }
         let proposals: { url?: string; quote?: string; relation?: string }[] = [];
         try {
           const o = JSON.parse(text.slice(a, b + 1));
@@ -201,12 +201,12 @@ export async function checkAuthors(
           else if (o && typeof o === "object" && ("found" in o || "url" in o)) {
             proposals = o.found ? [{ url: o.url, quote: o.quote, relation: o.relation }] : [];
           }
-        } catch { note(r.author, r.title, "check_failed"); return null; }
+        } catch { note(r.author, r.title, "check_failed", undefined, undefined, r.topic); return null; }
         console.log(`[sources] ${r.author}: ${proposals.length} bio proposal(s)`);
         // Owner decision 2026-11-02: keep both relations. A bio that states a background outside
         // the covered community is judged only from the author's own stated bio, never the name —
         // it becomes the P7 negative for "Whose perspectives are in the room".
-        if (!proposals.length) { note(r.author, r.title, "not_found"); return null; }
+        if (!proposals.length) { note(r.author, r.title, "not_found", undefined, undefined, r.topic); return null; }
         // One fetch per URL, shared by the same-person check and the quote gate below.
         const pageCache = new Map<string, string | undefined>();
         const pageFor = async (url: string): Promise<string | undefined> => {
@@ -221,7 +221,11 @@ export async function checkAuthors(
             return t;
           } catch { return undefined; } finally { clearTimeout(timer); }
         };
-        // Dedupe proposals by URL, keeping order. Each piece is independent, so all
+        // Group proposals by normalized quote: identical wording is decided once and the
+        // single answer applies to every URL carrying it. Live case: Joy's identical
+        // "writer from New Hampshire" came back outsider on one URL and unclear on
+        // another — the same words must never grade two ways.
+        // Dedupe proposals by URL first, keeping order. Each piece is independent, so all
         // of an author's pieces run concurrently — the old sequential loop tripled
         // lookup time once bios went from 1 to 3 per author.
         const seenUrls = new Set<string>();
@@ -236,33 +240,52 @@ export async function checkAuthors(
             relation: p?.relation === "insider_stated" || p?.relation === "outsider_stated" ? p.relation : "unclear",
           });
         }
-        const settledPieces = await Promise.allSettled(uniq.map(async ({ url, quote, relation }) => {
+        const byQuote = new Map<string, typeof uniq>();
+        for (const u of uniq) {
+          const key = squash(u.quote);
+          if (!byQuote.has(key)) byQuote.set(key, []);
+          byQuote.get(key)!.push(u);
+        }
+        const settledGroups = await Promise.allSettled([...byQuote.values()].map(async (group) => {
           // Same-person gate before any verification spend: the quote plus the search
           // snippet must name this exact author; the fetched page is the fallback. A
           // same-surname namesake (live case: Tanya Holland for a Kimberly Holland
           // reading) is dropped here, never graded.
-          const snippetText = results.filter((sr) => sr.url === url).map((sr) => sr.snippet).join(" ");
-          let page: string | undefined;
-          if (!namesAuthor(`${quote} ${snippetText}`, String(r.author))) {
-            page = await pageFor(url);
-            if (page === undefined || !namesAuthor(page, String(r.author))) {
-              console.log(`[sources] ${r.author}: bio names a different person, dropped ${url}`);
-              return null;
+          const rep = group[0];
+          const snippetText = results.filter((sr) => group.some((g) => g.url === sr.url)).map((sr) => sr.snippet).join(" ");
+          // Pages already fetched for the namesake check, keyed by URL: a fetched page
+          // is only ever reused to verify the URL it came from, never a namesake URL.
+          const fetchedPages = new Map<string, string>();
+          if (!namesAuthor(`${rep.quote} ${snippetText}`, String(r.author))) {
+            for (const g of group) {
+              const fetched = await pageFor(g.url);
+              if (fetched !== undefined) {
+                fetchedPages.set(g.url, fetched);
+                if (namesAuthor(fetched, String(r.author))) break;
+              }
+            }
+            if (![...fetchedPages.values()].some((t) => namesAuthor(t, String(r.author)))) {
+              console.log(`[sources] ${r.author}: bio names a different person, dropped ${group.map((g) => g.url).join(", ")}`);
+              return [];
             }
           }
-          if (!(await verifyBio(results, url, quote, page))) {
-            console.log(`[sources] ${r.author}: bio quote failed verification (${results.length} results) ${url}`);
-            return null;
-          }
+          const verifiedUrls: string[] = [];
+          await Promise.all(group.map(async (g) => {
+            // The caller may hand over a page it already fetched for the same-person
+            // check: reuse it, never refetch.
+            if (await verifyBio(results, g.url, g.quote, fetchedPages.get(g.url))) verifiedUrls.push(g.url);
+            else console.log(`[sources] ${r.author}: bio quote failed verification (${results.length} results) ${g.url}`);
+          }));
+          if (!verifiedUrls.length) return [];
+          // One decide pass per unique quote settles insider / outsider /
+          // neither from the words plus the reading topic; code grades only that
+          // answer. The proposal's own relation label is not trusted: the same quote
+          // has come back labeled differently on different runs.
           const verdict = await ask(
             CONFIRM_INSTRUCTIONS,
-            `Bio quote: ${squash(quote)}
+            `Bio quote: ${squash(rep.quote)}
 What the reading covers: ${r.topic ?? "unknown"}`,
           );
-          // The proposal's own relation label is not trusted: the same quote has come
-          // back labeled differently on different runs, and clear nationalities have
-          // come back "unclear". One decide pass per quote settles insider / outsider /
-          // neither from the words themselves; code grades only that answer.
           const va = verdict.indexOf("{");
           const vb = verdict.lastIndexOf("}");
           let decided: "insider_stated" | "outsider_stated" | "unclear" = "unclear";
@@ -270,25 +293,25 @@ What the reading covers: ${r.topic ?? "unknown"}`,
             const rel = JSON.parse(verdict.slice(va, vb + 1)).relation;
             if (rel === "insider_stated" || rel === "outsider_stated") decided = rel;
           } catch { /* unparseable verdict states nothing: unclear */ }
-          if (decided !== relation) {
-            console.log(`[sources] ${r.author}: proposed ${relation}, decided ${decided} ${url}`);
+          if (decided !== rep.relation) {
+            console.log(`[sources] ${r.author}: proposed ${rep.relation}, decided ${decided} ${verifiedUrls.join(", ")}`);
           }
-          return { quote: squash(quote), url, relation: decided };
+          return verifiedUrls.map((url) => ({ quote: squash(rep.quote), url, relation: decided }));
         }));
         const verifiedPieces: { quote: string; url: string; relation: "insider_stated" | "outsider_stated" | "unclear" }[] = [];
-        for (const s of settledPieces) {
-          if (s.status === "fulfilled" && s.value) verifiedPieces.push(s.value);
-          else if (s.status === "rejected") console.error("[sources] author piece failed:", s.reason instanceof Error ? s.reason.message : s.reason);
+        for (const s of settledGroups) {
+          if (s.status === "fulfilled") verifiedPieces.push(...s.value);
+          else console.error("[sources] author piece failed:", s.reason instanceof Error ? s.reason.message : s.reason);
         }
-        if (!verifiedPieces.length) { note(r.author, r.title, "bio_unverified"); return null; }
+        if (!verifiedPieces.length) { note(r.author, r.title, "bio_unverified", undefined, undefined, r.topic); return null; }
         const insider = verifiedPieces.find((p) => p.relation === "insider_stated");
         const outsider = verifiedPieces.find((p) => p.relation === "outsider_stated");
         const primary = insider ?? outsider;
         if (!primary) {
-          note(r.author, r.title, "no_stated_relation", verifiedPieces[0].url, verifiedPieces);
+          note(r.author, r.title, "no_stated_relation", verifiedPieces[0].url, verifiedPieces, r.topic);
           return null;
         }
-        note(r.author, r.title, primary.relation as "insider_stated" | "outsider_stated", primary.url, verifiedPieces);
+        note(r.author, r.title, primary.relation as "insider_stated" | "outsider_stated", primary.url, verifiedPieces, r.topic);
         return {
           author: r.author, title: r.title, page: Number(r.page), quote: r.quote,
           evidence: { author: r.author, url: primary.url, quote: primary.quote }, relation: primary.relation,
@@ -300,7 +323,7 @@ What the reading covers: ${r.topic ?? "unknown"}`,
       const s = settled[j];
       if (s.status === "rejected") {
         console.error("[sources] author lookup failed:", s.reason instanceof Error ? s.reason.message : s.reason);
-        note(batch[j].author, batch[j].title, "check_failed");
+        note(batch[j].author, batch[j].title, "check_failed", undefined, undefined, batch[j].topic);
       } else if (s.value) out.push(s.value);
     }
   }

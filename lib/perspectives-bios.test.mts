@@ -327,6 +327,49 @@ test("the decide pass overrides a wrong unclear proposal (live Orenstein case)",
   assert.equal((d.hits[0] as { code: string }).code, "P7");
 });
 
+test("identical quotes on two URLs are decided once and never split", async () => {
+  // Live 2026-11-03: Joy's identical "writer from New Hampshire" graded outsider on
+  // one URL and unclear on another. One decide call now settles the wording for all URLs.
+  const readings = [{ author: "Joy, Alexander B.", title: "River King", topic: "Japanese fishing game culture", page: 1, quote: "Joy, Alexander B., River King (2024)." }];
+  const bigPage = [{ pageNumber: 1, text: `- Joy, Alexander B., River King (2024).` }];
+  const quote = "Alexander B. Joy is a writer from New Hampshire.";
+  let decides = 0;
+  const model = async (instructions: string) => {
+    if (instructions === READINGS_INSTRUCTIONS) return JSON.stringify({ readings });
+    if (instructions === CONFIRM_INSTRUCTIONS) { decides++; return JSON.stringify({ relation: "outsider_stated" }); }
+    if (instructions === INSTRUCTIONS) return JSON.stringify({});
+    if (instructions.startsWith("You find evidence in a university syllabus")) return JSON.stringify({ signals: [] });
+    return JSON.stringify({});
+  };
+  const search = async () => ({
+    text: JSON.stringify({ bios: [
+      { url: "https://a.example.edu/joy", quote, relation: "outsider_stated" },
+      { url: "https://b.example.edu/joy", quote, relation: "unclear" },
+    ] }),
+    results: [
+      { url: "https://a.example.edu/joy", snippet: `Bio. ${quote} End.` },
+      { url: "https://b.example.edu/joy", snippet: `Bio. ${quote} End.` },
+    ],
+  });
+  const report = await runAudit({ requestId: "t", fileName: "t.pdf", pageCount: 1, pages: bigPage }, model, search);
+  assert.equal(decides, 1);
+  const d = perspectives(report);
+  assert.equal(d.negative, 1);
+  const pieces = report.sourceAuthors?.authors[0].pieces ?? [];
+  assert.equal(pieces.length, 2);
+  assert.ok(pieces.every((p) => p.relation === "outsider_stated"));
+});
+
+test("each author record carries the reading topic the bio was judged against", async () => {
+  const { report } = await run(
+    [citation("Smith", "J., Village Life (2001)")],
+    [bio("Smith", "insider_stated")],
+  );
+  const entry = report.sourceAuthors?.authors.find((a) => a.author === "Smith");
+  assert.ok(entry);
+  assert.equal(entry.topic, "the valley community");
+});
+
 test("a born-in place counts as a stated background (live Huizinga case)", async () => {
   const readings = [{ author: "Huizinga, Johan", title: "Homo Ludens", topic: "Yoruba games in Nigeria", page: 1, quote: "Huizinga, Johan, Homo Ludens (1938)." }];
   const bigPage = [{ pageNumber: 1, text: `- Huizinga, Johan, Homo Ludens (1938).` }];

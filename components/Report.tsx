@@ -173,6 +173,7 @@ export default function Report({ report, pages, policy }: { report: AuditReport;
                     {report.sourceAuthors.authors.map((a: AuthorBioCheck, i: number) => (
                       <li key={`${a.author}-${i}`}>
                         <strong>{a.author}</strong> — {BIO_OUTCOME_TEXT[a.outcome]}
+                        {a.topic && <span className="muted"> (reading covers: {a.topic})</span>}
                         {a.url && <> <a href={a.url} target="_blank" rel="noopener noreferrer">bio source</a></>}
                         {a.pieces?.length ? (
                           <ul>

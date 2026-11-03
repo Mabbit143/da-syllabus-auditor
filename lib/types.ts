@@ -92,6 +92,8 @@ export type AuthorBioOutcome = "insider_stated" | "outsider_stated" | "no_stated
 export interface AuthorBioCheck {
   author: string;
   title: string;
+  /** What the reading covers, from the syllabus text: the community the bio is judged against. */
+  topic?: string;
   outcome: AuthorBioOutcome;
   /** Where the bio was found, when one was. */
   url?: string;
