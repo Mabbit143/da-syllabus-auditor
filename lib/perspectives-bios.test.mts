@@ -45,7 +45,8 @@ async function run(readings: unknown[], bios: MockBio[], pagesOverride = pages) 
     if (instructions === READINGS_INSTRUCTIONS) return JSON.stringify({ readings });
     if (instructions === CONFIRM_INSTRUCTIONS) {
       const hit = bios.find((b) => input.includes(b.quote));
-      return JSON.stringify({ supported: hit ? hit.supported : false });
+      const relation = hit && hit.supported && hit.relation !== "unclear" ? hit.relation : "neither";
+      return JSON.stringify({ relation });
     }
     if (instructions === INSTRUCTIONS) return JSON.stringify({});
     if (instructions.startsWith("You find evidence in a university syllabus")) return JSON.stringify({ signals: [] });
@@ -192,7 +193,8 @@ test("three verified pieces are all recorded with insider precedence over affili
     if (instructions === READINGS_INSTRUCTIONS) return JSON.stringify({ readings });
     if (instructions === CONFIRM_INSTRUCTIONS) {
       const hit = pieces.find((b) => input.includes(b.quote));
-      return JSON.stringify({ supported: hit ? hit.supported : false });
+      const relation = hit && hit.supported && (hit.relation === "insider_stated" || hit.relation === "outsider_stated") ? hit.relation : "neither";
+      return JSON.stringify({ relation });
     }
     if (instructions === INSTRUCTIONS) return JSON.stringify({});
     if (instructions.startsWith("You find evidence in a university syllabus")) return JSON.stringify({ signals: [] });
@@ -223,7 +225,7 @@ test("a named based-at place outside the covered community counts as outsider", 
   const model = async (instructions: string) => {
     prompts.push(instructions);
     if (instructions === READINGS_INSTRUCTIONS) return JSON.stringify({ readings });
-    if (instructions === CONFIRM_INSTRUCTIONS) return JSON.stringify({ supported: true });
+    if (instructions === CONFIRM_INSTRUCTIONS) return JSON.stringify({ relation: "outsider_stated" });
     if (instructions === INSTRUCTIONS) return JSON.stringify({});
     if (instructions.startsWith("You find evidence in a university syllabus")) return JSON.stringify({ signals: [] });
     return JSON.stringify({});
@@ -244,7 +246,7 @@ test("a bare employer name with no place never counts", async () => {
   const quote = "Holland is editorial director for Southern Living Magazine, specializing in cooking.";
   const model = async (instructions: string) => {
     if (instructions === READINGS_INSTRUCTIONS) return JSON.stringify({ readings });
-    if (instructions === CONFIRM_INSTRUCTIONS) return JSON.stringify({ supported: false });
+    if (instructions === CONFIRM_INSTRUCTIONS) return JSON.stringify({ relation: "neither" });
     if (instructions === INSTRUCTIONS) return JSON.stringify({});
     if (instructions.startsWith("You find evidence in a university syllabus")) return JSON.stringify({ signals: [] });
     return JSON.stringify({});
@@ -281,7 +283,7 @@ test("a same-surname namesake bio is dropped and never graded", async () => {
     if (instructions === READINGS_INSTRUCTIONS) return JSON.stringify({ readings });
     if (instructions === CONFIRM_INSTRUCTIONS) {
       assert.ok(!input.includes("Tanya"), "a namesake bio must never reach the confirm pass");
-      return JSON.stringify({ supported: true });
+      return JSON.stringify({ relation: "neither" });
     }
     if (instructions === INSTRUCTIONS) return JSON.stringify({});
     if (instructions.startsWith("You find evidence in a university syllabus")) return JSON.stringify({ signals: [] });
@@ -295,4 +297,53 @@ test("a same-surname namesake bio is dropped and never graded", async () => {
   const d = perspectives(report);
   assert.equal(d.hits.length, 0);
   assert.equal(report.sourceAuthors?.authors[0].outcome, "bio_unverified");
+});
+
+test("the decide pass overrides a wrong unclear proposal (live Orenstein case)", async () => {
+  // Live 2026-11-03: "Peggy Orenstein is an American writer..." came back labeled
+  // unclear. The decide pass reads the quote itself, so the grade no longer depends
+  // on which label the proposal happened to carry.
+  const readings = [{ author: "Orenstein", title: "Girls and Sex", topic: "Samoan adolescent rites", page: 1, quote: "Orenstein, Girls and Sex (2016)." }];
+  const bigPage = [{ pageNumber: 1, text: `- Orenstein, Girls and Sex (2016).` }];
+  const quote = "Peggy Orenstein is an American writer on the politics of everyday life, usually relating to gender.";
+  const model = async (instructions: string, input: string) => {
+    if (instructions === READINGS_INSTRUCTIONS) return JSON.stringify({ readings });
+    if (instructions === CONFIRM_INSTRUCTIONS) {
+      assert.ok(input.includes(quote), "the decide pass must see the quote itself");
+      assert.ok(!input.includes("Claimed"), "the decide pass must not inherit the proposal label");
+      return JSON.stringify({ relation: "outsider_stated" });
+    }
+    if (instructions === INSTRUCTIONS) return JSON.stringify({});
+    if (instructions.startsWith("You find evidence in a university syllabus")) return JSON.stringify({ signals: [] });
+    return JSON.stringify({});
+  };
+  const search = async () => ({
+    text: JSON.stringify({ bios: [{ url: "https://en.example.edu/peggy", quote, relation: "unclear" }] }),
+    results: [{ url: "https://en.example.edu/peggy", snippet: `Bio. ${quote} End.` }],
+  });
+  const report = await runAudit({ requestId: "t", fileName: "t.pdf", pageCount: 1, pages: bigPage }, model, search);
+  const d = perspectives(report);
+  assert.equal(d.negative, 1);
+  assert.equal((d.hits[0] as { code: string }).code, "P7");
+});
+
+test("a born-in place counts as a stated background (live Huizinga case)", async () => {
+  const readings = [{ author: "Huizinga, Johan", title: "Homo Ludens", topic: "Yoruba games in Nigeria", page: 1, quote: "Huizinga, Johan, Homo Ludens (1938)." }];
+  const bigPage = [{ pageNumber: 1, text: `- Huizinga, Johan, Homo Ludens (1938).` }];
+  const quote = "Johan Huizinga was born in 1872 in Groningen.";
+  const model = async (instructions: string) => {
+    if (instructions === READINGS_INSTRUCTIONS) return JSON.stringify({ readings });
+    if (instructions === CONFIRM_INSTRUCTIONS) return JSON.stringify({ relation: "outsider_stated" });
+    if (instructions === INSTRUCTIONS) return JSON.stringify({});
+    if (instructions.startsWith("You find evidence in a university syllabus")) return JSON.stringify({ signals: [] });
+    return JSON.stringify({});
+  };
+  const search = async () => ({
+    text: JSON.stringify({ bios: [{ url: "https://en.example.edu/huizinga", quote, relation: "unclear" }] }),
+    results: [{ url: "https://en.example.edu/huizinga", snippet: `Bio. ${quote} End.` }],
+  });
+  const report = await runAudit({ requestId: "t", fileName: "t.pdf", pageCount: 1, pages: bigPage }, model, search);
+  const d = perspectives(report);
+  assert.equal(d.negative, 1);
+  assert.equal((d.hits[0] as { code: string }).code, "P7");
 });
