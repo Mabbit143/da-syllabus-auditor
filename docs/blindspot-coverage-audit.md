@@ -49,3 +49,30 @@ checks added no model requests. UTC-day usage remains 14 logical steps after the
 owner's already-consumed one-time two-step allowance; the scheduled cap stays 12.
 Originating-lineage verification, actual owner sign-in and manual/live auditor
 review remain open.
+
+## Administrative collection follow-up
+
+A later bounded collection pass saved the [required workplace notices entry
+page](https://hr.uoregon.edu/required-workplace-notices-and-posters) as version
+485 (2,353 extracted characters) and its linked [workplace accommodations
+notice](https://hr.uoregon.edu/content/workplace-accommodations-notice-effective-1-1-2020)
+as version 486 (1,781 characters). Both preserve original URL, discovery parent,
+content hash and native HTML extraction coverage. The second prints an effective
+date of January 1, 2020; retrieval today does not independently establish current
+applicability or implementation. These are potential policy/reference evidence,
+not observations that UO complied with or violated the commitments.
+
+The pass queued employee/labor-relations and classification/compensation pages;
+they remained pending at inspection. The ordinary global queue also followed
+notice-page children. A linked Spanish injury-notice PDF exceeded the default
+download-byte limit and remains a visible retryable failure; it was not saved as
+readable evidence. Publisher throttling deferred requests normally, and no model
+request was made. Model usage remained 14 after the prior one-time allowance.
+
+The contemporaneous latest-URL checkpoint was 480 records: 396 policy, 67
+administration, six news, ten press-release intake labels and one finance. Four
+were headline-only (three press-release labels and one administration label).
+395 latest records were archived snapshots. Counts include the independent
+scheduled worker's progress and should not all be attributed to this bounded
+pass. Collection and administrative reference coverage increased; substantive
+cross-source conclusions still await analysis and review.
