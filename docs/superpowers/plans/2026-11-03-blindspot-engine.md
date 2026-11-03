@@ -253,3 +253,20 @@ budget increase, worker restart, push or deployment was needed for this incremen
   recorded usage remains 14 after the consumed one-time two-step allowance.
 - The owner's clarification refers to connecting through UO's secure network,
   not migration to a UO server. The worker remains on the authorized local host.
+
+## Persistent collection retry correction (2026-11-03)
+
+- Actual queue inspection found seven priority-five pending collection jobs with
+  up to eleven attempts, alongside 75 priority-one and 64 priority-zero jobs.
+  Collection shares only three slots per scheduled pass. The old exponential
+  retry stopped growing at one hour, allowing inaccessible high-priority sources
+  to repeatedly consume those slots.
+- Collection failures now retain their error and pending state while exponential
+  backoff grows to a maximum of 24 hours. The first three delays remain 30/60/120
+  seconds. Analysis timing, priorities, lease fencing, publisher restrictions and
+  daily model cap remain unchanged. Existing pending due times are not rewritten;
+  the longer delay applies after a subsequent failure. No URL was deleted.
+- A regression follows fifteen failures through the daily ceiling, verifies
+  error preservation and confirms a fresh document can run while the failed
+  source is delayed. This reduces retry pressure; it is not proof of exhaustive
+  source coverage or a guarantee that every public URL is accessible.

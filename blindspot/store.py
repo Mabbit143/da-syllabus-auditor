@@ -238,7 +238,10 @@ class Store(MonitorState):
             ).fetchone()
             if job is None:
                 raise ValueError("Job lease expired or belongs to another worker")
-            delay = min(3600, 30 * 2 ** min(job["attempts"] - 1, 7))
+            # Persistently inaccessible sources must not monopolize the small
+            # collection pass. Keep their errors and eventual rechecks intact.
+            cap, exponent = (86400, 12) if job["kind"] == "collect" else (3600, 7)
+            delay = min(cap, 30 * 2 ** min(job["attempts"] - 1, exponent))
             db.execute(
                 "UPDATE jobs SET state=?,due=?,token=NULL,lease_until=NULL,last_error=? WHERE id=?",
                 ("pending" if error else "done", now + delay if error else now, error[:1000] if error else None, job_id),

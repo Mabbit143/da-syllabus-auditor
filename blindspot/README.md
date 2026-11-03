@@ -284,3 +284,10 @@ reviewed ranges, excludes unapproved scan text from ranking, preserves original
 passage offsets, and records candidate/omission counts. The five-related-document
 limit remains. See the [retrieval review](../docs/blindspot-retrieval-review.md)
 for an actual before/after example and remaining vocabulary/applicability limits.
+
+Persistent collection failures retain their last error and remain retryable, but
+their exponential delay can grow to 24 hours instead of repeatedly consuming a
+collection slot every hour. The initial delays remain 30, 60 and 120 seconds;
+the daily ceiling is reached after repeated failures. Analysis retry timing and
+the model budget are unchanged. Publisher restrictions are still respected on
+every attempt; a delayed retry does not bypass robots or access controls.

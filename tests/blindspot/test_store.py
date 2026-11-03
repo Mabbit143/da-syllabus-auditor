@@ -72,6 +72,25 @@ class StoreTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.store.finish(job["id"], job["token"], 15)
 
+    def test_persistent_collection_failures_back_off_to_daily_without_losing_error(self):
+        self.store.enqueue("collect", "blocked", {}, 10, priority=5)
+        now = 10
+        delays = []
+        for _ in range(15):
+            job = self.store.claim(now, 10, kind="collect")
+            self.assertIsNotNone(job)
+            self.store.finish(job["id"], job["token"], now + 1, error="Publisher robots rules disallow this document")
+            with self.store._db() as db:
+                row = db.execute("SELECT * FROM jobs WHERE id=?", (job["id"],)).fetchone()
+            delays.append(row["due"] - now - 1)
+            self.assertEqual(row["state"], "pending")
+            self.assertEqual(row["last_error"], "Publisher robots rules disallow this document")
+            now = row["due"]
+        self.assertEqual(delays[:3], [30, 60, 120])
+        self.assertEqual(delays[-2:], [86400, 86400])
+        self.store.enqueue("collect", "fresh", {}, now - 10)
+        self.assertEqual(self.store.claim(now - 1, 10, kind="collect")["key"], "fresh")
+
     def test_invalid_inputs_do_not_create_evidence_or_jobs(self):
         with self.assertRaises(ValueError):
             self.store.snapshot("https://uoregon.edu/a", "   ", {}, 10)
