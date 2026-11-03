@@ -329,3 +329,27 @@ The private screen filters findings/observations by recorded unit or Not recorde
 and opens the supporting passage. Legacy reports remain unchanged and have no
 department scope inferred from their titles, URLs or claims. Live populated
 scope output awaits future analysis within the normal model budget.
+
+## Owner originating-source review
+
+The private screen can compare two passages from a saved cross-report analysis
+and append a shared-origin, different-origin or unresolved assessment with a
+reason. The server supplies the verified owner identity; both passages are
+rechecked against immutable source text/hash/offsets and retained as receipts.
+Revising a pair appends history instead of overwriting it. Identical passages
+cannot establish different origins; contradictory shared-origin chains are shown.
+
+These are owner assessments, not certified independent support. The independent
+origin count stays unknown and publication eligibility stays false. The latest
+200 pair assessments for selected evidence can enter future Investigator/Skeptic
+context within the existing 60,000-character bound; omitted reviews are counted.
+Notes are untrusted input, not model instructions. Changes invalidate the current
+input hash and follow the existing deferred/superseded-job lifecycle and model
+cap. Saving a review itself does not call a model; scheduled work handles any
+reanalysis. With no recorded origin
+reviews, prior input hashes remain unchanged.
+
+The new local `origin_reviews` table is created on opening worker storage;
+existing research records remain intact. No Supabase schema or permission change
+is required. Real owner lineage assessments and live consumption by the model
+remain unverified; no such assessment has been invented for the real corpus.

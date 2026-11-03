@@ -2,6 +2,7 @@
 import hashlib
 import json
 from .quality import assess_text
+from .origins import attach_origin_context
 
 
 def digest(value):
@@ -58,4 +59,4 @@ def build_input(store):
                 continue
             evidence.update(supplied)
             leads.append(lead)
-    return {"schema_version": 1, "leads": leads, "evidence": list(evidence.values()), "coverage": {"recent_reports": len(reports), "report_limit": 100, "lead_limit": 24, "evidence_limit": 64, "context_character_limit": 60000, "omitted_leads": omitted, "invalid_evidence_leads": invalid, "note": "Only saved verified passages and nearby context, not a full-corpus review. Owner reviews do not establish independent origins."}}
+    return attach_origin_context(store, {"schema_version": 1, "leads": leads, "evidence": list(evidence.values()), "coverage": {"recent_reports": len(reports), "report_limit": 100, "lead_limit": 24, "evidence_limit": 64, "context_character_limit": 60000, "omitted_leads": omitted, "invalid_evidence_leads": invalid, "note": "Only saved verified passages and nearby context, not a full-corpus review. Owner reviews do not establish independent origins."}})

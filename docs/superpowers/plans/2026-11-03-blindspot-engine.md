@@ -346,3 +346,30 @@ budget increase, worker restart, push or deployment was needed for this incremen
   usage remains fourteen after the consumed one-time exception, task cap twelve.
   Live populated labels, owner JWT review and originating-lineage review remain
   open; old leads correctly show no recorded department rather than guessed scope.
+
+## Evidence-bound originating-source review (2026-11-03)
+
+- Added one append-only local `origin_reviews` table. Owner assessments bind two
+  exact passages in a saved synthesis, with source text/hash/offset revalidation,
+  stored evidence receipts, actor supplied by the authorized server and notes.
+  Same/different/unresolved revisions preserve history; reversed pairs share the
+  latest state. Identical passages cannot establish different origins.
+- Shared-origin chains expose conflicting different-origin assessments. The
+  independent-origin count remains unknown and publication eligibility false;
+  owner assessments never certify five independent supports or discrimination.
+- Selected evidence can carry up to 200 latest pair assessments into future
+  synthesis within the existing 60,000-character bound, counting omissions. Notes
+  are untrusted data. Changes invalidate input hashes and use the existing stale
+  job/budget lifecycle; no-review contexts keep their previous hash unchanged.
+- The private form compares both passages, saves the assessment, opens original
+  saved sources and retains visible history. Server authorization precedes all
+  reads/writes and ignores forged client actors. No student workflows changed.
+- Verification: 139 engine tests, ten research API tests and three private browser
+  tests passed, including copied passages, source tampering, conflicts, context
+  limits, actor binding and UI saving/history. Build and final typecheck passed.
+  The first UI run used a locator that mismatched a wrapped select label; the
+  actual accessible combobox names passed on rerun.
+- Actual database has zero origin reviews; no owner assessment was invented.
+  Synthesis 1's input remains current and model usage remains fourteen from the
+  consumed one-time exception. Actual owner review and live model consumption
+  remain unverified. No model request, push, deployment or Supabase change.

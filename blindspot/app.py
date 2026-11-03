@@ -10,6 +10,7 @@ from .synthesis_state import latest_synthesis
 from .locations import source_locations
 from .scans import scan_status, scan_preview, admit_passage
 from .quality import assess_text, coverage_summary
+from .origins import save_origin_review, origin_summary
 
 LIST_FIELDS = ("title", "category", "method", "archived_snapshot", "original_fetched_date", "published_at", "analysis_ready", "quality_state")
 
@@ -22,6 +23,8 @@ def _positive(value, maximum, *, zero=False):
 
 def query(store, request, *, now=None):
     action = request.get("action")
+    if action == "origin_review":
+        return save_origin_review(store, request, now=time.time() if now is None else now)
     if action == "scan_preview":
         return scan_preview(store, request.get("scan_id"), request.get("page"))
     if action == "scan_passage":
@@ -46,7 +49,8 @@ def query(store, request, *, now=None):
             quality = assess_text(row["short_text"], meta, character_count=row["characters"])
             documents.append({"id": row["id"], "url": row["url"], "title": meta.get("title") or row["url"], "category": meta.get("category") or "unknown", "method": meta.get("method") or "unknown", "archived_snapshot": bool(meta.get("archived_snapshot")), "original_fetched_date": meta.get("original_fetched_date"), "published_at": meta.get("published_at"), "first_seen": row["first_seen"], "last_seen": row["last_seen"], "quality": quality})
         reports = store.analyses(100)
-        return {"status": store.status(), "documents": documents, "page": page, "total_documents": total, "reports": reports, "patterns": summarize(reports, reviews), "synthesis": latest_synthesis(store), "scans": scan_status(store), "coverage": coverage_summary(store), "reviews": reviews, "storage": "local-worker", "history_limits": {"reports": 100, "reviews": 500}}
+        synthesis = latest_synthesis(store)
+        return {"status": store.status(), "documents": documents, "page": page, "total_documents": total, "reports": reports, "patterns": summarize(reports, reviews), "synthesis": synthesis, "origins": origin_summary(store, synthesis), "scans": scan_status(store), "coverage": coverage_summary(store), "reviews": reviews, "storage": "local-worker", "history_limits": {"reports": 100, "reviews": 500}}
     if action == "document":
         version = store.get_version(_positive(request.get("version_id"), 1000000000))
         start = _positive(request.get("start", 0), 4000000, zero=True)

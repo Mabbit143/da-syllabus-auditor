@@ -37,6 +37,7 @@ test("non-owner sees access refusal rather than research", async ({ page }) => {
 
 test("owner reads evidence, records review and clears data on sign-out", async ({ page }) => {
   const reviews: object[] = [];
+  const originReviews: object[] = [];
   let scanApprovals = 0;
   const sourceQuote = "Financial Aid Office: Access is available to all applicants.";
   const evidence = { version_id: 12, url: "https://policies.uoregon.edu/example", content_hash: "test-hash", quote: sourceQuote, start: 0, end: sourceQuote.length, page: null, role: "policy" };
@@ -46,6 +47,12 @@ test("owner reads evidence, records review and clears data on sign-out", async (
     if (route.request().method() === "POST") {
       const body = route.request().postDataJSON();
       expect(body.actor).toBeUndefined();
+      if (body.action === "origin_review") {
+        expect(body.left_id).toBe("e1"); expect(body.right_id).toBe("e2");
+        expect(body.relation).toBe("same_origin");
+        originReviews.push({ ...body, id: originReviews.length + 1, actor: user.id, created_at: 20, source_synthesis_id: 1 });
+        return route.fulfill({ json: { saved: true, id: originReviews.length } });
+      }
       if (body.action === "scan_passage") {
         expect(body.confirmed).toBe(true);
         expect(body.pdf_sha256).toBe("a".repeat(64));
@@ -65,9 +72,10 @@ test("owner reads evidence, records review and clears data on sign-out", async (
       page: 1, total_documents: 1, reviews, storage: "local-worker", history_limits: { reports: 100, reviews: 500 },
       coverage: { total_documents: 415, archived_snapshots: 398, headline_only: 1, categories: { policy: { documents: 414, analysis_ready: 414, headline_only: 0, archived: 398 }, press_release: { documents: 1, analysis_ready: 0, headline_only: 1, archived: 0 } }, headline_examples: [{ version_id: 13, url: "https://news.uoregon.edu/heading", title: "Headline without body" }], note: "Categories are intake labels; text availability does not establish full coverage." },
       scans: { total_sources: 1, limit: 20, sources: [{ id: 1, url: "https://uoregon.edu/scan.pdf", pdf_sha256: "a".repeat(64), page_count: 1, needs_review_pages: [1], approved_passages: scanApprovals }] },
+      origins: { latest: originReviews, history: originReviews, history_total: originReviews.length, history_limit: 200, omitted_latest_pairs: 0, same_origin_groups: originReviews.length ? [["e1", "e2"]] : [], conflicts: [], independent_origin_count: null, publication_eligible: false, limitations: "Owner assessments do not establish independent originating lineages." },
       synthesis: { id: 1, completed_at: 20, input_current: false, report: {
         incidents: [{ id: "i1", summary: "A reported access restriction needs investigation.", basis: "allegation", status: "unresolved", mechanism_code: "eligibility_barrier", lead_ids: ["r2:f2"], evidence_ids: ["e1"], temporal_scope: "Historical source; current applicability unknown.", distinctness: "Underlying event identity remains uncertain.", skeptic: { decision: "unresolved", reason: "An allegation does not establish an outcome.", distinctness: "Cannot establish distinct events from this source alone.", temporal_scope: "Historical only", alternative_explanations: ["Repeated coverage could describe one event."], counterevidence_ids: [] } }],
-        patterns: [], evidence: [{ ...evidence, id: "e1", role: "action" }], leads: [{ id: "r2:f2", report_id: 2, finding_id: "f2", claim: "A reported restriction" }], coverage: { recent_reports: 2, omitted_leads: 0, invalid_evidence_leads: 0, note: "Supplied passages only." }, rejected_count: 1, limitations: "Private review leads; originating lineages remain unverified."
+        patterns: [], evidence: [{ ...evidence, id: "e1", role: "action" }, { ...evidence, id: "e2", version_id: 14, url: "https://office.uoregon.edu/example", quote: "Applicants may request a fee waiver before applying.", end: 51, role: "context" }], leads: [{ id: "r2:f2", report_id: 2, finding_id: "f2", claim: "A reported restriction" }], coverage: { recent_reports: 2, omitted_leads: 0, invalid_evidence_leads: 0, note: "Supplied passages only." }, rejected_count: 1, limitations: "Private review leads; originating lineages remain unverified."
       } },
       patterns: { evidence_groups: [{ id: "group1", status: "incident_identity_unverified", members: [{ report_id: 2, finding_id: "f2", claim: "An attributed allegation requiring review.", topic: "Access", mechanism: "Restrictive eligibility", status: "unresolved", owner_status: null, actions: [{ ...evidence, role: "action" }] }] }], mechanism_candidates: [], limitations: "Different passages may describe the same incident." },
       reports: [{ id: 1, completed_at: 10, report: { findings: [], observations: [{ id: "f1", claim: "A policy commitment to equal access.", topic: "Access", mechanism: "Stated commitment", evidence: [evidence], departments: [{ name: "Financial Aid Office", evidence_index: 0 }], questions: ["What happens in practice?"], temporal_scope: "Applicability date unknown", temporal_status: "historical_or_undated", status: "source_observation", publisher_groups: 1, distinct_documents: 1, skeptic: { decision: "retain", reason: "The passage supports the observation.", counterevidence_search: "Checked supplied portions only.", alternative_explanations: [], temporal_scope: "Unknown", counterevidence: [] } }], rejected_count: 2, retrieval: { method: "bm25_documents_v1", candidate_documents: 30, matching_related_documents: 9, omitted_related_documents: 4, identical_content_collapsed: 3, limits: "Policy applicability requires evidence review." }, coverage: [{ version_id: 12, reviewed_characters: sourceQuote.length, total_characters: 200 }] } }],
@@ -113,6 +121,14 @@ test("owner reads evidence, records review and clears data on sign-out", async (
   await expect(page.getByText(/Run 2: completed/)).toBeVisible();
   await page.getByText("Internet discovery (18 candidate URLs)", { exact: true }).click();
   await expect(page.getByText(/University of Oregon administration interviews/)).toBeVisible();
+  await page.getByText("Compare and review two source passages", { exact: true }).click();
+  await page.getByRole("combobox", { name: "First passage", exact: true }).selectOption("e1");
+  await page.getByRole("combobox", { name: "Second passage", exact: true }).selectOption("e2");
+  await page.getByRole("combobox", { name: "Origin assessment", exact: true }).selectOption("same_origin");
+  await page.getByLabel("Origin assessment reason").fill("Check whether both accounts depend on the same originating record.");
+  await page.getByRole("button", { name: "Save origin assessment", exact: true }).click();
+  await expect(page.getByText("Origin assessment saved. It does not certify independent support.", { exact: true })).toBeVisible();
+  await expect(page.getByText("Origin review history (1)", { exact: true })).toBeVisible();
   await page.getByRole("button", { name: "Source observations (1)" }).click();
   await page.getByLabel("Department or office").selectOption("unrecorded");
   await expect(page.getByRole("heading", { name: "A policy commitment to equal access." })).toHaveCount(0);

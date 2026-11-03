@@ -13,6 +13,17 @@ function setup(owner: string | null = "owner-id") {
   return { ...handlers, calls };
 }
 
+test("origin reviews bind two passages and use only the verified owner actor", async () => {
+  const handler = setup();
+  const response = await handler.POST(new Request("https://app.example/api/research", { method: "POST", headers: { authorization: "Bearer valid", "Content-Type": "application/json" }, body: JSON.stringify({ action: "origin_review", synthesis_id: 1, left_id: "e1", right_id: "e2", relation: "same_origin", note: "Both cite the same originating report.", actor: "forged-owner" }) }));
+  assert.equal(response.status, 200);
+  assert.equal(handler.calls[0].action, "origin_review");
+  assert.equal(handler.calls[0].actor, "owner-id");
+  const invalid = await handler.POST(new Request("https://app.example/api/research", { method: "POST", headers: { authorization: "Bearer valid", "Content-Type": "application/json" }, body: JSON.stringify({ action: "origin_review", synthesis_id: 1, left_id: "e1", right_id: "e1", relation: "same_origin", note: "Repeated passage." }) }));
+  assert.equal(invalid.status, 400);
+  assert.equal(handler.calls.length, 1);
+});
+
 test("anonymous and non-owner requests never reach research storage", async () => {
   for (const token of [null, "valid"]) {
     const h = setup(null);

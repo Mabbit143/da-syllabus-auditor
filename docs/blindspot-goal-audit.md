@@ -21,7 +21,7 @@ authorize publication, push, merge or deployment.
 | Investigator and independent Skeptic | Exact evidence validation; live source analysis and one two-step synthesis completed | New retrieval contexts and newly collected records have not had live inference after the daily allowance was spent |
 | Policy/action interpretation | Related-source retrieval now includes direct official budget process and response material | A real paired policy/action discrepancy surviving applicability review is not established by the current results |
 | Recurring mechanisms and distinct incidents | Synthesis 1 retains two private incident proposals and proposes zero patterns; stored input remains current | No established recurring discrimination finding; incident/origin verification remains incomplete |
-| Source independence | Exact copies are collapsed for retrieval; publisher/content groups are explicitly conservative | No completed originating-lineage review workflow or verified independent-origin count; publication eligibility is not granted |
+| Source independence | Exact copies are collapsed for retrieval; append-only owner passage-pair origin review, source receipts, conflicts and bounded model-context integration are implemented | Real owner origin review and model consumption remain unverified; independent-origin count stays unknown and publication eligibility is not granted |
 | Topic/department investigation | Text filter covers claim, topic and mechanism; schema-3 quoted department/office tags and unit/Not recorded filtering are now implemented and tested | Legacy scope remains unknown; live populated tags await future inference, and quoted names alone do not prove attribution |
 | Owner reads and review history | Server verifies user token plus owner RPC; database owner/non-owner probes; review actor comes from server; local page and anonymous 401 verified | Real owner JWT dashboard/sign-in and saved review await the owner's pending check |
 | Student privacy | Separate public research SQLite store and owner API; student workflows unchanged; no private demo or saved syllabus ingestion | Maintain these boundaries during remaining work |
@@ -32,7 +32,7 @@ authorize publication, push, merge or deployment.
 | Regression verification | Latest engine code passed 129 tests; targeted private screen checks, typecheck/build/lint passed for its UI changes | Offline/mocked checks cannot establish live model quality, real account behavior or deployment state |
 | Hackathon delivery | Official Meta page confirms November 4, 9 PM ET deadline and Meta/open-weight tooling; organizer lists Baseten as an inference partner | Full participant rules, current submission form/video requirements and actual submission remain unverified |
 
-The next implementation gap is explicit originating-lineage review. The separate live gates are owner sign-in,
+The main remaining gates are live verification: owner sign-in,
 owner source approval where scans are used, representative live analysis after
 the normal budget reset, and participant-specific submission checks. Keep the
 goal active; do not relabel these as completed because collection continues.
@@ -50,3 +50,10 @@ tests, including opening the supporting passage. Build, typecheck and changed-fi
 lint passed. The worker was reloaded without model use; current old reports have
 no guessed labels. Live populated scope and the other listed live gates remain
 unverified.
+
+Origin-review follow-up: evidence-bound owner pair assessments and history are
+implemented with shared-origin conflict checks and context-budget omissions.
+139 engine tests, ten research API tests and three private browser tests passed;
+build and typecheck passed. No origin review was fabricated for real data, no
+independence count was certified, and no model request occurred. Actual owner
+review and live model use of these assessments remain open.

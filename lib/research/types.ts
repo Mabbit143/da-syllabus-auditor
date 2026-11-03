@@ -23,6 +23,7 @@ export interface ResearchReview { id: number; report_id: number; finding_id: str
 export interface ResearchQuality { state: string; analysis_ready: boolean; note: string }
 export interface ResearchDocument { id: number; url: string; title: string; category: string; method: string; archived_snapshot: boolean; original_fetched_date?: string; published_at?: string; first_seen: number; last_seen: number; quality?: ResearchQuality }
 export interface ResearchOverview {
+  origins?: ResearchOrigins;
   coverage?: { total_documents: number; archived_snapshots: number; headline_only: number; categories: Record<string, { documents: number; analysis_ready: number; headline_only: number; archived: number }>; headline_examples: { version_id: number; url: string; title: string }[]; note: string };
   scans?: { total_sources: number; limit: number; sources: { id: number; url: string; pdf_sha256: string; page_count: number; needs_review_pages: number[]; approved_passages: number }[] };
   synthesis?: ResearchSynthesis | null;
@@ -35,6 +36,15 @@ export interface ResearchOverview {
   documents: ResearchDocument[]; page: number; total_documents: number;
   reports: ResearchReport[]; reviews: ResearchReview[]; storage: string;
   history_limits: { reports: number; reviews: number };
+}
+export interface OriginAssessment {
+  id: number; source_synthesis_id: number; left_id: string; right_id: string;
+  relation: "same_origin" | "different_origin" | "unresolved"; note: string; actor: string; created_at: number;
+}
+export interface ResearchOrigins {
+  latest: OriginAssessment[]; history: OriginAssessment[]; history_total: number; history_limit: number;
+  omitted_latest_pairs: number; same_origin_groups: string[][]; conflicts: { left_id: string; right_id: string }[];
+  independent_origin_count: null; publication_eligible: false; limitations: string;
 }
 export interface ScanPreview {
   scan_id: number; url: string; pdf_sha256: string; page: number; page_count: number;

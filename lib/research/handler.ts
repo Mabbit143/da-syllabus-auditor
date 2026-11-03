@@ -68,6 +68,10 @@ export function createResearchHandlers(services: Services) {
         let body: Record<string, unknown>;
         try { body = await boundedBody(request); }
         catch { return fail(400, "Enter a valid review with a short note."); }
+        if (body.action === "origin_review") {
+          if (!Number.isSafeInteger(body.synthesis_id) || Number(body.synthesis_id) < 1 || typeof body.left_id !== "string" || !body.left_id || body.left_id.length > 80 || typeof body.right_id !== "string" || !body.right_id || body.right_id.length > 80 || body.left_id === body.right_id || typeof body.relation !== "string" || !["same_origin", "different_origin", "unresolved"].includes(body.relation) || typeof body.note !== "string" || !body.note.trim() || body.note.length > 1000) return fail(400, "Choose two different passages, an origin assessment and a short note.");
+          return respond(await services.query({ action: "origin_review", synthesis_id: body.synthesis_id, left_id: body.left_id, right_id: body.right_id, relation: body.relation, note: body.note.trim(), actor: auth.owner }));
+        }
         if (body.action === "scan_passage") {
           const region = body.region;
           if (!Number.isSafeInteger(body.scan_id) || Number(body.scan_id) < 1 || !Number.isSafeInteger(body.page) || Number(body.page) < 1 || Number(body.page) > 500 || typeof body.pdf_sha256 !== "string" || !/^[a-f0-9]{64}$/.test(body.pdf_sha256) || typeof body.image_sha256 !== "string" || !/^[a-f0-9]{64}$/.test(body.image_sha256) || typeof body.quote !== "string" || body.quote.trim().length < 40 || body.quote.trim().length > 500 || body.confirmed !== true || !Array.isArray(region) || region.length !== 4 || !region.every((value) => Number.isSafeInteger(value) && value >= 0 && value <= 10000) || !region[2] || !region[3]) return fail(400, "Review the source image, enter its exact passage and region, and confirm the comparison.");

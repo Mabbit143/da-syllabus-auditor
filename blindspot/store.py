@@ -14,6 +14,7 @@ from .monitor_state import MonitorState, SCHEMA as MONITOR_SCHEMA, migrate_recor
 from .search import SCHEMA as SEARCH_SCHEMA, search_status
 from .synthesis_state import SCHEMA as SYNTHESIS_SCHEMA
 from .scan_state import SCHEMA as SCAN_SCHEMA
+from .origin_state import SCHEMA as ORIGIN_SCHEMA
 
 
 SCHEMA = """
@@ -72,7 +73,7 @@ def timestamp(value):
     return value
 
 
-SCHEMA += MONITOR_SCHEMA + SEARCH_SCHEMA + SYNTHESIS_SCHEMA + SCAN_SCHEMA
+SCHEMA += MONITOR_SCHEMA + SEARCH_SCHEMA + SYNTHESIS_SCHEMA + SCAN_SCHEMA + ORIGIN_SCHEMA
 
 
 def snapshot_into(db, url, text, metadata, now):

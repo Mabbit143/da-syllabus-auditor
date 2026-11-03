@@ -9,6 +9,7 @@ import PatternSummary from "./PatternSummary";
 import SynthesisSummary from "./SynthesisSummary";
 import ScanReview from "./ScanReview";
 import SourceCoverage from "./SourceCoverage";
+import OriginReview from "./OriginReview";
 
 export default function ResearchWorkspace() {
   const [data, setData] = useState<ResearchOverview | null>(null);
@@ -58,6 +59,7 @@ export default function ResearchWorkspace() {
     <button onClick={() => setRefresh((value) => value + 1)}>Refresh status</button>
     {data.patterns && <PatternSummary patterns={data.patterns} open={open} />}
     {data.synthesis ? <SynthesisSummary synthesis={data.synthesis} open={open} /> : <p>Cross-report incident analysis has not completed yet. It uses the same daily model budget as source analysis and discovery.</p>}
+    {data.synthesis && data.origins && <OriginReview key={data.synthesis.id} synthesis={data.synthesis} origins={data.origins} open={open} saved={() => setRefresh((value) => value + 1)} />}
     {data.scans && <ScanReview scans={data.scans} saved={() => setRefresh((value) => value + 1)} />}
     {data.coverage && <SourceCoverage coverage={data.coverage} open={open} />}
     {error && <p role="alert">{error}</p>}
