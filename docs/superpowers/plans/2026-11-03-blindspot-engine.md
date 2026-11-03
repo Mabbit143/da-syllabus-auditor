@@ -190,3 +190,23 @@ budget increase, worker restart, push or deployment was needed for this incremen
   model outputs, optional OCR engine setup, originating lineages, deeper corpus
   retrieval, actual owner database access and remaining manual/live auditor checks.
   No extra model step, provider activation, merge, push or deployment occurred.
+
+## Owner-review queue correction (2026-11-03)
+
+- Found and fixed stale pattern jobs surviving later source-lead dismissals. Old
+  pending input is now superseded with its payload preserved, and replacement work
+  uses a new hash. With fewer than two leads, no replacement inference is queued.
+- Active leases stay intact. Runners recheck current selection before either model
+  step and before saving; changed input retires the fenced claim. Expired claims
+  remain recoverable/supersedable, and unchanged deferred work preserves caching
+  and next-due time. Superseded history is excluded from actionable queue counts.
+- Verification: 109 engine tests passed, including dismissals before a request,
+  changes between steps/during Skeptic, preserving active leases, expired-worker
+  fencing, immutable replacement history and cached budget resumption. Three
+  private browser tests passed with superseded-count exclusion. Production build,
+  typecheck, changed-file lint and diff checks passed.
+- Real state: one older synthesis job was superseded, one current job was queued,
+  and its analysis deferred at the unchanged 12-step cap without provider use.
+  The authorized task was guardedly reloaded and observed Running. The optional
+  one-time two-step live-test budget question remains pending; no extra calls were
+  inferred from silence. Full live synthesis and other release checks remain open.

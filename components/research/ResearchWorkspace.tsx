@@ -43,7 +43,7 @@ export default function ResearchWorkspace() {
   const findings = data.reports.flatMap((record) => record.report.findings.map((finding) => ({ record, finding })));
   const observations = data.reports.flatMap((record) => record.report.observations.map((finding) => ({ record, finding })));
   const visible = (tab === "observations" ? observations : findings).filter(({ finding }) => `${finding.claim} ${finding.topic} ${finding.mechanism}`.toLowerCase().includes(search.toLowerCase()));
-  const pending = (kind: string) => data.status.jobs.filter((job) => job.kind === kind && job.state !== "done").reduce((total, job) => total + job.count, 0);
+  const pending = (kind: string) => data.status.jobs.filter((job) => job.kind === kind && (job.state === "pending" || job.state === "running")).reduce((total, job) => total + job.count, 0);
   const monitor = data.status.monitor;
   const lastRun = monitor?.runs[0];
   return <>

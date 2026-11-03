@@ -25,7 +25,7 @@ class SynthesisTests(unittest.TestCase):
         self.store.complete_analysis(job["id"], job["token"], now + 1, {"schema_version": 2, "findings": [{"id": name, "claim": quote, "topic": "Access", "mechanism": "Eligibility", "status": "review_lead", "temporal_scope": "Historical 2025 record", "questions": ["Were exceptions available?"], "evidence": [evidence], "skeptic": {"reason": "Limited lead; no outcome proven.", "counterevidence": []}}], "observations": []})
 
     def response(self, context):
-        a, b = context["leads"]
+        a, b = context["leads"][:2]
         incidents = [{"id": f"i{index}", "summary": lead["claim"], "basis": "allegation", "mechanism_code": "eligibility_barrier", "lead_ids": [lead["id"]], "evidence_ids": [lead["evidence_ids"][0]], "temporal_scope": "2025 source; current applicability unknown", "distinctness": "Different described administrative decisions; verify underlying event."} for index, lead in enumerate([a, b], 1)]
         return {"incidents": incidents, "patterns": [{"id": "p1", "claim": "Two reported access barriers warrant comparison.", "kind": "recurring_mechanism", "mechanism_code": "eligibility_barrier", "incident_ids": ["i1", "i2"], "policy_evidence_ids": [], "temporal_scope": "Historical records only", "questions": ["Are these separate decisions?"]}]}
 
@@ -166,6 +166,77 @@ class SynthesisTests(unittest.TestCase):
             model(INVESTIGATOR, "source context")
         with self.store._db() as db:
             self.assertEqual(db.execute("SELECT count(*) FROM model_cache").fetchone()[0], 0)
+
+    def dismiss_first(self, now=32):
+        from blindspot.app import query
+        query(self.store, {"action": "review", "report_id": 1, "finding_id": "f1", "status": "dismissed", "note": "Same underlying incident; exclude this lead.", "actor": "verified-owner"}, now=now)
+
+    def test_owner_dismissal_supersedes_pending_snapshot_without_a_model_call(self):
+        from blindspot.synthesis import synthesis_due
+        enqueue_synthesis(self.store, 30)
+        self.dismiss_first()
+        self.assertFalse(enqueue_synthesis(self.store, 33))
+        self.assertFalse(synthesis_due(self.store, 33))
+        result = run_synthesis(self.store, lambda *args: self.fail("Dismissed input must not reach a model"), clock=lambda: 33)
+        self.assertEqual(result["completed"], 0)
+        with self.store._db() as db:
+            self.assertEqual(db.execute("SELECT state FROM jobs WHERE kind='synthesize'").fetchone()[0], "superseded")
+
+    def test_new_leads_replace_pending_input_without_rewriting_its_history(self):
+        enqueue_synthesis(self.store, 30)
+        with self.store._db() as db:
+            old = dict(db.execute("SELECT * FROM jobs WHERE kind='synthesize'").fetchone())
+        self.add_lead("A third distinct administrative decision was reported.", "f3", 31)
+        self.assertTrue(enqueue_synthesis(self.store, 33))
+        with self.store._db() as db:
+            rows = [dict(row) for row in db.execute("SELECT * FROM jobs WHERE kind='synthesize' ORDER BY id")]
+        self.assertEqual([r["state"] for r in rows], ["superseded", "pending"])
+        self.assertEqual(rows[0]["payload"], old["payload"])
+
+    def test_active_lease_is_preserved_then_expired_stale_input_is_superseded(self):
+        from blindspot.synthesis_state import complete
+        enqueue_synthesis(self.store, 30)
+        job = self.store.claim(31, 10, kind="synthesize")
+        self.dismiss_first()
+        self.assertFalse(enqueue_synthesis(self.store, 33))
+        with self.store._db() as db:
+            self.assertEqual(db.execute("SELECT state FROM jobs WHERE id=?", (job["id"],)).fetchone()[0], "running")
+        self.assertFalse(enqueue_synthesis(self.store, 41))
+        with self.store._db() as db:
+            self.assertEqual(db.execute("SELECT state FROM jobs WHERE id=?", (job["id"],)).fetchone()[0], "superseded")
+        with self.assertRaises(ValueError):
+            complete(self.store, job, 42, {})
+
+    def test_direct_runner_rechecks_owner_review_before_any_model_call(self):
+        enqueue_synthesis(self.store, 30)
+        self.dismiss_first()
+        result = run_synthesis(self.store, lambda *args: self.fail("Stale input reached a model"), clock=lambda: 33)
+        self.assertEqual(result["superseded"], 1)
+        self.assertIsNone(latest_synthesis(self.store))
+
+    def test_review_change_between_model_steps_prevents_skeptic_and_save(self):
+        enqueue_synthesis(self.store, 30)
+        calls = []
+        def change(instructions, context):
+            calls.append(instructions)
+            result = self.ask(instructions, context)
+            self.dismiss_first()
+            return result
+        result = run_synthesis(self.store, change, clock=lambda: 33)
+        self.assertEqual(result["superseded"], 1)
+        self.assertEqual(len(calls), 1)
+        self.assertIsNone(latest_synthesis(self.store))
+
+    def test_review_change_during_skeptic_prevents_saving_stale_output(self):
+        enqueue_synthesis(self.store, 30)
+        def change(instructions, context):
+            result = self.ask(instructions, context)
+            if "SKEPTIC" in instructions:
+                self.dismiss_first()
+            return result
+        result = run_synthesis(self.store, change, clock=lambda: 33)
+        self.assertEqual(result["superseded"], 1)
+        self.assertIsNone(latest_synthesis(self.store))
 
 
 if __name__ == "__main__":

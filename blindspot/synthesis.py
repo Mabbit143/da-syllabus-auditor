@@ -13,18 +13,38 @@ from .synthesis_contract import INVESTIGATOR, SKEPTIC, proposals, reviewed
 logger = logging.getLogger("blindspot")
 
 
+class SynthesisInputChanged(ValueError):
+    pass
+
+
 def enqueue_synthesis(store, now):
     from .store import timestamp
     timestamp(now)
     context = build_input(store)
-    if len(context["leads"]) < 2:
-        return False
     key = digest(context)
     with store._db() as db:
-        if db.execute("SELECT 1 FROM jobs WHERE kind='synthesize' AND (state!='done' OR key=?)", (key,)).fetchone():
+        if db.execute("SELECT 1 FROM jobs WHERE kind='synthesize' AND state='running' AND lease_until>?", (now,)).fetchone():
             return False
-        db.execute("INSERT INTO jobs(kind,key,payload,due,priority) VALUES ('synthesize',?,?,?,10)", (key, json.dumps({"input_hash": key, "context": context}, ensure_ascii=False), now))
+        # Preserve payload/history. A different current input gets a new work key,
+        # never an overwrite of a deferred Investigator/Skeptic snapshot.
+        db.execute("UPDATE jobs SET state='superseded',token=NULL,lease_until=NULL,last_error=NULL WHERE kind='synthesize' AND key!=? AND (state='pending' OR (state='running' AND lease_until<=?))", (key, now))
+        if len(context["leads"]) < 2:
+            return False
+        previous = db.execute("SELECT id,state FROM jobs WHERE kind='synthesize' AND key=?", (key,)).fetchone()
+        if previous and previous["state"] != "superseded":
+            return False
+        if previous:
+            db.execute("UPDATE jobs SET state='pending',due=?,last_error=NULL WHERE id=?", (now, previous["id"]))
+        else:
+            db.execute("INSERT INTO jobs(kind,key,payload,due,priority) VALUES ('synthesize',?,?,?,10)", (key, json.dumps({"input_hash": key, "context": context}, ensure_ascii=False), now))
     return True
+
+
+def _supersede_claim(store, job, now):
+    with store._db() as db:
+        changed = db.execute("UPDATE jobs SET state='superseded',token=NULL,lease_until=NULL,last_error=NULL WHERE id=? AND kind='synthesize' AND state='running' AND token=? AND lease_until>?", (job["id"], job["token"], now))
+        if changed.rowcount != 1:
+            raise ValueError("Pattern lease expired or belongs to another worker")
 
 
 def synthesis_due(store, now):
@@ -45,16 +65,28 @@ def synthesize(context, ask):
 
 
 def run_synthesis(store, ask, *, clock=time.time):
-    result = {"completed": 0, "failed": 0, "budget_deferred": 0}
+    result = {"completed": 0, "failed": 0, "budget_deferred": 0, "superseded": 0}
     job = store.claim(clock(), 600, kind="synthesize")
     if not job:
         return result
     try:
+        def current():
+            if digest(build_input(store)) != job["payload"]["input_hash"]:
+                raise SynthesisInputChanged("Selected leads or owner reviews changed")
+
+        def guarded_ask(instructions, context):
+            current()
+            return ask(instructions, context)
+
         start = len(getattr(ask, "calls", []))
-        report = synthesize(job["payload"]["context"], ask)
+        report = synthesize(job["payload"]["context"], guarded_ask)
+        current()
         report["model_calls"] = getattr(ask, "calls", [])[start:]
         complete(store, job, clock(), report)
         result["completed"] = 1
+    except SynthesisInputChanged:
+        _supersede_claim(store, job, clock())
+        result["superseded"] = 1
     except ModelBudgetExhausted as exc:
         store.defer(job["id"], job["token"], clock(), exc.next_due)
         result["budget_deferred"] = 1

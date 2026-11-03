@@ -219,3 +219,24 @@ source has zero approved passages. Its refresh URL is in the source registry.
 The existing document_jobs approval/admission workflow remains separate; no prior
 receipt or policy-reference selection was changed by this increment. Actual owner
 approval and live analysis of a reviewed scan remain unverified.
+
+## Owner-review changes and queued pattern work
+
+Queued pattern inputs are immutable snapshots. When selected leads or owner
+reviews change, pending jobs with an old input hash become `superseded`; their
+payloads remain available for inspection. A current snapshot gets a new work key.
+If fewer than two active leads remain, stale pending work is retired without
+making a replacement model request. Unchanged budget-deferred work retains its
+due time and cached Investigator result.
+
+Active leases remain untouched. A runner revalidates its selected input before
+each model step and before saving. If input changed, it retires its own fenced
+claim and discards the obsolete result. An already active provider request cannot
+be undone; its reserved model step still counts. Superseded jobs are excluded from
+actionable queue counts. Expired stale claims can be superseded; stale workers
+remain unable to complete through a newer lease.
+
+The real queue's older pre-update snapshot was superseded and replaced with one
+current pending job. The bounded verification command deferred at the existing
+12-step daily cap without another model call. The guarded worker reload activated
+the updated lifecycle while preserving its schedule and cap.
