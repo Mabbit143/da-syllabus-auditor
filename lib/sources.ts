@@ -20,6 +20,7 @@ const MAX_QUOTE = 400;
 export const BIO_INSTRUCTIONS = `You look up one author's public biography. Use web search. Acceptable sources: the author's own page, a publisher or university profile page, Britannica, or Wikipedia. Prefer distinct sources and include the Wikipedia page when web search returns one for this author.
 Return ONLY one JSON object: {"bios":[{"url":"https://...","quote":"exact bio text","relation":"insider_stated"}]}
 - Up to 3 entries, each from a different URL. Return fewer when fewer distinct bios exist. Never invent a URL or quote.
+- Each entry must be about this exact person, not a namesake who shares the surname: match the full name (first name or initial as given). A same-surname different person gets no entry.
 - Each "quote" must be copied exactly from the bio on the page at its "url", 12 to 300 characters.
 - Each "relation": "insider_stated" if that bio itself states the author belongs to or comes from the community or tradition the reading covers; "outsider_stated" if that bio itself states a background outside it (a stated nationality, ethnicity, community membership, or a based-at / educated-in place outside it counts); otherwise "unclear".
 - A based-at / educated-in place named in the quote counts as a stated background (owner decision 2026-11-03). A bare employer name with no place does not. Never infer from the name, a photo, or reputation.
@@ -31,6 +32,68 @@ export const CONFIRM_INSTRUCTIONS = `You check one claim. Return ONLY {"supporte
 
 export function squash(s: string): string {
   return s.replace(/\s+/g, " ").trim();
+}
+
+/** Lowercase ASCII fold, so "Mäyrä" matches "Mayra" without guessing anything about names. */
+function fold(s: string): string {
+  return s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+}
+
+/** Split a reading-list author ("Surname, First" or "First Surname" or bare surname) for same-person matching. */
+export function parseAuthor(author: string): { surname: string; first: string } {
+  const clean = (s: string) => fold(s).replace(/[^a-z]/g, "");
+  const parts = squash(author).split(",");
+  if (parts.length >= 2) {
+    const firstTok = squash(parts[1]).split(/\s+/)[0] ?? "";
+    return { surname: clean(parts[0]), first: clean(firstTok) };
+  }
+  let toks = squash(author).split(/\s+/).map((t) => t.replace(/\./g, "")).filter(Boolean);
+  toks = toks.filter((t) => !/^(jr|sr|ii|iii|iv|v)$/i.test(t));
+  if (toks.length === 0) return { surname: "", first: "" };
+  if (toks.length === 1) return { surname: clean(toks[0]), first: "" };
+  return { surname: clean(toks[toks.length - 1]), first: clean(toks[0]) };
+}
+
+/**
+ * Same-person gate (owner decision 2026-11-03): the text must name this exact author, not a
+ * namesake sharing the surname. The surname must appear as a whole word; when the reading
+ * gives a first name or initial, it (or its initial) must appear within `window` characters
+ * of the surname. Diacritics are folded, never guessed from.
+ */
+export function namesAuthor(text: string, author: string, window = 120): boolean {
+  const { surname, first } = parseAuthor(author);
+  if (surname.length < 2) return false;
+  const hay = fold(` ${text} `);
+  const atWord = (src: string, w: string, from: number): number => {
+    let p = from;
+    for (;;) {
+      p = src.indexOf(w, p);
+      if (p === -1) return -1;
+      const b = src[p - 1] ?? " ", a = src[p + w.length] ?? " ";
+      if (!/[a-z]/.test(b) && !/[a-z]/.test(a)) return p;
+      p += w.length;
+    }
+  };
+  let hit = -1;
+  const spots: number[] = [];
+  let from = 0;
+  for (;;) {
+    hit = atWord(hay, surname, from);
+    if (hit === -1) break;
+    spots.push(hit);
+    from = hit + surname.length;
+  }
+  if (!spots.length) return false;
+  if (!first) return true;
+  return spots.some((i) => {
+    const near = hay.slice(Math.max(0, i - window), Math.min(hay.length, i + surname.length + window));
+    if (first.length === 1) {
+      // A reading initial matches a full first name or a standalone initial near the surname.
+      return new RegExp(`[^a-z]${first}[a-z]*`).test(near);
+    }
+    const cands = [first, first[0]];
+    return cands.some((c) => atWord(near, c, 0) !== -1);
+  });
 }
 
 export interface BioCheck {
@@ -141,6 +204,21 @@ export async function checkAuthors(
         // it becomes the P7 negative for "Whose perspectives are in the room".
         if (!proposals.length) { note(r.author, r.title, "not_found"); return null; }
         const seenUrls = new Set<string>();
+        // Same-person page cache: one fetch per URL, reused by the namesake check below.
+        const pageCache = new Map<string, string>();
+        const pageFor = async (url: string): Promise<string> => {
+          const hit = pageCache.get(url);
+          if (hit !== undefined) return hit;
+          const controller = new AbortController();
+          const timer = setTimeout(() => controller.abort(), 8_000);
+          try {
+            const res = await fetch(url, { signal: controller.signal, headers: { "User-Agent": "DASyllabusAuditor/0.1" } });
+            if (!res.ok) return "";
+            const t = pageText((await res.text()).slice(0, 1_500_000));
+            pageCache.set(url, t);
+            return t;
+          } catch { return ""; } finally { clearTimeout(timer); }
+        };
         const verifiedPieces: { quote: string; url: string; relation: "insider_stated" | "outsider_stated" | "unclear" }[] = [];
         for (const p of proposals.slice(0, 3)) {
           const url = String(p?.url ?? "");
@@ -148,6 +226,18 @@ export async function checkAuthors(
           const relation = p?.relation === "insider_stated" || p?.relation === "outsider_stated" ? p.relation : "unclear";
           if (!url || seenUrls.has(url)) continue;
           seenUrls.add(url);
+          // Same-person gate before any verification spend: the quote plus the search
+          // snippet must name this exact author; the fetched page is the fallback. A
+          // same-surname namesake (live case: Tanya Holland for a Kimberly Holland
+          // reading) is dropped here, never graded.
+          const snippetText = results.filter((sr) => sr.url === url).map((sr) => sr.snippet).join(" ");
+          if (!namesAuthor(`${quote} ${snippetText}`, String(r.author))) {
+            const page = await pageFor(url);
+            if (!page || !namesAuthor(page, String(r.author))) {
+              console.log(`[sources] ${r.author}: bio names a different person, dropped ${url}`);
+              continue;
+            }
+          }
           if (!(await verifyBio(results, url, quote))) {
             console.log(`[sources] ${r.author}: bio quote failed verification (${results.length} results) ${url}`);
             continue;

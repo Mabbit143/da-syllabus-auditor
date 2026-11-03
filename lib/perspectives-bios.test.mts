@@ -5,7 +5,7 @@ import "../test-support/register-typescript.mjs";
 // @ts-expect-error Native Node TS entry point.
 const { runAudit } = await import("./audit.ts");
 // @ts-expect-error Native Node TS entry point.
-const { BIO_INSTRUCTIONS, CONFIRM_INSTRUCTIONS } = await import("./sources.ts");
+const { BIO_INSTRUCTIONS, CONFIRM_INSTRUCTIONS, parseAuthor, namesAuthor } = await import("./sources.ts");
 // @ts-expect-error Native Node TS entry point.
 const { INSTRUCTIONS, READINGS_INSTRUCTIONS } = await import("./audit.ts");
 
@@ -257,4 +257,42 @@ test("a bare employer name with no place never counts", async () => {
   const d = perspectives(report);
   assert.equal(d.hits.length, 0);
   assert.equal(report.sourceAuthors?.authors[0].outcome, "no_stated_relation");
+});
+
+test("same-person gate: surname, first name, initial and diacritics", () => {
+  assert.deepEqual(parseAuthor("Holland, Kimberly"), { surname: "holland", first: "kimberly" });
+  assert.deepEqual(parseAuthor("Kimberly Holland"), { surname: "holland", first: "kimberly" });
+  assert.deepEqual(parseAuthor("Holland"), { surname: "holland", first: "" });
+  assert.ok(namesAuthor("When Tanya Holland enrolled at UVA", "Holland, Tanya"));
+  assert.ok(!namesAuthor("When Tanya Holland enrolled at UVA", "Holland, Kimberly"));
+  assert.ok(!namesAuthor("When Tanya Holland enrolled at UVA", "Holland, K."));
+  assert.ok(namesAuthor("Kimberly Holland is editorial director", "Holland, K."));
+  assert.ok(namesAuthor("K. Holland is editorial director", "Holland, Kimberly"));
+  assert.ok(namesAuthor("Frans Mäyrä is Professor in Tampere", "Mayra, Frans"));
+  assert.ok(!namesAuthor("Frans Mäyrä is Professor in Tampere", "Mayra, Peggy"));
+});
+
+test("a same-surname namesake bio is dropped and never graded", async () => {
+  // Live case 2026-11-03: search returned Tanya Holland for a Kimberly Holland reading.
+  const readings = [{ author: "Holland, Kimberly", title: "Southern Cooking", topic: "Southern US food traditions", page: 1, quote: "Holland, Kimberly, Southern Cooking (2019)." }];
+  const bigPage = [{ pageNumber: 1, text: `- Holland, Kimberly, Southern Cooking (2019).` }];
+  const quote = "When Tanya Holland enrolled at the University of Virginia in the mid-1980s";
+  const model = async (instructions: string, input: string) => {
+    if (instructions === READINGS_INSTRUCTIONS) return JSON.stringify({ readings });
+    if (instructions === CONFIRM_INSTRUCTIONS) {
+      assert.ok(!input.includes("Tanya"), "a namesake bio must never reach the confirm pass");
+      return JSON.stringify({ supported: true });
+    }
+    if (instructions === INSTRUCTIONS) return JSON.stringify({});
+    if (instructions.startsWith("You find evidence in a university syllabus")) return JSON.stringify({ signals: [] });
+    return JSON.stringify({});
+  };
+  const search = async () => ({
+    text: JSON.stringify({ bios: [{ url: "https://news.example.edu/tanya-holland", quote, relation: "insider_stated" }] }),
+    results: [{ url: "https://news.example.edu/tanya-holland", snippet: `Alumni. ${quote} More.` }],
+  });
+  const report = await runAudit({ requestId: "t", fileName: "t.pdf", pageCount: 1, pages: bigPage }, model, search);
+  const d = perspectives(report);
+  assert.equal(d.hits.length, 0);
+  assert.equal(report.sourceAuthors?.authors[0].outcome, "bio_unverified");
 });
