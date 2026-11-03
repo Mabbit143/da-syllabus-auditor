@@ -23,6 +23,25 @@ settings were cleared at request end. No database rows, grants, policies or sche
 objects were changed. Management-tool access establishes the database-side gate;
 an actual owner browser/JWT sign-in remains a separate outstanding verification.
 
+## Local owner-session entry point
+
+On 2026-11-03 the actual checkout was started with
+`npm.cmd run dev -- --hostname 127.0.0.1 --port 3000`, loading `.env.local`.
+The compiled development client contains the expected project host, not the
+mocked browser-test host. No key, token or account identity was printed.
+
+- `http://127.0.0.1:3000/blindspot` returned HTTP 200 with `Cache-Control: no-store`.
+- An anonymous `/api/research` request returned HTTP 401 and
+  `Cache-Control: private, no-store`, with the readable sign-in requirement.
+- The owner was asked to sign in directly through the existing app form and
+  report whether the dashboard opens. Credentials stay in their browser.
+
+This verifies a running local entry point and real anonymous refusal, not a
+successful owner JWT session, private dashboard response or saved review. The
+server is bound to loopback on this computer; it was not deployed to UO or made
+available to other devices on the UO network. Runtime availability must be
+rechecked after this server stops or the computer restarts.
+
 The app also validates the incoming token with `getUser(token)` before checking
 the RPC, using the same bearer token for its request-scoped Supabase client. It
 does not authorize from user-editable profile metadata. This follows the documented
