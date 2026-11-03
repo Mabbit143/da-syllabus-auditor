@@ -39,29 +39,32 @@ Interfaces: Store(path); snapshot(url, text, metadata, now) returns immutable ve
 Files: blindspot/fetch.py, blindspot/collect.py, blindspot/cli.py, tests/blindspot/test_collect.py.
 Interfaces: fetch_public(url) returns bounded bytes and final URL; extract_document returns text, title, links and extraction coverage; run_once(store, limits) records snapshots and pending analysis.
 
-- [ ] Test public destination validation on redirects, HTML extraction, provenance, incremental links, PDF coverage failures and queue recovery.
-- [ ] Implement bounded fetch, discovery from a source registry, and local corpus import without widening existing UO download permissions.
-- [ ] Verify a representative live collection with saved provenance and explicit coverage gaps.
+- [x] Test public destination validation on redirects, HTML extraction, provenance, incremental links, PDF coverage failures and queue recovery. Covered by the 145-test engine suite.
+- [x] Implement bounded fetch, discovery from a source registry, and local corpus import without widening existing UO download permissions.
+- [x] Verify a representative live collection with saved provenance and explicit coverage gaps. See `docs/blindspot-coverage-audit.md`; this is bounded representative coverage, not an exhaustive corpus claim.
 
 ## Task 3: Analysis
 
 Files: blindspot/analyze.py, blindspot/evidence.py, tests/blindspot/test_analysis.py.
 - [ ] Test invented quotes, prompt injection, chronology, syndication, counterevidence and rejected findings.
-- [ ] Implement Investigator/Skeptic analysis with immutable version evidence, topic grouping, explicit uncertainty and review history.
+- [x] Implement Investigator/Skeptic analysis with immutable version evidence, topic grouping, explicit uncertainty and review history. Live populated department/origin scope remains a separate verification gap.
 - [ ] Verify supported and rejected cross-document findings end to end.
 
 ## Task 4: Private application integration
 
 Files: owner research server routes, research page and components, targeted E2E tests; exact paths chosen after reading current auth contracts.
-- [ ] Test non-owner denial, source browser, findings and run status.
-- [ ] Implement owner-only read/review flows without importing student uploads.
-- [ ] Verify user-visible evidence locators and error states.
+- [x] Test non-owner denial, source browser, findings and run status.
+- [x] Implement owner-only read/review flows without importing student uploads.
+- [x] Verify user-visible evidence locators and error states through mocked browser checks and real local storage adapters. Actual owner JWT sign-in remains a release gate.
 
 ## Task 5: Continuous operation and release checks
 
 - [ ] Verify current provider and hackathon terms, available free hosting, durable volume and scheduler.
-- [ ] Configure bounded recurring jobs; prove two scheduled runs with change detection.
-- [ ] Run auditor review checks and regressions. Record remaining release gaps; never label a local pass continuous operation.
+- [x] Configure bounded recurring jobs and observe multiple actual scheduled runs. Windows task state and runs 63/64 were checked directly.
+- [x] Verify new-data detection in a later scheduled cycle: run 64 reused parent version 420, discovered and saved full embedded story 497, and queued its analysis.
+- [ ] Observe a live publisher edit on the same URL. Changed/reverted-source handling is tested offline; the scheduled observation above proves new-document discovery, not a publisher editing its page.
+- [x] Run automated auditor regressions and record their limits: 238 Node tests and 40 mocked browser tests passed on the combined implementation.
+- [ ] Finish manual/live auditor review checks and remaining release gaps. Never label a local pass continuous operation; owner-session and representative live-model checks remain open.
 
 ## Execution record
 
@@ -396,3 +399,24 @@ budget increase, worker restart, push or deployment was needed for this incremen
   The guarded worker reload reported Running with the unchanged 12/day cap.
   Owner JWT review, live new-context analysis and remaining release gates stay
   open. No model calls, publication, push or deployment occurred.
+
+## Actual scheduled embedded-story recovery (2026-11-03)
+
+- Verified the existing Windows task was Running, queued one known public
+  OregonNews parent, and observed its normal next cycle without launching a
+  foreground collector or restarting the worker. An ignored read-only observer
+  watched the specific job and scheduled run.
+- Run 64 completed after run 63: three processed/collected jobs, one discovered
+  link, one incomplete headline, zero failed/deferred collection requests. It
+  reused headline version 420 and saved story 497 with 5,763 characters and the
+  correct `embedded_from` provenance. The story's first-seen time falls inside
+  the scheduled run's start/finish window; it did not exist at the baseline.
+- The new story analysis job is pending at priority ten with zero attempts.
+  The cycle recorded budget deferral and the scheduled twelve-step limit;
+  recorded model usage stayed fourteen. Actual task state remained Running.
+- Temporary verification priority was scoped to that queue work. No pending
+  verification-priority children remained after the cycle. Raw source data,
+  watcher and detailed receipt stay ignored in local state.
+- This proves scheduled discovery of new source data and reuse of an unchanged
+  parent. It does not prove a publisher edited the same URL, a new source finding
+  survived model review, or an owner has logged in. Those remain separate gates.

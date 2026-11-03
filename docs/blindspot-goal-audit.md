@@ -25,7 +25,7 @@ authorize publication, push, merge or deployment.
 | Topic/department investigation | Text filter covers claim, topic and mechanism; schema-3 quoted department/office tags and unit/Not recorded filtering are now implemented and tested | Legacy scope remains unknown; live populated tags await future inference, and quoted names alone do not prove attribution |
 | Owner reads and review history | Server verifies user token plus owner RPC; database owner/non-owner probes; review actor comes from server; local page and anonymous 401 verified | Real owner JWT dashboard/sign-in and saved review await the owner's pending check |
 | Student privacy | Separate public research SQLite store and owner API; student workflows unchanged; no private demo or saved syllabus ingestion | Maintain these boundaries during remaining work |
-| Actual recurring host | Owned Windows task observed Running with ten-minute interval, three collection jobs/pass and 12 logical model steps/day; scheduled run history through 57 includes completed cycles | Computer must remain on and logged in; a future live publisher-content change and UI reporting still need explicit end-to-end observation |
+| Actual recurring host | Owned Windows task Running at ten-minute/three-job/12-step limits; scheduled run 64 reused parent 420 and saved new embedded story 497 with matching provenance | Computer must remain on and logged in; actual owner UI reporting and a same-URL publisher edit remain unobserved |
 | Local storage capacity | Worker volume measured 22.0 GiB free of 236.8 GiB at this checkpoint | A point-in-time capacity check is not a reserved quota or backup |
 | Resumable limits and recovery | Leased jobs, stale completion rejection, persistent errors, daily collection retry ceiling, host pacing and model cache | Failed/blocked jobs remain visible; a partial run is not a full corpus review |
 | Budget | Actual task arguments retain 12/day; recorded usage is 14 after the owner's consumed one-time two-step exception | No further exception is authorized; additional live inference waits for the normal UTC reset |
@@ -65,3 +65,9 @@ parent provenance and conservative publisher grouping. Real story 496 has 11,118
 characters; the parent headline remains a separate incomplete snapshot. No model
 request or independent-confirmation claim resulted. Embedded links remain bounded
 by the existing source/depth/robots/network limits and a five-embed declaration cap.
+
+Scheduled follow-up: run 64 was observed through the actual Windows task and a
+read-only job/run watcher. It saved previously absent story 497 (5,763 characters)
+during that run and reused parent 420 unchanged. Its analysis remains pending;
+model usage stayed fourteen and real owner origin reviews remain zero. No
+foreground collection worker or schedule restart was used for this observation.
