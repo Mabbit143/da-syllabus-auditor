@@ -163,8 +163,8 @@ Findings so far from reading UO's own pages (all from public pages; quotes verif
 - [x] `db/002-policy-gaps.sql` run and owner added to `app_owners` (owner confirmed 2026-10-27).
 - [x] Meta billing spend limit set (owner confirmed 2026-10-27).
 - [x] GitHub Actions E2E workflow passes (green on `main`, run 40617882009, 2026-10-28).
-- [ ] UO policy wording used in the demo: re-fetch and re-quote it on the day, since pages change.
-- [ ] Owner runs `db/004-audit-term-id.sql` in the Supabase SQL editor (2026-11-02: new audits do not save remotely without it — see section 16).
+- [x] UO policy wording refreshed 2026-11-03: `npm.cmd run verify:quotes` checked all eleven topics against live pages or the admitted PDF hash; 11 passed. Refresh again if the demo occurs on a later day.
+- [x] Required `audits.term_id` column exists in the live database. Read-only `information_schema.columns` verification on 2026-11-03 returned `term_id text` alongside `id uuid` and `user_id uuid`. This confirms the schema prerequisite, not who applied migration 004 or a successful signed-in save. Actual account/browser saving remains unverified.
 
 ## November 2 readiness checkpoint (October 31)
 
