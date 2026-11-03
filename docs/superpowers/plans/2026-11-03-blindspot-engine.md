@@ -210,3 +210,27 @@ budget increase, worker restart, push or deployment was needed for this incremen
   The authorized task was guardedly reloaded and observed Running. The optional
   one-time two-step live-test budget question remains pending; no extra calls were
   inferred from silence. Full live synthesis and other release checks remain open.
+
+## Authorized live synthesis and database gate verification (2026-11-03)
+
+- The owner answered the budget question by approving two extra model steps once,
+  while retaining the worker's 12/day cap. One live Investigator/Skeptic pass
+  completed using exactly two uncached Baseten steps, no fallback and no failures.
+  Usage became 14 for the UTC day; actual task arguments still specify 12/day.
+  Its temporary idle-window reservation was restored after the test.
+- Synthesis 1 matches current input: five source reports considered, two active
+  leads, 13 passages, no coverage-limit omissions/invalid citations. Two incident
+  proposals were retained (procedure and allegation); zero recurring patterns were
+  proposed. These are private model-reviewed leads, not established findings.
+  A separate post-storage audit reverified all 13 exact citations and locators.
+- Current Supabase tool metadata exposed account links, resolving the earlier
+  connector-discovery blocker. The matching project is active/healthy. Read-only
+  probes verified one valid owner membership, pinned definer RPC membership guard,
+  owner array response, non-owner rejection, no anonymous execute privilege and
+  cleared transaction-local claim context. No student text/tokens were returned;
+  no rows, permissions or schema objects changed. Actual browser/JWT login remains
+  unverified. Details and advisor remediation links are in
+  docs/blindspot-owner-verification.md.
+- Still open: actual owner source review and reviewed-scan analysis; deeper corpus
+  retrieval/origin verification; representative coverage audit; and remaining
+  manual/live auditor and owner-session checks. No push, merge or deployment.

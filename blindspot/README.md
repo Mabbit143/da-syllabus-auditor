@@ -1,6 +1,6 @@
 # Blindspot research worker
 
-This is the local collection and analysis backend, separate from the built syllabus auditor. It has a private investigation screen at `/blindspot`. The owner selected this computer for recurring execution; a quiet Windows scheduled worker is installed. Bounded recurring internet discovery is connected; deeper incident/lineage/pattern aggregation remains unfinished.
+This is the local collection and analysis backend, separate from the built syllabus auditor. It has a private investigation screen at `/blindspot`. The owner selected this computer for recurring execution; a quiet Windows scheduled worker is installed. Bounded internet discovery, source analysis and cross-report incident/pattern proposals are connected. A live cross-report pass completed successfully; independently verified origins and comprehensive corpus coverage remain open.
 
 From the repository root:
 
@@ -15,7 +15,7 @@ The default source registry is `blindspot/sources.json`. It covers policies, the
 
 State is stored in `.blindspot/research.sqlite`, ignored by Git. Keep that directory on persistent local storage. SQLite must not be shared between hosts over a network filesystem. Do not put source databases into the public repository. No dependency installation or database service is required for HTML collection; PDF extraction uses the existing `document_jobs` runtime and limits.
 
-The collector follows validated HTTPS redirects, rejects private network destinations, pins validated DNS addresses for TLS, and limits response bytes/time. Publisher robots rules are checked, including redirected document URLs; missing robots files allow collection, access denial blocks it, and server failures cause retries. Durable per-host intervals defer work without consuming retry attempts. It extracts HTML or native PDF text, retaining physical PDF page numbers. Native administrative packets support up to 500 pages and two million characters in an isolated, time-bounded process. Pages needing OCR or blank-page confirmation fail explicitly. The existing reviewed OCR workflow is not yet connected to research imports. HTML extraction records its limits: dynamic content is not rendered.
+The collector follows validated HTTPS redirects, rejects private network destinations, pins validated DNS addresses for TLS, and limits response bytes/time. Publisher robots rules are checked, including redirected document URLs; missing robots files allow collection, access denial blocks it, and server failures cause retries. Durable per-host intervals defer work without consuming retry attempts. It extracts HTML, native PDF and DOCX/XLSX text with source locators. Native PDF packets support up to 500 pages and two million characters in an isolated, time-bounded process. Sparse/unreadable pages are staged outside the analysis pool for owner image review. The separate document_jobs OCR-receipt import remains unconnected; local reviewed transcription is available. HTML extraction records its limits: dynamic content is not rendered.
 
 Link discovery follows UO-hosted documents within the university domain boundary; external reporting follows relevant URLs on the same publisher. It rejects query-driven crawling, login/donation paths and common non-document media. Each source can extend two levels, each document contributes at most ten link candidates, and a pass discovers at most thirty candidates. Job keys deduplicate URLs per collection period. A separate rotating-query loop supplies broader internet candidates. Spreadsheets/Word documents remain unsupported and visible as collection failures.
 
@@ -240,3 +240,29 @@ The real queue's older pre-update snapshot was superseded and replaced with one
 current pending job. The bounded verification command deferred at the existing
 12-step daily cap without another model call. The guarded worker reload activated
 the updated lifecycle while preserving its schedule and cap.
+
+## Live cross-report verification and owner gate (2026-11-03)
+
+The owner explicitly authorized two extra logical model steps once, keeping the
+scheduled worker at 12/day. A bounded pass completed Investigator and Skeptic via
+Baseten with exactly two uncached steps and no fallback. Recorded UTC-day usage
+went from 12 to 14; the actual registered task arguments still specify
+`--daily-model-calls 12`. The temporary idle-window reservation was restored.
+
+The saved synthesis considered five source reports, selecting two active leads
+and 13 source passages with no input-limit omissions or locator failures. It
+retained two private incident proposals: an undated committee-membership procedure
+and a historical investigation allegation. It proposed zero recurring patterns.
+These are model-reviewed leads, not owner-confirmed institutional findings. The
+absence of a pattern proposal from these excerpts does not establish absence of
+discrimination or inequality. The stored input matches the current selection.
+All 13 citations were independently rechecked after storage against their original
+version text, content hash and exact offsets. No scanned passage was admitted.
+
+The live Supabase owner membership and RPC gate were also verified with count-only,
+transaction-local claim probes: owner context returned the expected array,
+non-owner context raised `not allowed`, and anonymous execution lacks a grant.
+Actual owner browser/JWT sign-in remains a separate check. See
+[the verification record](../docs/blindspot-owner-verification.md) for scope and
+existing advisor notices, including disabled leaked-password protection. No
+database permission, auth setting, schema or user record was changed.
