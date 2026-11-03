@@ -21,6 +21,18 @@ class Response:
 
 
 class FetchTests(unittest.TestCase):
+    def test_document_download_limits_match_native_readers_without_expanding_html(self):
+        from blindspot.collect import fetch_document
+        guard = lambda url: None
+        cases = [("notice.PDF?download=1", 20), ("budget.xlsx", 20),
+                 ("procedure.docx", 20), ("index.html", 5),
+                 ("file.pdf.exe", 5), ("download", 5)]
+        for path, megabytes in cases:
+            with self.subTest(path=path), patch("blindspot.collect.fetch_public", return_value={}) as fetch:
+                fetch_document("https://uoregon.edu/" + path, before_fetch=guard)
+                self.assertEqual(fetch.call_args.kwargs["max_bytes"], megabytes * 1024 * 1024)
+                self.assertIs(fetch.call_args.kwargs["before_fetch"], guard)
+
     def test_invalid_destinations_and_credentials_are_rejected(self):
         for url in ["http://example.com", "https://user@example.com", "https://127.0.0.1/", "https://[::1]/", "https://a:99/", "https://a/\nx"]:
             with self.subTest(url=url), self.assertRaises(ValueError):

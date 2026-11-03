@@ -76,3 +76,10 @@ were headline-only (three press-release labels and one administration label).
 scheduled worker's progress and should not all be attributed to this bounded
 pass. Collection and administrative reference coverage increased; substantive
 cross-source conclusions still await analysis and review.
+
+The Spanish injury-notice download gap was subsequently reproduced as a 5 MB
+fetch default versus 20 MB native-reader mismatch. With format-path downloads
+bounded at the existing 20 MB ceiling, the actual PDF downloaded at 9,608,355
+bytes and was staged as scan source 2 for image-backed review. No passage was
+approved or added to analysis; the ordinary queued job still needs its own
+lease-fenced retry completion. HTML limits and the daily model cap are unchanged.

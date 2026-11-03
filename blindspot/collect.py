@@ -1,6 +1,6 @@
 """Public document extraction and immutable snapshot ingestion."""
 from html.parser import HTMLParser
-from urllib.parse import urljoin
+from urllib.parse import urljoin, urlsplit
 
 from .fetch import canonical_url, fetch_public
 from .quality import assess_text
@@ -81,7 +81,15 @@ def extract_html(body, url):
     return {"text": text, "title": title, "published_at": parser.published or " ".join(parser.date_parts) or None, "links": parser.links, "method": "html", "coverage": coverage + ("; headline-only snapshot, article body unavailable" if not quality["analysis_ready"] else ""), "extraction_selector": "article_body" if parser.article_parts else "semantic_main" if parser.main else "body_fallback", "analysis_ready": quality["analysis_ready"], "quality_state": quality["state"]}
 
 
-def collect(store, source, now, *, fetch=fetch_public):
+def fetch_document(url, *, before_fetch=None):
+    # A filename is only a bounded download hint. Actual format and extraction
+    # limits are still checked against bytes by the native readers below.
+    path = urlsplit(canonical_url(url)).path.lower()
+    limit = 20 if path.endswith((".pdf", ".docx", ".xlsx")) else 5
+    return fetch_public(url, max_bytes=limit * 1024 * 1024, before_fetch=before_fetch)
+
+
+def collect(store, source, now, *, fetch=fetch_document):
     """Fetch actual document text; metadata does not claim publisher truth."""
     requested = canonical_url(source["url"])
     response = fetch(requested)

@@ -299,3 +299,10 @@ the per-document, per-pass or depth limits. Old completed URLs remain eligible
 for later refresh; pending failures retain their existing backoff. Rotation
 improves coverage but does not establish that every administrative document has
 been found.
+
+Document paths ending in PDF, DOCX or XLSX now use the same 20 MB download ceiling
+as the native readers. Other paths remain limited to 5 MB; extensionless download
+URLs can therefore still hit that smaller limit. Extensions are download hints,
+not format verification: bytes, native extraction limits, redirect/DNS checks and
+robots restrictions still apply. A real 9,608,355-byte Spanish injury notice was
+downloaded and staged for image-backed review, not admitted as analyzed text.

@@ -288,3 +288,20 @@ budget increase, worker restart, push or deployment was needed for this incremen
   compensation and employee/labor relations. This is selection evidence, not a
   claim those child bodies were fetched or analyzed. Private diagnostic remains
   under ignored worker state. Full-corpus completeness remains unproven.
+
+## Bounded native-document download correction (2026-11-03)
+
+- Actual Spanish injury-notice PDF exceeded the fetcher's default 5 MB ceiling,
+  although PDF/Office readers and the fetcher's absolute limit already allow
+  20 MB. Added a shared document-fetch wrapper: PDF/DOCX/XLSX paths use 20 MB;
+  other paths retain 5 MB. Byte signatures and native extraction limits still
+  determine format support; filename suffixes establish no evidentiary fact.
+- Both direct ingestion and scheduled collection use the wrapper. Redirect/DNS
+  checks and per-hop robots callbacks remain active. Tests cover uppercase/query
+  paths, misleading suffixes, ordinary/extensionless URLs and callback identity.
+  Updated the scan worker test's mocked transport boundary after the rename.
+- Real robots-checked download succeeded at 9,608,355 bytes and staged scan source
+  2. No approved text, model call or inferred interpretation resulted. The queued
+  retry retains its own lifecycle and will complete through its normal lease.
+- Extensionless large downloads, real owner image approval and reviewed-source
+  analysis remain open. The scheduled 12-step cap is unchanged.

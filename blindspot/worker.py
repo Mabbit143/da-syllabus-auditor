@@ -3,11 +3,10 @@ import logging
 import time
 from urllib.parse import urlsplit
 
-from .collect import collect
+from .collect import collect, fetch_document
 from .fetch import canonical_url
 from .store import timestamp
 from .discovery import discover, RobotsRules
-from .fetch import fetch_public
 
 logger = logging.getLogger("blindspot")
 
@@ -41,7 +40,7 @@ def run_once(store, max_jobs=10, *, clock=time.time, collector=collect):
                     store.defer(job["id"], job["token"], now, available)
                     result["deferred"] += 1
                     continue
-                document = collector(store, job["payload"], clock(), fetch=lambda url: fetch_public(url, before_fetch=rules.check))
+                document = collector(store, job["payload"], clock(), fetch=lambda url: fetch_document(url, before_fetch=rules.check))
             else:
                 document = collector(store, job["payload"], clock())
             if document.get("needs_review"):

@@ -75,7 +75,7 @@ class ScanTests(unittest.TestCase):
         from blindspot.pdf import PDFReviewRequired
         self.store.enqueue("collect", "scan", {"url": "https://uoregon.edu/another.pdf"}, 10)
         inspection = {"pageCount": 1, "pages": [{"page": 1, "method": "needs_review", "text": ""}]}
-        with patch("blindspot.worker.RobotsRules") as rules, patch("blindspot.worker.fetch_public", return_value={"url": "https://uoregon.edu/another.pdf", "body": self.pdf, "content_type": "application/pdf"}), patch("blindspot.pdf.extract_pdf", side_effect=PDFReviewRequired(inspection)):
+        with patch("blindspot.worker.RobotsRules") as rules, patch("blindspot.worker.fetch_document", return_value={"url": "https://uoregon.edu/another.pdf", "body": self.pdf, "content_type": "application/pdf"}), patch("blindspot.pdf.extract_pdf", side_effect=PDFReviewRequired(inspection)):
             rules.return_value.check.return_value = 2
             result = run_once(self.store, 1, clock=lambda: 12)
         self.assertEqual(result["review_pending"], 1)
