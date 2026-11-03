@@ -83,3 +83,16 @@ bounded at the existing 20 MB ceiling, the actual PDF downloaded at 9,608,355
 bytes and was staged as scan source 2 for image-backed review. No passage was
 approved or added to analysis; the ordinary queued job still needs its own
 lease-fenced retry completion. HTML limits and the daily model cap are unchanged.
+
+The staged Spanish poster's first physical page was subsequently rendered and
+visually inspected at 1224 × 1584 pixels. The complete poster, headings and body
+text were legible. Its PNG is 1,427,792 bytes, within the existing 2 MB image
+limit. The saved source hash was checked before rendering; cached preview bytes
+were independently hashed and matched the recorded image hash.
+
+The actual Node-to-Python storage bridge returned that preview in about 0.28
+seconds with a 1,904,159-byte JSON response, within its existing 15-second/8 MB
+limits. Scan source 2 had zero approved passages. This verifies preview delivery
+and legibility, not transcription accuracy, owner approval, policy applicability
+or successful authenticated browser access. The diagnostic and image remain in
+ignored local worker storage, with no model request or published source text.
