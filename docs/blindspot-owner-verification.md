@@ -21,7 +21,7 @@ The probes used the stored owner ID internally and a verified non-member UUID;
 neither account identity nor gap contents was returned. Transaction-local claim
 settings were cleared at request end. No database rows, grants, policies or schema
 objects were changed. Management-tool access establishes the database-side gate;
-an actual owner browser/JWT sign-in remains a separate outstanding verification.
+the owner subsequently verified browser sign-in as recorded below.
 
 ## Local owner-session entry point
 
@@ -36,10 +36,14 @@ mocked browser-test host. No key, token or account identity was printed.
 - The owner was asked to sign in directly through the existing app form and
   report whether the dashboard opens. Credentials stay in their browser.
 
-This verifies a running local entry point and real anonymous refusal, not a
-successful owner JWT session, private dashboard response or saved review. The
-server is bound to loopback on this computer; it was not deployed to UO or made
-available to other devices on the UO network. Runtime availability must be
+On November 3, 2026, the owner reported signing in through the browser and
+confirmed that the dashboard was present at the local Blindspot URL. This closes
+the owner sign-in/dashboard-opening check with owner-reported browser evidence.
+The agent did not extract browser credentials or tokens. Saving a review and
+reopening its history remain separate unverified checks.
+
+The server is bound to loopback on this computer; it was not deployed to UO or
+made available to other devices on the UO network. Runtime availability must be
 rechecked after this server stops or the computer restarts.
 
 The app also validates the incoming token with `getUser(token)` before checking

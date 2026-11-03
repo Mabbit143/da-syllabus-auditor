@@ -23,7 +23,7 @@ authorize publication, push, merge or deployment.
 | Recurring mechanisms and distinct incidents | Synthesis 1 retains two private incident proposals and proposes zero patterns; stored input remains current | No established recurring discrimination finding; incident/origin verification remains incomplete |
 | Source independence | Exact copies are collapsed for retrieval; append-only owner passage-pair origin review, source receipts, conflicts and bounded model-context integration are implemented | Real owner origin review and model consumption remain unverified; independent-origin count stays unknown and publication eligibility is not granted |
 | Topic/department investigation | Text filter covers claim, topic and mechanism; schema-3 quoted department/office tags and unit/Not recorded filtering are now implemented and tested | Legacy scope remains unknown; live populated tags await future inference, and quoted names alone do not prove attribution |
-| Owner reads and review history | Server verifies user token plus owner RPC; database owner/non-owner probes; review actor comes from server; local page and anonymous 401 verified | Real owner JWT dashboard/sign-in and saved review await the owner's pending check |
+| Owner reads and review history | Server verifies user token plus owner RPC; database owner/non-owner probes; review actor comes from server; local page and anonymous 401 verified | Owner confirmed signed-in local dashboard opens; actual saved review/history remains unverified |
 | Student privacy | Separate public research SQLite store and owner API; student workflows unchanged; no private demo or saved syllabus ingestion | Maintain these boundaries during remaining work |
 | Actual recurring host | Owned Windows task Running at ten-minute/three-job/12-step limits; scheduled run 64 reused parent 420 and saved new embedded story 497 with matching provenance | Computer must remain on and logged in; actual owner UI reporting and a same-URL publisher edit remain unobserved |
 | Local storage capacity | Worker volume measured 22.0 GiB free of 236.8 GiB at this checkpoint | A point-in-time capacity check is not a reserved quota or backup |
@@ -84,3 +84,8 @@ of the current feature branch. Recording and actual owner-session review remain
 open. A current database probe found zero archive-latest records shadowing an
 existing live version; no source-history change was justified. The Windows task
 was directly rechecked as Running outside the restricted task-query sandbox.
+
+Owner-session follow-up: the owner confirmed signing in in the browser and
+seeing the local Blindspot dashboard. This resolves the dashboard-opening gate;
+review persistence, reviewed scan admission and representative live analysis
+remain separate checks. See [owner verification](blindspot-owner-verification.md).
