@@ -130,11 +130,13 @@ export function pageText(html: string): string {
  * Search snippets are often empty, so the gate fetches the page itself: the URL must be one search
  * returned, and the quote must be a verbatim substring of that page's text.
  */
-export async function verifyBio(results: SearchResult[], url: string, quote: string): Promise<boolean> {
+export async function verifyBio(results: SearchResult[], url: string, quote: string, prefetchedPage?: string): Promise<boolean> {
   const q = squash(String(quote ?? ""));
   if (q.length < MIN_QUOTE || q.length > MAX_QUOTE) return false;
   if (!results.some((r) => r.url === url) || !isPublicHttp(url)) return false;
   if (results.some((r) => r.url === url && squash(r.snippet).includes(q))) return true;
+  // The caller may hand over a page it already fetched for the same-person check: reuse it, never refetch.
+  if (prefetchedPage !== undefined) return prefetchedPage.includes(q);
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), 8_000);
   try {
@@ -203,44 +205,52 @@ export async function checkAuthors(
         // the covered community is judged only from the author's own stated bio, never the name —
         // it becomes the P7 negative for "Whose perspectives are in the room".
         if (!proposals.length) { note(r.author, r.title, "not_found"); return null; }
-        const seenUrls = new Set<string>();
-        // Same-person page cache: one fetch per URL, reused by the namesake check below.
-        const pageCache = new Map<string, string>();
-        const pageFor = async (url: string): Promise<string> => {
-          const hit = pageCache.get(url);
-          if (hit !== undefined) return hit;
+        // One fetch per URL, shared by the same-person check and the quote gate below.
+        const pageCache = new Map<string, string | undefined>();
+        const pageFor = async (url: string): Promise<string | undefined> => {
+          if (pageCache.has(url)) return pageCache.get(url);
           const controller = new AbortController();
           const timer = setTimeout(() => controller.abort(), 8_000);
           try {
             const res = await fetch(url, { signal: controller.signal, headers: { "User-Agent": "DASyllabusAuditor/0.1" } });
-            if (!res.ok) return "";
+            if (!res.ok) return undefined;
             const t = pageText((await res.text()).slice(0, 1_500_000));
             pageCache.set(url, t);
             return t;
-          } catch { return ""; } finally { clearTimeout(timer); }
+          } catch { return undefined; } finally { clearTimeout(timer); }
         };
-        const verifiedPieces: { quote: string; url: string; relation: "insider_stated" | "outsider_stated" | "unclear" }[] = [];
+        // Dedupe proposals by URL, keeping order. Each piece is independent, so all
+        // of an author's pieces run concurrently — the old sequential loop tripled
+        // lookup time once bios went from 1 to 3 per author.
+        const seenUrls = new Set<string>();
+        const uniq: { url: string; quote: string; relation: "insider_stated" | "outsider_stated" | "unclear" }[] = [];
         for (const p of proposals.slice(0, 3)) {
           const url = String(p?.url ?? "");
-          const quote = String(p?.quote ?? "");
-          const relation = p?.relation === "insider_stated" || p?.relation === "outsider_stated" ? p.relation : "unclear";
           if (!url || seenUrls.has(url)) continue;
           seenUrls.add(url);
+          uniq.push({
+            url,
+            quote: String(p?.quote ?? ""),
+            relation: p?.relation === "insider_stated" || p?.relation === "outsider_stated" ? p.relation : "unclear",
+          });
+        }
+        const settledPieces = await Promise.allSettled(uniq.map(async ({ url, quote, relation }) => {
           // Same-person gate before any verification spend: the quote plus the search
           // snippet must name this exact author; the fetched page is the fallback. A
           // same-surname namesake (live case: Tanya Holland for a Kimberly Holland
           // reading) is dropped here, never graded.
           const snippetText = results.filter((sr) => sr.url === url).map((sr) => sr.snippet).join(" ");
+          let page: string | undefined;
           if (!namesAuthor(`${quote} ${snippetText}`, String(r.author))) {
-            const page = await pageFor(url);
-            if (!page || !namesAuthor(page, String(r.author))) {
+            page = await pageFor(url);
+            if (page === undefined || !namesAuthor(page, String(r.author))) {
               console.log(`[sources] ${r.author}: bio names a different person, dropped ${url}`);
-              continue;
+              return null;
             }
           }
-          if (!(await verifyBio(results, url, quote))) {
+          if (!(await verifyBio(results, url, quote, page))) {
             console.log(`[sources] ${r.author}: bio quote failed verification (${results.length} results) ${url}`);
-            continue;
+            return null;
           }
           const verdict = await ask(
             CONFIRM_INSTRUCTIONS,
@@ -253,10 +263,14 @@ Claimed: ${relation}`,
           const supported = va !== -1 && vb > va && (() => { try { return JSON.parse(verdict.slice(va, vb + 1)).supported === true; } catch { return false; } })();
           if (!supported && relation !== "unclear") {
             console.log(`[sources] ${r.author}: ${relation} not supported by the bio quote, kept as unclear ${url}`);
-            verifiedPieces.push({ quote: squash(quote), url, relation: "unclear" });
-            continue;
+            return { quote: squash(quote), url, relation: "unclear" as const };
           }
-          verifiedPieces.push({ quote: squash(quote), url, relation });
+          return { quote: squash(quote), url, relation };
+        }));
+        const verifiedPieces: { quote: string; url: string; relation: "insider_stated" | "outsider_stated" | "unclear" }[] = [];
+        for (const s of settledPieces) {
+          if (s.status === "fulfilled" && s.value) verifiedPieces.push(s.value);
+          else if (s.status === "rejected") console.error("[sources] author piece failed:", s.reason instanceof Error ? s.reason.message : s.reason);
         }
         if (!verifiedPieces.length) { note(r.author, r.title, "bio_unverified"); return null; }
         const insider = verifiedPieces.find((p) => p.relation === "insider_stated");
