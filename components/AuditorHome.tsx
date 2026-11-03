@@ -59,37 +59,59 @@ export default function AuditorHome({ disclosure, departmentEvidence }: { disclo
   const [policy, setPolicy] = useState<{ busy: boolean; error: string }>({ busy: false, error: "" });
   const [contentsState, setContentsState] = useState<Record<string, { busy: boolean; error: string }>>({});
   const contentsRequests = useRef<Record<string, number>>({});
+  // React live until the student returns: an audit that finishes while this module is unmounted
+  // must still be persisted, but must not fire further model calls with no report to show.
+  const mounted = useRef(true);
+  useEffect(() => {
+    mounted.current = true;
+    return () => { mounted.current = false; };
+  }, []);
 
   useEffect(() => {
     setCourses(load());
   }, []);
 
-  // Signed in: the account is the source of truth. If it is empty, upload what is on this device.
+  // Signed in: the account is the source of truth, but the device list is merged in, never
+  // replaced by it — an audit whose save failed or was still in flight must not be erased by
+  // the next sync. Local-only audits are retried upward so the account becomes complete.
   useEffect(() => {
     if (!userId) return;
     (async () => {
       const remote = await loadAudits();
       if (remote === null) return;
-      if (remote.length > 0) {
-        // Backfill termId for remote audits that were saved before term inference existed
-        for (const c of remote as StoredCourse[]) {
-          if (!c.termId) {
-            const text = c.pages?.map((p) => p.text).join(" ") ?? "";
-            const inferred = inferTermId({ fileName: c.report.fileName, text });
-            if (inferred) c.termId = inferred;
-          }
+      const remoteCourses = remote as StoredCourse[];
+      const remoteIds = new Set(remoteCourses.map((c) => c.id));
+      const localOnly = load().filter((c) => !remoteIds.has(c.id));
+      const merged = [...remoteCourses, ...localOnly];
+      // Backfill termId for audits saved before term inference existed
+      for (const c of merged) {
+        if (!c.termId) {
+          const text = c.pages?.map((p) => p.text).join(" ") ?? "";
+          const inferred = inferTermId({ fileName: c.report.fileName, text });
+          if (inferred) c.termId = inferred;
         }
-        setCourses(remote);
-        save(remote);
-      } else {
-        for (const c of load()) await saveAudit(c);
       }
+      setCourses(merged);
+      save(merged);
+      for (const c of localOnly) await saveAudit(c);
     })();
   }, [userId]);
 
   function update(next: StoredCourse[]) {
     setCourses(next);
     save(next);
+  }
+
+  /** Stores one course by merging into what is on the device now. A late response from an
+   *  unmounted panel must never overwrite audits saved while the student was elsewhere. */
+  function appendSave(course: StoredCourse) {
+    try {
+      const existing = load();
+      if (existing.some((c) => c.id === course.id)) return;
+      window.localStorage.setItem(STORE_KEY, JSON.stringify([...existing, course]));
+    } catch {
+      // Storage may be full or blocked; the account save still ran.
+    }
   }
 
   /** Compares one syllabus with its school's published policies and files the differences. */
@@ -180,15 +202,22 @@ export default function AuditorHome({ disclosure, departmentEvidence }: { disclo
       const id = crypto.randomUUID();
       const createdAt = new Date().toISOString();
       const termId = (input as { termId?: string | null }).termId ?? inferTermId({ fileName: input.fileName, text: input.pages.map((p) => p.text).join(" ") });
-      update([...courses, { id, report, pages: input.pages, createdAt, termId }]);
-      
+      const course: StoredCourse = { id, report, pages: input.pages, createdAt, termId };
+      // The student may have opened another screen while the audit ran: persist the result
+      // regardless (merge into device storage, never a stale-list overwrite), keep the live
+      // panel in sync when mounted, and only auto-run the policy check if they are still here.
+      appendSave(course);
+      setCourses((prev) => (prev.some((c) => c.id === id) ? prev : [...prev, course]));
+
       setSaveStatus({ id, state: "saving" });
-      saveAudit({ id, report, pages: input.pages, createdAt, termId })
+      saveAudit(course)
         .then(() => setSaveStatus((s) => s.id === id ? { id, state: "saved" } : s))
         .catch(() => setSaveStatus((s) => s.id === id ? { id, state: "failed" } : s));
 
-      setOpenId(id);
-      void runPolicyCheck(id, input.pages);
+      if (mounted.current) {
+        setOpenId(id);
+        void runPolicyCheck(id, input.pages);
+      }
     } catch (err) {
       if (err instanceof Error && err.name === "AbortError") return;
       throw err;

@@ -34,7 +34,11 @@ export default function SyllabusInput({ disclosure, signedIn, onAudit }: {
   const pieceSelections = useRef<Record<number, number>>({});
   const nextPiece = useRef(1);
   const request = useRef<AbortController | null>(null);
-  useEffect(() => () => { selection.current++; request.current?.abort(); }, []);
+  // Going to another screen must not cancel a running audit: the server spends the credits
+  // either way and the report is the deliverable. Bumping the stale-selection counter alone
+  // stops any late response from touching this (unmounted) panel; AuditorHome persists the
+  // result once the fetch lands.
+  useEffect(() => () => { selection.current++; }, []);
 
   async function choose(file: File | undefined, pieceId?: number) {
     if (!file) return;
