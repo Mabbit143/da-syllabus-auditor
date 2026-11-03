@@ -70,8 +70,13 @@ def collect(store, source, now, *, fetch=fetch_public):
     body = response["body"]
     mime = response["content_type"]
     if body.startswith(b"%PDF-"):
-        from .pdf import extract_pdf
-        extracted = extract_pdf(body)
+        from .pdf import extract_pdf, PDFReviewRequired
+        try:
+            extracted = extract_pdf(body)
+        except PDFReviewRequired as exc:
+            from .scans import stage_scan
+            source_id = stage_scan(store, url, body, exc.inspection, {**{k: v for k, v in source.items() if k != "url"}, "requested_url": requested, "content_type": mime}, now)
+            return {"needs_review": True, "review_source_id": source_id, "url": url, "links": []}
         pages = extracted["pages"]
         if extracted.get("status") != "ready_for_review" or len(pages) != extracted.get("pageCount") or any(page.get("method") == "failed" for page in pages):
             raise ValueError("PDF extraction is incomplete; retry or review the document")

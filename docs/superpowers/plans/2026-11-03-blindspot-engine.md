@@ -158,3 +158,35 @@ budget increase, worker restart, push or deployment was needed for this incremen
 - Still open: reviewed scanned-document admission, live new synthesis contract,
   originating lineages, deeper retrieval, real owner database access and remaining
   manual/live auditor checks. No merge, push or deployment occurred.
+
+## Image-backed source-review increment (2026-11-03)
+
+- Native scan detection now preserves hash-addressed public PDF bytes in a private
+  source queue, completes the collection job as review-pending, and keeps all
+  unreviewed text outside the analysis corpus. Original/final URL provenance and
+  source hash remain available. Changed bytes produce a separate source record.
+- Added bounded local page rendering, authenticated no-store previews, an owner
+  passage/region confirmation form and append-only receipts. Actor identity comes
+  from the existing owner check, never browser input. Local Tesseract is absent;
+  this is a manual image-review path, without activating Modal or changing the
+  separate document_jobs receipt/selection workflow.
+- Admission, snapshot and analysis-queue writes share one transaction. Only exact
+  owner-reviewed fragments are saved. Stored page numbers remain physical PDF
+  locators. Both source quote verification and cross-report revalidation reject
+  passages spanning separate fragments; partial coverage stays visible.
+- Real collection of the public three-page UO encampment agreement staged all
+  three pages with no failed job, no admitted text and no analysis request. Its
+  first source image was visually inspected for rendering/legibility and read
+  through the actual Node bridge. This inspection is not an owner approval:
+  the actual database retains zero approved passages.
+- Verification: 103 engine Python tests, 20 existing document-workflow tests and
+  15 targeted Node tests passed. Three private browser tests passed through source
+  preview, explicit confirmation, receipt response, existing findings review and
+  sign-out clearing. A later check also covers client-side region bounds. Typecheck
+  and changed-file lint passed; production build passed in the browser run. A
+  broad old Save review locator was made exact after it also matched the new
+  Save reviewed passage button.
+- Remaining: real owner source approval, live reviewed-source and new synthesis
+  model outputs, optional OCR engine setup, originating lineages, deeper corpus
+  retrieval, actual owner database access and remaining manual/live auditor checks.
+  No extra model step, provider activation, merge, push or deployment occurred.

@@ -184,3 +184,38 @@ Office-derived institutional conclusion has been verified. The owned worker was
 reloaded through its idle guard and observed Running. Reviewed scanned-document
 admission, live synthesis completion, origin verification and remaining auditor
 review checks are still open.
+
+## Image-backed source review (2026-11-03)
+
+PDFs with unreadable/sparse native pages now enter a private review queue instead
+of repeated extraction failures. Their original bytes are retained by SHA-256
+under `.blindspot/scans/`; staged text never enters research analysis. Recrawling
+unchanged bytes reuses the source record. Collection reports `review_pending`
+separately from readable documents and failures.
+
+The owner-only screen renders one physical page locally, in a bounded subprocess,
+and displays the source image with page and source links. PNGs are limited to
+2 MB/16 million pixels and served through the authenticated, no-store research
+endpoint. Saved PDF and page-image hashes are checked before each review. The
+owner enters an exact 40–500-character passage, specifies its image region, and
+explicitly confirms comparison including qualifications and exceptions. The
+reviewer comes from verified server authentication; a browser-supplied actor is
+ignored. Local Tesseract is unavailable, so this path uses owner transcription;
+automated OCR/Modal remains inactive and governed by its existing separate gates.
+
+Approval atomically appends a receipt, creates a partial-source snapshot containing
+only reviewed passages, and queues analysis. Receipts retain the PDF/image hashes,
+physical page, region, reviewer and review time. Duplicate submissions reuse their
+receipt and snapshot. Failed admission rolls back all changes. Multiple fragments
+are explicitly partial; quote verification and synthesis revalidation reject spans
+crossing their gaps. Snapshot/version history remains intact. This is an owner
+attestation of source text, not automatic OCR validation or a substantive finding.
+
+Live verification fetched the three-page UO encampment resolution agreement from
+the university's public site. All three pages needed image review. Collection
+staged the PDF with no failure or analysis job; the first page rendered legibly at
+1224×1584 and was verified through the existing Node-to-Python bridge. The actual
+source has zero approved passages. Its refresh URL is in the source registry.
+The existing document_jobs approval/admission workflow remains separate; no prior
+receipt or policy-reference selection was changed by this increment. Actual owner
+approval and live analysis of a reviewed scan remain unverified.

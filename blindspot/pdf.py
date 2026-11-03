@@ -6,6 +6,12 @@ import sys
 import tempfile
 
 
+class PDFReviewRequired(ValueError):
+    def __init__(self, inspection):
+        self.inspection = inspection
+        super().__init__("PDF has pages needing reviewed OCR or blank-page confirmation")
+
+
 def _extract_native(file):
     # Native parsing stays outside the collection process. Rendering/OCR remains
     # in document_jobs' reviewed workflow; this path never creates guessed text.
@@ -52,7 +58,7 @@ def extract_pdf(data):
         except (subprocess.SubprocessError, json.JSONDecodeError) as exc:
             raise ValueError("Could not read PDF within research limits; it may be corrupt, encrypted or too large") from exc
     if any(page["method"] != "text" for page in result["pages"]):
-        raise ValueError("PDF has pages needing reviewed OCR or blank-page confirmation")
+        raise PDFReviewRequired(result)
     return result
 
 

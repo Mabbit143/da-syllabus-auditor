@@ -21,6 +21,7 @@ export interface ResearchReport {
 export interface ResearchReview { id: number; report_id: number; finding_id: string; status: string; note: string; actor: string; created_at: number }
 export interface ResearchDocument { id: number; url: string; title: string; category: string; method: string; archived_snapshot: boolean; original_fetched_date?: string; published_at?: string; first_seen: number; last_seen: number }
 export interface ResearchOverview {
+  scans?: { total_sources: number; limit: number; sources: { id: number; url: string; pdf_sha256: string; page_count: number; needs_review_pages: number[]; approved_passages: number }[] };
   synthesis?: ResearchSynthesis | null;
   patterns?: {
     evidence_groups: { id: string; status: string; members: { report_id: number; finding_id: string; claim: string; topic: string; mechanism: string; status: string; owner_status: string | null; actions: ResearchEvidence[] }[] }[];
@@ -31,6 +32,11 @@ export interface ResearchOverview {
   documents: ResearchDocument[]; page: number; total_documents: number;
   reports: ResearchReport[]; reviews: ResearchReview[]; storage: string;
   history_limits: { reports: number; reviews: number };
+}
+export interface ScanPreview {
+  scan_id: number; url: string; pdf_sha256: string; page: number; page_count: number;
+  image_sha256: string; image_data_url: string; width: number; height: number; method: string;
+  receipts: { id: string; page: number; quote: string; actor: string; reviewed_at: number }[];
 }
 interface SynthesisReview {
   decision: string; reason: string; distinctness: string; temporal_scope: string;
@@ -50,7 +56,7 @@ export interface ResearchSynthesis {
 }
 export interface ResearchMonitor {
   schedule: { next_due: number; interval: number; runner: string; lease_until: number | null } | null;
-  runs: { id: number; started_at: number; finished_at: number | null; runner: string; state: string; error: string | null; collection: { collected?: number; failed?: number } | null; analysis: { completed?: number; pattern_completed?: number; failed?: number; budget_deferred?: number; daily_limit?: number } | null }[];
+  runs: { id: number; started_at: number; finished_at: number | null; runner: string; state: string; error: string | null; collection: { collected?: number; failed?: number; review_pending?: number } | null; analysis: { completed?: number; pattern_completed?: number; failed?: number; budget_deferred?: number; daily_limit?: number } | null }[];
   model_usage: { day: string; calls: number }[];
 }
 export interface ResearchSource {

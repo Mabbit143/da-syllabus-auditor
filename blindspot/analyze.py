@@ -57,8 +57,11 @@ def _context(store, version_id):
         pieces = [(start, min(start + 5000, len(text))) for start in range(0, len(text), 5000)]
         pieces.sort(key=lambda span: len(_words(text[span[0]:span[1]]) & terms), reverse=True)
         ranges = include_scope_context(version, pieces[:2 if version["id"] == version_id else 1])
+        admitted = version["metadata"].get("admitted_ranges")
+        if admitted is not None:
+            ranges = [(max(a, c), min(b, d)) for a, b in ranges for c, d in admitted if max(a, c) < min(b, d)]
         versions.append(dict(version, visible_ranges=ranges))
-        metadata = {key: value for key, value in version["metadata"].items() if key not in ("pages", "locations")}
+        metadata = {key: value for key, value in version["metadata"].items() if key not in ("pages", "locations", "admitted_ranges", "review_receipts")}
         segments = [{"start": a, "end": b, "text": text[a:b]} for a, b in ranges]
         page_ranges = []
         cursor = 0

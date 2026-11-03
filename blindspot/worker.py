@@ -25,7 +25,7 @@ def seed(store, sources, now, interval=86400):
 def run_once(store, max_jobs=10, *, clock=time.time, collector=collect):
     if type(max_jobs) is not int or not 1 <= max_jobs <= 100:
         raise ValueError("Collection pass must process 1–100 jobs")
-    result = {"processed": 0, "collected": 0, "failed": 0, "discovered": 0, "deferred": 0}
+    result = {"processed": 0, "collected": 0, "failed": 0, "discovered": 0, "deferred": 0, "review_pending": 0}
     rules = RobotsRules() if collector is collect else None
     for _ in range(max_jobs):
         job = store.claim(clock(), 600, kind="collect")
@@ -44,6 +44,10 @@ def run_once(store, max_jobs=10, *, clock=time.time, collector=collect):
                 document = collector(store, job["payload"], clock(), fetch=lambda url: fetch_public(url, before_fetch=rules.check))
             else:
                 document = collector(store, job["payload"], clock())
+            if document.get("needs_review"):
+                store.finish(job["id"], job["token"], clock())
+                result["review_pending"] += 1
+                continue
             store.enqueue("analyze", str(document["version_id"]), {"version_id": document["version_id"], "url": document["url"]}, clock(), priority=10)
             children = discover(dict(job["payload"], url=document["url"]), document["links"], max_links=min(10, 30 - result["discovered"]))
             seed(store, children, clock())

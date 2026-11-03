@@ -65,3 +65,20 @@ test("invalid reviews and broken storage return readable errors", async () => {
   assert.equal(failed.status, 503);
   assert.doesNotMatch(await failed.text(), /private filesystem/);
 });
+
+test("scan previews and passage approvals require owner access and explicit image confirmation", async () => {
+  const h = setup();
+  const headers = { authorization: "Bearer valid", "content-type": "application/json" };
+  const preview = await h.GET(new Request("https://example.test/api/research?scan=2&physical_page=3", { headers }));
+  assert.equal(preview.status, 200);
+  assert.deepEqual(h.calls[0], { action: "scan_preview", scan_id: 2, page: 3 });
+  const body = { action: "scan_passage", scan_id: 2, page: 3, pdf_sha256: "a".repeat(64), image_sha256: "b".repeat(64), quote: "An exact reviewed public administrative passage.", region: [0, 0, 100, 100], confirmed: false, actor: "forged" };
+  const bad = await h.POST(new Request("https://example.test/api/research", { method: "POST", headers, body: JSON.stringify(body) }));
+  assert.equal(bad.status, 400);
+  const good = await h.POST(new Request("https://example.test/api/research", { method: "POST", headers, body: JSON.stringify({ ...body, confirmed: true }) }));
+  assert.equal(good.status, 200);
+  assert.equal(h.calls[1].actor, "owner-id");
+  const denied = setup(null);
+  assert.equal((await denied.GET(new Request("https://example.test/api/research?scan=2&physical_page=3", { headers }))).status, 403);
+  assert.equal(denied.calls.length, 0);
+});

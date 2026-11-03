@@ -91,6 +91,8 @@ def verify_evidence(proposal, versions):
     absolute_start, absolute_end = offset + start, offset + end
     if "visible_ranges" in version and not any(a <= absolute_start and absolute_end <= b for a, b in version["visible_ranges"]):
         return None
+    if "admitted_ranges" in version["metadata"] and not any(a <= absolute_start and absolute_end <= b for a, b in version["metadata"]["admitted_ranges"]):
+        return None  # Separate reviewed fragments never become one source passage.
     if page_number is None and pages:
         cursor = 0
         for page in pages:

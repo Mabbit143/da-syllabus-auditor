@@ -13,6 +13,7 @@ import uuid
 from .monitor_state import MonitorState, SCHEMA as MONITOR_SCHEMA, migrate_recorded_calls
 from .search import SCHEMA as SEARCH_SCHEMA, search_status
 from .synthesis_state import SCHEMA as SYNTHESIS_SCHEMA
+from .scan_state import SCHEMA as SCAN_SCHEMA
 
 
 SCHEMA = """
@@ -71,7 +72,24 @@ def timestamp(value):
     return value
 
 
-SCHEMA += MONITOR_SCHEMA + SEARCH_SCHEMA + SYNTHESIS_SCHEMA
+SCHEMA += MONITOR_SCHEMA + SEARCH_SCHEMA + SYNTHESIS_SCHEMA + SCAN_SCHEMA
+
+
+def snapshot_into(db, url, text, metadata, now):
+    """Use an existing transaction for atomic evidence admission plus queue work."""
+    timestamp(now)
+    if not isinstance(url, str) or not url.strip() or not isinstance(text, str) or not text.strip() or not isinstance(metadata, dict):
+        raise ValueError("A snapshot needs a URL, readable text and metadata")
+    encoded = json.dumps(metadata, ensure_ascii=False, allow_nan=False)
+    digest = hashlib.sha256(text.encode("utf8")).hexdigest()
+    previous = db.execute("SELECT * FROM versions WHERE url=? ORDER BY id DESC LIMIT 1", (url,)).fetchone()
+    if previous and now < previous["last_seen"]:
+        raise ValueError("Observation predates the latest source observation")
+    if previous and previous["content_hash"] == digest:
+        db.execute("UPDATE versions SET last_seen=? WHERE id=?", (now, previous["id"]))
+        return previous["id"]
+    db.execute("INSERT OR IGNORE INTO content(hash,text) VALUES (?,?)", (digest, text))
+    return db.execute("INSERT INTO versions(url,content_hash,metadata,first_seen,last_seen) VALUES (?,?,?,?,?)", (url, digest, encoded, now, now)).lastrowid
 
 
 class Store(MonitorState):
@@ -104,27 +122,8 @@ class Store(MonitorState):
 
     def snapshot(self, url, text, metadata, now):
         """Append a version only on change; retain provenance per source URL."""
-        timestamp(now)
-        if not isinstance(url, str) or not url.strip():
-            raise ValueError("Document URL is required")
-        if not isinstance(text, str) or not text.strip():
-            raise ValueError("Document has no readable text")
-        if not isinstance(metadata, dict):
-            raise ValueError("Document metadata must be an object")
-        encoded = json.dumps(metadata, ensure_ascii=False, allow_nan=False)
-        digest = hashlib.sha256(text.encode("utf8")).hexdigest()
         with self._db() as db:
-            previous = db.execute("SELECT * FROM versions WHERE url=? ORDER BY id DESC LIMIT 1", (url,)).fetchone()
-            if previous and now < previous["last_seen"]:
-                raise ValueError("Observation predates the latest source observation")
-            if previous and previous["content_hash"] == digest:
-                db.execute("UPDATE versions SET last_seen=? WHERE id=?", (now, previous["id"]))
-                return previous["id"]
-            db.execute("INSERT OR IGNORE INTO content(hash,text) VALUES (?,?)", (digest, text))
-            return db.execute(
-                "INSERT INTO versions(url,content_hash,metadata,first_seen,last_seen) VALUES (?,?,?,?,?)",
-                (url, digest, encoded, now, now),
-            ).lastrowid
+            return snapshot_into(db, url, text, metadata, now)
 
     def history(self, url):
         with self._db() as db:

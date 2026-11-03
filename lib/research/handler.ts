@@ -44,6 +44,12 @@ export function createResearchHandlers(services: Services) {
         const auth = await authorize(request);
         if (auth.error) return auth.error;
         const url = new URL(request.url);
+        if (url.searchParams.has("scan")) {
+          const scan = integer(url.searchParams.get("scan"), 0);
+          const physicalPage = integer(url.searchParams.get("physical_page"), 1);
+          if (!scan || !physicalPage || physicalPage > 500 || url.searchParams.has("version")) return fail(400, "Choose a saved scan and a physical page.");
+          return respond(await services.query({ action: "scan_preview", scan_id: scan, page: physicalPage }));
+        }
         const version = integer(url.searchParams.get("version"), 0);
         const start = integer(url.searchParams.get("start"), 0, true);
         const page = integer(url.searchParams.get("page"), 1);
@@ -62,6 +68,11 @@ export function createResearchHandlers(services: Services) {
         let body: Record<string, unknown>;
         try { body = await boundedBody(request); }
         catch { return fail(400, "Enter a valid review with a short note."); }
+        if (body.action === "scan_passage") {
+          const region = body.region;
+          if (!Number.isSafeInteger(body.scan_id) || Number(body.scan_id) < 1 || !Number.isSafeInteger(body.page) || Number(body.page) < 1 || Number(body.page) > 500 || typeof body.pdf_sha256 !== "string" || !/^[a-f0-9]{64}$/.test(body.pdf_sha256) || typeof body.image_sha256 !== "string" || !/^[a-f0-9]{64}$/.test(body.image_sha256) || typeof body.quote !== "string" || body.quote.trim().length < 40 || body.quote.trim().length > 500 || body.confirmed !== true || !Array.isArray(region) || region.length !== 4 || !region.every((value) => Number.isSafeInteger(value) && value >= 0 && value <= 10000) || !region[2] || !region[3]) return fail(400, "Review the source image, enter its exact passage and region, and confirm the comparison.");
+          return respond(await services.query({ action: "scan_passage", scan_id: body.scan_id, page: body.page, pdf_sha256: body.pdf_sha256, image_sha256: body.image_sha256, quote: body.quote.trim(), region, confirmed: true, actor: auth.owner }));
+        }
         if (!Number.isSafeInteger(body.report_id) || Number(body.report_id) < 1 || typeof body.finding_id !== "string" || !body.finding_id || body.finding_id.length > 80 || !["reviewed", "dismissed", "follow_up"].includes(String(body.status)) || typeof body.note !== "string" || !body.note.trim() || body.note.length > 2000) return fail(400, "Choose a finding, review status and note.");
         return respond(await services.query({ action: "review", report_id: body.report_id, finding_id: body.finding_id, status: body.status, note: body.note, actor: auth.owner }));
       } catch {
