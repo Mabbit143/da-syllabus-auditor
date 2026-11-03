@@ -73,6 +73,32 @@ class DiscoveryTests(unittest.TestCase):
             retry = store.claim(20, 10)
             self.assertEqual(retry["attempts"], 1)
 
+    def test_repeated_parent_visits_advance_past_already_queued_links(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / "state.sqlite"
+            store = Store(path)
+            parent = {"url": "https://trustees.uoregon.edu/meetings"}
+            links = [f"https://trustees.uoregon.edu/packet-{i}.pdf" for i in range(25)]
+            collector = lambda store, source, now: {"version_id": 1, "url": source["url"], "links": links}
+            seed(store, [parent], 10)
+            self.assertEqual(run_once(store, 1, clock=lambda: 11, collector=collector)["discovered"], 10)
+            store = Store(path)
+            store.enqueue("collect", "parent-revisit", parent, 12, priority=100)
+            self.assertEqual(run_once(store, 1, clock=lambda: 13, collector=collector)["discovered"], 10)
+            with store._db() as db:
+                urls = {row[0] for row in db.execute("SELECT json_extract(payload,'$.url') FROM jobs WHERE kind='collect'")}
+            self.assertIn(links[19], urls)
+            self.assertNotIn(links[20], urls)
+
+    def test_discovery_rotates_oldest_scheduled_links_after_new_candidates(self):
+        source = {"url": "https://trustees.uoregon.edu/meetings"}
+        links = [f"https://trustees.uoregon.edu/packet-{i}.pdf" for i in range(5)]
+        history = {links[0]: {"last_job": 30, "active": False},
+                   links[1]: {"last_job": 10, "active": False},
+                   links[2]: {"last_job": 1, "active": True}}
+        found = discover(source, links, max_links=3, history=history)
+        self.assertEqual([v["url"] for v in found], [links[3], links[4], links[1]])
+
 
 if __name__ == "__main__":
     unittest.main()

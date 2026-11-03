@@ -291,3 +291,11 @@ collection slot every hour. The initial delays remain 30, 60 and 120 seconds;
 the daily ceiling is reached after repeated failures. Analysis retry timing and
 the model budget are unchanged. Publisher restrictions are still respected on
 every attempt; a delayed retry does not bypass robots or access controls.
+
+Repeated parent-page discovery now uses durable collection history: active URLs
+are skipped, unseen URLs come first, then previously scheduled URLs rotate in
+oldest-job order. This advances beyond a page's first ten links without increasing
+the per-document, per-pass or depth limits. Old completed URLs remain eligible
+for later refresh; pending failures retain their existing backoff. Rotation
+improves coverage but does not establish that every administrative document has
+been found.

@@ -11,7 +11,7 @@ def is_uo(host):
     return host == "uoregon.edu" or host.endswith(".uoregon.edu")
 
 
-def discover(source, links, *, max_links=10, max_depth=2):
+def discover(source, links, *, max_links=10, max_depth=2, history=None):
     if type(max_links) is not int or not 0 <= max_links <= 100:
         raise ValueError("Discovery limit must be 0–100")
     depth = source.get("depth", 0)
@@ -22,6 +22,7 @@ def discover(source, links, *, max_links=10, max_depth=2):
     parent = canonical_url(source["url"])
     parent_host = urlsplit(parent).hostname
     terms = source.get("discovery_terms", ["university-of-oregon", "university-oregon", "uoregon"])
+    history = history or {}
     found, seen = [], {parent}
     for candidate in links:
         try:
@@ -40,16 +41,19 @@ def discover(source, links, *, max_links=10, max_depth=2):
                     continue
             elif parsed.hostname != parent_host or not any(term.lower() in path for term in terms):
                 continue
+            if history.get(url, {}).get("active"):
+                continue
             child = dict(source, url=url, discovered_from=parent, depth=depth + 1)
             if parsed.hostname != parent_host:
                 child["publisher"] = "University of Oregon"
                 child["category"] = "policy" if parsed.hostname == "policies.uoregon.edu" else "administration"
             found.append(child)
-            if len(found) >= max_links:
-                break
         except (ValueError, TypeError):
             continue
-    return found
+    # Job IDs give durable scheduling order without treating fetch dates as
+    # document dates. Stable sorting preserves page order among unseen links.
+    found.sort(key=lambda child: history.get(child["url"], {}).get("last_job", 0))
+    return found[:max_links]
 
 
 class RobotsRules:

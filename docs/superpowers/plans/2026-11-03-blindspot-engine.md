@@ -270,3 +270,21 @@ budget increase, worker restart, push or deployment was needed for this incremen
   error preservation and confirms a fresh document can run while the failed
   source is delayed. This reduces retry pressure; it is not proof of exhaustive
   source coverage or a guarantee that every public URL is accessible.
+
+## Repeated-page discovery correction (2026-11-03)
+
+- Reproduced discovery repeatedly selecting the same first ten links, even when
+  every one already had a collection job. The daily seed dedupe prevented extra
+  same-period jobs but also prevented progress to later page links.
+- Discovery now reads URL scheduling order and active status from durable jobs:
+  skip pending/running URLs, select unseen URLs first, then rotate completed URLs
+  by oldest scheduling order. This leaves access, publisher scope, query filters,
+  depth two, ten links/document and thirty/pass unchanged. No schema migration or
+  model call is needed. Completed URLs remain eligible for refresh.
+- Regression proves a second parent visit reaches links 11–20 after reopening
+  storage; another checks new-first/oldest-next selection and active-job exclusion.
+- Actual robots-checked HR page comparison selected ten previously unscheduled
+  URLs with zero active jobs selected, including workplace notices, HR directory,
+  compensation and employee/labor relations. This is selection evidence, not a
+  claim those child bodies were fetched or analyzed. Private diagnostic remains
+  under ignored worker state. Full-corpus completeness remains unproven.

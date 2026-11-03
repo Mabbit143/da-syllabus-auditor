@@ -177,6 +177,16 @@ class Store(MonitorState):
             db.execute("INSERT OR IGNORE INTO jobs(kind,key,payload,due,priority) VALUES (?,?,?,?,?)", (kind, key, encoded, due, priority))
             return db.execute("SELECT id FROM jobs WHERE kind=? AND key=?", (kind, key)).fetchone()["id"]
 
+    def collection_history(self):
+        """Discovery rotation metadata; do not load document bodies or secrets."""
+        with self._db() as db:
+            rows = db.execute("""SELECT json_extract(payload,'$.url') AS url,
+                max(id) AS last_job,
+                max(CASE WHEN state IN ('pending','running') THEN 1 ELSE 0 END) AS active
+                FROM jobs WHERE kind='collect' AND json_type(payload,'$.url')='text'
+                GROUP BY json_extract(payload,'$.url')""").fetchall()
+        return {row["url"]: {"last_job": row["last_job"], "active": bool(row["active"])} for row in rows}
+
     def claim(self, now, lease_seconds, *, kind=None):
         timestamp(now)
         if isinstance(lease_seconds, bool) or not isinstance(lease_seconds, int) or not 1 <= lease_seconds <= 3600:

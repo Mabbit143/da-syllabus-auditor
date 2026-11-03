@@ -52,7 +52,7 @@ def run_once(store, max_jobs=10, *, clock=time.time, collector=collect):
                 result["incomplete"] += 1
             else:
                 store.enqueue("analyze", str(document["version_id"]), {"version_id": document["version_id"], "url": document["url"]}, clock(), priority=10)
-            children = discover(dict(job["payload"], url=document["url"]), document["links"], max_links=min(10, 30 - result["discovered"]))
+            children = discover(dict(job["payload"], url=document["url"]), document["links"], max_links=min(10, 30 - result["discovered"]), history=store.collection_history())
             seed(store, children, clock())
             result["discovered"] += len(children)
             store.finish(job["id"], job["token"], clock())
