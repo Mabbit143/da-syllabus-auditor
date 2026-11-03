@@ -11,6 +11,7 @@ export interface ResearchLocation {
 export interface ResearchFinding {
   id: string; claim: string; topic: string; mechanism: string; status: string;
   evidence: ResearchEvidence[]; questions: string[]; temporal_scope: string;
+  departments?: { name: string; evidence_index: number }[];
   temporal_status: string; publisher_groups: number; distinct_documents: number;
   skeptic: { decision: string; reason: string; counterevidence_search: string; alternative_explanations: string[]; temporal_scope: string; counterevidence: ResearchEvidence[] };
 }

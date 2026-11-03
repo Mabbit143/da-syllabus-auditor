@@ -325,3 +325,24 @@ budget increase, worker restart, push or deployment was needed for this incremen
   preservation. Worker was guardedly reloaded and observed Running. Usage stayed
   at fourteen from the already-consumed exception; no model request or daily cap
   change occurred. Live analysis of the changed contexts remains pending.
+
+## Evidence-backed department scope (2026-11-03)
+
+- Source report schema 3 adds optional department/office labels bound to a
+  zero-based verified evidence index. Code checks quoted word-bounded names,
+  whitespace normalization, index/type bounds, duplicate labels and an eight-label
+  maximum before Skeptic review. Semantic unit attribution remains review work;
+  source metadata and names alone do not establish responsibility.
+- Invalid labels are omitted and counted without discarding otherwise verified
+  leads. Read projections recheck schema-3 scope and leave legacy scope unknown;
+  raw report history is unchanged. Existing synthesis input remains current.
+- The owner screen filters by quoted unit or Not recorded and opens the cited
+  department passage. No label is guessed from titles, URLs, publishers or claims.
+- Verification: 133 engine tests and three private browser tests passed, including
+  filter exclusion/restoration and opening the scope passage. Production build,
+  changed-file lint and final typecheck passed. An initial parallel typecheck
+  raced with generated build files; it passed after the build completed.
+- Worker was guardedly reloaded and observed Running. No model calls were made;
+  usage remains fourteen after the consumed one-time exception, task cap twelve.
+  Live populated labels, owner JWT review and originating-lineage review remain
+  open; old leads correctly show no recorded department rather than guessed scope.

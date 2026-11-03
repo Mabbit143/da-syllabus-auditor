@@ -9,6 +9,7 @@ from .provider import ResearchProviderError
 from .locations import source_locations
 from .quality import assess_text, skip_analysis, SourceTextUnavailable
 from .retrieval import Retrieval, METHOD, LIMITS
+from .departments import checked_departments
 
 logger = logging.getLogger("blindspot")
 
@@ -22,6 +23,8 @@ Return one JSON object: {"reviews":[{"id":"f1","decision":"retain|unresolved|rej
 OFFICE_LIMITS = " Office locations are native text parts or sheet/row/cell references, never PDF pages. Spreadsheet values are raw stored values: do not infer currency, percent, dates, units or formula freshness from them. Cached formula results may be stale; stored Word field results are not recalculated. Respect extraction coverage omissions and hidden-content flags."
 INVESTIGATOR += OFFICE_LIMITS
 SKEPTIC += OFFICE_LIMITS
+INVESTIGATOR += '\nInclude a departments array on each finding: [{"name":"exact named department, office, school or unit","evidence_index":0}]. Use zero-based indexes into that finding\'s evidence array, at most eight labels. Each full unit name must occur verbatim in its cited passage; whitespace normalization only. Never infer a unit from a URL, title, publisher or institutional reputation. Use [] when no unit is explicitly named. The university name alone does not identify a department.'
+SKEPTIC += '\nCheck each departments label: a quoted name does not alone establish the unit\'s role, authority, responsibility or affected population. Reject or leave unresolved misattributed unit scope in the claim.'
 
 
 def _object(value):
@@ -75,6 +78,7 @@ def analyze_version(store, version_id, ask):
     if not isinstance(raw, list) or len(raw) > 3:
         raise ValueError("Research model returned an invalid findings list")
     candidates, rejected = [], []
+    department_rejections = 0
     ids = set()
     for item in raw:
         if not isinstance(item, dict) or not all(_text(item.get(key)) for key in ("id", "claim", "topic", "mechanism", "temporal_scope")) or not _strings(item.get("questions")):
@@ -92,7 +96,9 @@ def analyze_version(store, version_id, ask):
         if not external_scope_verified(evidence, versions):
             rejected.append("institutional connection was not established by verified external-source passages")
             continue
-        candidates.append(dict(item, evidence=evidence))
+        departments, omitted = checked_departments(item.get("departments", []), evidence)
+        department_rejections += omitted
+        candidates.append(dict(item, evidence=evidence, departments=departments))
     retained = []
     if candidates:
         review = _object(ask(SKEPTIC, json.dumps(dict(context, proposals=candidates), ensure_ascii=False)))
@@ -118,7 +124,7 @@ def analyze_version(store, version_id, ask):
             retained.append(dict(candidate, status="review_lead" if skeptic["decision"] == "retain" else "unresolved", skeptic=dict(skeptic, counterevidence=checked), publisher_groups=source_groups(cited), distinct_documents=len({v["url"] for v in cited}), temporal_status="historical_or_undated" if historical else "dated_sources_applicability_unverified"))
     observations = [dict(item, status="source_observation") for item in retained if not any(e["role"] == "action" for e in item["evidence"])]
     findings = [item for item in retained if any(e["role"] == "action" for e in item["evidence"])]
-    return {"schema_version": 2, "anchor_version_id": version_id, "findings": findings, "observations": observations, "rejected_count": len(rejected), "rejection_reasons": rejected, "coverage": coverage, "corpus_search": METHOD + "; " + LIMITS, "retrieval": context["retrieval"], "independence_note": "Publisher/content groups are conservative clusters, not verified independent origins."}
+    return {"schema_version": 3, "anchor_version_id": version_id, "findings": findings, "observations": observations, "rejected_count": len(rejected), "rejection_reasons": rejected, "department_labels_rejected": department_rejections, "coverage": coverage, "corpus_search": METHOD + "; " + LIMITS, "retrieval": context["retrieval"], "independence_note": "Publisher/content groups are conservative clusters, not verified independent origins."}
 
 
 def run_analysis(store, ask, max_jobs=1, *, clock=time.time):

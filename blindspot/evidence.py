@@ -4,15 +4,21 @@ from urllib.parse import urlsplit
 
 from .discovery import is_uo
 from .locations import source_locations
+from .departments import checked_departments
 
 INSTITUTION = re.compile(r"\buniversity\s+of\s+oregon\b|\buoregon\.edu\b", re.I)
 
 
 def report_view(report):
-    """Project legacy policy summaries as observations; keep stored history intact."""
-    observations = list(report.get("observations", []))
+    """Project checked scopes and legacy summaries without changing saved history."""
+    def scoped(item):
+        current = type(report.get("schema_version")) is int and report["schema_version"] >= 3
+        departments, _ = checked_departments(item.get("departments", []), item.get("evidence", [])) if current else ([], 0)
+        return dict(item, departments=departments)
+    observations = [scoped(item) for item in report.get("observations", [])]
     findings = []
     for item in report.get("findings", []):
+        item = scoped(item)
         if any(e.get("role") == "action" for e in item.get("evidence", [])):
             findings.append(item)
         else:

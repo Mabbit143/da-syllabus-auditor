@@ -4,8 +4,9 @@ The goal remains the two-part application: preserve and review the student
 syllabus auditor, and run a private engine that continually gathers public UO
 administrative material and investigates discrimination, inequality, gatekeeping
 and policy/practice differences. A growing corpus or a green test suite alone
-does not complete that goal. This audit uses code and runtime state at
-`94770fb`; it does not authorize publication, push, merge or deployment.
+does not complete that goal. The initial audit used code and runtime state at
+`94770fb`; later implementation updates are identified below. It does not
+authorize publication, push, merge or deployment.
 
 | Requirement | Current evidence | Remaining work or limit |
 | --- | --- | --- |
@@ -21,7 +22,7 @@ does not complete that goal. This audit uses code and runtime state at
 | Policy/action interpretation | Related-source retrieval now includes direct official budget process and response material | A real paired policy/action discrepancy surviving applicability review is not established by the current results |
 | Recurring mechanisms and distinct incidents | Synthesis 1 retains two private incident proposals and proposes zero patterns; stored input remains current | No established recurring discrimination finding; incident/origin verification remains incomplete |
 | Source independence | Exact copies are collapsed for retrieval; publisher/content groups are explicitly conservative | No completed originating-lineage review workflow or verified independent-origin count; publication eligibility is not granted |
-| Topic/department investigation | Existing text filter covers claim, topic and mechanism | Structured department scope/filter is not implemented; names must not be guessed from URLs or metadata |
+| Topic/department investigation | Text filter covers claim, topic and mechanism; schema-3 quoted department/office tags and unit/Not recorded filtering are now implemented and tested | Legacy scope remains unknown; live populated tags await future inference, and quoted names alone do not prove attribution |
 | Owner reads and review history | Server verifies user token plus owner RPC; database owner/non-owner probes; review actor comes from server; local page and anonymous 401 verified | Real owner JWT dashboard/sign-in and saved review await the owner's pending check |
 | Student privacy | Separate public research SQLite store and owner API; student workflows unchanged; no private demo or saved syllabus ingestion | Maintain these boundaries during remaining work |
 | Actual recurring host | Owned Windows task observed Running with ten-minute interval, three collection jobs/pass and 12 logical model steps/day; scheduled run history through 57 includes completed cycles | Computer must remain on and logged in; a future live publisher-content change and UI reporting still need explicit end-to-end observation |
@@ -31,8 +32,7 @@ does not complete that goal. This audit uses code and runtime state at
 | Regression verification | Latest engine code passed 129 tests; targeted private screen checks, typecheck/build/lint passed for its UI changes | Offline/mocked checks cannot establish live model quality, real account behavior or deployment state |
 | Hackathon delivery | Official Meta page confirms November 4, 9 PM ET deadline and Meta/open-weight tooling; organizer lists Baseten as an inference partner | Full participant rules, current submission form/video requirements and actual submission remain unverified |
 
-The next implementation gaps are evidence-backed department scope/filtering and
-explicit originating-lineage review. The separate live gates are owner sign-in,
+The next implementation gap is explicit originating-lineage review. The separate live gates are owner sign-in,
 owner source approval where scans are used, representative live analysis after
 the normal budget reset, and participant-specific submission checks. Keep the
 goal active; do not relabel these as completed because collection continues.
@@ -43,3 +43,10 @@ Official event references checked during this audit:
 The public waiver route fetched successfully but exposed only a loading shell to
 the text reader; it did not establish the full rules. No terms were accepted,
 account changed or submission made.
+
+Department scope follow-up: schema-3 quoted labels, legacy-safe projection and
+unit/Not recorded filtering passed 133 engine tests and three private browser
+tests, including opening the supporting passage. Build, typecheck and changed-file
+lint passed. The worker was reloaded without model use; current old reports have
+no guessed labels. Live populated scope and the other listed live gates remain
+unverified.

@@ -15,6 +15,7 @@ export default function ResearchWorkspace() {
   const [error, setError] = useState("");
   const [tab, setTab] = useState<"findings" | "observations" | "sources">("findings");
   const [search, setSearch] = useState("");
+  const [department, setDepartment] = useState("");
   const [sourceSearch, setSourceSearch] = useState("");
   const [page, setPage] = useState(1);
   const [refresh, setRefresh] = useState(0);
@@ -43,7 +44,8 @@ export default function ResearchWorkspace() {
   if (!data) return <>{error ? <p role="alert">{error}</p> : <p role="status">Loading private research…</p>}<button onClick={() => setRefresh((value) => value + 1)}>Try again</button></>;
   const findings = data.reports.flatMap((record) => record.report.findings.map((finding) => ({ record, finding })));
   const observations = data.reports.flatMap((record) => record.report.observations.map((finding) => ({ record, finding })));
-  const visible = (tab === "observations" ? observations : findings).filter(({ finding }) => `${finding.claim} ${finding.topic} ${finding.mechanism}`.toLowerCase().includes(search.toLowerCase()));
+  const departments = [...new Set([...findings, ...observations].flatMap(({ finding }) => finding.departments?.map((item) => item.name) || []))].sort();
+  const visible = (tab === "observations" ? observations : findings).filter(({ finding }) => `${finding.claim} ${finding.topic} ${finding.mechanism}`.toLowerCase().includes(search.toLowerCase()) && (!department || (department === "unrecorded" ? !finding.departments?.length : finding.departments?.some((item) => `unit:${item.name}` === department))));
   const pending = (kind: string) => data.status.jobs.filter((job) => job.kind === kind && (job.state === "pending" || job.state === "running")).reduce((total, job) => total + job.count, 0);
   const monitor = data.status.monitor;
   const lastRun = monitor?.runs[0];
@@ -68,6 +70,7 @@ export default function ResearchWorkspace() {
       <button disabled={page === 1} onClick={() => setPage((value) => value - 1)}>Previous sources</button>{" "}<button disabled={page * 20 >= data.total_documents} onClick={() => setPage((value) => value + 1)}>Next sources</button>
     </section> : <section aria-label={tab === "observations" ? "Source observations" : "Investigation leads"}>
       <label>Filter by claim, topic or mechanism <input value={search} onChange={(event) => setSearch(event.target.value)} /></label>
+      <label>Department or office <select value={department} onChange={(event) => setDepartment(event.target.value)}><option value="">All recorded scopes</option><option value="unrecorded">Not recorded</option>{departments.map((name) => <option key={name} value={`unit:${name}`}>{name}</option>)}</select></label>
       {visible.length === 0 && <p>{tab === "findings" ? "No investigation leads in these reports. Source observations are available separately." : "No matching source observations."}</p>}
       {visible.map(({ record, finding }) => <FindingCard key={`${record.id}:${finding.id}`} reportId={record.id} finding={finding} reviews={data.reviews.filter((review) => review.report_id === record.id && review.finding_id === finding.id)} open={open} saved={() => setRefresh((value) => value + 1)} />)}
       <details><summary>Analysis coverage and rejected proposals</summary>{data.reports.map((record) => <div key={record.id}><p>Report {record.id}: {record.report.rejected_count} rejected proposal(s). Provider steps: {record.report.model_calls?.map((call) => `${call.provider}${call.fallback ? " (fallback)" : ""}${call.cached ? " (cached)" : ""}`).join(", ") || "not recorded"}.</p>{record.report.retrieval && <p>Related-source search: {record.report.retrieval.candidate_documents} distinct candidate document(s); {record.report.retrieval.matching_related_documents} matched, {record.report.retrieval.omitted_related_documents} omitted by the five-document limit. Identical-content copies collapsed: {record.report.retrieval.identical_content_collapsed}. {record.report.retrieval.limits}</p>}<ul>{record.report.coverage.map((coverage) => <li key={coverage.version_id}>Version {coverage.version_id}: {coverage.reviewed_characters} of {coverage.total_characters} characters supplied for review.</li>)}</ul></div>)}</details>

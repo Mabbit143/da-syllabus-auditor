@@ -319,3 +319,13 @@ default priority and remain queued. The registry now includes three direct
 sources prioritized for their administrative substance: budget-cut reporting,
 donation reporting and the workplace-accommodation process. Priority does not
 label wrongdoing, establish policy applicability or grant extra model steps.
+
+New source reports can carry department/office scope in schema version 3. Each
+name must occur verbatim with word boundaries in one of that finding's verified
+passages, with only whitespace normalization. Invalid labels are omitted and counted;
+labels are checked before the Skeptic reviews attribution. Quoted names establish
+textual scope, not responsibility, policy applicability or discrimination.
+The private screen filters findings/observations by recorded unit or Not recorded
+and opens the supporting passage. Legacy reports remain unchanged and have no
+department scope inferred from their titles, URLs or claims. Live populated
+scope output awaits future analysis within the normal model budget.

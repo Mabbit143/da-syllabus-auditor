@@ -26,6 +26,10 @@ export default function FindingCard({ finding, reportId, reviews, open, saved }:
     <h3>{finding.claim}</h3>
     <p>{finding.topic} · {finding.status.replaceAll("_", " ")}</p>
     <p>{finding.mechanism}</p>
+    {finding.departments?.length ? <p>Department or office stated in evidence: {finding.departments.map((department, index) => {
+      const source = finding.evidence[department.evidence_index];
+      return <span key={`${department.name}:${index}`}>{index > 0 && "; "}{department.name}{source && <> · <button className="link" onClick={() => open(source.version_id, Math.max(0, source.start - 150))}>Read department passage</button></>}</span>;
+    })}. Unit attribution remains subject to review.</p> : <p className="muted">Department or office not recorded.</p>}
     <p className="muted">{finding.temporal_scope} · {finding.distinct_documents} document(s), {finding.publisher_groups} publisher/content group(s). These groups do not establish independent confirmation.</p>
     {finding.evidence.map(evidence)}
     <details><summary>Skeptic review and counterevidence</summary>
