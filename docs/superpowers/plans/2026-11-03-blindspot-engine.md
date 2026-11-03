@@ -234,3 +234,22 @@ budget increase, worker restart, push or deployment was needed for this incremen
 - Still open: actual owner source review and reviewed-scan analysis; deeper corpus
   retrieval/origin verification; representative coverage audit; and remaining
   manual/live auditor and owner-session checks. No push, merge or deployment.
+
+## Retrieval correction (2026-11-03)
+
+- Reproduced raw word-overlap ranking selecting anniversary/syllabus pages for
+  budget-cut reporting. Added corpus-frequency, length-normalized lexical ranking
+  with bounded title-weighted query terms and exact-offset passage selection.
+- Collapse identical content only when admitted ranges also match. Unapproved
+  scan text cannot influence retrieval; different approved passages remain usable.
+  Preserve institution-context inclusion, physical/native locators and five related
+  documents. Store method/omission metadata and disclose selection limits locally.
+- Actual budget article context now selects a trustees packet, donation reporting,
+  Provost page, budget workbook and President page. This improves the observed
+  case without proving general relevance or policy applicability; vocabulary gaps
+  and broader formal-policy selection still need work. Old reports are immutable.
+- Verification: 123 Python engine tests, three private browser tests including the
+  omission disclosure, TypeScript and production build passed. No model request;
+  recorded usage remains 14 after the consumed one-time two-step allowance.
+- The owner's clarification refers to connecting through UO's secure network,
+  not migration to a UO server. The worker remains on the authorized local host.

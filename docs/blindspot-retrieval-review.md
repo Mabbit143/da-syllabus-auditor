@@ -26,4 +26,28 @@ effective dates, affected populations, exceptions and supersession still require
 evidence and Skeptic review. Do not claim an applicable policy merely because a
 document ranks highly. Existing historical report inputs must remain immutable.
 
-This is a verified open quality issue, not a completed retrieval improvement.
+## Implemented correction
+
+`blindspot/retrieval.py` now uses BM25 document scoring with corpus-frequency
+weights, length normalization and a maximum of 64 anchor terms. Anchor title
+words receive extra weight only when they also occur in admitted source text.
+Identical content with identical admitted ranges is collapsed before computing
+corpus statistics and selecting up to five related documents. Different reviewed
+passages from the same bytes remain eligible. Neither duplicate collapse nor a
+high score establishes independent originating evidence or policy applicability.
+
+Passages use the same weighted query, retaining original character offsets and
+the existing 10,000-character anchor / 5,000-character related-source bounds.
+Only admitted scan ranges contribute text or ranking terms. Institution-scope
+passages and physical/native locators remain subject to existing exact checks.
+Reports record the method, candidate/match/omission counts and query terms; the
+owner coverage disclosure shows selection limits. Old reports remain unchanged.
+
+A read-only repeat for budget article 459 selected trustees packet 440, donation
+reporting 461, Provost entry page 457, budget workbook 438 and President page 8.
+The prior anniversary and syllabus selections disappeared. Context preparation
+took about three seconds on this computer at this corpus size. This is one
+observed relevance improvement, not a comprehensive relevance benchmark: broad
+entry pages can still rank, policies using different vocabulary can be missed,
+and effective-date/applicability review remains necessary. No live model pass
+was run for the changed context because the approved daily allowance was spent.

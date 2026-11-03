@@ -277,3 +277,10 @@ selection removes unrelated page sidebars; original versions remain stored.
 The registry includes 22 entry points after eight additional official office
 pages were collected successfully. See the [coverage checkpoint](../docs/blindspot-coverage-audit.md)
 for bounded live checks and unresolved collection limits.
+
+Source context now uses corpus-frequency and length-normalized lexical ranking
+instead of raw shared-word counts. It collapses exact copies with the same
+reviewed ranges, excludes unapproved scan text from ranking, preserves original
+passage offsets, and records candidate/omission counts. The five-related-document
+limit remains. See the [retrieval review](../docs/blindspot-retrieval-review.md)
+for an actual before/after example and remaining vocabulary/applicability limits.

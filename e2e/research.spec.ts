@@ -69,7 +69,7 @@ test("owner reads evidence, records review and clears data on sign-out", async (
         patterns: [], evidence: [{ ...evidence, id: "e1", role: "action" }], leads: [{ id: "r2:f2", report_id: 2, finding_id: "f2", claim: "A reported restriction" }], coverage: { recent_reports: 2, omitted_leads: 0, invalid_evidence_leads: 0, note: "Supplied passages only." }, rejected_count: 1, limitations: "Private review leads; originating lineages remain unverified."
       } },
       patterns: { evidence_groups: [{ id: "group1", status: "incident_identity_unverified", members: [{ report_id: 2, finding_id: "f2", claim: "An attributed allegation requiring review.", topic: "Access", mechanism: "Restrictive eligibility", status: "unresolved", owner_status: null, actions: [{ ...evidence, role: "action" }] }] }], mechanism_candidates: [], limitations: "Different passages may describe the same incident." },
-      reports: [{ id: 1, completed_at: 10, report: { findings: [], observations: [{ id: "f1", claim: "A policy commitment to equal access.", topic: "Access", mechanism: "Stated commitment", evidence: [evidence], questions: ["What happens in practice?"], temporal_scope: "Applicability date unknown", temporal_status: "historical_or_undated", status: "source_observation", publisher_groups: 1, distinct_documents: 1, skeptic: { decision: "retain", reason: "The passage supports the observation.", counterevidence_search: "Checked supplied portions only.", alternative_explanations: [], temporal_scope: "Unknown", counterevidence: [] } }], rejected_count: 2, coverage: [{ version_id: 12, reviewed_characters: 38, total_characters: 200 }] } }],
+      reports: [{ id: 1, completed_at: 10, report: { findings: [], observations: [{ id: "f1", claim: "A policy commitment to equal access.", topic: "Access", mechanism: "Stated commitment", evidence: [evidence], questions: ["What happens in practice?"], temporal_scope: "Applicability date unknown", temporal_status: "historical_or_undated", status: "source_observation", publisher_groups: 1, distinct_documents: 1, skeptic: { decision: "retain", reason: "The passage supports the observation.", counterevidence_search: "Checked supplied portions only.", alternative_explanations: [], temporal_scope: "Unknown", counterevidence: [] } }], rejected_count: 2, retrieval: { method: "bm25_documents_v1", candidate_documents: 30, matching_related_documents: 9, omitted_related_documents: 4, identical_content_collapsed: 3, limits: "Policy applicability requires evidence review." }, coverage: [{ version_id: 12, reviewed_characters: 38, total_characters: 200 }] } }],
     } });
   });
   await account(page);
@@ -113,6 +113,9 @@ test("owner reads evidence, records review and clears data on sign-out", async (
   await page.getByText("Internet discovery (18 candidate URLs)", { exact: true }).click();
   await expect(page.getByText(/University of Oregon administration interviews/)).toBeVisible();
   await page.getByRole("button", { name: "Source observations (1)" }).click();
+  await page.getByText("Analysis coverage and rejected proposals", { exact: true }).click();
+  await expect(page.getByText(/9 matched, 4 omitted by the five-document limit/)).toBeVisible();
+  await expect(page.getByText(/Policy applicability requires evidence review/)).toBeVisible();
   await expect(page.getByRole("heading", { name: "A policy commitment to equal access." })).toBeVisible();
   await page.getByRole("button", { name: "Read saved passage" }).click();
   await expect(page.getByRole("region", { name: "Saved document" })).toContainText(evidence.quote);

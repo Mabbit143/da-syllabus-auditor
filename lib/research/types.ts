@@ -16,7 +16,7 @@ export interface ResearchFinding {
 }
 export interface ResearchReport {
   id: number; completed_at: number;
-  report: { findings: ResearchFinding[]; observations: ResearchFinding[]; rejected_count: number; coverage: { version_id: number; reviewed_characters: number; total_characters: number }[]; model_calls?: { provider: string; fallback: boolean; cached?: boolean }[] };
+  report: { findings: ResearchFinding[]; observations: ResearchFinding[]; rejected_count: number; retrieval?: { method: string; candidate_documents: number; matching_related_documents: number; omitted_related_documents: number; identical_content_collapsed: number; limits: string }; coverage: { version_id: number; reviewed_characters: number; total_characters: number }[]; model_calls?: { provider: string; fallback: boolean; cached?: boolean }[] };
 }
 export interface ResearchReview { id: number; report_id: number; finding_id: string; status: string; note: string; actor: string; created_at: number }
 export interface ResearchQuality { state: string; analysis_ready: boolean; note: string }
