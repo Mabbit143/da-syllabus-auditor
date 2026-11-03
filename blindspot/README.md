@@ -274,8 +274,8 @@ headline-only extraction gaps. Heading-only HTML is retained for inspection but
 excluded from source analysis and cross-report evidence. Text availability does
 not establish document completeness or claim support. Daily Emerald article-body
 selection removes unrelated page sidebars; original versions remain stored.
-The registry includes 22 entry points after eight additional official office
-pages were collected successfully. See the [coverage checkpoint](../docs/blindspot-coverage-audit.md)
+The registry now has 30 source URLs, including office entry pages, direct official
+budget statements and presidential/provost update indexes. See the [coverage checkpoint](../docs/blindspot-coverage-audit.md)
 for bounded live checks and unresolved collection limits.
 
 Source context now uses corpus-frequency and length-normalized lexical ranking

@@ -162,5 +162,40 @@
     "publisher": "University of Oregon Office of Equal Opportunity and Access",
     "discovered_from": "https://investigations.uoregon.edu/workplace-accommodations",
     "analysis_priority": 25
+  },
+  {
+    "url": "https://president.uoregon.edu/proposal-academic-budget-reductions",
+    "category": "administration",
+    "publisher": "University of Oregon Office of the President",
+    "discovered_from": "https://president.uoregon.edu/presidential-messages",
+    "analysis_priority": 20
+  },
+  {
+    "url": "https://president.uoregon.edu/proposal-overview",
+    "category": "administration",
+    "publisher": "University of Oregon Office of the President",
+    "discovered_from": "https://president.uoregon.edu/proposal-academic-budget-reductions",
+    "analysis_priority": 20
+  },
+  {
+    "url": "https://provost.uoregon.edu/provosts-council-budget-engagement-guidelines-2026",
+    "category": "administration",
+    "publisher": "University of Oregon Office of the Provost",
+    "discovered_from": "https://provost.uoregon.edu/toward-premier-r1-public",
+    "analysis_priority": 20
+  },
+  {
+    "url": "https://president.uoregon.edu/presidential-messages",
+    "category": "administration",
+    "publisher": "University of Oregon Office of the President",
+    "discovered_from": "verified public presidential message index",
+    "collection_priority": 1
+  },
+  {
+    "url": "https://provost.uoregon.edu/updates",
+    "category": "administration",
+    "publisher": "University of Oregon Office of the Provost",
+    "discovered_from": "verified public provost updates index",
+    "collection_priority": 1
   }
 ]

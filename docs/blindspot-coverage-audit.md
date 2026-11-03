@@ -96,3 +96,36 @@ limits. Scan source 2 had zero approved passages. This verifies preview delivery
 and legibility, not transcription accuracy, owner approval, policy applicability
 or successful authenticated browser access. The diagnostic and image remain in
 ignored local worker storage, with no model request or published source text.
+
+## Official statements beside independent reporting
+
+Current OregonNews article fetches still exposed only headings even where a
+search engine returned previously indexed article text. Cached search text was
+not substituted for the fetched source or silently admitted as current evidence.
+The headline-only limitation therefore remains open.
+
+Three directly fetched official records now provide more relevant budget context:
+
+| Saved version | Official record | Extracted characters |
+| --- | --- | --- |
+| 488 | [President's October 28 budget message](https://president.uoregon.edu/proposal-academic-budget-reductions) | 3,709 |
+| 489 | [Provost's Council Budget Engagement Guidelines 2026](https://provost.uoregon.edu/provosts-council-budget-engagement-guidelines-2026) | 8,937 |
+| 490 | [Proposal overview](https://president.uoregon.edu/proposal-overview) | 2,884 |
+
+The overview distinguishes preliminary proposals from final decisions. These
+statements provide institutional process and response context, not proof of
+implementation or independent corroboration. The statement and reporting may
+share an underlying event or originating information.
+
+A read-only context pass for budget article 459 selected overview 490, trustees
+packet 440, presidential message 488, donation reporting 461 and guidelines 489.
+This supplies directly relevant official material for the next Investigator and
+Skeptic pass without a new model request now. Exact quotation, temporal scope,
+applicability and counterevidence checks still apply; no discrepancy or recurring
+pattern was established by retrieval.
+
+The three records plus presidential-message and provost-update entry pages extend
+the refresh registry to 30 unique canonical URLs. One request was normally
+deferred for publisher pacing before succeeding. All three body snapshots were
+saved with provenance and queued for future analysis. Model usage remains 14;
+the scheduled cap remains 12 per UTC day.
