@@ -167,13 +167,23 @@ export default function Report({ report, pages, policy }: { report: AuditReport;
                     {report.sourceAuthors.sampled < report.sourceAuthors.verified ? " (random sample)" : ""}
                   </summary>
                   <p className="muted">
-                    The syllabus&rsquo;s own reading list was used: the public bio of each sampled author was searched, and only a bio whose own text states the author&rsquo;s background counts here. Each hit appears with its quote above.
+                    The syllabus&rsquo;s own reading list was used: up to 3 public bios per sampled author were searched (Wikipedia included when found), each quote verified word-for-word against its source page. Only a bio whose own text states the author&rsquo;s background counts toward the grade — a named based-at / educated-in place counts, a bare employer name does not, and a name alone never counts. Each hit appears with its quote above.
                   </p>
                   <ul>
                     {report.sourceAuthors.authors.map((a: AuthorBioCheck, i: number) => (
                       <li key={`${a.author}-${i}`}>
                         <strong>{a.author}</strong> — {BIO_OUTCOME_TEXT[a.outcome]}
                         {a.url && <> <a href={a.url} target="_blank" rel="noopener noreferrer">bio source</a></>}
+                        {a.pieces?.length ? (
+                          <ul>
+                            {a.pieces.map((p, j) => (
+                              <li key={j}>
+                                &ldquo;{p.quote}&rdquo; — {p.relation}{" "}
+                                <a href={p.url} target="_blank" rel="noopener noreferrer">source</a>
+                              </li>
+                            ))}
+                          </ul>
+                        ) : null}
                       </li>
                     ))}
                   </ul>
