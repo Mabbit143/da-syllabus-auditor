@@ -1,6 +1,7 @@
 """Bounded immutable-evidence inputs for cross-report incident research."""
 import hashlib
 import json
+from .quality import assess_text
 
 
 def digest(value):
@@ -30,6 +31,8 @@ def build_input(store):
                     if version_id not in versions:
                         versions[version_id] = store.get_version(version_id)
                     version = versions[version_id]
+                    if not assess_text(version["text"], version["metadata"])["analysis_ready"]:
+                        raise ValueError("Source has only headline or incomplete text")
                     start, end = item["start"], item["end"]
                     if type(start) is not int or type(end) is not int or not 0 <= start < end <= len(version["text"]) or not 12 <= len(" ".join(item["quote"].split())) <= 500 or version["text"][start:end] != item["quote"] or version["content_hash"] != item["content_hash"] or version["url"] != item["url"] or item["role"] not in ("policy", "action", "context"):
                         raise ValueError("Saved source locator did not verify")

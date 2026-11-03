@@ -3,6 +3,7 @@ from html.parser import HTMLParser
 from urllib.parse import urljoin
 
 from .fetch import canonical_url, fetch_public
+from .quality import assess_text
 
 
 class DocumentHTML(HTMLParser):
@@ -15,6 +16,8 @@ class DocumentHTML(HTMLParser):
         self.title = []
         self.links = []
         self.published = None
+        self.article_parts, self.article_depths = [], []
+        self.headings, self.date_parts, self.date_depths = [], [], []
 
     def handle_starttag(self, tag, attrs):
         attrs = dict(attrs)
@@ -22,6 +25,11 @@ class DocumentHTML(HTMLParser):
             self.published = attrs.get("content")
         if tag not in {"meta", "link", "img", "br", "hr", "input", "source", "area", "base", "embed", "wbr", "param", "track", "col"}:
             self.stack.append(tag)
+        classes = set(attrs.get("class", "").split())
+        if tag in ("div", "section", "article") and classes & {"sno-story-body", "sno-story-body-content"} and not self._ignored():
+            self.article_depths.append(len(self.stack))
+        if "sno-story-date" in classes and not self._ignored():
+            self.date_depths.append(len(self.stack))
         if tag == "a" and attrs.get("href") and not self._ignored():
             try:
                 link = canonical_url(urljoin(self.url, attrs["href"]))
@@ -37,6 +45,8 @@ class DocumentHTML(HTMLParser):
     def handle_endtag(self, tag):
         if tag in self.stack:
             self.stack = self.stack[:len(self.stack) - 1 - self.stack[::-1].index(tag)]
+            self.article_depths = [depth for depth in self.article_depths if depth <= len(self.stack)]
+            self.date_depths = [depth for depth in self.date_depths if depth <= len(self.stack)]
 
     def _ignored(self):
         return any(tag in {"script", "style", "noscript", "nav", "footer", "header", "svg", "form"} for tag in self.stack)
@@ -51,15 +61,24 @@ class DocumentHTML(HTMLParser):
             self.parts.append(text)
             if "main" in self.stack or "article" in self.stack:
                 self.main.append(text)
+                if "h1" in self.stack and not self.article_depths:
+                    self.headings.append(text)
+            if self.article_depths:
+                self.article_parts.append(text)
+            if self.date_depths:
+                self.date_parts.append(text)
 
 
 def extract_html(body, url):
     parser = DocumentHTML(url)
     parser.feed(body.decode("utf8", errors="replace"))
-    text = "\n".join(parser.main or parser.parts)
+    text = "\n".join(parser.headings + parser.article_parts if parser.article_parts else parser.main or parser.parts)
     if not text.strip():
         raise ValueError("Could not read text from this public document")
-    return {"text": text, "title": " ".join(parser.title), "published_at": parser.published, "links": parser.links, "method": "html", "coverage": "extracted HTML text; dynamic content not rendered"}
+    title = " ".join(parser.title)
+    quality = assess_text(text, {"method": "html", "title": title})
+    coverage = "selected article-body HTML text; surrounding page areas omitted; dynamic content not rendered" if parser.article_parts else "extracted HTML text; dynamic content not rendered"
+    return {"text": text, "title": title, "published_at": parser.published or " ".join(parser.date_parts) or None, "links": parser.links, "method": "html", "coverage": coverage + ("; headline-only snapshot, article body unavailable" if not quality["analysis_ready"] else ""), "extraction_selector": "article_body" if parser.article_parts else "semantic_main" if parser.main else "body_fallback", "analysis_ready": quality["analysis_ready"], "quality_state": quality["state"]}
 
 
 def collect(store, source, now, *, fetch=fetch_public):
@@ -96,4 +115,4 @@ def collect(store, source, now, *, fetch=fetch_public):
     metadata.update({key: value for key, value in document.items() if key not in ("text", "links")})
     metadata.update(requested_url=requested, content_type=mime)
     version = store.snapshot(url, document["text"], metadata, now)
-    return {"version_id": version, "url": url, "links": document["links"]}
+    return {"version_id": version, "url": url, "links": document["links"], **({"analysis_ready": False} if document.get("analysis_ready") is False else {})}

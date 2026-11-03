@@ -9,6 +9,9 @@ from .patterns import summarize
 from .synthesis_state import latest_synthesis
 from .locations import source_locations
 from .scans import scan_status, scan_preview, admit_passage
+from .quality import assess_text, coverage_summary
+
+LIST_FIELDS = ("title", "category", "method", "archived_snapshot", "original_fetched_date", "published_at", "analysis_ready", "quality_state")
 
 
 def _positive(value, maximum, *, zero=False):
@@ -32,14 +35,18 @@ def query(store, request, *, now=None):
         with store._db() as db:
             where = "id IN (SELECT max(id) FROM versions GROUP BY url) AND (url LIKE ? OR metadata LIKE ?)"
             total = db.execute("SELECT count(*) FROM versions WHERE " + where, (pattern, pattern)).fetchone()[0]
-            rows = db.execute("SELECT * FROM versions WHERE " + where + " ORDER BY id DESC LIMIT 20 OFFSET ?", (pattern, pattern, (page - 1) * 20)).fetchall()
+            rows = db.execute("""SELECT versions.id,versions.url,versions.first_seen,versions.last_seen,
+                json_extract(metadata,'$.title','$.category','$.method','$.archived_snapshot','$.original_fetched_date','$.published_at','$.analysis_ready','$.quality_state') AS metadata_summary,
+                length(content.text) AS characters, CASE WHEN length(content.text)<=1000 THEN content.text ELSE '' END AS short_text
+                FROM versions JOIN content ON content.hash=versions.content_hash WHERE """ + where + " ORDER BY id DESC LIMIT 20 OFFSET ?", (pattern, pattern, (page - 1) * 20)).fetchall()
             reviews = [dict(row) for row in db.execute("SELECT * FROM reviews ORDER BY id DESC LIMIT 500")]
         documents = []
         for row in rows:
-            meta = json.loads(row["metadata"])
-            documents.append({"id": row["id"], "url": row["url"], "title": meta.get("title") or row["url"], "category": meta.get("category", "unknown"), "method": meta.get("method", "unknown"), "archived_snapshot": bool(meta.get("archived_snapshot")), "original_fetched_date": meta.get("original_fetched_date"), "published_at": meta.get("published_at"), "first_seen": row["first_seen"], "last_seen": row["last_seen"]})
+            meta = dict(zip(LIST_FIELDS, json.loads(row["metadata_summary"])))
+            quality = assess_text(row["short_text"], meta, character_count=row["characters"])
+            documents.append({"id": row["id"], "url": row["url"], "title": meta.get("title") or row["url"], "category": meta.get("category") or "unknown", "method": meta.get("method") or "unknown", "archived_snapshot": bool(meta.get("archived_snapshot")), "original_fetched_date": meta.get("original_fetched_date"), "published_at": meta.get("published_at"), "first_seen": row["first_seen"], "last_seen": row["last_seen"], "quality": quality})
         reports = store.analyses(100)
-        return {"status": store.status(), "documents": documents, "page": page, "total_documents": total, "reports": reports, "patterns": summarize(reports, reviews), "synthesis": latest_synthesis(store), "scans": scan_status(store), "reviews": reviews, "storage": "local-worker", "history_limits": {"reports": 100, "reviews": 500}}
+        return {"status": store.status(), "documents": documents, "page": page, "total_documents": total, "reports": reports, "patterns": summarize(reports, reviews), "synthesis": latest_synthesis(store), "scans": scan_status(store), "coverage": coverage_summary(store), "reviews": reviews, "storage": "local-worker", "history_limits": {"reports": 100, "reviews": 500}}
     if action == "document":
         version = store.get_version(_positive(request.get("version_id"), 1000000000))
         start = _positive(request.get("start", 0), 4000000, zero=True)
@@ -53,7 +60,7 @@ def query(store, request, *, now=None):
             if start < end and offset < start + 10000:
                 physical_pages.append({"page": page["page"], "start": offset, "end": end})
             offset = end + 2
-        return {"id": version["id"], "url": version["url"], "content_hash": version["content_hash"], "metadata": {k: v for k, v in version["metadata"].items() if k not in ("pages", "locations")}, "text": version["text"][start:start + 10000], "start": start, "total_characters": len(version["text"]), "physical_pages": physical_pages, "source_locations": source_locations(version["metadata"], [(start, start + 10000)]), "history": history}
+        return {"id": version["id"], "url": version["url"], "content_hash": version["content_hash"], "metadata": {k: v for k, v in version["metadata"].items() if k not in ("pages", "locations")}, "quality": assess_text(version["text"], version["metadata"]), "text": version["text"][start:start + 10000], "start": start, "total_characters": len(version["text"]), "physical_pages": physical_pages, "source_locations": source_locations(version["metadata"], [(start, start + 10000)]), "history": history}
     if action == "review":
         report_id = _positive(request.get("report_id"), 1000000000)
         finding_id, actor, note, status = (request.get(key) for key in ("finding_id", "actor", "note", "status"))

@@ -8,6 +8,7 @@ import SourceViewer from "./SourceViewer";
 import PatternSummary from "./PatternSummary";
 import SynthesisSummary from "./SynthesisSummary";
 import ScanReview from "./ScanReview";
+import SourceCoverage from "./SourceCoverage";
 
 export default function ResearchWorkspace() {
   const [data, setData] = useState<ResearchOverview | null>(null);
@@ -56,13 +57,14 @@ export default function ResearchWorkspace() {
     {data.patterns && <PatternSummary patterns={data.patterns} open={open} />}
     {data.synthesis ? <SynthesisSummary synthesis={data.synthesis} open={open} /> : <p>Cross-report incident analysis has not completed yet. It uses the same daily model budget as source analysis and discovery.</p>}
     {data.scans && <ScanReview scans={data.scans} saved={() => setRefresh((value) => value + 1)} />}
+    {data.coverage && <SourceCoverage coverage={data.coverage} open={open} />}
     {error && <p role="alert">{error}</p>}
     {data.status.failures.length > 0 && <details><summary>Collection and analysis failures ({data.status.failures.length})</summary><ul>{data.status.failures.map((job) => <li key={job.id}>{job.kind}: {job.last_error} · {job.attempts} attempt(s)</li>)}</ul></details>}
     <p><button onClick={() => setTab("findings")} aria-pressed={tab === "findings"}>Investigation leads ({findings.length})</button>{" "}<button onClick={() => setTab("observations")} aria-pressed={tab === "observations"}>Source observations ({observations.length})</button>{" "}<button onClick={() => setTab("sources")} aria-pressed={tab === "sources"}>Sources</button></p>
     {tab === "sources" ? <section aria-label="Source library">
       <form onSubmit={(event) => { event.preventDefault(); setPage(1); setSourceSearch(search); }}><label>Search source titles or URLs <input maxLength={200} value={search} onChange={(event) => setSearch(event.target.value)} /></label><button>Search sources</button></form>
       <p>{data.total_documents} matching source(s).</p>
-      {data.documents.map((document) => <article className="card mixed" key={document.id}><h3>{document.title}</h3><p>{document.category} · {document.archived_snapshot ? `Archived snapshot from ${document.original_fetched_date || "unknown date"}` : "Live collection snapshot"}</p><p><a href={document.url} target="_blank" rel="noopener noreferrer">Original source</a>{" · "}<button className="link" onClick={() => open(document.id)}>Read saved document</button></p></article>)}
+      {data.documents.map((document) => <article className="card mixed" key={document.id}><h3>{document.title}</h3><p>{document.category} · {document.archived_snapshot ? `Archived snapshot from ${document.original_fetched_date || "unknown date"}` : "Live collection snapshot"}</p>{document.quality && !document.quality.analysis_ready && <p>{document.quality.note}</p>}<p><a href={document.url} target="_blank" rel="noopener noreferrer">Original source</a>{" · "}<button className="link" onClick={() => open(document.id)}>Read saved document</button></p></article>)}
       <button disabled={page === 1} onClick={() => setPage((value) => value - 1)}>Previous sources</button>{" "}<button disabled={page * 20 >= data.total_documents} onClick={() => setPage((value) => value + 1)}>Next sources</button>
     </section> : <section aria-label={tab === "observations" ? "Source observations" : "Investigation leads"}>
       <label>Filter by claim, topic or mechanism <input value={search} onChange={(event) => setSearch(event.target.value)} /></label>

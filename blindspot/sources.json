@@ -81,6 +81,62 @@
     "discovered_from": "public web search: UO encampment resolution agreement"
   },
   {
+    "url": "https://hr.uoregon.edu/",
+    "category": "administration",
+    "publisher": "University of Oregon Human Resources",
+    "discovered_from": "verified public UO office entry page",
+    "collection_priority": 1
+  },
+  {
+    "url": "https://financialaid.uoregon.edu/",
+    "category": "administration",
+    "publisher": "University of Oregon Financial Aid and Scholarships",
+    "discovered_from": "verified public UO office entry page",
+    "collection_priority": 1
+  },
+  {
+    "url": "https://www.uoregon.edu/admissions/",
+    "category": "administration",
+    "publisher": "University of Oregon Admissions",
+    "discovered_from": "https://admissions.uoregon.edu/",
+    "collection_priority": 1
+  },
+  {
+    "url": "https://aec.uoregon.edu/",
+    "category": "administration",
+    "publisher": "University of Oregon Accessible Education Center",
+    "discovered_from": "verified public UO office entry page",
+    "collection_priority": 1
+  },
+  {
+    "url": "https://dos.uoregon.edu/",
+    "category": "administration",
+    "publisher": "University of Oregon Dean of Students",
+    "discovered_from": "verified public UO office entry page",
+    "collection_priority": 1
+  },
+  {
+    "url": "https://studentlife.uoregon.edu/",
+    "category": "administration",
+    "publisher": "University of Oregon Division of Student Life",
+    "discovered_from": "verified public UO office entry page",
+    "collection_priority": 1
+  },
+  {
+    "url": "https://data.uoregon.edu/",
+    "category": "administration",
+    "publisher": "University of Oregon Office of Data Enablement",
+    "discovered_from": "https://ir.uoregon.edu/",
+    "collection_priority": 1
+  },
+  {
+    "url": "https://provost.uoregon.edu/",
+    "category": "administration",
+    "publisher": "University of Oregon Office of the Provost",
+    "discovered_from": "verified public UO office entry page",
+    "collection_priority": 1
+  },
+  {
     "url": "https://www.opb.org/article/2025/03/14/us-education-department-uo-civil-rights-investigation/",
     "category": "news",
     "publisher": "OPB",

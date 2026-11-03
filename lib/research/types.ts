@@ -19,8 +19,10 @@ export interface ResearchReport {
   report: { findings: ResearchFinding[]; observations: ResearchFinding[]; rejected_count: number; coverage: { version_id: number; reviewed_characters: number; total_characters: number }[]; model_calls?: { provider: string; fallback: boolean; cached?: boolean }[] };
 }
 export interface ResearchReview { id: number; report_id: number; finding_id: string; status: string; note: string; actor: string; created_at: number }
-export interface ResearchDocument { id: number; url: string; title: string; category: string; method: string; archived_snapshot: boolean; original_fetched_date?: string; published_at?: string; first_seen: number; last_seen: number }
+export interface ResearchQuality { state: string; analysis_ready: boolean; note: string }
+export interface ResearchDocument { id: number; url: string; title: string; category: string; method: string; archived_snapshot: boolean; original_fetched_date?: string; published_at?: string; first_seen: number; last_seen: number; quality?: ResearchQuality }
 export interface ResearchOverview {
+  coverage?: { total_documents: number; archived_snapshots: number; headline_only: number; categories: Record<string, { documents: number; analysis_ready: number; headline_only: number; archived: number }>; headline_examples: { version_id: number; url: string; title: string }[]; note: string };
   scans?: { total_sources: number; limit: number; sources: { id: number; url: string; pdf_sha256: string; page_count: number; needs_review_pages: number[]; approved_passages: number }[] };
   synthesis?: ResearchSynthesis | null;
   patterns?: {
@@ -60,6 +62,7 @@ export interface ResearchMonitor {
   model_usage: { day: string; calls: number }[];
 }
 export interface ResearchSource {
+  quality?: ResearchQuality;
   id: number; url: string; content_hash: string; metadata: { title?: string; original_fetched_date?: string; published_at?: string; coverage?: string };
   text: string; start: number; total_characters: number;
   physical_pages: { page: number; start: number; end: number }[];

@@ -266,3 +266,14 @@ Actual owner browser/JWT sign-in remains a separate check. See
 [the verification record](../docs/blindspot-owner-verification.md) for scope and
 existing advisor notices, including disabled leaked-password protection. No
 database permission, auth setting, schema or user record was changed.
+
+## Source availability and coverage
+
+The owner screen now shows latest-URL intake counts, historical snapshots and
+headline-only extraction gaps. Heading-only HTML is retained for inspection but
+excluded from source analysis and cross-report evidence. Text availability does
+not establish document completeness or claim support. Daily Emerald article-body
+selection removes unrelated page sidebars; original versions remain stored.
+The registry includes 22 entry points after eight additional official office
+pages were collected successfully. See the [coverage checkpoint](../docs/blindspot-coverage-audit.md)
+for bounded live checks and unresolved collection limits.

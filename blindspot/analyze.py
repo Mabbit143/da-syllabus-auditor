@@ -8,6 +8,7 @@ from .evidence import source_groups, verify_evidence, external_scope_verified, i
 from .budget import ModelBudgetExhausted
 from .provider import ResearchProviderError
 from .locations import source_locations
+from .quality import assess_text, skip_analysis, SourceTextUnavailable
 
 logger = logging.getLogger("blindspot")
 
@@ -46,8 +47,10 @@ def _strings(value):
 
 def _context(store, version_id):
     anchor = store.get_version(version_id)
+    if not assess_text(anchor["text"], anchor["metadata"])["analysis_ready"]:
+        raise SourceTextUnavailable("Only a headline or incomplete source text is available")
     terms = _words(anchor["text"])
-    candidates = [v for v in store.latest_versions() if v["id"] != version_id and v["url"] != anchor["url"]]
+    candidates = [v for v in store.latest_versions() if v["id"] != version_id and v["url"] != anchor["url"] and assess_text(v["text"], v["metadata"])["analysis_ready"]]
     # Lexical retrieval selects candidates only; it does not decide misconduct.
     ranked = sorted(candidates, key=lambda v: len(_words(v["text"]) & terms), reverse=True)
     selected = [anchor] + [v for v in ranked if len(_words(v["text"]) & terms) >= 2][:5]
@@ -131,7 +134,7 @@ def analyze_version(store, version_id, ask):
 def run_analysis(store, ask, max_jobs=1, *, clock=time.time):
     if type(max_jobs) is not int or not 1 <= max_jobs <= 10:
         raise ValueError("Analysis pass must process 1–10 jobs")
-    result = {"completed": 0, "failed": 0, "findings": 0, "budget_deferred": 0, "daily_limit": getattr(ask, "daily_limit", None)}
+    result = {"completed": 0, "failed": 0, "findings": 0, "budget_deferred": 0, "skipped": 0, "daily_limit": getattr(ask, "daily_limit", None)}
     for _ in range(max_jobs):
         job = store.claim(clock(), 600, kind="analyze")
         if not job:
@@ -143,6 +146,9 @@ def run_analysis(store, ask, max_jobs=1, *, clock=time.time):
             store.complete_analysis(job["id"], job["token"], clock(), report)
             result["completed"] += 1
             result["findings"] += len(report["findings"])
+        except SourceTextUnavailable:
+            skip_analysis(store, job, clock())
+            result["skipped"] += 1
         except ModelBudgetExhausted as exc:
             store.defer(job["id"], job["token"], clock(), exc.next_due)
             result["budget_deferred"] += 1

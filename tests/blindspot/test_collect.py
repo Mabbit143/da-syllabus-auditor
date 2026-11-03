@@ -76,6 +76,22 @@ class CollectTests(unittest.TestCase):
             self.assertEqual(version["metadata"]["discovered_from"], "https://example.com/")
             self.assertIsNone(version["metadata"]["published_at"])
 
+    def test_student_news_article_body_excludes_other_stories_and_keeps_attribution(self):
+        html = b'''<title>Budget proposals | Student News</title><main>
+          <aside><h2>Recent stories</h2><p>Unrelated sports headline and interview.</p></aside>
+          <h1 class="sno-story-headline">Budget proposals</h1>
+          <div class="sno-story-date">November 2, 2026</div>
+          <div class="sno-story-body"><div class="sno-story-body-content">
+            <p>The provost said that fee waivers remain available to eligible applicants.</p>
+          </div></div><div class="sno-story-related-content">More unrelated recommendations.</div></main>'''
+        document = extract_html(html, "https://news.example/budget")
+        self.assertIn("Budget proposals", document["text"])
+        self.assertEqual(document["text"].count("The provost said"), 1)
+        self.assertNotIn("Unrelated sports", document["text"])
+        self.assertNotIn("recommendations", document["text"])
+        self.assertEqual(document["published_at"], "November 2, 2026")
+        self.assertEqual(document["extraction_selector"], "article_body")
+
     def test_unreadable_or_unsupported_document_is_not_saved(self):
         with tempfile.TemporaryDirectory() as folder:
             store = Store(Path(folder) / "state.sqlite")
