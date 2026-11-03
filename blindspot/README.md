@@ -1,5 +1,9 @@
 # Blindspot research worker
 
+For requirement-by-requirement status and remaining work, see the
+[full-goal acceptance audit](../docs/blindspot-goal-audit.md). Runtime collection
+counts and passing tests alone do not establish completion of the investigation.
+
 This is the local collection and analysis backend, separate from the built syllabus auditor. It has a private investigation screen at `/blindspot`. The owner selected this computer for recurring execution; a quiet Windows scheduled worker is installed. Bounded internet discovery, source analysis and cross-report incident/pattern proposals are connected. A live cross-report pass completed successfully; independently verified origins and comprehensive corpus coverage remain open.
 
 From the repository root:
