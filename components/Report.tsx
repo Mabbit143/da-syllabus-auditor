@@ -61,7 +61,7 @@ const RELATION_TEXT: Record<Relation, string> = {
 const BIO_OUTCOME_TEXT: Record<AuthorBioOutcome, string> = {
   insider_stated: "Public bio states a background in the community the reading covers — counts for this dimension.",
   outsider_stated: "Public bio states a background outside it — counts against this dimension.",
-  no_stated_relation: "Bio found, but it does not state the author's own background — not counted.",
+  no_stated_relation: "Bio states a background, but not clearly inside or outside what this reading covers — not counted.",
   not_found: "No public bio found for this author.",
   bio_unverified: "Bio found, but its text could not be verified on the page — not counted.",
   check_failed: "The lookup failed this run.",
