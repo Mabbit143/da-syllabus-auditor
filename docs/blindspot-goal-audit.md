@@ -159,3 +159,13 @@ A real local Node smoke launch with the flag returned successfully without a
 model request. The idle-guarded restart loaded the fix and returned Running with
 the existing schedule and spending limit. No account action is needed for this
 fix, and no additional live-analysis allowance was requested or used.
+
+Parsing follow-up: scheduled run 84 attempted synthesis job 906 a third time,
+received an Investigator response that failed JSON parsing, and saved no new
+synthesis or Investigator cache entry. Usage reached 9/12. The prior observer
+finished normally after seeing that attempt return to pending. Response parsing
+now logs only the static step/shape classification, character count and parse
+line/column; no response or request content is logged. New privacy regressions
+verify rejected output stays uncached and charged to the daily counter. All 148
+engine tests passed. Malformed output is not repaired or accepted by this change.
+The exact live parsing cause still awaits the next scheduled diagnostic.

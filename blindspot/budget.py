@@ -2,7 +2,11 @@
 from datetime import datetime, timedelta, timezone
 import hashlib
 import json
+import logging
 import time
+
+
+logger = logging.getLogger("blindspot")
 
 
 class ModelBudgetExhausted(ValueError):
@@ -36,8 +40,14 @@ class CachedBudgetModel:
         # Failed/timed-out requests still consume the reserved logical step.
         start = len(getattr(self.ask, "calls", []))
         raw = self.ask(instructions, context)
-        result = json.loads(raw) if isinstance(raw, str) else raw
         field = "results" if instructions.startswith("DISCOVERY") else "reviews" if "SKEPTIC" in instructions else "incidents" if instructions.startswith("PATTERN_INVESTIGATOR") else "findings"
+        try:
+            result = json.loads(raw) if isinstance(raw, str) else raw
+        except json.JSONDecodeError as exc:
+            stripped = raw.lstrip()
+            shape = "empty" if not stripped else "fenced" if stripped.startswith("```") else "object" if stripped.startswith("{") else "array" if stripped.startswith("[") else "other"
+            logger.error("Invalid model JSON: step=%s shape=%s characters=%s line=%s column=%s", field, shape, len(raw), exc.lineno, exc.colno)
+            raise
         maximum = 20 if field == "results" else 15 if instructions.startswith("PATTERN_SKEPTIC") else 12 if field == "incidents" else 3
         if not isinstance(result, dict) or not isinstance(result.get(field), list) or len(result[field]) > maximum:
             raise ValueError("Research model returned an invalid step response")
