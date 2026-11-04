@@ -38,3 +38,14 @@ test("provider diagnostics retain status codes without arbitrary error text", ()
   assert.equal(safeProviderCode(new Error("Meta returned HTTP 429. Usage is limited; retry later.")), "provider_http_429");
   assert.equal(safeProviderCode(new Error("PRIVATE DOCUMENT OR KEY")), "provider_error");
 });
+
+
+test("known unusable provider responses get a safe response diagnostic", async () => {
+  for (const message of ["Baseten response had no text output.", "Meta response had no text output.", "Meta response output was invalid.", "Baseten response was invalid."]) {
+    assert.equal(safeProviderCode(new Error(message)), "provider_response_invalid");
+  }
+  await assert.rejects(() => runModel({ instructions: "test", input: "test" }, {
+    creditsVerified: true, provider: "baseten", ask: async () => "",
+  }), (error) => safeProviderCode(error) === "provider_response_invalid");
+  assert.equal(safeProviderCode(new Error("Baseten response was invalid. PRIVATE TEXT")), "provider_error");
+});

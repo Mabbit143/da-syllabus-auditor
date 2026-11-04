@@ -9,6 +9,7 @@ export function safeProviderCode(error) {
   if (http) return `provider_http_${http[1]}`;
   if (/^(?:MODEL_API_KEY|BASETEN_API_KEY) is not set\.$/.test(message)) return "provider_not_configured";
   if (/^(?:Meta|Baseten) request failed or timed out\./.test(message)) return "provider_unavailable";
+  if (/^(?:Meta|Baseten) response (?:had no text output|(?:output )?was invalid)\.$/.test(message) || message === "Research provider returned no usable text.") return "provider_response_invalid";
   return "provider_error";
 }
 

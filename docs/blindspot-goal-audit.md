@@ -115,3 +115,14 @@ No additional allowance or foreground worker was used. This proves normal-reset
 continuation, live retrieval and populated department tags; it does not establish
 reliable corpus-wide comparisons, verified originating lineages, reviewed scan
 analysis, or a recurring discrimination finding.
+
+Provider-diagnostic follow-up: the failed synthesis Investigator context was
+53,249 characters with in-range instructions, ruling out the bridge input-size
+limit for that saved request. No successful Investigator cache entry exists for
+that attempt. Its original generic error does not prove a specific provider
+cause. Known empty/invalid response messages now map to the existing sanitized
+`provider_response_invalid` code; unknown text still maps to `provider_error`.
+Seven bridge tests and four Python provider tests passed after a failing
+regression demonstrated the diagnostic gap. No live model request was made for
+this change. The worker starts a fresh Node bridge for each call, so this
+JavaScript-only diagnostic update does not require restarting the Python worker.
