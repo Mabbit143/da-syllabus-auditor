@@ -193,3 +193,12 @@ synthesis and fourteen source-analysis tests passed; instruction strings remain
 within bridge limits. Stored historical reports are unchanged. Future live
 compliance with the instruction is not proven by these mocked checks. The
 idle-guarded worker reload preserved the daily spending cap.
+
+Budget-bound completion: scheduled run 86 completed three collection jobs with
+zero failures, saved a successful Investigator cache step, and deferred further
+analysis at 12/12 logical steps. No partial interpretation was published as a
+completed source report. Public provider policies were separately rechecked;
+see [data policy review](provider-data-policy-review.md). Standard no-training
+and application `store: false` must not be described as provider zero retention.
+Account-specific settings and the broader student-data release gate remain open;
+no provider settings or student workflows were changed by this review.
