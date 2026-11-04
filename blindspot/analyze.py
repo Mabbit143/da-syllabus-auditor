@@ -26,6 +26,9 @@ SKEPTIC += OFFICE_LIMITS
 NUMERIC_LIMITS = " For every number, preserve the exact measured category, denominator, unit, population, period and qualification stated in the quote. A program-budget reduction percentage is not a staffing or aid reduction percentage unless the passage explicitly connects them. Nearby statements do not establish that connection. Omit a narrower numerical interpretation that the source does not support; the Skeptic must reject or mark it unresolved even when every quoted word matches. Conflicting source dates or decision schedules must be stated as conflicting, not silently combined."
 INVESTIGATOR += NUMERIC_LIMITS
 SKEPTIC += NUMERIC_LIMITS
+OUTPUT_LIMITS = " Keep every free-text field within 1500 characters and each questions or alternative_explanations list item within 1000 characters. Keep reviews concise while preserving material uncertainty; an overlong review is rejected rather than truncated."
+INVESTIGATOR += OUTPUT_LIMITS
+SKEPTIC += OUTPUT_LIMITS
 INVESTIGATOR += '\nInclude a departments array on each finding: [{"name":"exact named department, office, school or unit","evidence_index":0}]. Use zero-based indexes into that finding\'s evidence array, at most eight labels. Each full unit name must occur verbatim in its cited passage; whitespace normalization only. Never infer a unit from a URL, title, publisher or institutional reputation. Use [] when no unit is explicitly named. The university name alone does not identify a department.'
 SKEPTIC += '\nCheck each departments label: a quoted name does not alone establish the unit\'s role, authority, responsibility or affected population. Reject or leave unresolved misattributed unit scope in the claim.'
 

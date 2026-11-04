@@ -183,3 +183,13 @@ were relaxed. The remaining three leads do not establish discrimination or
 independent origins. The active process check observed exactly one Python worker,
 one Node child, and zero Node main windows. No content from that process or
 owner review notes was inspected. No additional spending allowance was used.
+
+Review-bound follow-up: source and cross-report prompts now state the existing
+1500-character free-text / 1000-character list-item limits. Synthesis validation
+reports an overlong review explicitly instead of conflating it with a Skeptic
+rejection. Boundary regression confirms 1500 characters is accepted, 1501 is
+excluded without truncation, and dependent patterns are not retained. Nineteen
+synthesis and fourteen source-analysis tests passed; instruction strings remain
+within bridge limits. Stored historical reports are unchanged. Future live
+compliance with the instruction is not proven by these mocked checks. The
+idle-guarded worker reload preserved the daily spending cap.

@@ -49,6 +49,22 @@ class SynthesisTests(unittest.TestCase):
         self.assertTrue(saved["input_current"])
         self.assertFalse(enqueue_synthesis(self.store, 32))
 
+    def test_review_text_limit_is_strict_and_exclusion_is_explained(self):
+        from blindspot.synthesis import synthesize
+        for length in (1500, 1501):
+            with self.subTest(length=length):
+                def ask(instructions, context):
+                    result = self.ask(instructions, context)
+                    if "SKEPTIC" in instructions:
+                        for review in result["reviews"]:
+                            review["reason"] = "x" * length
+                    return result
+                report = synthesize(build_input(self.store), ask)
+                self.assertEqual(len(report["incidents"]), 2 if length == 1500 else 0)
+                if length > 1500:
+                    self.assertTrue(any("1500-character" in reason for reason in report["rejection_reasons"]))
+                    self.assertEqual(report["patterns"], [])
+
     def test_unknown_evidence_and_repeated_incidents_cannot_support_pattern(self):
         def invalid(instructions, raw):
             import json
