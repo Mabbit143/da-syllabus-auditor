@@ -39,8 +39,12 @@ mocked browser-test host. No key, token or account identity was printed.
 On November 3, 2026, the owner reported signing in through the browser and
 confirmed that the dashboard was present at the local Blindspot URL. This closes
 the owner sign-in/dashboard-opening check with owner-reported browser evidence.
-The agent did not extract browser credentials or tokens. Saving a review and
-reopening its history remain separate unverified checks.
+The agent did not extract browser credentials or tokens. The owner then confirmed that a saved review remains visible after refreshing
+the page. A read-only database check independently found three persisted reviews
+linked to existing findings, with nonempty actor and note fields. Note contents
+and account identifiers were not returned. This closes the finding-review save
+and reload check; originating-lineage review and scan passage admission remain
+separate workflows.
 
 The server is bound to loopback on this computer; it was not deployed to UO or
 made available to other devices on the UO network. Runtime availability must be

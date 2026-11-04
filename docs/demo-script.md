@@ -26,15 +26,18 @@ separately verified. The private Blindspot screen runs on this computer at
 
 ## Recording checks
 
-- Sign in through the real owner account and confirm the dashboard opens. Actual
-  owner browser access and saved reviews remain unverified; do not substitute a
-  mocked browser test or claim-context database probe for this check.
+- The owner has confirmed real dashboard sign-in and review persistence after
+  refresh. Sign in again for recording and check the current session; do not
+  substitute a mocked browser test for the real screen.
 - Review the chosen audit's grades, quotations, policy applicability, and next
   steps before recording. Use only results actually present on screen.
 - Read current source counts and task state at recording time. Counts are intake
   coverage, not proof of complete administrative coverage or independent support.
 - Confirm the saved synthesis still shows two incident proposals and zero
-  patterns before using that line. A later result requires updated narration.
+  patterns before using that line. Check its current-input indicator: synthesis
+  2 predates source report 6 at the latest checkpoint. An outdated pass must not
+  be narrated as covering the latest evidence. Later results require updated
+  narration.
 - Keep account identifiers, student text, tokens, and unrelated private research
   out of the recording. Owner-only access does not itself approve publication of
   a private lead; use a synthetic view if a real lead is not chosen for sharing.
