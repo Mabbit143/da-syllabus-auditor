@@ -169,3 +169,17 @@ line/column; no response or request content is logged. New privacy regressions
 verify rejected output stays uncached and charged to the daily counter. All 148
 engine tests passed. Malformed output is not repaired or accepted by this change.
 The exact live parsing cause still awaits the next scheduled diagnostic.
+
+Recovery verification: the read-only observer saw job 906 attempt 4 complete and
+exit done. Synthesis 3 is current at the checkpoint, with three retained private
+incident leads, zero patterns and 26 evidence passages independently reverified
+against hashes, URLs, offsets and exact text. Both steps used Baseten without
+fallback; daily usage reached 11/12. The live Skeptic explicitly rejected the
+narrower numerical interpretation identified during manual review and stated
+conflicting decision schedules. However, the associated incident was excluded
+by the validator because its reason was 1,801 characters, above the existing
+1,500-character field limit; this was not a Skeptic rejection. No field limits
+were relaxed. The remaining three leads do not establish discrimination or
+independent origins. The active process check observed exactly one Python worker,
+one Node child, and zero Node main windows. No content from that process or
+owner review notes was inspected. No additional spending allowance was used.
