@@ -88,7 +88,13 @@ A network-enabled collector invocation processed three live sources with `collec
 
 The restricted shell initially failed DNS resolution. A network-enabled invocation succeeded without changing the source URLs or collection logic.
 
-## Remaining implementation
+## Remaining implementation at the initial checkpoint
+
+This paragraph is historical. The dated implementation entries below and
+`docs/blindspot-goal-audit.md` supersede its status claims. Owner login, review
+persistence, native Office ingestion and post-reset scheduled synthesis have
+since been verified; scan/origin and representative auditor-quality review
+remain distinct open checks.
 
 Wider query coverage and collection quality; spreadsheets/Word and reviewed scanned PDF ingestion; deeper corpus retrieval and lineage/incident/pattern grouping; real owner access verification against the deployed database; and remaining manual/live auditor review checks. Hosted worker/storage is an optional later target; the owner selected the local computer for the current recurring worker. No deployment, merge or push has been performed by this worker work.
 

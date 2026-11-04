@@ -46,25 +46,25 @@ Interfaces: fetch_public(url) returns bounded bytes and final URL; extract_docum
 ## Task 3: Analysis
 
 Files: blindspot/analyze.py, blindspot/evidence.py, tests/blindspot/test_analysis.py.
-- [ ] Test invented quotes, prompt injection, chronology, syndication, counterevidence and rejected findings.
-- [x] Implement Investigator/Skeptic analysis with immutable version evidence, topic grouping, explicit uncertainty and review history. Live populated department/origin scope remains a separate verification gap.
-- [ ] Verify supported and rejected cross-document findings end to end.
+- [x] Test invented quotes, prompt injection, chronology, syndication, counterevidence and rejected findings. Source-analysis and synthesis regressions cover these gates; semantic adequacy still needs live review.
+- [x] Implement Investigator/Skeptic analysis with immutable version evidence, topic grouping, explicit uncertainty and review history. Live quoted department labels were verified in report 6; owner-origin assessment remains a separate gap.
+- [x] Verify supported and rejected cross-document findings end to end through offline Investigator/Skeptic fixtures and real immutable storage. Live synthesis 3 adds 26 reverified citations; these checks do not certify a policy breach or recurring discrimination finding.
 
 ## Task 4: Private application integration
 
 Files: owner research server routes, research page and components, targeted E2E tests; exact paths chosen after reading current auth contracts.
 - [x] Test non-owner denial, source browser, findings and run status.
 - [x] Implement owner-only read/review flows without importing student uploads.
-- [x] Verify user-visible evidence locators and error states through mocked browser checks and real local storage adapters. Actual owner JWT sign-in remains a release gate.
+- [x] Verify user-visible evidence locators and error states through mocked browser checks and real local storage adapters. The owner subsequently confirmed actual local sign-in and review persistence after refresh; three saved reviews were independently checked.
 
 ## Task 5: Continuous operation and release checks
 
-- [ ] Verify current provider and hackathon terms, available free hosting, durable volume and scheduler.
+- [ ] Verify current provider and hackathon terms, available free hosting, durable volume and scheduler. Public rules, owner-reported form fields, selected local host, persistent storage and scheduler are verified; credits/no-out-of-pocket were owner-verified. Account-specific acceptance and full provider retention/training compatibility remain unverified. No backup or reserved storage quota is established.
 - [x] Configure bounded recurring jobs and observe multiple actual scheduled runs. Windows task state and runs 63/64 were checked directly.
 - [x] Verify new-data detection in a later scheduled cycle: run 64 reused parent version 420, discovered and saved full embedded story 497, and queued its analysis.
 - [ ] Observe a live publisher edit on the same URL. Changed/reverted-source handling is tested offline; the scheduled observation above proves new-document discovery, not a publisher editing its page.
 - [x] Run automated auditor regressions and record their limits: 238 Node tests and 40 mocked browser tests passed on the combined implementation.
-- [ ] Finish manual/live auditor review checks and remaining release gaps. Never label a local pass continuous operation; owner-session and representative live-model checks remain open.
+- [ ] Finish manual/live auditor review checks and remaining release gaps. Owner-session and scheduled live-model checks are now recorded; representative student audit quality, timing and remaining release checks stay open.
 
 ## Execution record
 
@@ -420,3 +420,17 @@ budget increase, worker restart, push or deployment was needed for this incremen
 - This proves scheduled discovery of new source data and reuse of an unchanged
   parent. It does not prove a publisher edited the same URL, a new source finding
   survived model review, or an owner has logged in. Those remain separate gates.
+
+## Current acceptance reconciliation (November 3, after 4 PM Pacific)
+
+Owner login and saved-review refresh are verified by the owner and persisted
+review records. The scheduled worker crossed the normal UTC budget reset,
+completed current synthesis 3 and populated quoted department tags in report 6.
+Twenty-six synthesis citations reverified; three retained incident leads remain
+private and zero recurring patterns were proposed. A live Skeptic challenged an
+unsupported numerical interpretation; an overlong review was separately excluded.
+See `docs/blindspot-goal-audit.md` for the evidence and remaining quality limits.
+A real publisher changing the same URL, actual originating-lineage assessments,
+reviewed scan admission/live analysis, and representative auditor-quality review
+remain unverified. Do not equate zero proposed patterns with a failed search or
+require a discrimination finding where the evidence does not establish one.
