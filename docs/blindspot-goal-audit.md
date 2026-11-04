@@ -139,3 +139,12 @@ limit. The idle-guarded worker restart loaded the change and returned Running,
 preserving existing task arguments and the 12-step cap. This is prompt guidance,
 not a deterministic entailment proof; correction on live output remains to be
 verified. The existing synthesis-job observer was retained across the reload.
+
+Scheduled retry follow-up: the existing read-only observer saw job 906 transition
+from pending to running (attempt 2) and back to pending with a generic provider
+error. Run 83 ended partial, saved no new synthesis, and usage reached 8/12 for
+the UTC day. The observer exited normally after observing that terminal attempt;
+no duplicate worker or foreground inference was started. Additional exact,
+static response-validation messages from the shared provider client are now
+covered by the safe diagnostic mapping; all seven bridge tests passed after the
+expanded regression failed first. Original failure cause remains unproven.

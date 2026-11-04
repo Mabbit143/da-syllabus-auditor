@@ -41,7 +41,7 @@ test("provider diagnostics retain status codes without arbitrary error text", ()
 
 
 test("known unusable provider responses get a safe response diagnostic", async () => {
-  for (const message of ["Baseten response had no text output.", "Meta response had no text output.", "Meta response output was invalid.", "Baseten response was invalid."]) {
+  for (const message of ["Baseten response had no text output.", "Meta response had no text output.", "Meta response output was invalid.", "Baseten response was invalid.", "Baseten response message was invalid.", "Baseten response text was invalid.", "Baseten response tools were invalid.", "Baseten response had no text or tools."]) {
     assert.equal(safeProviderCode(new Error(message)), "provider_response_invalid");
   }
   await assert.rejects(() => runModel({ instructions: "test", input: "test" }, {
