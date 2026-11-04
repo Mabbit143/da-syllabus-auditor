@@ -126,3 +126,16 @@ Seven bridge tests and four Python provider tests passed after a failing
 regression demonstrated the diagnostic gap. No live model request was made for
 this change. The worker starts a fresh Node bridge for each call, so this
 JavaScript-only diagnostic update does not require restarting the Python worker.
+
+Interpretation-quality follow-up: manual review of the newly generated report
+identified a numerical-category overreach despite exact quotations. Details stay
+in the ignored private quality-review artifact; neither model history nor owner
+reviews were overwritten. Shared Investigator/Skeptic instructions now require
+numbers to retain their quoted category, denominator, units, population, period
+and qualifications, and require conflicting schedules to remain explicit. The
+same rule applies to source and cross-report analysis. All 145 engine tests
+passed; all four instruction strings remain below the 6,000-character bridge
+limit. The idle-guarded worker restart loaded the change and returned Running,
+preserving existing task arguments and the 12-step cap. This is prompt guidance,
+not a deterministic entailment proof; correction on live output remains to be
+verified. The existing synthesis-job observer was retained across the reload.
