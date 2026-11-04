@@ -24,6 +24,13 @@ class ProviderTests(unittest.TestCase):
             self.assertEqual(run.call_count, 1)
             self.assertIn("--credits-verified", run.call_args.args[0])
 
+    def test_windows_node_process_does_not_open_a_console(self):
+        model = NodeModel(credits_verified=True)
+        response = SimpleNamespace(stdout=json.dumps({"text": '{"findings":[]}', "provider": "baseten", "fallback": False}))
+        with patch("blindspot.provider.sys.platform", "win32"), patch("blindspot.provider.subprocess.CREATE_NO_WINDOW", 0x08000000, create=True), patch("blindspot.provider.subprocess.run", return_value=response) as run:
+            model("instructions", "input")
+        self.assertEqual(run.call_args.kwargs.get("creationflags"), 0x08000000)
+
     def test_provider_failure_does_not_echo_secret_or_document(self):
         error = subprocess.CalledProcessError(1, ["node"], stderr="SECRET DOCUMENT TEXT")
         with patch("blindspot.provider.subprocess.run", side_effect=error):

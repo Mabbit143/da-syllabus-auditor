@@ -2,6 +2,7 @@
 import json
 from pathlib import Path
 import subprocess
+import sys
 import re
 
 
@@ -35,6 +36,7 @@ class NodeModel:
                 ["node", "--import", "./test-support/register-typescript.mjs", "blindspot/model.mjs", "--credits-verified"],
                 cwd=self.root, input=json.dumps({"mode": self.mode, "instructions": instructions, "input": context}, ensure_ascii=False),
                 capture_output=True, text=True, encoding="utf8", timeout=210, check=True,
+                creationflags=subprocess.CREATE_NO_WINDOW if sys.platform == "win32" else 0,
             )
             output = json.loads(process.stdout)
             if output.get("provider") not in ("meta", "baseten") or not isinstance(output.get("text"), str):

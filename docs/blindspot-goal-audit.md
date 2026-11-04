@@ -148,3 +148,14 @@ no duplicate worker or foreground inference was started. Additional exact,
 static response-validation messages from the shared provider client are now
 covered by the safe diagnostic mapping; all seven bridge tests passed after the
 expanded regression failed first. Original failure cause remains unproven.
+
+Quiet-worker correction: the owner reported a visible Node console window and
+closing it without knowing its purpose. The Python worker's child Node bridge
+previously lacked `CREATE_NO_WINDOW`; Windows launches now set that flag while
+other platforms retain zero creation flags. Closing the old window can interrupt
+a provider call, but the original generic errors do not prove that cause.
+The regression failed on the missing flag, then all five provider tests passed.
+A real local Node smoke launch with the flag returned successfully without a
+model request. The idle-guarded restart loaded the fix and returned Running with
+the existing schedule and spending limit. No account action is needed for this
+fix, and no additional live-analysis allowance was requested or used.
