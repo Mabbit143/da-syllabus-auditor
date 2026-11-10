@@ -7,7 +7,7 @@ import { loadProfile, loadStatuses, saveProfile, saveStatus } from "@/lib/cloud"
 import {
   FUNDING_TYPES, REQUIREMENT_FLAGS, type FundingType, type Profile, type RankedOpportunity, type RequirementFlag,
 } from "@/lib/opps/types";
-import { missingProfileFields } from "@/lib/opps/required";
+import { UNDECLARED_MAJOR, isUndeclaredMajor, missingProfileFields } from "@/lib/opps/required";
 
 const PROFILE_KEY = "da-syllabus-auditor.profile.v1";
 const STATUS_KEY = "da-syllabus-auditor.oppstatus.v1";
@@ -147,7 +147,8 @@ export default function Opportunities() {
       <section className="noprint">
         <p>Tell us about you. We search for scholarships, grants, fellowships and emergency funding, then check every listing against its own page. Your profile stays in this browser.</p>
         <div className="form">
-          <label>Major<input value={profile.major} onChange={(e) => setP({ major: e.target.value })} /></label>
+          <label>Major (optional)<input value={profile.major} list="major-options" placeholder={UNDECLARED_MAJOR} aria-describedby="major-hint" onChange={(e) => setP({ major: e.target.value })} /></label>
+          <datalist id="major-options"><option value={UNDECLARED_MAJOR} /></datalist>
           <label>School<input value={profile.school} onChange={(e) => setP({ school: e.target.value })} /></label>
           <label>State or city<input value={profile.location} onChange={(e) => setP({ location: e.target.value })} /></label>
           <label>Hours a week you can work<input type="number" min={0} max={80} value={profile.hoursPerWeek} onChange={(e) => setP({ hoursPerWeek: Number(e.target.value) })} /></label>
@@ -163,6 +164,7 @@ export default function Opportunities() {
           ))}
         </fieldset>
         <p className="muted">We only show listings you qualify for. Add your term start date and audit your syllabi, and deadlines that land in your crunch weeks sink to the bottom.</p>
+        <p className="muted" id="major-hint">{isUndeclaredMajor(profile.major) ? "No major yet? Leave it blank or pick \u201cUndeclared / exploring\u201d and we\u2019ll search funding open to any major." : "We\u2019ll include awards for your major and ones open to any major."}</p>
         {missing.length > 0 && <p className="muted" id="profile-missing">To search, fill in: {missing.join(", ")}.</p>}
         <button type="button" onClick={search} disabled={busy || missing.length > 0} aria-describedby={missing.length > 0 ? "profile-missing" : undefined}>{busy ? "Searching…" : "Find funding"}</button>
       </section>
