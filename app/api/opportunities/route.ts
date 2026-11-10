@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { callMeta, callMetaSearch } from "@/lib/meta";
 import { discoverFunding } from "@/lib/opps/discover";
 import { rankOpportunities } from "@/lib/opps/rank";
+import { missingProfileFields } from "@/lib/opps/required";
 import { REQUIREMENT_FLAGS, type Profile, type RequirementFlag } from "@/lib/opps/types";
 
 export const maxDuration = 300;
@@ -32,6 +33,8 @@ export async function POST(request: Request) {
     }
     const profile = readProfile(body);
     if (!profile) return fail(400, "invalid_request", "A profile is required.");
+    const missing = missingProfileFields(profile);
+    if (missing.length) return fail(400, "incomplete_profile", `Fill in ${missing.join(", ")} to search for funding.`);
     const crunchWeeks = Array.isArray((body as { crunchWeeks?: unknown }).crunchWeeks)
       ? ((body as { crunchWeeks: unknown[] }).crunchWeeks.filter((n) => Number.isInteger(n)) as number[])
       : [];

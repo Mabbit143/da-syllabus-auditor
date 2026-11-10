@@ -7,6 +7,7 @@ import { loadProfile, loadStatuses, saveProfile, saveStatus } from "@/lib/cloud"
 import {
   FUNDING_TYPES, REQUIREMENT_FLAGS, type FundingType, type Profile, type RankedOpportunity, type RequirementFlag,
 } from "@/lib/opps/types";
+import { missingProfileFields } from "@/lib/opps/required";
 
 const PROFILE_KEY = "da-syllabus-auditor.profile.v1";
 const STATUS_KEY = "da-syllabus-auditor.oppstatus.v1";
@@ -103,7 +104,13 @@ export default function Opportunities() {
     void saveStatus({ url: opp.url, status: s, opp });
   }
 
+  const missing = missingProfileFields(profile);
+
   async function search() {
+    if (missing.length) {
+      setError(`Fill in ${missing.join(", ")} to search for funding.`);
+      return;
+    }
     setBusy(true);
     setError("");
     try {
@@ -156,7 +163,8 @@ export default function Opportunities() {
           ))}
         </fieldset>
         <p className="muted">We only show listings you qualify for. Add your term start date and audit your syllabi, and deadlines that land in your crunch weeks sink to the bottom.</p>
-        <button type="button" onClick={search} disabled={busy}>{busy ? "Searching…" : "Find funding"}</button>
+        {missing.length > 0 && <p className="muted" id="profile-missing">To search, fill in: {missing.join(", ")}.</p>}
+        <button type="button" onClick={search} disabled={busy || missing.length > 0} aria-describedby={missing.length > 0 ? "profile-missing" : undefined}>{busy ? "Searching…" : "Find funding"}</button>
       </section>
 
       {busy && <p role="status">Searching and checking pages. This takes about a minute…</p>}
