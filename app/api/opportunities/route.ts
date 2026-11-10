@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { callMeta, callMetaSearch } from "@/lib/meta";
 import { discoverFunding } from "@/lib/opps/discover";
 import { rankOpportunities } from "@/lib/opps/rank";
+import { declaredMajor, missingProfileFields } from "@/lib/opps/required";
 import { REQUIREMENT_FLAGS, type Profile, type RequirementFlag } from "@/lib/opps/types";
 
 export const maxDuration = 300;
@@ -15,7 +16,8 @@ function readProfile(body: unknown): Profile | null {
   if (!b || typeof b !== "object") return null;
   const str = (v: unknown) => (typeof v === "string" ? v.slice(0, 100) : "");
   return {
-    major: str(b.major), school: str(b.school), location: str(b.location),
+    // Blank or "Undeclared / exploring" both become "": the search treats the student as undeclared.
+    major: declaredMajor(str(b.major)), school: str(b.school), location: str(b.location),
     hoursPerWeek: Number.isFinite(Number(b.hoursPerWeek)) ? Math.max(0, Math.min(80, Number(b.hoursPerWeek))) : 0,
     flags: (Array.isArray(b.flags) ? b.flags : []).filter((f): f is RequirementFlag => (REQUIREMENT_FLAGS as readonly string[]).includes(f as string)),
     termStart: typeof b.termStart === "string" && /^\d{4}-\d{2}-\d{2}$/.test(b.termStart) ? b.termStart : null,
@@ -32,6 +34,8 @@ export async function POST(request: Request) {
     }
     const profile = readProfile(body);
     if (!profile) return fail(400, "invalid_request", "A profile is required.");
+    const missing = missingProfileFields(profile);
+    if (missing.length) return fail(400, "incomplete_profile", `Fill in ${missing.join(", ")} to search for funding.`);
     const crunchWeeks = Array.isArray((body as { crunchWeeks?: unknown }).crunchWeeks)
       ? ((body as { crunchWeeks: unknown[] }).crunchWeeks.filter((n) => Number.isInteger(n)) as number[])
       : [];

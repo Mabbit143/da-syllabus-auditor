@@ -1,11 +1,13 @@
 import { schoolMatches } from "./fit";
+import { declaredMajor } from "./required";
 import type { Opportunity, Profile, RankedOpportunity } from "./types";
 
 const DAY = 86_400_000;
 
 /**
  * Deterministic ranking. The model never ranks. Order:
- * 1. hard filters (deadline passed, requirements the profile lacks, major mismatch) remove a listing,
+ * 1. hard filters (deadline passed, requirements the profile lacks, major mismatch) remove a listing.
+ *    An undeclared student (blank major or "Undeclared / exploring") keeps general, any-major listings,
  * 2. listings due in a crunch week sink,
  * 3. higher expected value first: the dollar amount, weighted up 25% for each way the award targets this
  *    student (a profile flag other than study level, a major, or their school), since targeted awards
@@ -43,9 +45,16 @@ export function rankOpportunities(
       why.push(`Limited to students at ${profile.school}`);
     }
     if (o.majors.length) {
-      const m = profile.major.trim().toLowerCase();
-      if (!m || !o.majors.some((x) => x.toLowerCase().includes(m) || m.includes(x.toLowerCase()))) continue;
-      why.push(`Open to your major (${profile.major})`);
+      // An undeclared student only keeps a major-limited award if it is itself for undeclared students.
+      const major = declaredMajor(profile.major);
+      const m = major.toLowerCase();
+      if (!m) {
+        if (!o.majors.some((x) => /undeclared|undecided|exploratory|any major|all majors/i.test(x))) continue;
+        why.push("Open to undeclared students");
+      } else {
+        if (!o.majors.some((x) => x.toLowerCase().includes(m) || m.includes(x.toLowerCase()))) continue;
+        why.push(`Open to your major (${major})`);
+      }
     }
 
     let daysLeft: number | null = null;
