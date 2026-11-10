@@ -1,0 +1,16 @@
+name: Supabase keep-alive
+
+on:
+  schedule:
+    - cron: "17 16 * * 1,4" # Mon and Thu, ~8-9am Pacific
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping keepalive route
+        run: |
+          code=$(curl -s -o body.txt -w "%{http_code}" https://da-syllabus-auditor-hkrr.vercel.app/api/keepalive)
+          cat body.txt; echo
+          test "$code" = "200"
