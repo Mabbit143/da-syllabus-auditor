@@ -2,7 +2,6 @@ import { createClient } from "@supabase/supabase-js";
 
 // Tiny read so Supabase sees database activity and doesn't auto-pause the free project.
 // Pinged weekly by .github/workflows/supabase-keepalive.yml.
-export const dynamic = "force-dynamic";
 
 export async function GET() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
